@@ -1,9 +1,10 @@
 <?php
 
-namespace Payabli\Types;
+namespace Payabli\Query\Types;
 
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
+use Payabli\Types\TransactionQueryRecords;
 use Payabli\Core\Types\ArrayType;
 
 class QueryTransferResponse extends JsonSerializableType

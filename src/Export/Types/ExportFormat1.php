@@ -2,7 +2,7 @@
 
 namespace Payabli\Export\Types;
 
-enum ExportFormat: string
+enum ExportFormat1: string
 {
     case Csv = "csv";
     case Xlsx = "xlsx";

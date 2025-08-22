@@ -11,10 +11,10 @@ use Payabli\Core\Types\Date;
 class VendorDataResponse extends JsonSerializableType
 {
     /**
-     * @var ?string $vendorNumber
+     * @var string $vendorNumber
      */
     #[JsonProperty('VendorNumber')]
-    public ?string $vendorNumber;
+    public string $vendorNumber;
 
     /**
      * @var string $name1 Primary name for vendor.
@@ -41,10 +41,10 @@ class VendorDataResponse extends JsonSerializableType
     public string $phone;
 
     /**
-     * @var ?string $email
+     * @var string $email
      */
     #[JsonProperty('Email')]
-    public ?string $email;
+    public string $email;
 
     /**
      * @var ?string $remitEmail Email address for remittance
@@ -89,10 +89,10 @@ class VendorDataResponse extends JsonSerializableType
     public string $country;
 
     /**
-     * @var ?string $mcc
+     * @var string $mcc
      */
     #[JsonProperty('Mcc')]
-    public ?string $mcc;
+    public string $mcc;
 
     /**
      * @var string $locationCode Additional location code used to identify the vendor.
@@ -185,52 +185,52 @@ class VendorDataResponse extends JsonSerializableType
     public DateTime $lastUpdated;
 
     /**
-     * @var ?string $remitAddress1
+     * @var string $remitAddress1
      */
     #[JsonProperty('remitAddress1')]
-    public ?string $remitAddress1;
+    public string $remitAddress1;
 
     /**
-     * @var ?string $remitAddress2
+     * @var string $remitAddress2
      */
     #[JsonProperty('remitAddress2')]
-    public ?string $remitAddress2;
+    public string $remitAddress2;
 
     /**
-     * @var ?string $remitCity
+     * @var string $remitCity
      */
     #[JsonProperty('remitCity')]
-    public ?string $remitCity;
+    public string $remitCity;
 
     /**
-     * @var ?string $remitState
+     * @var string $remitState
      */
     #[JsonProperty('remitState')]
-    public ?string $remitState;
+    public string $remitState;
 
     /**
-     * @var ?string $remitZip
+     * @var string $remitZip
      */
     #[JsonProperty('remitZip')]
-    public ?string $remitZip;
+    public string $remitZip;
 
     /**
-     * @var ?string $remitCountry
+     * @var string $remitCountry
      */
     #[JsonProperty('remitCountry')]
-    public ?string $remitCountry;
+    public string $remitCountry;
 
     /**
-     * @var ?string $payeeName1
+     * @var string $payeeName1
      */
     #[JsonProperty('payeeName1')]
-    public ?string $payeeName1;
+    public string $payeeName1;
 
     /**
-     * @var ?string $payeeName2
+     * @var string $payeeName2
      */
     #[JsonProperty('payeeName2')]
-    public ?string $payeeName2;
+    public string $payeeName2;
 
     /**
      * @var string $customField1 Custom field 1 for vendor
@@ -276,16 +276,19 @@ class VendorDataResponse extends JsonSerializableType
 
     /**
      * @param array{
+     *   vendorNumber: string,
      *   name1: string,
      *   name2: string,
      *   ein: string,
      *   phone: string,
+     *   email: string,
      *   address1: string,
      *   address2: string,
      *   city: string,
      *   state: string,
      *   zip: string,
      *   country: string,
+     *   mcc: string,
      *   locationCode: string,
      *   contacts: array<ContactsResponse>,
      *   billingData: VendorResponseBillingData,
@@ -298,26 +301,23 @@ class VendorDataResponse extends JsonSerializableType
      *   parentOrgId: int,
      *   createdDate: DateTime,
      *   lastUpdated: DateTime,
+     *   remitAddress1: string,
+     *   remitAddress2: string,
+     *   remitCity: string,
+     *   remitState: string,
+     *   remitZip: string,
+     *   remitCountry: string,
+     *   payeeName1: string,
+     *   payeeName2: string,
      *   customField1: string,
      *   customField2: string,
      *   additionalData: array<string, string>,
      *   externalPaypointId: string,
      *   storedMethods: array<VendorResponseStoredMethod>,
-     *   vendorNumber?: ?string,
-     *   email?: ?string,
      *   remitEmail?: ?string,
-     *   mcc?: ?string,
      *   vendorStatus?: ?int,
      *   vendorId?: ?int,
      *   enrollmentStatus?: ?string,
-     *   remitAddress1?: ?string,
-     *   remitAddress2?: ?string,
-     *   remitCity?: ?string,
-     *   remitState?: ?string,
-     *   remitZip?: ?string,
-     *   remitCountry?: ?string,
-     *   payeeName1?: ?string,
-     *   payeeName2?: ?string,
      *   customerVendorAccount?: ?string,
      *   internalReferenceId?: ?int,
      * } $values
@@ -325,12 +325,12 @@ class VendorDataResponse extends JsonSerializableType
     public function __construct(
         array $values,
     ) {
-        $this->vendorNumber = $values['vendorNumber'] ?? null;
+        $this->vendorNumber = $values['vendorNumber'];
         $this->name1 = $values['name1'];
         $this->name2 = $values['name2'];
         $this->ein = $values['ein'];
         $this->phone = $values['phone'];
-        $this->email = $values['email'] ?? null;
+        $this->email = $values['email'];
         $this->remitEmail = $values['remitEmail'] ?? null;
         $this->address1 = $values['address1'];
         $this->address2 = $values['address2'];
@@ -338,7 +338,7 @@ class VendorDataResponse extends JsonSerializableType
         $this->state = $values['state'];
         $this->zip = $values['zip'];
         $this->country = $values['country'];
-        $this->mcc = $values['mcc'] ?? null;
+        $this->mcc = $values['mcc'];
         $this->locationCode = $values['locationCode'];
         $this->contacts = $values['contacts'];
         $this->billingData = $values['billingData'];
@@ -354,14 +354,14 @@ class VendorDataResponse extends JsonSerializableType
         $this->parentOrgId = $values['parentOrgId'];
         $this->createdDate = $values['createdDate'];
         $this->lastUpdated = $values['lastUpdated'];
-        $this->remitAddress1 = $values['remitAddress1'] ?? null;
-        $this->remitAddress2 = $values['remitAddress2'] ?? null;
-        $this->remitCity = $values['remitCity'] ?? null;
-        $this->remitState = $values['remitState'] ?? null;
-        $this->remitZip = $values['remitZip'] ?? null;
-        $this->remitCountry = $values['remitCountry'] ?? null;
-        $this->payeeName1 = $values['payeeName1'] ?? null;
-        $this->payeeName2 = $values['payeeName2'] ?? null;
+        $this->remitAddress1 = $values['remitAddress1'];
+        $this->remitAddress2 = $values['remitAddress2'];
+        $this->remitCity = $values['remitCity'];
+        $this->remitState = $values['remitState'];
+        $this->remitZip = $values['remitZip'];
+        $this->remitCountry = $values['remitCountry'];
+        $this->payeeName1 = $values['payeeName1'];
+        $this->payeeName2 = $values['payeeName2'];
         $this->customField1 = $values['customField1'];
         $this->customField2 = $values['customField2'];
         $this->customerVendorAccount = $values['customerVendorAccount'] ?? null;

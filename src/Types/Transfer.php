@@ -15,16 +15,28 @@ class Transfer extends JsonSerializableType
     public int $transferId;
 
     /**
-     * @var int $paypointId The ID of the paypoint the transfer belongs to.
+     * @var ?int $paypointId
      */
     #[JsonProperty('paypointId')]
-    public int $paypointId;
+    public ?int $paypointId;
 
     /**
-     * @var string $batchNumber The batch number associated with the transfer.
+     * @var string $batchNumber
      */
     #[JsonProperty('batchNumber')]
     public string $batchNumber;
+
+    /**
+     * @var ?string $batchCurrency The currency of the batch, either USD or CAD.
+     */
+    #[JsonProperty('batchCurrency')]
+    public ?string $batchCurrency;
+
+    /**
+     * @var ?int $batchRecords Number of records in the batch.
+     */
+    #[JsonProperty('batchRecords')]
+    public ?int $batchRecords;
 
     /**
      * @var string $transferIdentifier Unique identifier for the transfer.
@@ -37,6 +49,36 @@ class Transfer extends JsonSerializableType
      */
     #[JsonProperty('batchId')]
     public int $batchId;
+
+    /**
+     * @var ?string $paypointEntryName The paypoint entry name.
+     */
+    #[JsonProperty('paypointEntryName')]
+    public ?string $paypointEntryName;
+
+    /**
+     * @var ?string $paypointLegalName The paypoint legal name.
+     */
+    #[JsonProperty('paypointLegalName')]
+    public ?string $paypointLegalName;
+
+    /**
+     * @var ?string $paypointDbaName The paypoint DBA name.
+     */
+    #[JsonProperty('paypointDbaName')]
+    public ?string $paypointDbaName;
+
+    /**
+     * @var ?string $paypointLogo The paypoint logo URL.
+     */
+    #[JsonProperty('paypointLogo')]
+    public ?string $paypointLogo;
+
+    /**
+     * @var ?TransferBankAccount $bankAccount Bank account information for the transfer.
+     */
+    #[JsonProperty('bankAccount')]
+    public ?TransferBankAccount $bankAccount;
 
     /**
      * @var string $transferDate Date when the transfer occurred.
@@ -111,21 +153,20 @@ class Transfer extends JsonSerializableType
     public float $netTransferAmount;
 
     /**
-     * @var array<TransferEvent> $eventsData List of events associated with the transfer.
+     * @var ?array<GeneralEvents> $eventsData List of events associated with the transfer.
      */
-    #[JsonProperty('eventsData'), ArrayType([TransferEvent::class])]
-    public array $eventsData;
+    #[JsonProperty('eventsData'), ArrayType([GeneralEvents::class])]
+    public ?array $eventsData;
 
     /**
-     * @var array<string> $messages List of messages related to the transfer.
+     * @var ?array<TransferMessage> $messages List of messages related to the transfer.
      */
-    #[JsonProperty('messages'), ArrayType(['string'])]
-    public array $messages;
+    #[JsonProperty('messages'), ArrayType([TransferMessage::class])]
+    public ?array $messages;
 
     /**
      * @param array{
      *   transferId: int,
-     *   paypointId: int,
      *   batchNumber: string,
      *   transferIdentifier: string,
      *   batchId: int,
@@ -141,18 +182,33 @@ class Transfer extends JsonSerializableType
      *   thirdPartyPaidAmount: float,
      *   adjustmentsAmount: float,
      *   netTransferAmount: float,
-     *   eventsData: array<TransferEvent>,
-     *   messages: array<string>,
+     *   paypointId?: ?int,
+     *   batchCurrency?: ?string,
+     *   batchRecords?: ?int,
+     *   paypointEntryName?: ?string,
+     *   paypointLegalName?: ?string,
+     *   paypointDbaName?: ?string,
+     *   paypointLogo?: ?string,
+     *   bankAccount?: ?TransferBankAccount,
+     *   eventsData?: ?array<GeneralEvents>,
+     *   messages?: ?array<TransferMessage>,
      * } $values
      */
     public function __construct(
         array $values,
     ) {
         $this->transferId = $values['transferId'];
-        $this->paypointId = $values['paypointId'];
+        $this->paypointId = $values['paypointId'] ?? null;
         $this->batchNumber = $values['batchNumber'];
+        $this->batchCurrency = $values['batchCurrency'] ?? null;
+        $this->batchRecords = $values['batchRecords'] ?? null;
         $this->transferIdentifier = $values['transferIdentifier'];
         $this->batchId = $values['batchId'];
+        $this->paypointEntryName = $values['paypointEntryName'] ?? null;
+        $this->paypointLegalName = $values['paypointLegalName'] ?? null;
+        $this->paypointDbaName = $values['paypointDbaName'] ?? null;
+        $this->paypointLogo = $values['paypointLogo'] ?? null;
+        $this->bankAccount = $values['bankAccount'] ?? null;
         $this->transferDate = $values['transferDate'];
         $this->processor = $values['processor'];
         $this->transferStatus = $values['transferStatus'];
@@ -165,8 +221,8 @@ class Transfer extends JsonSerializableType
         $this->thirdPartyPaidAmount = $values['thirdPartyPaidAmount'];
         $this->adjustmentsAmount = $values['adjustmentsAmount'];
         $this->netTransferAmount = $values['netTransferAmount'];
-        $this->eventsData = $values['eventsData'];
-        $this->messages = $values['messages'];
+        $this->eventsData = $values['eventsData'] ?? null;
+        $this->messages = $values['messages'] ?? null;
     }
 
     /**

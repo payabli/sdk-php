@@ -63,6 +63,7 @@ enum NotificationContentEventType: string
     case PayOutProcessed = "PayOutProcessed";
     case PayOutCanceled = "PayOutCanceled";
     case PayOutPaid = "PayOutPaid";
+    case PayOutReturned = "PayOutReturned";
     case PayoutSubscriptionCreated = "PayoutSubscriptionCreated";
     case PayoutSubscriptionUpdated = "PayoutSubscriptionUpdated";
     case PayoutSubscriptionCanceled = "PayoutSubscriptionCanceled";

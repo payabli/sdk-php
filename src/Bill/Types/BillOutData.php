@@ -1,12 +1,16 @@
 <?php
 
-namespace Payabli\Types;
+namespace Payabli\Bill\Types;
 
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
+use Payabli\Types\FileContent;
 use Payabli\Core\Types\ArrayType;
 use DateTime;
 use Payabli\Core\Types\Date;
+use Payabli\Types\BillItem;
+use Payabli\Types\Frequency;
+use Payabli\Types\VendorData;
 
 class BillOutData extends JsonSerializableType
 {
@@ -25,7 +29,7 @@ class BillOutData extends JsonSerializableType
     /**
      * @var ?string $additionalData
      */
-    #[JsonProperty('AdditionalData')]
+    #[JsonProperty('additionalData')]
     public ?string $additionalData;
 
     /**
@@ -59,6 +63,12 @@ class BillOutData extends JsonSerializableType
     public ?string $comments;
 
     /**
+     * @var ?float $discount Discount amount applied to the bill.
+     */
+    #[JsonProperty('discount')]
+    public ?float $discount;
+
+    /**
      * @var ?DateTime $dueDate Due date of bill. Accepted formats: YYYY-MM-DD, MM/DD/YYYY.
      */
     #[JsonProperty('dueDate'), Date(Date::TYPE_DATE)]
@@ -77,16 +87,28 @@ class BillOutData extends JsonSerializableType
     public ?string $frequency;
 
     /**
+     * @var ?string $lotNumber Lot number associated with the bill.
+     */
+    #[JsonProperty('lotNumber')]
+    public ?string $lotNumber;
+
+    /**
      * @var ?int $mode Bill mode: value `0` for one-time bills, `1` for scheduled bills.
      */
     #[JsonProperty('mode')]
     public ?int $mode;
 
     /**
-     * @var ?string $netAmount Net Amount owed in bill. Required when adding a bill.
+     * @var ?float $netAmount Net Amount owed in bill. Required when adding a bill.
      */
     #[JsonProperty('netAmount')]
-    public ?string $netAmount;
+    public ?float $netAmount;
+
+    /**
+     * @var ?BillOutDataScheduledOptions $scheduledOptions Options for scheduled bills.
+     */
+    #[JsonProperty('scheduledOptions')]
+    public ?BillOutDataScheduledOptions $scheduledOptions;
 
     /**
      * @var ?int $status
@@ -99,6 +121,12 @@ class BillOutData extends JsonSerializableType
      */
     #[JsonProperty('terms')]
     public ?string $terms;
+
+    /**
+     * @var ?float $totalAmount Total amount of the bill.
+     */
+    #[JsonProperty('totalAmount')]
+    public ?float $totalAmount;
 
     /**
      * @var ?VendorData $vendor The vendor associated with the bill. Although you can create a vendor in a create bill request, Payabli recommends creating a vendor separately and passing a valid `vendorNumber` here. At minimum, the `vendorNumber` is required.
@@ -116,13 +144,17 @@ class BillOutData extends JsonSerializableType
      *   billItems?: ?array<BillItem>,
      *   billNumber?: ?string,
      *   comments?: ?string,
+     *   discount?: ?float,
      *   dueDate?: ?DateTime,
      *   endDate?: ?DateTime,
      *   frequency?: ?value-of<Frequency>,
+     *   lotNumber?: ?string,
      *   mode?: ?int,
-     *   netAmount?: ?string,
+     *   netAmount?: ?float,
+     *   scheduledOptions?: ?BillOutDataScheduledOptions,
      *   status?: ?int,
      *   terms?: ?string,
+     *   totalAmount?: ?float,
      *   vendor?: ?VendorData,
      * } $values
      */
@@ -137,13 +169,17 @@ class BillOutData extends JsonSerializableType
         $this->billItems = $values['billItems'] ?? null;
         $this->billNumber = $values['billNumber'] ?? null;
         $this->comments = $values['comments'] ?? null;
+        $this->discount = $values['discount'] ?? null;
         $this->dueDate = $values['dueDate'] ?? null;
         $this->endDate = $values['endDate'] ?? null;
         $this->frequency = $values['frequency'] ?? null;
+        $this->lotNumber = $values['lotNumber'] ?? null;
         $this->mode = $values['mode'] ?? null;
         $this->netAmount = $values['netAmount'] ?? null;
+        $this->scheduledOptions = $values['scheduledOptions'] ?? null;
         $this->status = $values['status'] ?? null;
         $this->terms = $values['terms'] ?? null;
+        $this->totalAmount = $values['totalAmount'] ?? null;
         $this->vendor = $values['vendor'] ?? null;
     }
 

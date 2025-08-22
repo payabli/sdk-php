@@ -17,6 +17,12 @@ class QueryPayoutTransactionRecordsItem extends JsonSerializableType
     public ?string $batchNumber;
 
     /**
+     * @var ?int $batchId Identifier of the batch associated with payout transaction.
+     */
+    #[JsonProperty('BatchId')]
+    public ?int $batchId;
+
+    /**
      * @var ?array<BillPayOutData> $bills Events associated with this transaction.
      */
     #[JsonProperty('Bills'), ArrayType([BillPayOutData::class])]
@@ -71,7 +77,7 @@ class QueryPayoutTransactionRecordsItem extends JsonSerializableType
     public ?string $externalPaypointId;
 
     /**
-     * @var ?float $feeAmount Service fee or sub-charge applied.
+     * @var ?float $feeAmount
      */
     #[JsonProperty('FeeAmount')]
     public ?float $feeAmount;
@@ -83,10 +89,22 @@ class QueryPayoutTransactionRecordsItem extends JsonSerializableType
     public ?string $gateway;
 
     /**
+     * @var ?bool $hasVcardTransactions
+     */
+    #[JsonProperty('HasVcardTransactions')]
+    public ?bool $hasVcardTransactions;
+
+    /**
      * @var ?int $idOut Identifier of payout transaction.
      */
     #[JsonProperty('IdOut')]
     public ?int $idOut;
+
+    /**
+     * @var ?bool $isSameDayAch
+     */
+    #[JsonProperty('IsSameDayACH')]
+    public ?bool $isSameDayAch;
 
     /**
      * @var ?DateTime $lastUpdated Timestamp when payment record was updated.
@@ -105,6 +123,12 @@ class QueryPayoutTransactionRecordsItem extends JsonSerializableType
      */
     #[JsonProperty('ParentOrgName')]
     public ?string $parentOrgName;
+
+    /**
+     * @var ?int $parentOrgId
+     */
+    #[JsonProperty('ParentOrgId')]
+    public ?int $parentOrgId;
 
     /**
      * @var ?QueryPayoutTransactionRecordsItemPaymentData $paymentData
@@ -131,6 +155,12 @@ class QueryPayoutTransactionRecordsItem extends JsonSerializableType
     public ?string $paymentStatus;
 
     /**
+     * @var ?string $payoutProgram
+     */
+    #[JsonProperty('PayoutProgram')]
+    public ?string $payoutProgram;
+
+    /**
      * @var ?string $paypointDbaname
      */
     #[JsonProperty('PaypointDbaname')]
@@ -141,6 +171,54 @@ class QueryPayoutTransactionRecordsItem extends JsonSerializableType
      */
     #[JsonProperty('PaypointLegalname')]
     public ?string $paypointLegalname;
+
+    /**
+     * @var ?string $riskAction
+     */
+    #[JsonProperty('RiskAction')]
+    public ?string $riskAction;
+
+    /**
+     * @var ?int $riskActionCode
+     */
+    #[JsonProperty('RiskActionCode')]
+    public ?int $riskActionCode;
+
+    /**
+     * @var ?bool $riskFlagged
+     */
+    #[JsonProperty('RiskFlagged')]
+    public ?bool $riskFlagged;
+
+    /**
+     * @var ?DateTime $riskFlaggedOn
+     */
+    #[JsonProperty('RiskFlaggedOn'), Date(Date::TYPE_DATETIME)]
+    public ?DateTime $riskFlaggedOn;
+
+    /**
+     * @var ?string $riskReason
+     */
+    #[JsonProperty('RiskReason')]
+    public ?string $riskReason;
+
+    /**
+     * @var ?string $riskStatus
+     */
+    #[JsonProperty('RiskStatus')]
+    public ?string $riskStatus;
+
+    /**
+     * @var ?int $scheduleId
+     */
+    #[JsonProperty('ScheduleId')]
+    public ?int $scheduleId;
+
+    /**
+     * @var ?string $settlementStatus
+     */
+    #[JsonProperty('SettlementStatus')]
+    public ?string $settlementStatus;
 
     /**
      * @var ?string $source
@@ -169,6 +247,7 @@ class QueryPayoutTransactionRecordsItem extends JsonSerializableType
     /**
      * @param array{
      *   batchNumber?: ?string,
+     *   batchId?: ?int,
      *   bills?: ?array<BillPayOutData>,
      *   cardToken?: ?string,
      *   checkData?: ?FileContent,
@@ -180,16 +259,28 @@ class QueryPayoutTransactionRecordsItem extends JsonSerializableType
      *   externalPaypointId?: ?string,
      *   feeAmount?: ?float,
      *   gateway?: ?string,
+     *   hasVcardTransactions?: ?bool,
      *   idOut?: ?int,
+     *   isSameDayAch?: ?bool,
      *   lastUpdated?: ?DateTime,
      *   netAmount?: ?float,
      *   parentOrgName?: ?string,
+     *   parentOrgId?: ?int,
      *   paymentData?: ?QueryPayoutTransactionRecordsItemPaymentData,
      *   paymentId?: ?string,
      *   paymentMethod?: ?string,
      *   paymentStatus?: ?string,
+     *   payoutProgram?: ?string,
      *   paypointDbaname?: ?string,
      *   paypointLegalname?: ?string,
+     *   riskAction?: ?string,
+     *   riskActionCode?: ?int,
+     *   riskFlagged?: ?bool,
+     *   riskFlaggedOn?: ?DateTime,
+     *   riskReason?: ?string,
+     *   riskStatus?: ?string,
+     *   scheduleId?: ?int,
+     *   settlementStatus?: ?string,
      *   source?: ?string,
      *   status?: ?int,
      *   totalAmount?: ?float,
@@ -200,6 +291,7 @@ class QueryPayoutTransactionRecordsItem extends JsonSerializableType
         array $values = [],
     ) {
         $this->batchNumber = $values['batchNumber'] ?? null;
+        $this->batchId = $values['batchId'] ?? null;
         $this->bills = $values['bills'] ?? null;
         $this->cardToken = $values['cardToken'] ?? null;
         $this->checkData = $values['checkData'] ?? null;
@@ -211,16 +303,28 @@ class QueryPayoutTransactionRecordsItem extends JsonSerializableType
         $this->externalPaypointId = $values['externalPaypointId'] ?? null;
         $this->feeAmount = $values['feeAmount'] ?? null;
         $this->gateway = $values['gateway'] ?? null;
+        $this->hasVcardTransactions = $values['hasVcardTransactions'] ?? null;
         $this->idOut = $values['idOut'] ?? null;
+        $this->isSameDayAch = $values['isSameDayAch'] ?? null;
         $this->lastUpdated = $values['lastUpdated'] ?? null;
         $this->netAmount = $values['netAmount'] ?? null;
         $this->parentOrgName = $values['parentOrgName'] ?? null;
+        $this->parentOrgId = $values['parentOrgId'] ?? null;
         $this->paymentData = $values['paymentData'] ?? null;
         $this->paymentId = $values['paymentId'] ?? null;
         $this->paymentMethod = $values['paymentMethod'] ?? null;
         $this->paymentStatus = $values['paymentStatus'] ?? null;
+        $this->payoutProgram = $values['payoutProgram'] ?? null;
         $this->paypointDbaname = $values['paypointDbaname'] ?? null;
         $this->paypointLegalname = $values['paypointLegalname'] ?? null;
+        $this->riskAction = $values['riskAction'] ?? null;
+        $this->riskActionCode = $values['riskActionCode'] ?? null;
+        $this->riskFlagged = $values['riskFlagged'] ?? null;
+        $this->riskFlaggedOn = $values['riskFlaggedOn'] ?? null;
+        $this->riskReason = $values['riskReason'] ?? null;
+        $this->riskStatus = $values['riskStatus'] ?? null;
+        $this->scheduleId = $values['scheduleId'] ?? null;
+        $this->settlementStatus = $values['settlementStatus'] ?? null;
         $this->source = $values['source'] ?? null;
         $this->status = $values['status'] ?? null;
         $this->totalAmount = $values['totalAmount'] ?? null;

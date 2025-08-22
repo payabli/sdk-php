@@ -27,7 +27,7 @@ use Payabli\Subscription\SubscriptionClient;
 use Payabli\Templates\TemplatesClient;
 use Payabli\TokenStorage\TokenStorageClient;
 use Payabli\User\UserClient;
-use Payabli\Vendorv\VendorvClient;
+use Payabli\Vendor\VendorClient;
 use Payabli\Wallet\WalletClient;
 use GuzzleHttp\ClientInterface;
 use Payabli\Core\Client\RawClient;
@@ -160,9 +160,9 @@ class PayabliClient
     public UserClient $user;
 
     /**
-     * @var VendorvClient $vendorv
+     * @var VendorClient $vendor
      */
-    public VendorvClient $vendorv;
+    public VendorClient $vendor;
 
     /**
      * @var WalletClient $wallet
@@ -202,6 +202,8 @@ class PayabliClient
         $defaultHeaders = [
             'X-Fern-Language' => 'PHP',
             'X-Fern-SDK-Name' => 'Payabli',
+            'X-Fern-SDK-Version' => '0.0.269',
+            'User-Agent' => 'payabli/payabli/0.0.269',
         ];
         if ($apiKey != null) {
             $defaultHeaders['requestToken'] = $apiKey;
@@ -242,7 +244,7 @@ class PayabliClient
         $this->templates = new TemplatesClient($this->client, $this->options);
         $this->tokenStorage = new TokenStorageClient($this->client, $this->options);
         $this->user = new UserClient($this->client, $this->options);
-        $this->vendorv = new VendorvClient($this->client, $this->options);
+        $this->vendor = new VendorClient($this->client, $this->options);
         $this->wallet = new WalletClient($this->client, $this->options);
     }
 }

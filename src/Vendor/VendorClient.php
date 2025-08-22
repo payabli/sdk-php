@@ -1,6 +1,6 @@
 <?php
 
-namespace Payabli\Vendorv;
+namespace Payabli\Vendor;
 
 use GuzzleHttp\ClientInterface;
 use Payabli\Core\Client\RawClient;
@@ -16,7 +16,7 @@ use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Payabli\Types\VendorQueryRecord;
 
-class VendorvClient
+class VendorClient
 {
     /**
      * @var array{

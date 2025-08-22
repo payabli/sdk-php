@@ -5,7 +5,7 @@ namespace Payabli\Query;
 use GuzzleHttp\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\Query\Requests\ListBatchDetailsRequest;
-use Payabli\Types\QueryResponseSettlements;
+use Payabli\Types\QueryBatchesDetailResponse;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -15,6 +15,7 @@ use JsonException;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Payabli\Query\Requests\ListBatchDetailsOrgRequest;
+use Payabli\Types\QueryResponseSettlements;
 use Payabli\Query\Requests\ListBatchesRequest;
 use Payabli\Types\QueryBatchesResponse;
 use Payabli\Query\Requests\ListBatchesOrgRequest;
@@ -49,9 +50,10 @@ use Payabli\Query\Requests\ListTransactionsRequest;
 use Payabli\Types\QueryResponseTransactions;
 use Payabli\Query\Requests\ListTransactionsOrgRequest;
 use Payabli\Query\Requests\ListTransfersPaypointRequest;
-use Payabli\Types\QueryTransferDetailResponse;
+use Payabli\Query\Types\QueryTransferDetailResponse;
 use Payabli\Query\Requests\ListTransfersRequest;
 use Payabli\Types\TransferQueryResponse;
+use Payabli\Query\Requests\ListTransfersRequestOrg;
 use Payabli\Query\Requests\ListUsersOrgRequest;
 use Payabli\Types\QueryUserResponse;
 use Payabli\Query\Requests\ListUsersPaypointRequest;
@@ -99,7 +101,8 @@ class QueryClient
     }
 
     /**
-     * Retrieve a list of batches and their details, including settled and unsettled transactions for a paypoint. Use filters to limit results.
+     * Retrieve a list of batches and their details, including settled and
+     * unsettled transactions for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param string $entry
      * @param ListBatchDetailsRequest $request
@@ -111,14 +114,17 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryResponseSettlements
+     * @return QueryBatchesDetailResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listBatchDetails(string $entry, ListBatchDetailsRequest $request = new ListBatchDetailsRequest(), ?array $options = null): QueryResponseSettlements
+    public function listBatchDetails(string $entry, ListBatchDetailsRequest $request = new ListBatchDetailsRequest(), ?array $options = null): QueryBatchesDetailResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -144,7 +150,7 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
-                return QueryResponseSettlements::fromJson($json);
+                return QueryBatchesDetailResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -169,7 +175,7 @@ class QueryClient
     }
 
     /**
-     * Retrieve a list of batches and their details, including settled and unsettled transactions for an organization. Use filters to limit results.
+     * Retrieve a list of batches and their details, including settled and unsettled transactions for an organization. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListBatchDetailsOrgRequest $request
@@ -189,6 +195,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -239,7 +248,7 @@ class QueryClient
     }
 
     /**
-     * Retrieve a list of batches for a paypoint. Use filters to limit results.
+     * Retrieve a list of batches for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param string $entry
      * @param ListBatchesRequest $request
@@ -259,6 +268,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -309,7 +321,7 @@ class QueryClient
     }
 
     /**
-     * Retrieve a list of batches for an org. Use filters to limit results.
+     * Retrieve a list of batches for an org. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListBatchesOrgRequest $request
@@ -329,6 +341,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -379,7 +394,7 @@ class QueryClient
     }
 
     /**
-     * Retrieve a list of MoneyOut batches for a paypoint. Use filters to limit results.
+     * Retrieve a list of MoneyOut batches for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param string $entry
      * @param ListBatchesOutRequest $request
@@ -399,6 +414,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -449,7 +467,7 @@ class QueryClient
     }
 
     /**
-     * Retrieve a list of MoneyOut batches for an org. Use filters to limit results.
+     * Retrieve a list of MoneyOut batches for an org. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListBatchesOutOrgRequest $request
@@ -469,6 +487,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -519,7 +540,7 @@ class QueryClient
     }
 
     /**
-     * Retrieves a list of chargebacks and returned transactions for a paypoint. Use filters to limit results.
+     * Retrieves a list of chargebacks and returned transactions for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param string $entry
      * @param ListChargebacksRequest $request
@@ -539,6 +560,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -589,7 +613,7 @@ class QueryClient
     }
 
     /**
-     * Retrieve a list of chargebacks and returned transactions for an org. Use filters to limit results.
+     * Retrieve a list of chargebacks and returned transactions for an org. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListChargebacksOrgRequest $request
@@ -609,6 +633,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -659,7 +686,7 @@ class QueryClient
     }
 
     /**
-     * Retrieves a list of customers for a paypoint. Use filters to limit results.
+     * Retrieves a list of customers for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param string $entry
      * @param ListCustomersRequest $request
@@ -679,6 +706,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -729,7 +759,7 @@ class QueryClient
     }
 
     /**
-     * Retrieves a list of customers for an org. Use filters to limit results.
+     * Retrieves a list of customers for an org. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListCustomersOrgRequest $request
@@ -749,6 +779,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -1079,7 +1112,7 @@ class QueryClient
     }
 
     /**
-     * Retrieves a list of an organization's suborganizations and their full details such as orgId, users, and settings. Use filters to limit results.
+     * Retrieves a list of an organization's suborganizations and their full details such as orgId, users, and settings. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListOrganizationsRequest $request
@@ -1099,6 +1132,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -1149,7 +1185,7 @@ class QueryClient
     }
 
     /**
-     * Retrieves a list of money out transactions (payouts) for a paypoint. Use filters to limit results.
+     * Retrieves a list of money out transactions (payouts) for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param string $entry
      * @param ListPayoutRequest $request
@@ -1169,6 +1205,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -1219,7 +1258,7 @@ class QueryClient
     }
 
     /**
-     * Retrieves a list of money out transactions (payouts) for an organization. Use filters to limit results.
+     * Retrieves a list of money out transactions (payouts) for an organization. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListPayoutOrgRequest $request
@@ -1239,6 +1278,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -1289,7 +1331,7 @@ class QueryClient
     }
 
     /**
-     * Returns a list of paypoints in an organization. Use filters to limit results.
+     * Returns a list of paypoints in an organization. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListPaypointsRequest $request
@@ -1309,6 +1351,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -1359,7 +1404,7 @@ class QueryClient
     }
 
     /**
-     * Retrieve a list of settled transactions for a paypoint. Use filters to limit results.
+     * Retrieve a list of settled transactions for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param string $entry
      * @param ListSettlementsRequest $request
@@ -1379,6 +1424,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -1429,7 +1477,7 @@ class QueryClient
     }
 
     /**
-     * Retrieve a list of settled transactions for an organization.
+     * Retrieve a list of settled transactions for an organization. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListSettlementsOrgRequest $request
@@ -1449,6 +1497,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -1499,7 +1550,7 @@ class QueryClient
     }
 
     /**
-     * Returns a list of subscriptions for a single paypoint. Use filters to limit results.
+     * Returns a list of subscriptions for a single paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param string $entry
      * @param ListSubscriptionsRequest $request
@@ -1519,6 +1570,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -1569,7 +1623,7 @@ class QueryClient
     }
 
     /**
-     * Returns a list of subscriptions for a single org. Use filters to limit results.
+     * Returns a list of subscriptions for a single org. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListSubscriptionsOrgRequest $request
@@ -1589,6 +1643,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -1639,7 +1696,7 @@ class QueryClient
     }
 
     /**
-     * Retrieve a list of transactions for a paypoint. Use filters to limit results.
+     * Retrieve a list of transactions for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      * By default, this endpoint returns only transactions from the last 60 days. To query transactions outside of this period, include `transactionDate` filters.
      * For example, this request parameters filter for transactions between April 01, 2024 and April 09, 2024.
      * ``` curl --request GET \
@@ -1666,6 +1723,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -1716,10 +1776,17 @@ class QueryClient
     }
 
     /**
-     * Retrieve a list of transactions for an organization. Use filters to limit results.
+     *
+     * Retrieve a list of transactions for an organization. Use filters to
+     * limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
+     *
+     *
      * By default, this endpoint returns only transactions from the last 60 days. To query transactions outside of this period, include `transactionDate` filters.
+     *
      * For example, this request parameters filter for transactions between April 01, 2024 and April 09, 2024.
-     * ``` curl --request GET \
+     *
+     * ```
+     * curl --request GET \
      *   --url https://sandbox.payabli.com/api/Query/transactions/org/1?limitRecord=20&fromRecord=0&transactionDate(ge)=2024-04-01T00:00:00&transactionDate(le)=2024-04-09T23:59:59\
      *   --header 'requestToken: <api-key>'
      *
@@ -1743,6 +1810,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -1793,7 +1863,7 @@ class QueryClient
     }
 
     /**
-     * Retrieve a list of transfer details records for a paypoint. Use filters to limit results.
+     * Retrieve a list of transfer details records for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param string $entry
      * @param int $transferId The numeric identifier for the transfer, assigned by Payabli.
@@ -1814,6 +1884,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -1864,7 +1937,7 @@ class QueryClient
     }
 
     /**
-     * Retrieve a list of transfers for a paypoint. Use filters to limit results.
+     * Retrieve a list of transfers for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param string $entry
      * @param ListTransfersRequest $request
@@ -1884,6 +1957,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -1901,6 +1977,79 @@ class QueryClient
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
                     path: "Query/transfers/{$entry}",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                return TransferQueryResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (RequestException $e) {
+            $response = $e->getResponse();
+            if ($response === null) {
+                throw new PayabliException(message: $e->getMessage(), previous: $e);
+            }
+            throw new PayabliApiException(
+                message: "API request failed",
+                statusCode: $response->getStatusCode(),
+                body: $response->getBody()->getContents(),
+            );
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Retrieve a list of transfers for an org. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
+     *
+     * @param ?int $orgId
+     * @param ListTransfersRequestOrg $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return TransferQueryResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function listTransfersOrg(ListTransfersRequestOrg $request = new ListTransfersRequestOrg(), ?int $orgId = null, ?array $options = null): TransferQueryResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
+        if ($request->fromRecord != null) {
+            $query['fromRecord'] = $request->fromRecord;
+        }
+        if ($request->limitRecord != null) {
+            $query['limitRecord'] = $request->limitRecord;
+        }
+        if ($request->parameters != null) {
+            $query['parameters'] = $request->parameters;
+        }
+        if ($request->sortBy != null) {
+            $query['sortBy'] = $request->sortBy;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "Query/transfers/org/{$orgId}",
                     method: HttpMethod::GET,
                     query: $query,
                 ),
@@ -2074,7 +2223,7 @@ class QueryClient
     }
 
     /**
-     * Retrieve a list of vendors for an entrypoint. Use filters to limit results.
+     * Retrieve a list of vendors for an entrypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListVendorsRequest $request
@@ -2094,6 +2243,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -2144,7 +2296,7 @@ class QueryClient
     }
 
     /**
-     * Retrieve a list of vendors for an organization. Use filters to limit results.
+     * Retrieve a list of vendors for an organization. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListVendorsOrgRequest $request
@@ -2164,6 +2316,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -2214,7 +2369,7 @@ class QueryClient
     }
 
     /**
-     * Retrieve a list of vcards (virtual credit cards) issued for an entrypoint. Use filters to limit results.
+     * Retrieve a list of vcards (virtual credit cards) issued for an entrypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param string $entry
      * @param ListVcardsRequest $request
@@ -2234,6 +2389,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -2284,7 +2442,7 @@ class QueryClient
     }
 
     /**
-     * Retrieve a list of vcards (virtual credit cards) issued for an organization. Use filters to limit results.
+     * Retrieve a list of vcards (virtual credit cards) issued for an organization. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListVcardsOrgRequest $request
@@ -2304,6 +2462,9 @@ class QueryClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }

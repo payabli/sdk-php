@@ -29,10 +29,10 @@ class RequestPaymentValidatePaymentMethod extends JsonSerializableType
     public string $cardexp;
 
     /**
-     * @var ?string $cardzip
+     * @var string $cardzip
      */
     #[JsonProperty('cardzip')]
-    public ?string $cardzip;
+    public string $cardzip;
 
     /**
      * @var string $cardHolder
@@ -45,8 +45,8 @@ class RequestPaymentValidatePaymentMethod extends JsonSerializableType
      *   method: value-of<RequestPaymentValidatePaymentMethodMethod>,
      *   cardnumber: string,
      *   cardexp: string,
+     *   cardzip: string,
      *   cardHolder: string,
-     *   cardzip?: ?string,
      * } $values
      */
     public function __construct(
@@ -55,7 +55,7 @@ class RequestPaymentValidatePaymentMethod extends JsonSerializableType
         $this->method = $values['method'];
         $this->cardnumber = $values['cardnumber'];
         $this->cardexp = $values['cardexp'];
-        $this->cardzip = $values['cardzip'] ?? null;
+        $this->cardzip = $values['cardzip'];
         $this->cardHolder = $values['cardHolder'];
     }
 

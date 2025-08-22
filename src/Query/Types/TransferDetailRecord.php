@@ -1,32 +1,41 @@
 <?php
 
-namespace Payabli\Types;
+namespace Payabli\Query\Types;
 
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
+use Payabli\Types\BillingFeeDetail;
 use Payabli\Core\Types\ArrayType;
+use Payabli\Types\QueryPaymentData;
+use Payabli\Types\QueryResponseData;
+use Payabli\Types\BillData;
 use DateTime;
 use Payabli\Core\Types\Date;
+use Payabli\Types\QueryTransactionPayorData;
+use Payabli\Types\SplitFundingContent;
+use Payabli\Types\QueryCFeeTransaction;
+use Payabli\Types\QueryTransactionEvents;
+use Payabli\Types\AchHolderType;
 
 class TransferDetailRecord extends JsonSerializableType
 {
     /**
-     * @var int $transferDetailId Unique identifier for the transfer detail record
+     * @var ?int $transferDetailId Unique identifier for the transfer detail record
      */
     #[JsonProperty('transferDetailId')]
-    public int $transferDetailId;
+    public ?int $transferDetailId;
 
     /**
-     * @var int $transferId The ID of the transfer this detail belongs to
+     * @var ?int $transferId The ID of the transfer this detail belongs to
      */
     #[JsonProperty('transferId')]
-    public int $transferId;
+    public ?int $transferId;
 
     /**
-     * @var string $transactionId The transaction ID in Payabli's system
+     * @var ?string $transactionId The transaction ID in Payabli's system
      */
     #[JsonProperty('transactionId')]
-    public string $transactionId;
+    public ?string $transactionId;
 
     /**
      * @var ?string $transactionNumber External transaction reference number
@@ -35,16 +44,10 @@ class TransferDetailRecord extends JsonSerializableType
     public ?string $transactionNumber;
 
     /**
-     * @var int $paypointId The ID of the paypoint this transaction belongs to
-     */
-    #[JsonProperty('paypointId')]
-    public int $paypointId;
-
-    /**
-     * @var string $type The transaction type (credit or debit)
+     * @var ?string $type The transaction type (credit or debit)
      */
     #[JsonProperty('type')]
-    public string $type;
+    public ?string $type;
 
     /**
      * @var ?string $category A field used to categorize the transaction details. Values include: auth, decline, refund, adj, cb, split
@@ -53,91 +56,91 @@ class TransferDetailRecord extends JsonSerializableType
     public ?string $category;
 
     /**
-     * @var float $grossAmount The gross amount of the transaction
+     * @var ?float $grossAmount The gross amount of the transaction
      */
     #[JsonProperty('grossAmount')]
-    public float $grossAmount;
+    public ?float $grossAmount;
 
     /**
-     * @var float $chargeBackAmount Chargeback amount deducted from transaction
+     * @var ?float $chargeBackAmount Chargeback amount deducted from transaction
      */
     #[JsonProperty('chargeBackAmount')]
-    public float $chargeBackAmount;
+    public ?float $chargeBackAmount;
 
     /**
-     * @var float $returnedAmount ACH return amount deducted from transaction
+     * @var ?float $returnedAmount ACH return amount deducted from transaction
      */
     #[JsonProperty('returnedAmount')]
-    public float $returnedAmount;
+    public ?float $returnedAmount;
 
     /**
-     * @var float $refundAmount Refund amount deducted from transaction
+     * @var ?float $refundAmount Refund amount deducted from transaction
      */
     #[JsonProperty('refundAmount')]
-    public float $refundAmount;
+    public ?float $refundAmount;
 
     /**
-     * @var float $holdAmount Amount being held for fraud or risk concerns
+     * @var ?float $holdAmount Amount being held for fraud or risk concerns
      */
     #[JsonProperty('holdAmount')]
-    public float $holdAmount;
+    public ?float $holdAmount;
 
     /**
-     * @var float $releasedAmount Previously held funds that have been released after a risk review
+     * @var ?float $releasedAmount Previously held funds that have been released after a risk review
      */
     #[JsonProperty('releasedAmount')]
-    public float $releasedAmount;
+    public ?float $releasedAmount;
 
     /**
-     * @var float $billingFeesAmount Charges applied for transactions and services
+     * @var ?float $billingFeesAmount Charges applied for transactions and services
      */
     #[JsonProperty('billingFeesAmount')]
-    public float $billingFeesAmount;
+    public ?float $billingFeesAmount;
 
     /**
-     * @var float $thirdPartyPaidAmount Payments captured in the batch cycle that are deposited separately. For example,  checks or cash payments recorded in the batch but not deposited via Payabli,  or card brands making a direct transfer in certain situations.
+     * @var ?float $thirdPartyPaidAmount Payments captured in the batch cycle that are deposited separately. For example,  checks or cash payments recorded in the batch but not deposited via Payabli,  or card brands making a direct transfer in certain situations.
      */
     #[JsonProperty('thirdPartyPaidAmount')]
-    public float $thirdPartyPaidAmount;
+    public ?float $thirdPartyPaidAmount;
 
     /**
-     * @var float $adjustmentsAmount Corrections applied to Billing & Fees charges
+     * @var ?float $adjustmentsAmount Corrections applied to Billing & Fees charges
      */
     #[JsonProperty('adjustmentsAmount')]
-    public float $adjustmentsAmount;
+    public ?float $adjustmentsAmount;
 
     /**
-     * @var float $netTransferAmount The net amount after all deductions
+     * @var ?float $netTransferAmount The net amount after all deductions
      */
     #[JsonProperty('netTransferAmount')]
-    public float $netTransferAmount;
+    public ?float $netTransferAmount;
 
     /**
-     * @var float $splitFundingAmount Total amount directed to split funding destinations
+     * @var ?float $splitFundingAmount Total amount directed to split funding destinations
      */
     #[JsonProperty('splitFundingAmount')]
-    public float $splitFundingAmount;
+    public ?float $splitFundingAmount;
 
     /**
-     * @var ?array<BillingFeeDetail> $billingFeesDetails Detailed breakdown of billing fees applied to the transaction
+     * @var ?array<BillingFeeDetail> $billingFeesDetails
      */
     #[JsonProperty('billingFeesDetails'), ArrayType([BillingFeeDetail::class])]
     public ?array $billingFeesDetails;
 
     /**
-     * @var ?string $parentOrgName The name of the parent organization
+     * @var ?string $parentOrgName
      */
     #[JsonProperty('ParentOrgName')]
     public ?string $parentOrgName;
 
     /**
-     * @var ?string $paypointDbaname The paypoint's DBA name
+     * @var ?string $paypointDbaname
      */
     #[JsonProperty('PaypointDbaname')]
     public ?string $paypointDbaname;
 
     /**
-     * @var ?string $paypointLegalname The paypoint's legal name
+     * @var ?string $paypointLegalname
      */
     #[JsonProperty('PaypointLegalname')]
     public ?string $paypointLegalname;
@@ -161,7 +164,7 @@ class TransferDetailRecord extends JsonSerializableType
     public ?string $connectorName;
 
     /**
-     * @var ?string $externalProcessorInformation Processor information, used for troubleshooting and reporting. This field contains a value when the API key used to make the request has management permissions.
+     * @var ?string $externalProcessorInformation
      */
     #[JsonProperty('ExternalProcessorInformation')]
     public ?string $externalProcessorInformation;
@@ -173,7 +176,7 @@ class TransferDetailRecord extends JsonSerializableType
     public ?string $gatewayTransId;
 
     /**
-     * @var ?string $orderId Custom identifier for the transaction
+     * @var ?string $orderId
      */
     #[JsonProperty('OrderId')]
     public ?string $orderId;
@@ -185,7 +188,7 @@ class TransferDetailRecord extends JsonSerializableType
     public ?string $method;
 
     /**
-     * @var ?string $batchNumber The batch number the transaction was included in
+     * @var ?string $batchNumber
      */
     #[JsonProperty('BatchNumber')]
     public ?string $batchNumber;
@@ -203,16 +206,26 @@ class TransferDetailRecord extends JsonSerializableType
     public ?int $payorId;
 
     /**
-     * @var ?QueryPaymentData $paymentData Details about the payment method and transaction
+     * @var ?QueryPaymentData $paymentData
      */
     #[JsonProperty('PaymentData')]
     public ?QueryPaymentData $paymentData;
 
     /**
-     * @var ?int $transStatus Status of transaction. See [the docs](/developers/references/money-in-statuses#money-in-transaction-status) for a full reference.
+     * Status of transaction. See [the
+     * docs](/developers/references/money-in-statuses#money-in-transaction-status) for a
+     * full reference.
+     *
+     * @var ?int $transStatus
      */
     #[JsonProperty('TransStatus')]
     public ?int $transStatus;
+
+    /**
+     * @var ?int $paypointId
+     */
+    #[JsonProperty('PaypointId')]
+    public ?int $paypointId;
 
     /**
      * @var ?float $totalAmount Transaction total amount (including service fee or sub-charge)
@@ -227,7 +240,7 @@ class TransferDetailRecord extends JsonSerializableType
     public ?float $netAmount;
 
     /**
-     * @var ?float $feeAmount Service fee or sub-charge applied
+     * @var ?float $feeAmount
      */
     #[JsonProperty('FeeAmount')]
     public ?float $feeAmount;
@@ -239,19 +252,19 @@ class TransferDetailRecord extends JsonSerializableType
     public ?int $settlementStatus;
 
     /**
-     * @var ?string $operation The transaction's operation
+     * @var ?string $operation
      */
     #[JsonProperty('Operation')]
     public ?string $operation;
 
     /**
-     * @var ?QueryResponseData $responseData Details about the transaction response
+     * @var ?QueryResponseData $responseData
      */
     #[JsonProperty('ResponseData')]
     public ?QueryResponseData $responseData;
 
     /**
-     * @var ?string $source Custom identifier to indicate the transaction or request source
+     * @var ?string $source
      */
     #[JsonProperty('Source')]
     public ?string $source;
@@ -263,31 +276,31 @@ class TransferDetailRecord extends JsonSerializableType
     public ?int $scheduleReference;
 
     /**
-     * @var ?int $orgId ID of immediate parent organization
+     * @var ?int $orgId
      */
     #[JsonProperty('OrgId')]
     public ?int $orgId;
 
     /**
-     * @var ?int $refundId Identifier of refund transaction linked to this payment
+     * @var ?int $refundId
      */
     #[JsonProperty('RefundId')]
     public ?int $refundId;
 
     /**
-     * @var ?int $returnedId Identifier of return/chargeback transaction linked to this payment
+     * @var ?int $returnedId
      */
     #[JsonProperty('ReturnedId')]
     public ?int $returnedId;
 
     /**
-     * @var ?int $chargebackId Identifier of chargeback transaction
+     * @var ?int $chargebackId
      */
     #[JsonProperty('ChargebackId')]
     public ?int $chargebackId;
 
     /**
-     * @var ?int $retrievalId Identifier of retrieval request
+     * @var ?int $retrievalId
      */
     #[JsonProperty('RetrievalId')]
     public ?int $retrievalId;
@@ -305,16 +318,22 @@ class TransferDetailRecord extends JsonSerializableType
     public ?BillData $invoiceData;
 
     /**
-     * @var ?int $entrypageId Internal reference ID to the payment page capturing the payment
+     * @var ?int $entrypageId
      */
     #[JsonProperty('EntrypageId')]
     public ?int $entrypageId;
 
     /**
-     * @var ?string $externalPaypointId A custom identifier for the paypoint
+     * @var ?string $externalPaypointId
      */
     #[JsonProperty('externalPaypointID')]
     public ?string $externalPaypointId;
+
+    /**
+     * @var ?bool $isValidatedAch Indicates whether the ACH account has been validated
+     */
+    #[JsonProperty('IsValidatedACH')]
+    public ?bool $isValidatedAch;
 
     /**
      * @var ?DateTime $transactionTime Transaction date and time, in UTC
@@ -323,115 +342,126 @@ class TransferDetailRecord extends JsonSerializableType
     public ?DateTime $transactionTime;
 
     /**
-     * @var ?QueryTransactionPayorData $customer Customer information associated with the transaction
+     * @var ?QueryTransactionPayorData $customer
      */
     #[JsonProperty('Customer')]
     public ?QueryTransactionPayorData $customer;
 
     /**
-     * @var ?array<SplitFundingContent> $splitFundingInstructions Split funding instructions for the transaction
+     * @var ?array<SplitFundingContent> $splitFundingInstructions
      */
     #[JsonProperty('splitFundingInstructions'), ArrayType([SplitFundingContent::class])]
     public ?array $splitFundingInstructions;
 
     /**
-     * @var ?array<QueryCFeeTransaction> $cfeeTransactions Service Fee or sub-charge transactions associated to the main transaction
+     * @var ?array<QueryCFeeTransaction> $cfeeTransactions
      */
     #[JsonProperty('CfeeTransactions'), ArrayType([QueryCFeeTransaction::class])]
     public ?array $cfeeTransactions;
 
     /**
-     * @var ?array<QueryTransactionEvents> $transactionEvents Events associated with this transaction
+     * @var ?array<QueryTransactionEvents> $transactionEvents
      */
     #[JsonProperty('TransactionEvents'), ArrayType([QueryTransactionEvents::class])]
     public ?array $transactionEvents;
 
     /**
-     * @var ?float $pendingFeeAmount Pending fee amount for the transaction
+     * @var ?float $pendingFeeAmount
      */
     #[JsonProperty('PendingFeeAmount')]
     public ?float $pendingFeeAmount;
 
     /**
-     * @var ?bool $riskFlagged Indicates if the transaction was flagged for risk
+     * @var ?bool $riskFlagged
      */
     #[JsonProperty('RiskFlagged')]
     public ?bool $riskFlagged;
 
     /**
-     * @var ?DateTime $riskFlaggedOn Timestamp when the transaction was flagged for risk
+     * @var ?DateTime $riskFlaggedOn
      */
     #[JsonProperty('RiskFlaggedOn'), Date(Date::TYPE_DATETIME)]
     public ?DateTime $riskFlaggedOn;
 
     /**
-     * @var ?string $riskStatus Current risk status of the transaction
+     * @var ?string $riskStatus
      */
     #[JsonProperty('RiskStatus')]
     public ?string $riskStatus;
 
     /**
-     * @var ?string $riskReason Reason for risk flagging
+     * @var ?string $riskReason
      */
     #[JsonProperty('RiskReason')]
     public ?string $riskReason;
 
     /**
-     * @var ?string $riskAction Action taken due to risk assessment
+     * @var ?string $riskAction
      */
     #[JsonProperty('RiskAction')]
     public ?string $riskAction;
 
     /**
-     * @var ?int $riskActionCode Numeric code representing the risk action
+     * @var ?int $riskActionCode
      */
     #[JsonProperty('RiskActionCode')]
     public ?int $riskActionCode;
 
     /**
-     * @var ?string $deviceId Identifier of registered cloud device used in the transaction
+     * @var ?string $deviceId
      */
     #[JsonProperty('DeviceId')]
     public ?string $deviceId;
 
     /**
-     * @var ?string $achSecCode Standard Entry Class (SEC) code for ACH transactions
+     * @var ?string $achSecCode
      */
     #[JsonProperty('AchSecCode')]
     public ?string $achSecCode;
 
     /**
-     * @var ?value-of<AchHolderType> $achHolderType Type of ACH account holder (personal or business)
+     * @var ?value-of<AchHolderType> $achHolderType
      */
     #[JsonProperty('AchHolderType')]
     public ?string $achHolderType;
 
     /**
-     * @var ?string $ipAddress IP address of the transaction source
+     * @var ?string $ipAddress
      */
-    #[JsonProperty('IPAddress')]
+    #[JsonProperty('IpAddress')]
     public ?string $ipAddress;
 
     /**
+     * @var ?bool $isSameDayAch Indicates if this was a same-day ACH transaction.
+     */
+    #[JsonProperty('IsSameDayACH')]
+    public ?bool $isSameDayAch;
+
+    /**
+     * @var ?string $walletType Type of wallet used for the transaction (if applicable)
+     */
+    #[JsonProperty('WalletType')]
+    public ?string $walletType;
+
+    /**
      * @param array{
-     *   transferDetailId: int,
-     *   transferId: int,
-     *   transactionId: string,
-     *   paypointId: int,
-     *   type: string,
-     *   grossAmount: float,
-     *   chargeBackAmount: float,
-     *   returnedAmount: float,
-     *   refundAmount: float,
-     *   holdAmount: float,
-     *   releasedAmount: float,
-     *   billingFeesAmount: float,
-     *   thirdPartyPaidAmount: float,
-     *   adjustmentsAmount: float,
-     *   netTransferAmount: float,
-     *   splitFundingAmount: float,
+     *   transferDetailId?: ?int,
+     *   transferId?: ?int,
+     *   transactionId?: ?string,
      *   transactionNumber?: ?string,
+     *   type?: ?string,
      *   category?: ?string,
+     *   grossAmount?: ?float,
+     *   chargeBackAmount?: ?float,
+     *   returnedAmount?: ?float,
+     *   refundAmount?: ?float,
+     *   holdAmount?: ?float,
+     *   releasedAmount?: ?float,
+     *   billingFeesAmount?: ?float,
+     *   thirdPartyPaidAmount?: ?float,
+     *   adjustmentsAmount?: ?float,
+     *   netTransferAmount?: ?float,
+     *   splitFundingAmount?: ?float,
      *   billingFeesDetails?: ?array<BillingFeeDetail>,
      *   parentOrgName?: ?string,
      *   paypointDbaname?: ?string,
@@ -448,6 +478,7 @@ class TransferDetailRecord extends JsonSerializableType
      *   payorId?: ?int,
      *   paymentData?: ?QueryPaymentData,
      *   transStatus?: ?int,
+     *   paypointId?: ?int,
      *   totalAmount?: ?float,
      *   netAmount?: ?float,
      *   feeAmount?: ?float,
@@ -465,6 +496,7 @@ class TransferDetailRecord extends JsonSerializableType
      *   invoiceData?: ?BillData,
      *   entrypageId?: ?int,
      *   externalPaypointId?: ?string,
+     *   isValidatedAch?: ?bool,
      *   transactionTime?: ?DateTime,
      *   customer?: ?QueryTransactionPayorData,
      *   splitFundingInstructions?: ?array<SplitFundingContent>,
@@ -481,29 +513,30 @@ class TransferDetailRecord extends JsonSerializableType
      *   achSecCode?: ?string,
      *   achHolderType?: ?value-of<AchHolderType>,
      *   ipAddress?: ?string,
+     *   isSameDayAch?: ?bool,
+     *   walletType?: ?string,
      * } $values
      */
     public function __construct(
-        array $values,
+        array $values = [],
     ) {
-        $this->transferDetailId = $values['transferDetailId'];
-        $this->transferId = $values['transferId'];
-        $this->transactionId = $values['transactionId'];
+        $this->transferDetailId = $values['transferDetailId'] ?? null;
+        $this->transferId = $values['transferId'] ?? null;
+        $this->transactionId = $values['transactionId'] ?? null;
         $this->transactionNumber = $values['transactionNumber'] ?? null;
-        $this->paypointId = $values['paypointId'];
-        $this->type = $values['type'];
+        $this->type = $values['type'] ?? null;
         $this->category = $values['category'] ?? null;
-        $this->grossAmount = $values['grossAmount'];
-        $this->chargeBackAmount = $values['chargeBackAmount'];
-        $this->returnedAmount = $values['returnedAmount'];
-        $this->refundAmount = $values['refundAmount'];
-        $this->holdAmount = $values['holdAmount'];
-        $this->releasedAmount = $values['releasedAmount'];
-        $this->billingFeesAmount = $values['billingFeesAmount'];
-        $this->thirdPartyPaidAmount = $values['thirdPartyPaidAmount'];
-        $this->adjustmentsAmount = $values['adjustmentsAmount'];
-        $this->netTransferAmount = $values['netTransferAmount'];
-        $this->splitFundingAmount = $values['splitFundingAmount'];
+        $this->grossAmount = $values['grossAmount'] ?? null;
+        $this->chargeBackAmount = $values['chargeBackAmount'] ?? null;
+        $this->returnedAmount = $values['returnedAmount'] ?? null;
+        $this->refundAmount = $values['refundAmount'] ?? null;
+        $this->holdAmount = $values['holdAmount'] ?? null;
+        $this->releasedAmount = $values['releasedAmount'] ?? null;
+        $this->billingFeesAmount = $values['billingFeesAmount'] ?? null;
+        $this->thirdPartyPaidAmount = $values['thirdPartyPaidAmount'] ?? null;
+        $this->adjustmentsAmount = $values['adjustmentsAmount'] ?? null;
+        $this->netTransferAmount = $values['netTransferAmount'] ?? null;
+        $this->splitFundingAmount = $values['splitFundingAmount'] ?? null;
         $this->billingFeesDetails = $values['billingFeesDetails'] ?? null;
         $this->parentOrgName = $values['parentOrgName'] ?? null;
         $this->paypointDbaname = $values['paypointDbaname'] ?? null;
@@ -520,6 +553,7 @@ class TransferDetailRecord extends JsonSerializableType
         $this->payorId = $values['payorId'] ?? null;
         $this->paymentData = $values['paymentData'] ?? null;
         $this->transStatus = $values['transStatus'] ?? null;
+        $this->paypointId = $values['paypointId'] ?? null;
         $this->totalAmount = $values['totalAmount'] ?? null;
         $this->netAmount = $values['netAmount'] ?? null;
         $this->feeAmount = $values['feeAmount'] ?? null;
@@ -537,6 +571,7 @@ class TransferDetailRecord extends JsonSerializableType
         $this->invoiceData = $values['invoiceData'] ?? null;
         $this->entrypageId = $values['entrypageId'] ?? null;
         $this->externalPaypointId = $values['externalPaypointId'] ?? null;
+        $this->isValidatedAch = $values['isValidatedAch'] ?? null;
         $this->transactionTime = $values['transactionTime'] ?? null;
         $this->customer = $values['customer'] ?? null;
         $this->splitFundingInstructions = $values['splitFundingInstructions'] ?? null;
@@ -553,6 +588,8 @@ class TransferDetailRecord extends JsonSerializableType
         $this->achSecCode = $values['achSecCode'] ?? null;
         $this->achHolderType = $values['achHolderType'] ?? null;
         $this->ipAddress = $values['ipAddress'] ?? null;
+        $this->isSameDayAch = $values['isSameDayAch'] ?? null;
+        $this->walletType = $values['walletType'] ?? null;
     }
 
     /**

@@ -29,7 +29,7 @@ class SubscriptionQueryRecords extends JsonSerializableType
     public ?DateTime $endDate;
 
     /**
-     * @var ?int $entrypageId If applicable, the internal reference ID to the payment page capturing the payment.
+     * @var ?int $entrypageId
      */
     #[JsonProperty('EntrypageId')]
     public ?int $entrypageId;

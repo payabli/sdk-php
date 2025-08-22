@@ -24,6 +24,7 @@ use Payabli\Invoice\Types\QueryInvoiceResponse;
 use Payabli\Invoice\Requests\ListInvoicesOrgRequest;
 use Payabli\Invoice\Requests\SendInvoiceRequest;
 use Payabli\Invoice\Types\SendInvoiceResponse;
+use Payabli\Core\Json\JsonDecoder;
 
 class InvoiceClient
 {
@@ -500,7 +501,7 @@ class InvoiceClient
     }
 
     /**
-     * Returns a list of invoices for an entrypoint. Use filters to limit results.
+     * Returns a list of invoices for an entrypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListInvoicesRequest $request
@@ -520,6 +521,9 @@ class InvoiceClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -570,7 +574,7 @@ class InvoiceClient
     }
 
     /**
-     * Returns a list of invoices for an org. Use filters to limit results.
+     * Returns a list of invoices for an org. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListInvoicesOrgRequest $request
@@ -590,6 +594,9 @@ class InvoiceClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -680,6 +687,61 @@ class InvoiceClient
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
                 return SendInvoiceResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (RequestException $e) {
+            $response = $e->getResponse();
+            if ($response === null) {
+                throw new PayabliException(message: $e->getMessage(), previous: $e);
+            }
+            throw new PayabliApiException(
+                message: "API request failed",
+                statusCode: $response->getStatusCode(),
+                body: $response->getBody()->getContents(),
+            );
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Export a single invoice in PDF format.
+     *
+     * @param int $idInvoice Invoice ID
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return array<string, mixed>
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function getInvoicePdf(int $idInvoice, ?array $options = null): array
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "Export/invoicePdf/{$idInvoice}",
+                    method: HttpMethod::GET,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

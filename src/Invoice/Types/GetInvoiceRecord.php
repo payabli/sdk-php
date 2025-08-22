@@ -35,10 +35,10 @@ class GetInvoiceRecord extends JsonSerializableType
     public ?int $paypointId;
 
     /**
-     * @var ?string $invoiceNumber
+     * @var string $invoiceNumber
      */
     #[JsonProperty('invoiceNumber')]
-    public ?string $invoiceNumber;
+    public string $invoiceNumber;
 
     /**
      * @var ?DateTime $invoiceDate
@@ -95,16 +95,16 @@ class GetInvoiceRecord extends JsonSerializableType
     public string $frequency;
 
     /**
-     * @var ?string $paymentTerms
+     * @var string $paymentTerms
      */
     #[JsonProperty('paymentTerms')]
-    public ?string $paymentTerms;
+    public string $paymentTerms;
 
     /**
-     * @var string $termsConditions
+     * @var ?string $termsConditions
      */
     #[JsonProperty('termsConditions')]
-    public string $termsConditions;
+    public ?string $termsConditions;
 
     /**
      * @var ?string $notes
@@ -173,16 +173,16 @@ class GetInvoiceRecord extends JsonSerializableType
     public ?string $company;
 
     /**
-     * @var ?string $shippingAddress1
+     * @var string $shippingAddress1
      */
     #[JsonProperty('shippingAddress1')]
-    public ?string $shippingAddress1;
+    public string $shippingAddress1;
 
     /**
-     * @var ?string $shippingAddress2
+     * @var string $shippingAddress2
      */
     #[JsonProperty('shippingAddress2')]
-    public ?string $shippingAddress2;
+    public string $shippingAddress2;
 
     /**
      * @var string $shippingCity
@@ -197,10 +197,10 @@ class GetInvoiceRecord extends JsonSerializableType
     public string $shippingState;
 
     /**
-     * @var ?string $shippingZip
+     * @var string $shippingZip
      */
     #[JsonProperty('shippingZip')]
-    public ?string $shippingZip;
+    public string $shippingZip;
 
     /**
      * @var string $shippingFromZip
@@ -215,10 +215,10 @@ class GetInvoiceRecord extends JsonSerializableType
     public string $shippingCountry;
 
     /**
-     * @var ?string $shippingEmail
+     * @var string $shippingEmail
      */
     #[JsonProperty('shippingEmail')]
-    public ?string $shippingEmail;
+    public string $shippingEmail;
 
     /**
      * @var string $shippingPhone
@@ -227,10 +227,10 @@ class GetInvoiceRecord extends JsonSerializableType
     public string $shippingPhone;
 
     /**
-     * @var ?string $summaryCommodityCode
+     * @var string $summaryCommodityCode
      */
     #[JsonProperty('summaryCommodityCode')]
-    public ?string $summaryCommodityCode;
+    public string $summaryCommodityCode;
 
     /**
      * @var array<BillItem> $items
@@ -245,10 +245,10 @@ class GetInvoiceRecord extends JsonSerializableType
     public PayorDataResponse $customer;
 
     /**
-     * @var ?string $paylinkId
+     * @var string $paylinkId
      */
     #[JsonProperty('paylinkId')]
-    public ?string $paylinkId;
+    public string $paylinkId;
 
     /**
      * @var ?array<GeneralEvents> $billEvents
@@ -269,10 +269,10 @@ class GetInvoiceRecord extends JsonSerializableType
     public string $paypointLegalname;
 
     /**
-     * @var ?string $paypointDbaname
+     * @var string $paypointDbaname
      */
     #[JsonProperty('PaypointDbaname')]
-    public ?string $paypointDbaname;
+    public string $paypointDbaname;
 
     /**
      * @var string $paypointEntryname
@@ -307,34 +307,41 @@ class GetInvoiceRecord extends JsonSerializableType
     /**
      * @param array{
      *   invoiceId: int,
+     *   invoiceNumber: string,
      *   createdAt: DateTime,
      *   invoiceStatus: int,
      *   invoiceType: int,
      *   frequency: value-of<Frequency>,
-     *   termsConditions: string,
+     *   paymentTerms: string,
      *   invoicePaidAmount: float,
      *   purchaseOrder: string,
+     *   shippingAddress1: string,
+     *   shippingAddress2: string,
      *   shippingCity: string,
      *   shippingState: string,
+     *   shippingZip: string,
      *   shippingFromZip: string,
      *   shippingCountry: string,
+     *   shippingEmail: string,
      *   shippingPhone: string,
+     *   summaryCommodityCode: string,
      *   items: array<BillItem>,
      *   customer: PayorDataResponse,
+     *   paylinkId: string,
      *   scheduledOptions: BillOptions,
      *   paypointLegalname: string,
+     *   paypointDbaname: string,
      *   paypointEntryname: string,
      *   parentOrgName: string,
      *   documentsRef: DocumentsRef,
      *   customerId?: ?int,
      *   paypointId?: ?int,
-     *   invoiceNumber?: ?string,
      *   invoiceDate?: ?DateTime,
      *   invoiceDueDate?: ?DateTime,
      *   invoiceSentDate?: ?DateTime,
      *   invoiceEndDate?: ?DateTime,
      *   lastPaymentDate?: ?DateTime,
-     *   paymentTerms?: ?string,
+     *   termsConditions?: ?string,
      *   notes?: ?string,
      *   tax?: ?float,
      *   discount?: ?float,
@@ -344,14 +351,7 @@ class GetInvoiceRecord extends JsonSerializableType
      *   firstName?: ?string,
      *   lastName?: ?string,
      *   company?: ?string,
-     *   shippingAddress1?: ?string,
-     *   shippingAddress2?: ?string,
-     *   shippingZip?: ?string,
-     *   shippingEmail?: ?string,
-     *   summaryCommodityCode?: ?string,
-     *   paylinkId?: ?string,
      *   billEvents?: ?array<GeneralEvents>,
-     *   paypointDbaname?: ?string,
      *   additionalData?: ?string,
      *   externalPaypointId?: ?string,
      * } $values
@@ -362,7 +362,7 @@ class GetInvoiceRecord extends JsonSerializableType
         $this->invoiceId = $values['invoiceId'];
         $this->customerId = $values['customerId'] ?? null;
         $this->paypointId = $values['paypointId'] ?? null;
-        $this->invoiceNumber = $values['invoiceNumber'] ?? null;
+        $this->invoiceNumber = $values['invoiceNumber'];
         $this->invoiceDate = $values['invoiceDate'] ?? null;
         $this->invoiceDueDate = $values['invoiceDueDate'] ?? null;
         $this->invoiceSentDate = $values['invoiceSentDate'] ?? null;
@@ -372,8 +372,8 @@ class GetInvoiceRecord extends JsonSerializableType
         $this->invoiceStatus = $values['invoiceStatus'];
         $this->invoiceType = $values['invoiceType'];
         $this->frequency = $values['frequency'];
-        $this->paymentTerms = $values['paymentTerms'] ?? null;
-        $this->termsConditions = $values['termsConditions'];
+        $this->paymentTerms = $values['paymentTerms'];
+        $this->termsConditions = $values['termsConditions'] ?? null;
         $this->notes = $values['notes'] ?? null;
         $this->tax = $values['tax'] ?? null;
         $this->discount = $values['discount'] ?? null;
@@ -385,23 +385,23 @@ class GetInvoiceRecord extends JsonSerializableType
         $this->firstName = $values['firstName'] ?? null;
         $this->lastName = $values['lastName'] ?? null;
         $this->company = $values['company'] ?? null;
-        $this->shippingAddress1 = $values['shippingAddress1'] ?? null;
-        $this->shippingAddress2 = $values['shippingAddress2'] ?? null;
+        $this->shippingAddress1 = $values['shippingAddress1'];
+        $this->shippingAddress2 = $values['shippingAddress2'];
         $this->shippingCity = $values['shippingCity'];
         $this->shippingState = $values['shippingState'];
-        $this->shippingZip = $values['shippingZip'] ?? null;
+        $this->shippingZip = $values['shippingZip'];
         $this->shippingFromZip = $values['shippingFromZip'];
         $this->shippingCountry = $values['shippingCountry'];
-        $this->shippingEmail = $values['shippingEmail'] ?? null;
+        $this->shippingEmail = $values['shippingEmail'];
         $this->shippingPhone = $values['shippingPhone'];
-        $this->summaryCommodityCode = $values['summaryCommodityCode'] ?? null;
+        $this->summaryCommodityCode = $values['summaryCommodityCode'];
         $this->items = $values['items'];
         $this->customer = $values['customer'];
-        $this->paylinkId = $values['paylinkId'] ?? null;
+        $this->paylinkId = $values['paylinkId'];
         $this->billEvents = $values['billEvents'] ?? null;
         $this->scheduledOptions = $values['scheduledOptions'];
         $this->paypointLegalname = $values['paypointLegalname'];
-        $this->paypointDbaname = $values['paypointDbaname'] ?? null;
+        $this->paypointDbaname = $values['paypointDbaname'];
         $this->paypointEntryname = $values['paypointEntryname'];
         $this->parentOrgName = $values['parentOrgName'];
         $this->additionalData = $values['additionalData'] ?? null;

@@ -21,6 +21,8 @@ use Payabli\Types\PayabliApiResponseGeneric2Part;
 use Payabli\Types\FileContent;
 use Payabli\Types\PayabliApiResponse00Responsedatanonobject;
 use Payabli\Types\SettingsQueryRecord;
+use Payabli\Paypoint\Types\PaypointMoveRequest;
+use Payabli\Paypoint\Types\MigratePaypointResponse;
 
 class PaypointClient
 {
@@ -430,6 +432,62 @@ class PaypointClient
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
                 return SettingsQueryRecord::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (RequestException $e) {
+            $response = $e->getResponse();
+            if ($response === null) {
+                throw new PayabliException(message: $e->getMessage(), previous: $e);
+            }
+            throw new PayabliApiException(
+                message: "API request failed",
+                statusCode: $response->getStatusCode(),
+                body: $response->getBody()->getContents(),
+            );
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Migrates a paypoint to a new parent organization.
+     *
+     * @param PaypointMoveRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return MigratePaypointResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function migrate(PaypointMoveRequest $request, ?array $options = null): MigratePaypointResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "Paypoint/migrate",
+                    method: HttpMethod::POST,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                return MigratePaypointResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

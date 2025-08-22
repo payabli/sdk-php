@@ -21,6 +21,8 @@ use Payabli\MoneyOut\Requests\CaptureAllOutRequest;
 use Payabli\MoneyOut\Requests\CaptureOutRequest;
 use Payabli\Types\BillDetailResponse;
 use Payabli\MoneyOut\Types\VCardGetResponse;
+use Payabli\MoneyOut\Requests\SendVCardLinkRequest;
+use Payabli\MoneyOut\Types\OperationResult;
 use Payabli\Core\Json\JsonDecoder;
 
 class MoneyOutClient
@@ -451,6 +453,62 @@ class MoneyOutClient
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
                 return VCardGetResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (RequestException $e) {
+            $response = $e->getResponse();
+            if ($response === null) {
+                throw new PayabliException(message: $e->getMessage(), previous: $e);
+            }
+            throw new PayabliApiException(
+                message: "API request failed",
+                statusCode: $response->getStatusCode(),
+                body: $response->getBody()->getContents(),
+            );
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Sends a virtual card link via email to the vendor associated with the `transId`.
+     *
+     * @param SendVCardLinkRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return OperationResult
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function sendVCardLink(SendVCardLinkRequest $request, ?array $options = null): OperationResult
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "vcard/send-card-link",
+                    method: HttpMethod::POST,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                return OperationResult::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

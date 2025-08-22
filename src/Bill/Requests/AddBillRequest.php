@@ -3,7 +3,7 @@
 namespace Payabli\Bill\Requests;
 
 use Payabli\Core\Json\JsonSerializableType;
-use Payabli\Types\BillOutData;
+use Payabli\Bill\Types\BillOutData;
 
 class AddBillRequest extends JsonSerializableType
 {

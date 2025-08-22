@@ -4,7 +4,7 @@ namespace Payabli\Export;
 
 use GuzzleHttp\ClientInterface;
 use Payabli\Core\Client\RawClient;
-use Payabli\Export\Types\ExportFormat;
+use Payabli\Export\Types\ExportFormat1;
 use Payabli\Export\Requests\ExportApplicationsRequest;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
@@ -83,7 +83,7 @@ class ExportClient
     /**
      * Export a list of boarding applications for an organization. Use filters to limit results.
      *
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportApplicationsRequest $request
      * @param ?array{
@@ -153,7 +153,7 @@ class ExportClient
 
     /**
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param ExportBatchDetailsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -221,7 +221,7 @@ class ExportClient
     }
 
     /**
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportBatchDetailsOrgRequest $request
      * @param ?array{
@@ -293,7 +293,7 @@ class ExportClient
      * Export a list of batches for an entrypoint. Use filters to limit results.
      *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param ExportBatchesRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -363,7 +363,7 @@ class ExportClient
     /**
      * Export a list of batches for an organization. Use filters to limit results.
      *
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportBatchesOrgRequest $request
      * @param ?array{
@@ -435,7 +435,7 @@ class ExportClient
      * Export a list of money out batches for a paypoint. Use filters to limit results.
      *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param ExportBatchesOutRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -505,7 +505,7 @@ class ExportClient
     /**
      * Export a list of money out batches for an organization. Use filters to limit results.
      *
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportBatchesOutOrgRequest $request
      * @param ?array{
@@ -577,7 +577,7 @@ class ExportClient
      * Export a list of bills for an entrypoint. Use filters to limit results.
      *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param ExportBillsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -647,7 +647,7 @@ class ExportClient
     /**
      * Export a list of bills for an organization. Use filters to limit results.
      *
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportBillsOrgRequest $request
      * @param ?array{
@@ -719,7 +719,7 @@ class ExportClient
      * Export a list of chargebacks and ACH returns for an entrypoint. Use filters to limit results.
      *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param ExportChargebacksRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -789,7 +789,7 @@ class ExportClient
     /**
      * Export a list of chargebacks and ACH returns for an organization. Use filters to limit results.
      *
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportChargebacksOrgRequest $request
      * @param ?array{
@@ -861,7 +861,7 @@ class ExportClient
      * Export a list of customers for an entrypoint. Use filters to limit results.
      *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param ExportCustomersRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -931,7 +931,7 @@ class ExportClient
     /**
      * Exports a list of customers for an organization. Use filters to limit results.
      *
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportCustomersOrgRequest $request
      * @param ?array{
@@ -1003,7 +1003,7 @@ class ExportClient
      * Export list of invoices for an entrypoint. Use filters to limit results.
      *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param ExportInvoicesRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -1073,7 +1073,7 @@ class ExportClient
     /**
      * Export a list of invoices for an organization. Use filters to limit results.
      *
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportInvoicesOrgRequest $request
      * @param ?array{
@@ -1144,7 +1144,7 @@ class ExportClient
     /**
      * Export a list of child organizations (suborganizations) for a parent organization.
      *
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportOrganizationsRequest $request
      * @param ?array{
@@ -1216,7 +1216,7 @@ class ExportClient
      * Export a list of payouts and their statuses for an entrypoint. Use filters to limit results.
      *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param ExportPayoutRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -1286,7 +1286,7 @@ class ExportClient
     /**
      * Export a list of payouts and their details for an organization. Use filters to limit results.
      *
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportPayoutOrgRequest $request
      * @param ?array{
@@ -1357,7 +1357,7 @@ class ExportClient
     /**
      * Export a list of paypoints in an organization. Use filters to limit results.
      *
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportPaypointsRequest $request
      * @param ?array{
@@ -1429,7 +1429,7 @@ class ExportClient
      * Export a list of settled transactions for an entrypoint. Use filters to limit results.
      *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param ExportSettlementsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -1499,7 +1499,7 @@ class ExportClient
     /**
      * Export a list of settled transactions for an organization. Use filters to limit results.
      *
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportSettlementsOrgRequest $request
      * @param ?array{
@@ -1571,7 +1571,7 @@ class ExportClient
      * Export a list of subscriptions for an entrypoint. Use filters to limit results.
      *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param ExportSubscriptionsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -1641,7 +1641,7 @@ class ExportClient
     /**
      * Export a list of subscriptions for an organization. Use filters to limit results.
      *
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportSubscriptionsOrgRequest $request
      * @param ?array{
@@ -1713,7 +1713,7 @@ class ExportClient
      * Export a list of transactions for an entrypoint in a file in XLXS or CSV format. Use filters to limit results. If you don't specify a date range in the request, the last two months of data are returned.
      *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param ExportTransactionsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -1783,7 +1783,7 @@ class ExportClient
     /**
      * Export a list of transactions for an org in a file in XLSX or CSV format. Use filters to limit results. If you don't specify a date range in the request, the last two months of data are returned.
      *
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportTransactionsOrgRequest $request
      * @param ?array{
@@ -1855,7 +1855,7 @@ class ExportClient
      * Export a list of transfer details for an entrypoint. Use filters to limit results.
      *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $transferId Transfer identifier.
      * @param ExportTransferDetailsRequest $request
      * @param ?array{
@@ -2003,7 +2003,7 @@ class ExportClient
      * Export a list of vendors for an entrypoint. Use filters to limit results.
      *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param ExportVendorsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -2073,7 +2073,7 @@ class ExportClient
     /**
      * Export a list of vendors for an organization. Use filters to limit results.
      *
-     * @param value-of<ExportFormat> $format Format for the export, either XLSX or CSV.
+     * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportVendorsOrgRequest $request
      * @param ?array{
@@ -2111,116 +2111,6 @@ class ExportClient
                     path: "Export/vendors/{$format}/org/{$orgId}",
                     method: HttpMethod::GET,
                     query: $query,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (RequestException $e) {
-            $response = $e->getResponse();
-            if ($response === null) {
-                throw new PayabliException(message: $e->getMessage(), previous: $e);
-            }
-            throw new PayabliApiException(
-                message: "API request failed",
-                statusCode: $response->getStatusCode(),
-                body: $response->getBody()->getContents(),
-            );
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Export a single invoice in PDF format.
-     *
-     * @param int $idInvoice Invoice ID
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return array<string, mixed>
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function getInvoicePdf(int $idInvoice, ?array $options = null): array
-    {
-        $options = array_merge($this->options, $options ?? []);
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "Export/invoicePdf/{$idInvoice}",
-                    method: HttpMethod::GET,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (RequestException $e) {
-            $response = $e->getResponse();
-            if ($response === null) {
-                throw new PayabliException(message: $e->getMessage(), previous: $e);
-            }
-            throw new PayabliApiException(
-                message: "API request failed",
-                statusCode: $response->getStatusCode(),
-                body: $response->getBody()->getContents(),
-            );
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Gets a copy of a generated report by ID.'
-     *
-     * @param int $id Report ID
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return array<string, mixed>
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function getReportFile(int $id, ?array $options = null): array
-    {
-        $options = array_merge($this->options, $options ?? []);
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "Export/notificationReport/{$id}",
-                    method: HttpMethod::GET,
                 ),
                 $options,
             );

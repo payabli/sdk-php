@@ -11,10 +11,10 @@ use Payabli\Core\Json\JsonProperty;
 class CaptureResponseData extends JsonSerializableType
 {
     /**
-     * @var ?string $authCode
+     * @var string $authCode
      */
     #[JsonProperty('authCode')]
-    public ?string $authCode;
+    public string $authCode;
 
     /**
      * @var string $referenceId
@@ -60,10 +60,10 @@ class CaptureResponseData extends JsonSerializableType
 
     /**
      * @param array{
+     *   authCode: string,
      *   referenceId: string,
      *   resultCode: int,
      *   resultText: string,
-     *   authCode?: ?string,
      *   avsResponseText?: ?string,
      *   cvvResponseText?: ?string,
      *   customerId?: ?int,
@@ -73,7 +73,7 @@ class CaptureResponseData extends JsonSerializableType
     public function __construct(
         array $values,
     ) {
-        $this->authCode = $values['authCode'] ?? null;
+        $this->authCode = $values['authCode'];
         $this->referenceId = $values['referenceId'];
         $this->resultCode = $values['resultCode'];
         $this->resultText = $values['resultText'];

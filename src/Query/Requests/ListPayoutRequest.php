@@ -3,9 +3,15 @@
 namespace Payabli\Query\Requests;
 
 use Payabli\Core\Json\JsonSerializableType;
+use Payabli\Types\ExportFormat;
 
 class ListPayoutRequest extends JsonSerializableType
 {
+    /**
+     * @var ?value-of<ExportFormat> $exportFormat
+     */
+    public ?string $exportFormat;
+
     /**
      * @var ?int $fromRecord The number of records to skip before starting to collect the result set.
      */
@@ -72,6 +78,7 @@ class ListPayoutRequest extends JsonSerializableType
      *   - `lotNumber` (ct, nct)
      *   - `customerVendorAccount` (ct, nct, eq, ne)
      *   - `batchId` (eq, ne)
+     *   - `payoutProgram`(eq, ne) the options are `managed` or `odp`. For example, `payoutProgram(eq)=managed` returns all records with a `payoutProgram` equal to `managed`.
      *
      *   List of comparison accepted - enclosed between parentheses:
      *   - eq or empty => equal
@@ -106,6 +113,7 @@ class ListPayoutRequest extends JsonSerializableType
 
     /**
      * @param array{
+     *   exportFormat?: ?value-of<ExportFormat>,
      *   fromRecord?: ?int,
      *   limitRecord?: ?int,
      *   parameters?: ?array<string, ?string>,
@@ -115,6 +123,7 @@ class ListPayoutRequest extends JsonSerializableType
     public function __construct(
         array $values = [],
     ) {
+        $this->exportFormat = $values['exportFormat'] ?? null;
         $this->fromRecord = $values['fromRecord'] ?? null;
         $this->limitRecord = $values['limitRecord'] ?? null;
         $this->parameters = $values['parameters'] ?? null;

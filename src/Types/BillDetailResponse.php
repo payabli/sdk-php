@@ -41,13 +41,19 @@ class BillDetailResponse extends JsonSerializableType
     public ?DateTime $createdDate;
 
     /**
+     * @var ?DateTime $createdAt
+     */
+    #[JsonProperty('CreatedAt'), Date(Date::TYPE_DATETIME)]
+    public ?DateTime $createdAt;
+
+    /**
      * @var ?array<QueryTransactionEvents> $events Events associated to this transaction.
      */
     #[JsonProperty('Events'), ArrayType([QueryTransactionEvents::class])]
     public ?array $events;
 
     /**
-     * @var ?float $feeAmount Service fee or sub-charge applied.
+     * @var ?float $feeAmount
      */
     #[JsonProperty('FeeAmount')]
     public ?float $feeAmount;
@@ -79,8 +85,14 @@ class BillDetailResponse extends JsonSerializableType
     /**
      * @var ?string $parentOrgName
      */
-    #[JsonProperty('parentOrgName')]
+    #[JsonProperty('ParentOrgName')]
     public ?string $parentOrgName;
+
+    /**
+     * @var ?int $parentOrgId
+     */
+    #[JsonProperty('ParentOrgId')]
+    public ?int $parentOrgId;
 
     /**
      * @var ?QueryPaymentData $paymentData
@@ -115,13 +127,13 @@ class BillDetailResponse extends JsonSerializableType
     /**
      * @var ?string $paypointDbaname
      */
-    #[JsonProperty('paypointDbaname')]
+    #[JsonProperty('PaypointDbaname')]
     public ?string $paypointDbaname;
 
     /**
      * @var ?string $paypointLegalname Paypoint legal name.
      */
-    #[JsonProperty('paypointLegalname')]
+    #[JsonProperty('PaypointLegalname')]
     public ?string $paypointLegalname;
 
     /**
@@ -155,12 +167,91 @@ class BillDetailResponse extends JsonSerializableType
     public ?VendorQueryRecord $vendor;
 
     /**
+     * @var ?string $externalPaypointId
+     */
+    #[JsonProperty('externalPaypointID')]
+    public ?string $externalPaypointId;
+
+    /**
+     * @var ?string $entryName
+     */
+    #[JsonProperty('EntryName')]
+    public ?string $entryName;
+
+    /**
+     * @var ?string $batchId Identifier for the batch in which this transaction was processed. Used to track and reconcile batch-level operations.
+     */
+    #[JsonProperty('BatchId')]
+    public ?string $batchId;
+
+    /**
+     * @var ?bool $hasVcardTransactions
+     */
+    #[JsonProperty('HasVcardTransactions')]
+    public ?bool $hasVcardTransactions;
+
+    /**
+     * @var ?bool $isSameDayAch
+     */
+    #[JsonProperty('IsSameDayACH')]
+    public ?bool $isSameDayAch;
+
+    /**
+     * @var ?int $scheduleId
+     */
+    #[JsonProperty('ScheduleId')]
+    public ?int $scheduleId;
+
+    /**
+     * @var ?int $settlementStatus
+     */
+    #[JsonProperty('SettlementStatus')]
+    public ?int $settlementStatus;
+
+    /**
+     * @var ?bool $riskFlagged
+     */
+    #[JsonProperty('RiskFlagged')]
+    public ?bool $riskFlagged;
+
+    /**
+     * @var ?DateTime $riskFlaggedOn
+     */
+    #[JsonProperty('RiskFlaggedOn'), Date(Date::TYPE_DATETIME)]
+    public ?DateTime $riskFlaggedOn;
+
+    /**
+     * @var ?string $riskStatus
+     */
+    #[JsonProperty('RiskStatus')]
+    public ?string $riskStatus;
+
+    /**
+     * @var ?string $riskReason
+     */
+    #[JsonProperty('RiskReason')]
+    public ?string $riskReason;
+
+    /**
+     * @var ?string $riskAction
+     */
+    #[JsonProperty('RiskAction')]
+    public ?string $riskAction;
+
+    /**
+     * @var ?int $riskActionCode
+     */
+    #[JsonProperty('RiskActionCode')]
+    public ?int $riskActionCode;
+
+    /**
      * @param array{
      *   bills?: ?array<BillDetailsResponse>,
      *   checkData?: ?FileContent,
      *   checkNumber?: ?string,
      *   comments?: ?string,
      *   createdDate?: ?DateTime,
+     *   createdAt?: ?DateTime,
      *   events?: ?array<QueryTransactionEvents>,
      *   feeAmount?: ?float,
      *   gateway?: ?string,
@@ -168,6 +259,7 @@ class BillDetailResponse extends JsonSerializableType
      *   lastUpdated?: ?DateTime,
      *   netAmount?: ?float,
      *   parentOrgName?: ?string,
+     *   parentOrgId?: ?int,
      *   paymentData?: ?QueryPaymentData,
      *   paymentGroup?: ?string,
      *   paymentId?: ?string,
@@ -180,6 +272,19 @@ class BillDetailResponse extends JsonSerializableType
      *   statusText?: ?string,
      *   totalAmount?: ?float,
      *   vendor?: ?VendorQueryRecord,
+     *   externalPaypointId?: ?string,
+     *   entryName?: ?string,
+     *   batchId?: ?string,
+     *   hasVcardTransactions?: ?bool,
+     *   isSameDayAch?: ?bool,
+     *   scheduleId?: ?int,
+     *   settlementStatus?: ?int,
+     *   riskFlagged?: ?bool,
+     *   riskFlaggedOn?: ?DateTime,
+     *   riskStatus?: ?string,
+     *   riskReason?: ?string,
+     *   riskAction?: ?string,
+     *   riskActionCode?: ?int,
      * } $values
      */
     public function __construct(
@@ -190,6 +295,7 @@ class BillDetailResponse extends JsonSerializableType
         $this->checkNumber = $values['checkNumber'] ?? null;
         $this->comments = $values['comments'] ?? null;
         $this->createdDate = $values['createdDate'] ?? null;
+        $this->createdAt = $values['createdAt'] ?? null;
         $this->events = $values['events'] ?? null;
         $this->feeAmount = $values['feeAmount'] ?? null;
         $this->gateway = $values['gateway'] ?? null;
@@ -197,6 +303,7 @@ class BillDetailResponse extends JsonSerializableType
         $this->lastUpdated = $values['lastUpdated'] ?? null;
         $this->netAmount = $values['netAmount'] ?? null;
         $this->parentOrgName = $values['parentOrgName'] ?? null;
+        $this->parentOrgId = $values['parentOrgId'] ?? null;
         $this->paymentData = $values['paymentData'] ?? null;
         $this->paymentGroup = $values['paymentGroup'] ?? null;
         $this->paymentId = $values['paymentId'] ?? null;
@@ -209,6 +316,19 @@ class BillDetailResponse extends JsonSerializableType
         $this->statusText = $values['statusText'] ?? null;
         $this->totalAmount = $values['totalAmount'] ?? null;
         $this->vendor = $values['vendor'] ?? null;
+        $this->externalPaypointId = $values['externalPaypointId'] ?? null;
+        $this->entryName = $values['entryName'] ?? null;
+        $this->batchId = $values['batchId'] ?? null;
+        $this->hasVcardTransactions = $values['hasVcardTransactions'] ?? null;
+        $this->isSameDayAch = $values['isSameDayAch'] ?? null;
+        $this->scheduleId = $values['scheduleId'] ?? null;
+        $this->settlementStatus = $values['settlementStatus'] ?? null;
+        $this->riskFlagged = $values['riskFlagged'] ?? null;
+        $this->riskFlaggedOn = $values['riskFlaggedOn'] ?? null;
+        $this->riskStatus = $values['riskStatus'] ?? null;
+        $this->riskReason = $values['riskReason'] ?? null;
+        $this->riskAction = $values['riskAction'] ?? null;
+        $this->riskActionCode = $values['riskActionCode'] ?? null;
     }
 
     /**

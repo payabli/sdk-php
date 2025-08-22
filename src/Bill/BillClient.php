@@ -5,7 +5,7 @@ namespace Payabli\Bill;
 use GuzzleHttp\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\Bill\Requests\AddBillRequest;
-use Payabli\Types\PayabliApiResponseBills;
+use Payabli\Bill\Types\BillResponse;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -15,7 +15,7 @@ use JsonException;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Payabli\Bill\Requests\DeleteAttachedFromBillRequest;
-use Payabli\Types\BillOutData;
+use Payabli\Bill\Types\BillOutData;
 use Payabli\Bill\Types\EditBillResponse;
 use Payabli\Bill\Requests\GetAttachedFromBillRequest;
 use Payabli\Types\FileContent;
@@ -78,11 +78,11 @@ class BillClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseBills
+     * @return BillResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function addBill(string $entry, AddBillRequest $request, ?array $options = null): PayabliApiResponseBills
+    public function addBill(string $entry, AddBillRequest $request, ?array $options = null): BillResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $headers = [];
@@ -103,7 +103,7 @@ class BillClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
-                return PayabliApiResponseBills::fromJson($json);
+                return BillResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -158,11 +158,11 @@ class BillClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseBills
+     * @return BillResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function deleteAttachedFromBill(string $filename, int $idBill, DeleteAttachedFromBillRequest $request = new DeleteAttachedFromBillRequest(), ?array $options = null): PayabliApiResponseBills
+    public function deleteAttachedFromBill(string $filename, int $idBill, DeleteAttachedFromBillRequest $request = new DeleteAttachedFromBillRequest(), ?array $options = null): BillResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -182,7 +182,7 @@ class BillClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
-                return PayabliApiResponseBills::fromJson($json);
+                return BillResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -218,11 +218,11 @@ class BillClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseBills
+     * @return BillResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function deleteBill(int $idBill, ?array $options = null): PayabliApiResponseBills
+    public function deleteBill(int $idBill, ?array $options = null): BillResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -237,7 +237,7 @@ class BillClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
-                return PayabliApiResponseBills::fromJson($json);
+                return BillResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -448,7 +448,7 @@ class BillClient
     }
 
     /**
-     * Retrieve a list of bills for an entrypoint. Use filters to limit results.
+     * Retrieve a list of bills for an entrypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListBillsRequest $request
@@ -468,6 +468,9 @@ class BillClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -518,7 +521,7 @@ class BillClient
     }
 
     /**
-     * Retrieve a list of bills for an organization. Use filters to limit results.
+     * Retrieve a list of bills for an organization. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListBillsOrgRequest $request
@@ -538,6 +541,9 @@ class BillClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }
@@ -657,11 +663,11 @@ class BillClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseBills
+     * @return BillResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function sendToApprovalBill(int $idBill, SendToApprovalBillRequest $request, ?array $options = null): PayabliApiResponseBills
+    public function sendToApprovalBill(int $idBill, SendToApprovalBillRequest $request, ?array $options = null): BillResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -687,7 +693,7 @@ class BillClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
-                return PayabliApiResponseBills::fromJson($json);
+                return BillResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

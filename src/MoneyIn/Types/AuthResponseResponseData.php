@@ -8,10 +8,10 @@ use Payabli\Core\Json\JsonProperty;
 class AuthResponseResponseData extends JsonSerializableType
 {
     /**
-     * @var ?string $authCode
+     * @var string $authCode
      */
     #[JsonProperty('authCode')]
-    public ?string $authCode;
+    public string $authCode;
 
     /**
      * @var string $referenceId
@@ -32,16 +32,16 @@ class AuthResponseResponseData extends JsonSerializableType
     public string $resultText;
 
     /**
-     * @var ?string $avsResponseText
+     * @var string $avsResponseText
      */
     #[JsonProperty('avsResponseText')]
-    public ?string $avsResponseText;
+    public string $avsResponseText;
 
     /**
-     * @var ?string $cvvResponseText
+     * @var string $cvvResponseText
      */
     #[JsonProperty('cvvResponseText')]
-    public ?string $cvvResponseText;
+    public string $cvvResponseText;
 
     /**
      * @var ?int $customerId
@@ -57,12 +57,12 @@ class AuthResponseResponseData extends JsonSerializableType
 
     /**
      * @param array{
+     *   authCode: string,
      *   referenceId: string,
      *   resultCode: int,
      *   resultText: string,
-     *   authCode?: ?string,
-     *   avsResponseText?: ?string,
-     *   cvvResponseText?: ?string,
+     *   avsResponseText: string,
+     *   cvvResponseText: string,
      *   customerId?: ?int,
      *   methodReferenceId?: ?string,
      * } $values
@@ -70,12 +70,12 @@ class AuthResponseResponseData extends JsonSerializableType
     public function __construct(
         array $values,
     ) {
-        $this->authCode = $values['authCode'] ?? null;
+        $this->authCode = $values['authCode'];
         $this->referenceId = $values['referenceId'];
         $this->resultCode = $values['resultCode'];
         $this->resultText = $values['resultText'];
-        $this->avsResponseText = $values['avsResponseText'] ?? null;
-        $this->cvvResponseText = $values['cvvResponseText'] ?? null;
+        $this->avsResponseText = $values['avsResponseText'];
+        $this->cvvResponseText = $values['cvvResponseText'];
         $this->customerId = $values['customerId'] ?? null;
         $this->methodReferenceId = $values['methodReferenceId'] ?? null;
     }

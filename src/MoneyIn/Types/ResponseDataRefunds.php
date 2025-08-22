@@ -8,10 +8,10 @@ use Payabli\Core\Json\JsonProperty;
 class ResponseDataRefunds extends JsonSerializableType
 {
     /**
-     * @var ?string $authCode
+     * @var string $authCode
      */
     #[JsonProperty('authCode')]
-    public ?string $authCode;
+    public string $authCode;
 
     /**
      * @var ?string $avsResponseText This field isn't applicable to refund operations.
@@ -57,10 +57,10 @@ class ResponseDataRefunds extends JsonSerializableType
 
     /**
      * @param array{
+     *   authCode: string,
      *   referenceId: string,
      *   resultCode: int,
      *   resultText: string,
-     *   authCode?: ?string,
      *   avsResponseText?: ?string,
      *   customerId?: ?int,
      *   cvvResponseText?: ?string,
@@ -70,7 +70,7 @@ class ResponseDataRefunds extends JsonSerializableType
     public function __construct(
         array $values,
     ) {
-        $this->authCode = $values['authCode'] ?? null;
+        $this->authCode = $values['authCode'];
         $this->avsResponseText = $values['avsResponseText'] ?? null;
         $this->customerId = $values['customerId'] ?? null;
         $this->cvvResponseText = $values['cvvResponseText'] ?? null;

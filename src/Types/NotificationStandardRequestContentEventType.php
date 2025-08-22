@@ -45,6 +45,7 @@ enum NotificationStandardRequestContentEventType: string
     case HoldingApplication = "HoldingApplication";
     case DeclinedApplication = "DeclinedApplication";
     case BoardingApplication = "BoardingApplication";
+    case PaypointMoved = "PaypointMoved";
     case FraudAlert = "FraudAlert";
     case InvoiceSent = "InvoiceSent";
     case InvoicePaid = "InvoicePaid";
@@ -66,6 +67,7 @@ enum NotificationStandardRequestContentEventType: string
     case PayOutProcessed = "PayOutProcessed";
     case PayOutCanceled = "PayOutCanceled";
     case PayOutPaid = "PayOutPaid";
+    case PayOutReturned = "PayOutReturned";
     case PayoutSubscriptionCreated = "PayoutSubscriptionCreated";
     case PayoutSubscriptionUpdated = "PayoutSubscriptionUpdated";
     case PayoutSubscriptionCanceled = "PayoutSubscriptionCanceled";

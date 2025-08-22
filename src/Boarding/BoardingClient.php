@@ -522,7 +522,7 @@ class BoardingClient
     }
 
     /**
-     * Returns a list of boarding applications for an organization. Use filters to limit results.
+     * Returns a list of boarding applications for an organization. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListApplicationsRequest $request
@@ -542,6 +542,9 @@ class BoardingClient
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
         }

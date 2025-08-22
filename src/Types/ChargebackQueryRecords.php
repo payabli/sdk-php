@@ -47,16 +47,16 @@ class ChargebackQueryRecords extends JsonSerializableType
     public ?int $id;
 
     /**
-     * @var ?string $lastFour Last 4 digits of card or bank account involved in chargeback or return.
+     * @var string $lastFour Last 4 digits of card or bank account involved in chargeback or return.
      */
     #[JsonProperty('lastFour')]
-    public ?string $lastFour;
+    public string $lastFour;
 
     /**
-     * @var ?string $method Type of payment vehicle: **ach** or **card**.
+     * @var string $method Type of payment vehicle: **ach** or **card**.
      */
     #[JsonProperty('method')]
-    public ?string $method;
+    public string $method;
 
     /**
      * @var ?float $netAmount Net amount in chargeback or ACH return.
@@ -159,14 +159,14 @@ class ChargebackQueryRecords extends JsonSerializableType
 
     /**
      * @param array{
+     *   lastFour: string,
+     *   method: string,
      *   accountType?: ?string,
      *   caseNumber?: ?string,
      *   chargebackDate?: ?DateTime,
      *   createdAt?: ?DateTime,
      *   customer?: ?QueryTransactionPayorData,
      *   id?: ?int,
-     *   lastFour?: ?string,
-     *   method?: ?string,
      *   netAmount?: ?float,
      *   orderId?: ?string,
      *   parentOrgName?: ?string,
@@ -185,7 +185,7 @@ class ChargebackQueryRecords extends JsonSerializableType
      * } $values
      */
     public function __construct(
-        array $values = [],
+        array $values,
     ) {
         $this->accountType = $values['accountType'] ?? null;
         $this->caseNumber = $values['caseNumber'] ?? null;
@@ -193,8 +193,8 @@ class ChargebackQueryRecords extends JsonSerializableType
         $this->createdAt = $values['createdAt'] ?? null;
         $this->customer = $values['customer'] ?? null;
         $this->id = $values['id'] ?? null;
-        $this->lastFour = $values['lastFour'] ?? null;
-        $this->method = $values['method'] ?? null;
+        $this->lastFour = $values['lastFour'];
+        $this->method = $values['method'];
         $this->netAmount = $values['netAmount'] ?? null;
         $this->orderId = $values['orderId'] ?? null;
         $this->parentOrgName = $values['parentOrgName'] ?? null;

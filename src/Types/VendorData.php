@@ -58,6 +58,18 @@ class VendorData extends JsonSerializableType
     public ?string $country;
 
     /**
+     * @var ?string $customField1 Custom field 1 for vendor
+     */
+    #[JsonProperty('customField1')]
+    public ?string $customField1;
+
+    /**
+     * @var ?string $customField2 Custom field 2 for vendor
+     */
+    #[JsonProperty('customField2')]
+    public ?string $customField2;
+
+    /**
      * @var ?string $customerVendorAccount Account number of paypoint in the vendor side.
      */
     #[JsonProperty('customerVendorAccount')]
@@ -154,6 +166,12 @@ class VendorData extends JsonSerializableType
     public ?string $remitCountry;
 
     /**
+     * @var ?string $remitEmail
+     */
+    #[JsonProperty('remitEmail')]
+    public ?string $remitEmail;
+
+    /**
      * @var ?string $remitState
      */
     #[JsonProperty('remitState')]
@@ -193,6 +211,8 @@ class VendorData extends JsonSerializableType
      *   city?: ?string,
      *   contacts?: ?array<Contacts>,
      *   country?: ?string,
+     *   customField1?: ?string,
+     *   customField2?: ?string,
      *   customerVendorAccount?: ?string,
      *   ein?: ?string,
      *   email?: ?string,
@@ -209,6 +229,7 @@ class VendorData extends JsonSerializableType
      *   remitAddress2?: ?string,
      *   remitCity?: ?string,
      *   remitCountry?: ?string,
+     *   remitEmail?: ?string,
      *   remitState?: ?string,
      *   remitZip?: ?string,
      *   state?: ?string,
@@ -227,6 +248,8 @@ class VendorData extends JsonSerializableType
         $this->city = $values['city'] ?? null;
         $this->contacts = $values['contacts'] ?? null;
         $this->country = $values['country'] ?? null;
+        $this->customField1 = $values['customField1'] ?? null;
+        $this->customField2 = $values['customField2'] ?? null;
         $this->customerVendorAccount = $values['customerVendorAccount'] ?? null;
         $this->ein = $values['ein'] ?? null;
         $this->email = $values['email'] ?? null;
@@ -243,6 +266,7 @@ class VendorData extends JsonSerializableType
         $this->remitAddress2 = $values['remitAddress2'] ?? null;
         $this->remitCity = $values['remitCity'] ?? null;
         $this->remitCountry = $values['remitCountry'] ?? null;
+        $this->remitEmail = $values['remitEmail'] ?? null;
         $this->remitState = $values['remitState'] ?? null;
         $this->remitZip = $values['remitZip'] ?? null;
         $this->state = $values['state'] ?? null;

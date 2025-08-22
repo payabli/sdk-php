@@ -35,16 +35,16 @@ class GetPaidResponseData extends JsonSerializableType
     public string $resultText;
 
     /**
-     * @var ?string $avsResponseText
+     * @var string $avsResponseText
      */
     #[JsonProperty('avsResponseText')]
-    public ?string $avsResponseText;
+    public string $avsResponseText;
 
     /**
-     * @var ?string $cvvResponseText
+     * @var string $cvvResponseText
      */
     #[JsonProperty('cvvResponseText')]
-    public ?string $cvvResponseText;
+    public string $cvvResponseText;
 
     /**
      * @var ?int $customerId
@@ -63,9 +63,9 @@ class GetPaidResponseData extends JsonSerializableType
      *   referenceId: string,
      *   resultCode: int,
      *   resultText: string,
+     *   avsResponseText: string,
+     *   cvvResponseText: string,
      *   authCode?: ?string,
-     *   avsResponseText?: ?string,
-     *   cvvResponseText?: ?string,
      *   customerId?: ?int,
      *   methodReferenceId?: ?string,
      * } $values
@@ -77,8 +77,8 @@ class GetPaidResponseData extends JsonSerializableType
         $this->referenceId = $values['referenceId'];
         $this->resultCode = $values['resultCode'];
         $this->resultText = $values['resultText'];
-        $this->avsResponseText = $values['avsResponseText'] ?? null;
-        $this->cvvResponseText = $values['cvvResponseText'] ?? null;
+        $this->avsResponseText = $values['avsResponseText'];
+        $this->cvvResponseText = $values['cvvResponseText'];
         $this->customerId = $values['customerId'] ?? null;
         $this->methodReferenceId = $values['methodReferenceId'] ?? null;
     }

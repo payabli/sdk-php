@@ -59,7 +59,7 @@ class TransactionQueryRecords extends JsonSerializableType
     public ?string $deviceId;
 
     /**
-     * @var ?int $entrypageId If applicable, the internal reference ID to the payment page capturing the payment.
+     * @var ?int $entrypageId
      */
     #[JsonProperty('EntrypageId')]
     public ?int $entrypageId;
@@ -71,7 +71,7 @@ class TransactionQueryRecords extends JsonSerializableType
     public ?string $externalProcessorInformation;
 
     /**
-     * @var ?float $feeAmount Service fee or sub-charge applied.
+     * @var ?float $feeAmount
      */
     #[JsonProperty('FeeAmount')]
     public ?float $feeAmount;
@@ -137,7 +137,7 @@ class TransactionQueryRecords extends JsonSerializableType
     public ?string $paymentTransId;
 
     /**
-     * @var ?int $payorId Unique ID for customer linked to the transaction.
+     * @var ?int $payorId
      */
     #[JsonProperty('PayorId')]
     public ?int $payorId;
@@ -173,7 +173,7 @@ class TransactionQueryRecords extends JsonSerializableType
     public ?float $pendingFeeAmount;
 
     /**
-     * @var ?int $refundId Identifier of refund transaction linked to this payment.
+     * @var ?int $refundId
      */
     #[JsonProperty('RefundId')]
     public ?int $refundId;
@@ -185,7 +185,7 @@ class TransactionQueryRecords extends JsonSerializableType
     public ?QueryResponseData $responseData;
 
     /**
-     * @var ?int $returnedId Identifier of return/chargeback transaction linked to this payment.
+     * @var ?int $returnedId
      */
     #[JsonProperty('ReturnedId')]
     public ?int $returnedId;

@@ -18,118 +18,136 @@ class VendorQueryRecord extends JsonSerializableType
     public ?array $additionalData;
 
     /**
-     * @var ?string $address1 Vendor's address.
+     * @var ?string $address1
      */
-    #[JsonProperty('address1')]
+    #[JsonProperty('Address1')]
     public ?string $address1;
 
     /**
-     * @var ?string $address2 Additional line for vendor's address.
+     * @var ?string $address2
      */
-    #[JsonProperty('address2')]
+    #[JsonProperty('Address2')]
     public ?string $address2;
 
     /**
      * @var ?BillingDataResponse $billingData
      */
-    #[JsonProperty('billingData')]
+    #[JsonProperty('BillingData')]
     public ?BillingDataResponse $billingData;
 
     /**
-     * @var ?string $city Vendor's city.
+     * @var ?string $city
      */
-    #[JsonProperty('city')]
+    #[JsonProperty('City')]
     public ?string $city;
 
     /**
-     * @var ?array<Contacts> $contacts
+     * @var ?ContactsResponse $contacts
      */
-    #[JsonProperty('contacts'), ArrayType([Contacts::class])]
-    public ?array $contacts;
+    #[JsonProperty('Contacts')]
+    public ?ContactsResponse $contacts;
 
     /**
-     * @var ?string $country Vendor's country.
+     * @var ?string $country
      */
-    #[JsonProperty('country')]
+    #[JsonProperty('Country')]
     public ?string $country;
 
     /**
      * @var ?DateTime $createdDate
      */
-    #[JsonProperty('createdDate'), Date(Date::TYPE_DATETIME)]
+    #[JsonProperty('CreatedDate'), Date(Date::TYPE_DATETIME)]
     public ?DateTime $createdDate;
 
     /**
-     * @var ?string $customerVendorAccount Account number of paypoint in the vendor system.
+     * @var ?string $customerVendorAccount
      */
     #[JsonProperty('customerVendorAccount')]
     public ?string $customerVendorAccount;
 
     /**
+     * @var ?string $customField1
+     */
+    #[JsonProperty('customField1')]
+    public ?string $customField1;
+
+    /**
+     * @var ?string $customField2
+     */
+    #[JsonProperty('customField2')]
+    public ?string $customField2;
+
+    /**
      * @var ?string $ein
      */
-    #[JsonProperty('ein')]
+    #[JsonProperty('EIN')]
     public ?string $ein;
 
     /**
-     * @var ?string $email Vendor's email address.
+     * @var ?string $email
      */
-    #[JsonProperty('email')]
+    #[JsonProperty('Email')]
     public ?string $email;
 
     /**
      * @var ?string $enrollmentStatus
      */
-    #[JsonProperty('enrollmentStatus')]
+    #[JsonProperty('EnrollmentStatus')]
     public ?string $enrollmentStatus;
 
     /**
      * @var ?string $externalPaypointId
      */
-    #[JsonProperty('externalPaypointId')]
+    #[JsonProperty('externalPaypointID')]
     public ?string $externalPaypointId;
 
     /**
      * @var ?int $internalReferenceId
      */
-    #[JsonProperty('internalReferenceId')]
+    #[JsonProperty('InternalReferenceId')]
     public ?int $internalReferenceId;
 
     /**
      * @var ?DateTime $lastUpdated
      */
-    #[JsonProperty('lastUpdated'), Date(Date::TYPE_DATETIME)]
+    #[JsonProperty('LastUpdated'), Date(Date::TYPE_DATETIME)]
     public ?DateTime $lastUpdated;
 
     /**
-     * @var ?string $locationCode Additional location code used to identify the vendor.
+     * @var ?string $locationCode
      */
-    #[JsonProperty('locationCode')]
+    #[JsonProperty('LocationCode')]
     public ?string $locationCode;
 
     /**
      * @var ?string $mcc
      */
-    #[JsonProperty('mcc')]
+    #[JsonProperty('Mcc')]
     public ?string $mcc;
 
     /**
-     * @var ?string $name1 Primary name for vendor.
+     * @var ?string $name1
      */
-    #[JsonProperty('name1')]
+    #[JsonProperty('Name1')]
     public ?string $name1;
 
     /**
-     * @var ?string $name2 Secondary name for vendor.
+     * @var ?string $name2
      */
-    #[JsonProperty('name2')]
+    #[JsonProperty('Name2')]
     public ?string $name2;
 
     /**
      * @var ?string $parentOrgName
      */
-    #[JsonProperty('parentOrgName')]
+    #[JsonProperty('ParentOrgName')]
     public ?string $parentOrgName;
+
+    /**
+     * @var ?int $parentOrgId
+     */
+    #[JsonProperty('ParentOrgId')]
+    public ?int $parentOrgId;
 
     /**
      * @var ?string $payeeName1
@@ -146,31 +164,31 @@ class VendorQueryRecord extends JsonSerializableType
     /**
      * @var ?VendorPaymentMethod $paymentMethod
      */
-    #[JsonProperty('paymentMethod')]
+    #[JsonProperty('PaymentMethod')]
     public ?VendorPaymentMethod $paymentMethod;
 
     /**
      * @var ?string $paypointDbaname
      */
-    #[JsonProperty('paypointDbaname')]
+    #[JsonProperty('PaypointDbaname')]
     public ?string $paypointDbaname;
 
     /**
      * @var ?string $paypointEntryname
      */
-    #[JsonProperty('paypointEntryname')]
+    #[JsonProperty('PaypointEntryname')]
     public ?string $paypointEntryname;
 
     /**
      * @var ?string $paypointLegalname
      */
-    #[JsonProperty('paypointLegalname')]
+    #[JsonProperty('PaypointLegalname')]
     public ?string $paypointLegalname;
 
     /**
-     * @var ?string $phone Vendor's phone number.
+     * @var ?string $phone
      */
-    #[JsonProperty('phone')]
+    #[JsonProperty('Phone')]
     public ?string $phone;
 
     /**
@@ -198,6 +216,12 @@ class VendorQueryRecord extends JsonSerializableType
     public ?string $remitCountry;
 
     /**
+     * @var ?string $remitEmail
+     */
+    #[JsonProperty('RemitEmail')]
+    public ?string $remitEmail;
+
+    /**
      * @var ?string $remitState
      */
     #[JsonProperty('remitState')]
@@ -210,39 +234,45 @@ class VendorQueryRecord extends JsonSerializableType
     public ?string $remitZip;
 
     /**
-     * @var ?string $state Vendor's state.
+     * @var ?string $state
      */
-    #[JsonProperty('state')]
+    #[JsonProperty('State')]
     public ?string $state;
+
+    /**
+     * @var ?array<VendorResponseStoredMethod> $storedMethods
+     */
+    #[JsonProperty('StoredMethods'), ArrayType([VendorResponseStoredMethod::class])]
+    public ?array $storedMethods;
 
     /**
      * @var ?VendorSummary $summary
      */
-    #[JsonProperty('summary')]
+    #[JsonProperty('Summary')]
     public ?VendorSummary $summary;
 
     /**
      * @var ?int $vendorId
      */
-    #[JsonProperty('vendorId')]
+    #[JsonProperty('VendorId')]
     public ?int $vendorId;
 
     /**
      * @var ?string $vendorNumber
      */
-    #[JsonProperty('vendorNumber')]
+    #[JsonProperty('VendorNumber')]
     public ?string $vendorNumber;
 
     /**
      * @var ?int $vendorStatus
      */
-    #[JsonProperty('vendorStatus')]
+    #[JsonProperty('VendorStatus')]
     public ?int $vendorStatus;
 
     /**
-     * @var ?string $zip Vendor's zip code.
+     * @var ?string $zip
      */
-    #[JsonProperty('zip')]
+    #[JsonProperty('Zip')]
     public ?string $zip;
 
     /**
@@ -252,10 +282,12 @@ class VendorQueryRecord extends JsonSerializableType
      *   address2?: ?string,
      *   billingData?: ?BillingDataResponse,
      *   city?: ?string,
-     *   contacts?: ?array<Contacts>,
+     *   contacts?: ?ContactsResponse,
      *   country?: ?string,
      *   createdDate?: ?DateTime,
      *   customerVendorAccount?: ?string,
+     *   customField1?: ?string,
+     *   customField2?: ?string,
      *   ein?: ?string,
      *   email?: ?string,
      *   enrollmentStatus?: ?string,
@@ -267,6 +299,7 @@ class VendorQueryRecord extends JsonSerializableType
      *   name1?: ?string,
      *   name2?: ?string,
      *   parentOrgName?: ?string,
+     *   parentOrgId?: ?int,
      *   payeeName1?: ?string,
      *   payeeName2?: ?string,
      *   paymentMethod?: ?VendorPaymentMethod,
@@ -278,9 +311,11 @@ class VendorQueryRecord extends JsonSerializableType
      *   remitAddress2?: ?string,
      *   remitCity?: ?string,
      *   remitCountry?: ?string,
+     *   remitEmail?: ?string,
      *   remitState?: ?string,
      *   remitZip?: ?string,
      *   state?: ?string,
+     *   storedMethods?: ?array<VendorResponseStoredMethod>,
      *   summary?: ?VendorSummary,
      *   vendorId?: ?int,
      *   vendorNumber?: ?string,
@@ -300,6 +335,8 @@ class VendorQueryRecord extends JsonSerializableType
         $this->country = $values['country'] ?? null;
         $this->createdDate = $values['createdDate'] ?? null;
         $this->customerVendorAccount = $values['customerVendorAccount'] ?? null;
+        $this->customField1 = $values['customField1'] ?? null;
+        $this->customField2 = $values['customField2'] ?? null;
         $this->ein = $values['ein'] ?? null;
         $this->email = $values['email'] ?? null;
         $this->enrollmentStatus = $values['enrollmentStatus'] ?? null;
@@ -311,6 +348,7 @@ class VendorQueryRecord extends JsonSerializableType
         $this->name1 = $values['name1'] ?? null;
         $this->name2 = $values['name2'] ?? null;
         $this->parentOrgName = $values['parentOrgName'] ?? null;
+        $this->parentOrgId = $values['parentOrgId'] ?? null;
         $this->payeeName1 = $values['payeeName1'] ?? null;
         $this->payeeName2 = $values['payeeName2'] ?? null;
         $this->paymentMethod = $values['paymentMethod'] ?? null;
@@ -322,9 +360,11 @@ class VendorQueryRecord extends JsonSerializableType
         $this->remitAddress2 = $values['remitAddress2'] ?? null;
         $this->remitCity = $values['remitCity'] ?? null;
         $this->remitCountry = $values['remitCountry'] ?? null;
+        $this->remitEmail = $values['remitEmail'] ?? null;
         $this->remitState = $values['remitState'] ?? null;
         $this->remitZip = $values['remitZip'] ?? null;
         $this->state = $values['state'] ?? null;
+        $this->storedMethods = $values['storedMethods'] ?? null;
         $this->summary = $values['summary'] ?? null;
         $this->vendorId = $values['vendorId'] ?? null;
         $this->vendorNumber = $values['vendorNumber'] ?? null;

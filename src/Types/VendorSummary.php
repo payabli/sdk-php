@@ -8,91 +8,139 @@ use Payabli\Core\Json\JsonProperty;
 class VendorSummary extends JsonSerializableType
 {
     /**
-     * @var ?int $inTransitBills
+     * @var ?int $activeBills
      */
-    #[JsonProperty('inTransitBills')]
-    public ?int $inTransitBills;
-
-    /**
-     * @var ?float $inTransitBillsAmount
-     */
-    #[JsonProperty('inTransitBillsAmount')]
-    public ?float $inTransitBillsAmount;
-
-    /**
-     * @var ?int $overdueBills
-     */
-    #[JsonProperty('overdueBills')]
-    public ?int $overdueBills;
-
-    /**
-     * @var ?float $overdueBillsAmount
-     */
-    #[JsonProperty('overdueBillsAmount')]
-    public ?float $overdueBillsAmount;
-
-    /**
-     * @var ?int $paidBills
-     */
-    #[JsonProperty('paidBills')]
-    public ?int $paidBills;
-
-    /**
-     * @var ?float $paidBillsAmount
-     */
-    #[JsonProperty('paidBillsAmount')]
-    public ?float $paidBillsAmount;
+    #[JsonProperty('ActiveBills')]
+    public ?int $activeBills;
 
     /**
      * @var ?int $pendingBills
      */
-    #[JsonProperty('pendingBills')]
+    #[JsonProperty('PendingBills')]
     public ?int $pendingBills;
 
     /**
-     * @var ?float $pendingBillsAmount
+     * @var ?int $inTransitBills
      */
-    #[JsonProperty('pendingBillsAmount')]
-    public ?float $pendingBillsAmount;
+    #[JsonProperty('InTransitBills')]
+    public ?int $inTransitBills;
+
+    /**
+     * @var ?int $paidBills
+     */
+    #[JsonProperty('PaidBills')]
+    public ?int $paidBills;
+
+    /**
+     * @var ?int $overdueBills
+     */
+    #[JsonProperty('OverdueBills')]
+    public ?int $overdueBills;
+
+    /**
+     * @var ?int $approvedBills
+     */
+    #[JsonProperty('ApprovedBills')]
+    public ?int $approvedBills;
+
+    /**
+     * @var ?int $disapprovedBills
+     */
+    #[JsonProperty('DisapprovedBills')]
+    public ?int $disapprovedBills;
 
     /**
      * @var ?int $totalBills
      */
-    #[JsonProperty('totalBills')]
+    #[JsonProperty('TotalBills')]
     public ?int $totalBills;
+
+    /**
+     * @var ?float $activeBillsAmount
+     */
+    #[JsonProperty('ActiveBillsAmount')]
+    public ?float $activeBillsAmount;
+
+    /**
+     * @var ?float $pendingBillsAmount
+     */
+    #[JsonProperty('PendingBillsAmount')]
+    public ?float $pendingBillsAmount;
+
+    /**
+     * @var ?float $inTransitBillsAmount
+     */
+    #[JsonProperty('InTransitBillsAmount')]
+    public ?float $inTransitBillsAmount;
+
+    /**
+     * @var ?float $paidBillsAmount
+     */
+    #[JsonProperty('PaidBillsAmount')]
+    public ?float $paidBillsAmount;
+
+    /**
+     * @var ?float $overdueBillsAmount
+     */
+    #[JsonProperty('OverdueBillsAmount')]
+    public ?float $overdueBillsAmount;
+
+    /**
+     * @var ?float $approvedBillsAmount
+     */
+    #[JsonProperty('ApprovedBillsAmount')]
+    public ?float $approvedBillsAmount;
+
+    /**
+     * @var ?float $disapprovedBillsAmount
+     */
+    #[JsonProperty('DisapprovedBillsAmount')]
+    public ?float $disapprovedBillsAmount;
 
     /**
      * @var ?float $totalBillsAmount
      */
-    #[JsonProperty('totalBillsAmount')]
+    #[JsonProperty('TotalBillsAmount')]
     public ?float $totalBillsAmount;
 
     /**
      * @param array{
-     *   inTransitBills?: ?int,
-     *   inTransitBillsAmount?: ?float,
-     *   overdueBills?: ?int,
-     *   overdueBillsAmount?: ?float,
-     *   paidBills?: ?int,
-     *   paidBillsAmount?: ?float,
+     *   activeBills?: ?int,
      *   pendingBills?: ?int,
-     *   pendingBillsAmount?: ?float,
+     *   inTransitBills?: ?int,
+     *   paidBills?: ?int,
+     *   overdueBills?: ?int,
+     *   approvedBills?: ?int,
+     *   disapprovedBills?: ?int,
      *   totalBills?: ?int,
+     *   activeBillsAmount?: ?float,
+     *   pendingBillsAmount?: ?float,
+     *   inTransitBillsAmount?: ?float,
+     *   paidBillsAmount?: ?float,
+     *   overdueBillsAmount?: ?float,
+     *   approvedBillsAmount?: ?float,
+     *   disapprovedBillsAmount?: ?float,
      *   totalBillsAmount?: ?float,
      * } $values
      */
     public function __construct(
         array $values = [],
     ) {
-        $this->inTransitBills = $values['inTransitBills'] ?? null;
-        $this->inTransitBillsAmount = $values['inTransitBillsAmount'] ?? null;
-        $this->overdueBills = $values['overdueBills'] ?? null;
-        $this->overdueBillsAmount = $values['overdueBillsAmount'] ?? null;
-        $this->paidBills = $values['paidBills'] ?? null;
-        $this->paidBillsAmount = $values['paidBillsAmount'] ?? null;
+        $this->activeBills = $values['activeBills'] ?? null;
         $this->pendingBills = $values['pendingBills'] ?? null;
-        $this->pendingBillsAmount = $values['pendingBillsAmount'] ?? null;
+        $this->inTransitBills = $values['inTransitBills'] ?? null;
+        $this->paidBills = $values['paidBills'] ?? null;
+        $this->overdueBills = $values['overdueBills'] ?? null;
+        $this->approvedBills = $values['approvedBills'] ?? null;
+        $this->disapprovedBills = $values['disapprovedBills'] ?? null;
         $this->totalBills = $values['totalBills'] ?? null;
+        $this->activeBillsAmount = $values['activeBillsAmount'] ?? null;
+        $this->pendingBillsAmount = $values['pendingBillsAmount'] ?? null;
+        $this->inTransitBillsAmount = $values['inTransitBillsAmount'] ?? null;
+        $this->paidBillsAmount = $values['paidBillsAmount'] ?? null;
+        $this->overdueBillsAmount = $values['overdueBillsAmount'] ?? null;
+        $this->approvedBillsAmount = $values['approvedBillsAmount'] ?? null;
+        $this->disapprovedBillsAmount = $values['disapprovedBillsAmount'] ?? null;
         $this->totalBillsAmount = $values['totalBillsAmount'] ?? null;
     }
 

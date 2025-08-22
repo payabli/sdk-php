@@ -3,9 +3,15 @@
 namespace Payabli\Bill\Requests;
 
 use Payabli\Core\Json\JsonSerializableType;
+use Payabli\Types\ExportFormat;
 
 class ListBillsRequest extends JsonSerializableType
 {
+    /**
+     * @var ?value-of<ExportFormat> $exportFormat
+     */
+    public ?string $exportFormat;
+
     /**
      * @var ?int $fromRecord The number of records to skip before starting to collect the result set.
      */
@@ -42,6 +48,7 @@ class ListBillsRequest extends JsonSerializableType
      * - `approvalUserId` (`eq`, `ne`)
      * - `parentOrgId` (`ne`, `eq`, `nin`, `in`)
      * - `approvalUserEmail` (`eq`, `ne`)
+     * - `scheduleId` (`ne`, `eq`)
      *
      * List of comparison accepted - enclosed between parentheses:
      * - `eq` or empty => equal
@@ -71,6 +78,7 @@ class ListBillsRequest extends JsonSerializableType
 
     /**
      * @param array{
+     *   exportFormat?: ?value-of<ExportFormat>,
      *   fromRecord?: ?int,
      *   limitRecord?: ?int,
      *   parameters?: ?array<string, ?string>,
@@ -80,6 +88,7 @@ class ListBillsRequest extends JsonSerializableType
     public function __construct(
         array $values = [],
     ) {
+        $this->exportFormat = $values['exportFormat'] ?? null;
         $this->fromRecord = $values['fromRecord'] ?? null;
         $this->limitRecord = $values['limitRecord'] ?? null;
         $this->parameters = $values['parameters'] ?? null;
