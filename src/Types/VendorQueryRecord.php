@@ -162,10 +162,10 @@ class VendorQueryRecord extends JsonSerializableType
     public ?string $payeeName2;
 
     /**
-     * @var ?VendorPaymentMethod $paymentMethod
+     * @var ?string $paymentMethod
      */
     #[JsonProperty('PaymentMethod')]
-    public ?VendorPaymentMethod $paymentMethod;
+    public ?string $paymentMethod;
 
     /**
      * @var ?string $paypointDbaname
@@ -302,7 +302,7 @@ class VendorQueryRecord extends JsonSerializableType
      *   parentOrgId?: ?int,
      *   payeeName1?: ?string,
      *   payeeName2?: ?string,
-     *   paymentMethod?: ?VendorPaymentMethod,
+     *   paymentMethod?: ?string,
      *   paypointDbaname?: ?string,
      *   paypointEntryname?: ?string,
      *   paypointLegalname?: ?string,

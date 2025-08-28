@@ -23,16 +23,16 @@ class GetInvoiceRecord extends JsonSerializableType
     public int $invoiceId;
 
     /**
-     * @var ?int $customerId
+     * @var int $customerId
      */
     #[JsonProperty('customerId')]
-    public ?int $customerId;
+    public int $customerId;
 
     /**
-     * @var ?int $paypointId
+     * @var int $paypointId
      */
     #[JsonProperty('paypointId')]
-    public ?int $paypointId;
+    public int $paypointId;
 
     /**
      * @var string $invoiceNumber
@@ -125,10 +125,10 @@ class GetInvoiceRecord extends JsonSerializableType
     public ?float $discount;
 
     /**
-     * @var ?float $invoiceAmount
+     * @var float $invoiceAmount
      */
     #[JsonProperty('invoiceAmount')]
-    public ?float $invoiceAmount;
+    public float $invoiceAmount;
 
     /**
      * @var float $invoicePaidAmount
@@ -307,12 +307,15 @@ class GetInvoiceRecord extends JsonSerializableType
     /**
      * @param array{
      *   invoiceId: int,
+     *   customerId: int,
+     *   paypointId: int,
      *   invoiceNumber: string,
      *   createdAt: DateTime,
      *   invoiceStatus: int,
      *   invoiceType: int,
      *   frequency: value-of<Frequency>,
      *   paymentTerms: string,
+     *   invoiceAmount: float,
      *   invoicePaidAmount: float,
      *   purchaseOrder: string,
      *   shippingAddress1: string,
@@ -334,8 +337,6 @@ class GetInvoiceRecord extends JsonSerializableType
      *   paypointEntryname: string,
      *   parentOrgName: string,
      *   documentsRef: DocumentsRef,
-     *   customerId?: ?int,
-     *   paypointId?: ?int,
      *   invoiceDate?: ?DateTime,
      *   invoiceDueDate?: ?DateTime,
      *   invoiceSentDate?: ?DateTime,
@@ -345,7 +346,6 @@ class GetInvoiceRecord extends JsonSerializableType
      *   notes?: ?string,
      *   tax?: ?float,
      *   discount?: ?float,
-     *   invoiceAmount?: ?float,
      *   freightAmount?: ?float,
      *   dutyAmount?: ?float,
      *   firstName?: ?string,
@@ -360,8 +360,8 @@ class GetInvoiceRecord extends JsonSerializableType
         array $values,
     ) {
         $this->invoiceId = $values['invoiceId'];
-        $this->customerId = $values['customerId'] ?? null;
-        $this->paypointId = $values['paypointId'] ?? null;
+        $this->customerId = $values['customerId'];
+        $this->paypointId = $values['paypointId'];
         $this->invoiceNumber = $values['invoiceNumber'];
         $this->invoiceDate = $values['invoiceDate'] ?? null;
         $this->invoiceDueDate = $values['invoiceDueDate'] ?? null;
@@ -377,7 +377,7 @@ class GetInvoiceRecord extends JsonSerializableType
         $this->notes = $values['notes'] ?? null;
         $this->tax = $values['tax'] ?? null;
         $this->discount = $values['discount'] ?? null;
-        $this->invoiceAmount = $values['invoiceAmount'] ?? null;
+        $this->invoiceAmount = $values['invoiceAmount'];
         $this->invoicePaidAmount = $values['invoicePaidAmount'];
         $this->freightAmount = $values['freightAmount'] ?? null;
         $this->dutyAmount = $values['dutyAmount'] ?? null;

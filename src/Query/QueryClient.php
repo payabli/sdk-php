@@ -5,7 +5,7 @@ namespace Payabli\Query;
 use GuzzleHttp\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\Query\Requests\ListBatchDetailsRequest;
-use Payabli\Types\QueryBatchesDetailResponse;
+use Payabli\QueryTypes\Types\QueryBatchesDetailResponse;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -17,7 +17,7 @@ use Psr\Http\Client\ClientExceptionInterface;
 use Payabli\Query\Requests\ListBatchDetailsOrgRequest;
 use Payabli\Types\QueryResponseSettlements;
 use Payabli\Query\Requests\ListBatchesRequest;
-use Payabli\Types\QueryBatchesResponse;
+use Payabli\QueryTypes\Types\QueryBatchesResponse;
 use Payabli\Query\Requests\ListBatchesOrgRequest;
 use Payabli\Query\Requests\ListBatchesOutRequest;
 use Payabli\Types\QueryBatchesOutResponse;
@@ -35,7 +35,7 @@ use Payabli\Query\Requests\ListNotificationsRequest;
 use Payabli\Types\QueryResponseNotifications;
 use Payabli\Query\Requests\ListNotificationsOrgRequest;
 use Payabli\Query\Requests\ListOrganizationsRequest;
-use Payabli\Query\Types\ListOrganizationsResponse;
+use Payabli\QueryTypes\Types\ListOrganizationsResponse;
 use Payabli\Query\Requests\ListPayoutRequest;
 use Payabli\Types\QueryPayoutTransaction;
 use Payabli\Query\Requests\ListPayoutOrgRequest;
@@ -50,7 +50,7 @@ use Payabli\Query\Requests\ListTransactionsRequest;
 use Payabli\Types\QueryResponseTransactions;
 use Payabli\Query\Requests\ListTransactionsOrgRequest;
 use Payabli\Query\Requests\ListTransfersPaypointRequest;
-use Payabli\Query\Types\QueryTransferDetailResponse;
+use Payabli\QueryTypes\Types\QueryTransferDetailResponse;
 use Payabli\Query\Requests\ListTransfersRequest;
 use Payabli\Types\TransferQueryResponse;
 use Payabli\Query\Requests\ListTransfersRequestOrg;
@@ -2012,7 +2012,7 @@ class QueryClient
     /**
      * Retrieve a list of transfers for an org. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
-     * @param ?int $orgId
+     * @param int $orgId
      * @param ListTransfersRequestOrg $request
      * @param ?array{
      *   baseUrl?: string,
@@ -2026,7 +2026,7 @@ class QueryClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listTransfersOrg(ListTransfersRequestOrg $request = new ListTransfersRequestOrg(), ?int $orgId = null, ?array $options = null): TransferQueryResponse
+    public function listTransfersOrg(int $orgId, ListTransfersRequestOrg $request = new ListTransfersRequestOrg(), ?array $options = null): TransferQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];

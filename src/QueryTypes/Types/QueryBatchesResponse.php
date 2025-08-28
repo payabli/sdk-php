@@ -1,10 +1,11 @@
 <?php
 
-namespace Payabli\Types;
+namespace Payabli\QueryTypes\Types;
 
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
 use Payabli\Core\Types\ArrayType;
+use Payabli\Types\BatchSummary;
 
 /**
  * Response body for queries about batches.

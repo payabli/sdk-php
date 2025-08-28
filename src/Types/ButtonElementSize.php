@@ -2,7 +2,7 @@
 
 namespace Payabli\Types;
 
-enum ButtomElementSize: string
+enum ButtonElementSize: string
 {
     case Sm = "sm";
     case Md = "md";

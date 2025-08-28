@@ -251,10 +251,10 @@ class VendorDataResponse extends JsonSerializableType
     public ?string $customerVendorAccount;
 
     /**
-     * @var ?int $internalReferenceId
+     * @var int $internalReferenceId
      */
     #[JsonProperty('InternalReferenceId')]
-    public ?int $internalReferenceId;
+    public int $internalReferenceId;
 
     /**
      * @var array<string, string> $additionalData
@@ -311,6 +311,7 @@ class VendorDataResponse extends JsonSerializableType
      *   payeeName2: string,
      *   customField1: string,
      *   customField2: string,
+     *   internalReferenceId: int,
      *   additionalData: array<string, string>,
      *   externalPaypointId: string,
      *   storedMethods: array<VendorResponseStoredMethod>,
@@ -319,7 +320,6 @@ class VendorDataResponse extends JsonSerializableType
      *   vendorId?: ?int,
      *   enrollmentStatus?: ?string,
      *   customerVendorAccount?: ?string,
-     *   internalReferenceId?: ?int,
      * } $values
      */
     public function __construct(
@@ -365,7 +365,7 @@ class VendorDataResponse extends JsonSerializableType
         $this->customField1 = $values['customField1'];
         $this->customField2 = $values['customField2'];
         $this->customerVendorAccount = $values['customerVendorAccount'] ?? null;
-        $this->internalReferenceId = $values['internalReferenceId'] ?? null;
+        $this->internalReferenceId = $values['internalReferenceId'];
         $this->additionalData = $values['additionalData'];
         $this->externalPaypointId = $values['externalPaypointId'];
         $this->storedMethods = $values['storedMethods'];

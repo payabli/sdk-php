@@ -130,10 +130,10 @@ class VendorData extends JsonSerializableType
     public ?string $payeeName2;
 
     /**
-     * @var ?VendorPaymentMethod $paymentMethod
+     * @var ?string $paymentMethod
      */
     #[JsonProperty('paymentMethod')]
-    public ?VendorPaymentMethod $paymentMethod;
+    public ?string $paymentMethod;
 
     /**
      * @var ?string $phone
@@ -223,7 +223,7 @@ class VendorData extends JsonSerializableType
      *   name2?: ?string,
      *   payeeName1?: ?string,
      *   payeeName2?: ?string,
-     *   paymentMethod?: ?VendorPaymentMethod,
+     *   paymentMethod?: ?string,
      *   phone?: ?string,
      *   remitAddress1?: ?string,
      *   remitAddress2?: ?string,

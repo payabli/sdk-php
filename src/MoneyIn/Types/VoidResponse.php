@@ -23,10 +23,10 @@ class VoidResponse extends JsonSerializableType
     public ?string $pageIdentifier;
 
     /**
-     * @var ?int $roomId
+     * @var int $roomId
      */
     #[JsonProperty('roomId')]
-    public ?int $roomId;
+    public int $roomId;
 
     /**
      * @var bool $isSuccess
@@ -49,11 +49,11 @@ class VoidResponse extends JsonSerializableType
     /**
      * @param array{
      *   responseCode: int,
+     *   roomId: int,
      *   isSuccess: bool,
      *   responseText: string,
      *   responseData: VoidResponseData,
      *   pageIdentifier?: ?string,
-     *   roomId?: ?int,
      * } $values
      */
     public function __construct(
@@ -61,7 +61,7 @@ class VoidResponse extends JsonSerializableType
     ) {
         $this->responseCode = $values['responseCode'];
         $this->pageIdentifier = $values['pageIdentifier'] ?? null;
-        $this->roomId = $values['roomId'] ?? null;
+        $this->roomId = $values['roomId'];
         $this->isSuccess = $values['isSuccess'];
         $this->responseText = $values['responseText'];
         $this->responseData = $values['responseData'];

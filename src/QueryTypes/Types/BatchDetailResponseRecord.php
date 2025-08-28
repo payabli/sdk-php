@@ -1,12 +1,20 @@
 <?php
 
-namespace Payabli\Types;
+namespace Payabli\QueryTypes\Types;
 
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
+use Payabli\Types\QueryPaymentData;
 use DateTime;
 use Payabli\Core\Types\Date;
+use Payabli\Types\QueryTransactionPayorData;
+use Payabli\Types\QueryResponseData;
+use Payabli\Types\AchHolderType;
+use Payabli\Types\SplitFundingContent;
 use Payabli\Core\Types\ArrayType;
+use Payabli\Types\QueryCFeeTransaction;
+use Payabli\Types\BillData;
+use Payabli\Types\QueryTransactionEvents;
 
 class BatchDetailResponseRecord extends JsonSerializableType
 {
@@ -227,10 +235,10 @@ class BatchDetailResponseRecord extends JsonSerializableType
     public int $retrievalId;
 
     /**
-     * @var ?int $chargebackId
+     * @var int $chargebackId
      */
     #[JsonProperty('ChargebackId')]
-    public ?int $chargebackId;
+    public int $chargebackId;
 
     /**
      * @var value-of<AchHolderType> $achHolderType
@@ -251,10 +259,10 @@ class BatchDetailResponseRecord extends JsonSerializableType
     public string $connectorName;
 
     /**
-     * @var ?int $entrypageId
+     * @var int $entrypageId
      */
     #[JsonProperty('EntrypageId')]
-    public ?int $entrypageId;
+    public int $entrypageId;
 
     /**
      * @var float $feeAmount
@@ -263,22 +271,22 @@ class BatchDetailResponseRecord extends JsonSerializableType
     public float $feeAmount;
 
     /**
-     * @var ?int $orgId
+     * @var int $orgId
      */
     #[JsonProperty('OrgId')]
-    public ?int $orgId;
+    public int $orgId;
 
     /**
-     * @var ?int $payorId
+     * @var int $payorId
      */
     #[JsonProperty('PayorId')]
-    public ?int $payorId;
+    public int $payorId;
 
     /**
-     * @var ?int $paypointId
+     * @var int $paypointId
      */
     #[JsonProperty('PaypointId')]
-    public ?int $paypointId;
+    public int $paypointId;
 
     /**
      * @var ?float $pendingFeeAmount
@@ -287,10 +295,10 @@ class BatchDetailResponseRecord extends JsonSerializableType
     public ?float $pendingFeeAmount;
 
     /**
-     * @var ?int $refundId
+     * @var int $refundId
      */
     #[JsonProperty('RefundId')]
-    public ?int $refundId;
+    public int $refundId;
 
     /**
      * @var int $returnedId
@@ -371,10 +379,16 @@ class BatchDetailResponseRecord extends JsonSerializableType
      *   parentOrgId: int,
      *   paypointEntryname: string,
      *   retrievalId: int,
+     *   chargebackId: int,
      *   achHolderType: value-of<AchHolderType>,
      *   achSecCode: string,
      *   connectorName: string,
+     *   entrypageId: int,
      *   feeAmount: float,
+     *   orgId: int,
+     *   payorId: int,
+     *   paypointId: int,
+     *   refundId: int,
      *   returnedId: int,
      *   totalAmount: float,
      *   cfeeTransactions: array<QueryCFeeTransaction>,
@@ -388,13 +402,7 @@ class BatchDetailResponseRecord extends JsonSerializableType
      *   customer?: ?QueryTransactionPayorData,
      *   responseData?: ?QueryResponseData,
      *   deviceId?: ?string,
-     *   chargebackId?: ?int,
-     *   entrypageId?: ?int,
-     *   orgId?: ?int,
-     *   payorId?: ?int,
-     *   paypointId?: ?int,
      *   pendingFeeAmount?: ?float,
-     *   refundId?: ?int,
      *   splitFundingInstructions?: ?array<SplitFundingContent>,
      *   invoiceData?: ?BillData,
      * } $values
@@ -438,17 +446,17 @@ class BatchDetailResponseRecord extends JsonSerializableType
         $this->paypointEntryname = $values['paypointEntryname'];
         $this->deviceId = $values['deviceId'] ?? null;
         $this->retrievalId = $values['retrievalId'];
-        $this->chargebackId = $values['chargebackId'] ?? null;
+        $this->chargebackId = $values['chargebackId'];
         $this->achHolderType = $values['achHolderType'];
         $this->achSecCode = $values['achSecCode'];
         $this->connectorName = $values['connectorName'];
-        $this->entrypageId = $values['entrypageId'] ?? null;
+        $this->entrypageId = $values['entrypageId'];
         $this->feeAmount = $values['feeAmount'];
-        $this->orgId = $values['orgId'] ?? null;
-        $this->payorId = $values['payorId'] ?? null;
-        $this->paypointId = $values['paypointId'] ?? null;
+        $this->orgId = $values['orgId'];
+        $this->payorId = $values['payorId'];
+        $this->paypointId = $values['paypointId'];
         $this->pendingFeeAmount = $values['pendingFeeAmount'] ?? null;
-        $this->refundId = $values['refundId'] ?? null;
+        $this->refundId = $values['refundId'];
         $this->returnedId = $values['returnedId'];
         $this->splitFundingInstructions = $values['splitFundingInstructions'] ?? null;
         $this->totalAmount = $values['totalAmount'];

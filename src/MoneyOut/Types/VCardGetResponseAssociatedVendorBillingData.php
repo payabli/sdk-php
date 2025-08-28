@@ -4,6 +4,7 @@ namespace Payabli\MoneyOut\Types;
 
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
+use Payabli\Core\Types\ArrayType;
 
 /**
  * Billing data for the vendor.
@@ -11,16 +12,46 @@ use Payabli\Core\Json\JsonProperty;
 class VCardGetResponseAssociatedVendorBillingData extends JsonSerializableType
 {
     /**
+     * @var ?int $id Unique identifier for billing data.
+     */
+    #[JsonProperty('id')]
+    public ?int $id;
+
+    /**
+     * @var ?string $accountId Account identifier.
+     */
+    #[JsonProperty('accountId')]
+    public ?string $accountId;
+
+    /**
+     * @var ?string $nickname Nickname for the account.
+     */
+    #[JsonProperty('nickname')]
+    public ?string $nickname;
+
+    /**
+     * @var ?string $bankName Name of the bank used for transactions.
+     */
+    #[JsonProperty('bankName')]
+    public ?string $bankName;
+
+    /**
+     * @var ?string $routingAccount Routing number for the bank account.
+     */
+    #[JsonProperty('routingAccount')]
+    public ?string $routingAccount;
+
+    /**
      * @var ?string $accountNumber Masked account number for transactions.
      */
     #[JsonProperty('accountNumber')]
     public ?string $accountNumber;
 
     /**
-     * @var ?int $bankAccountFunction Function of the bank account.
+     * @var ?string $typeAccount Type of the bank account.
      */
-    #[JsonProperty('bankAccountFunction')]
-    public ?int $bankAccountFunction;
+    #[JsonProperty('typeAccount')]
+    public ?string $typeAccount;
 
     /**
      * @var ?string $bankAccountHolderName Name of the bank account holder.
@@ -35,52 +66,70 @@ class VCardGetResponseAssociatedVendorBillingData extends JsonSerializableType
     public ?string $bankAccountHolderType;
 
     /**
-     * @var ?string $bankName Name of the bank used for transactions.
+     * @var ?int $bankAccountFunction Function of the bank account.
      */
-    #[JsonProperty('bankName')]
-    public ?string $bankName;
+    #[JsonProperty('bankAccountFunction')]
+    public ?int $bankAccountFunction;
 
     /**
-     * @var ?string $id Unique identifier for billing data.
+     * @var ?bool $verified Indicates if the account is verified.
      */
-    #[JsonProperty('id')]
-    public ?string $id;
+    #[JsonProperty('verified')]
+    public ?bool $verified;
 
     /**
-     * @var ?string $routingAccount Routing number for the bank account.
+     * @var ?int $status Status of the billing data.
      */
-    #[JsonProperty('routingAccount')]
-    public ?string $routingAccount;
+    #[JsonProperty('status')]
+    public ?int $status;
 
     /**
-     * @var ?string $typeAccount Type of the bank account.
+     * @var ?array<mixed> $services Services associated with the account.
      */
-    #[JsonProperty('typeAccount')]
-    public ?string $typeAccount;
+    #[JsonProperty('services'), ArrayType(['mixed'])]
+    public ?array $services;
+
+    /**
+     * @var ?bool $default Indicates if this is the default billing account.
+     */
+    #[JsonProperty('default')]
+    public ?bool $default;
 
     /**
      * @param array{
+     *   id?: ?int,
+     *   accountId?: ?string,
+     *   nickname?: ?string,
+     *   bankName?: ?string,
+     *   routingAccount?: ?string,
      *   accountNumber?: ?string,
-     *   bankAccountFunction?: ?int,
+     *   typeAccount?: ?string,
      *   bankAccountHolderName?: ?string,
      *   bankAccountHolderType?: ?string,
-     *   bankName?: ?string,
-     *   id?: ?string,
-     *   routingAccount?: ?string,
-     *   typeAccount?: ?string,
+     *   bankAccountFunction?: ?int,
+     *   verified?: ?bool,
+     *   status?: ?int,
+     *   services?: ?array<mixed>,
+     *   default?: ?bool,
      * } $values
      */
     public function __construct(
         array $values = [],
     ) {
+        $this->id = $values['id'] ?? null;
+        $this->accountId = $values['accountId'] ?? null;
+        $this->nickname = $values['nickname'] ?? null;
+        $this->bankName = $values['bankName'] ?? null;
+        $this->routingAccount = $values['routingAccount'] ?? null;
         $this->accountNumber = $values['accountNumber'] ?? null;
-        $this->bankAccountFunction = $values['bankAccountFunction'] ?? null;
+        $this->typeAccount = $values['typeAccount'] ?? null;
         $this->bankAccountHolderName = $values['bankAccountHolderName'] ?? null;
         $this->bankAccountHolderType = $values['bankAccountHolderType'] ?? null;
-        $this->bankName = $values['bankName'] ?? null;
-        $this->id = $values['id'] ?? null;
-        $this->routingAccount = $values['routingAccount'] ?? null;
-        $this->typeAccount = $values['typeAccount'] ?? null;
+        $this->bankAccountFunction = $values['bankAccountFunction'] ?? null;
+        $this->verified = $values['verified'] ?? null;
+        $this->status = $values['status'] ?? null;
+        $this->services = $values['services'] ?? null;
+        $this->default = $values['default'] ?? null;
     }
 
     /**

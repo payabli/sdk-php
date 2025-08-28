@@ -47,10 +47,10 @@ class ValidateResponseData extends JsonSerializableType
     public string $cvvResponseText;
 
     /**
-     * @var ?int $customerId
+     * @var int $customerId
      */
     #[JsonProperty('customerId')]
-    public ?int $customerId;
+    public int $customerId;
 
     /**
      * @var ?string $methodReferenceId
@@ -66,7 +66,7 @@ class ValidateResponseData extends JsonSerializableType
      *   resultText: string,
      *   avsResponseText: string,
      *   cvvResponseText: string,
-     *   customerId?: ?int,
+     *   customerId: int,
      *   methodReferenceId?: ?string,
      * } $values
      */
@@ -79,7 +79,7 @@ class ValidateResponseData extends JsonSerializableType
         $this->resultText = $values['resultText'];
         $this->avsResponseText = $values['avsResponseText'];
         $this->cvvResponseText = $values['cvvResponseText'];
-        $this->customerId = $values['customerId'] ?? null;
+        $this->customerId = $values['customerId'];
         $this->methodReferenceId = $values['methodReferenceId'] ?? null;
     }
 

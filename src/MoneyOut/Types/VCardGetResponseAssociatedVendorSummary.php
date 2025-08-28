@@ -17,34 +17,10 @@ class VCardGetResponseAssociatedVendorSummary extends JsonSerializableType
     public ?int $activeBills;
 
     /**
-     * @var ?float $activeBillsAmount Total amount of active bills.
+     * @var ?int $pendingBills Number of bills pending approval or payment.
      */
-    #[JsonProperty('ActiveBillsAmount')]
-    public ?float $activeBillsAmount;
-
-    /**
-     * @var ?int $approvedBills Number of bills that have been approved.
-     */
-    #[JsonProperty('ApprovedBills')]
-    public ?int $approvedBills;
-
-    /**
-     * @var ?float $approvedBillsAmount Total amount of approved bills.
-     */
-    #[JsonProperty('ApprovedBillsAmount')]
-    public ?float $approvedBillsAmount;
-
-    /**
-     * @var ?int $disapprovedBills Number of bills that have been disapproved.
-     */
-    #[JsonProperty('DisapprovedBills')]
-    public ?int $disapprovedBills;
-
-    /**
-     * @var ?float $disapprovedBillsAmount Total amount of rejected bills.
-     */
-    #[JsonProperty('DisapprovedBillsAmount')]
-    public ?float $disapprovedBillsAmount;
+    #[JsonProperty('PendingBills')]
+    public ?int $pendingBills;
 
     /**
      * @var ?int $inTransitBills Number of bills in transit.
@@ -53,10 +29,10 @@ class VCardGetResponseAssociatedVendorSummary extends JsonSerializableType
     public ?int $inTransitBills;
 
     /**
-     * @var ?float $inTransitBillsAmount Total amount of bills in transit.
+     * @var ?int $paidBills Number of bills that have been paid.
      */
-    #[JsonProperty('InTransitBillsAmount')]
-    public ?float $inTransitBillsAmount;
+    #[JsonProperty('PaidBills')]
+    public ?int $paidBills;
 
     /**
      * @var ?int $overdueBills Number of bills that are overdue.
@@ -65,28 +41,28 @@ class VCardGetResponseAssociatedVendorSummary extends JsonSerializableType
     public ?int $overdueBills;
 
     /**
-     * @var ?float $overdueBillsAmount Total amount of overdue bills.
+     * @var ?int $approvedBills Number of bills that have been approved.
      */
-    #[JsonProperty('OverdueBillsAmount')]
-    public ?float $overdueBillsAmount;
+    #[JsonProperty('ApprovedBills')]
+    public ?int $approvedBills;
 
     /**
-     * @var ?int $paidBills Number of bills that have been paid.
+     * @var ?int $disapprovedBills Number of bills that have been disapproved.
      */
-    #[JsonProperty('PaidBills')]
-    public ?int $paidBills;
+    #[JsonProperty('DisapprovedBills')]
+    public ?int $disapprovedBills;
 
     /**
-     * @var ?float $paidBillsAmount Total amount of paid bills.
+     * @var ?int $totalBills Total number of bills.
      */
-    #[JsonProperty('PaidBillsAmount')]
-    public ?float $paidBillsAmount;
+    #[JsonProperty('TotalBills')]
+    public ?int $totalBills;
 
     /**
-     * @var ?int $pendingBills Number of bills pending approval or payment.
+     * @var ?float $activeBillsAmount Total amount of active bills.
      */
-    #[JsonProperty('PendingBills')]
-    public ?int $pendingBills;
+    #[JsonProperty('ActiveBillsAmount')]
+    public ?float $activeBillsAmount;
 
     /**
      * @var ?float $pendingBillsAmount Total amount of pending bills.
@@ -95,10 +71,34 @@ class VCardGetResponseAssociatedVendorSummary extends JsonSerializableType
     public ?float $pendingBillsAmount;
 
     /**
-     * @var ?int $totalBills Total number of bills.
+     * @var ?float $inTransitBillsAmount Total amount of bills in transit.
      */
-    #[JsonProperty('TotalBills')]
-    public ?int $totalBills;
+    #[JsonProperty('InTransitBillsAmount')]
+    public ?float $inTransitBillsAmount;
+
+    /**
+     * @var ?float $paidBillsAmount Total amount of paid bills.
+     */
+    #[JsonProperty('PaidBillsAmount')]
+    public ?float $paidBillsAmount;
+
+    /**
+     * @var ?float $overdueBillsAmount Total amount of overdue bills.
+     */
+    #[JsonProperty('OverdueBillsAmount')]
+    public ?float $overdueBillsAmount;
+
+    /**
+     * @var ?float $approvedBillsAmount Total amount of approved bills.
+     */
+    #[JsonProperty('ApprovedBillsAmount')]
+    public ?float $approvedBillsAmount;
+
+    /**
+     * @var ?float $disapprovedBillsAmount Total amount of rejected bills.
+     */
+    #[JsonProperty('DisapprovedBillsAmount')]
+    public ?float $disapprovedBillsAmount;
 
     /**
      * @var ?float $totalBillsAmount Total amount of all bills.
@@ -109,20 +109,20 @@ class VCardGetResponseAssociatedVendorSummary extends JsonSerializableType
     /**
      * @param array{
      *   activeBills?: ?int,
-     *   activeBillsAmount?: ?float,
-     *   approvedBills?: ?int,
-     *   approvedBillsAmount?: ?float,
-     *   disapprovedBills?: ?int,
-     *   disapprovedBillsAmount?: ?float,
-     *   inTransitBills?: ?int,
-     *   inTransitBillsAmount?: ?float,
-     *   overdueBills?: ?int,
-     *   overdueBillsAmount?: ?float,
-     *   paidBills?: ?int,
-     *   paidBillsAmount?: ?float,
      *   pendingBills?: ?int,
-     *   pendingBillsAmount?: ?float,
+     *   inTransitBills?: ?int,
+     *   paidBills?: ?int,
+     *   overdueBills?: ?int,
+     *   approvedBills?: ?int,
+     *   disapprovedBills?: ?int,
      *   totalBills?: ?int,
+     *   activeBillsAmount?: ?float,
+     *   pendingBillsAmount?: ?float,
+     *   inTransitBillsAmount?: ?float,
+     *   paidBillsAmount?: ?float,
+     *   overdueBillsAmount?: ?float,
+     *   approvedBillsAmount?: ?float,
+     *   disapprovedBillsAmount?: ?float,
      *   totalBillsAmount?: ?float,
      * } $values
      */
@@ -130,20 +130,20 @@ class VCardGetResponseAssociatedVendorSummary extends JsonSerializableType
         array $values = [],
     ) {
         $this->activeBills = $values['activeBills'] ?? null;
-        $this->activeBillsAmount = $values['activeBillsAmount'] ?? null;
-        $this->approvedBills = $values['approvedBills'] ?? null;
-        $this->approvedBillsAmount = $values['approvedBillsAmount'] ?? null;
-        $this->disapprovedBills = $values['disapprovedBills'] ?? null;
-        $this->disapprovedBillsAmount = $values['disapprovedBillsAmount'] ?? null;
-        $this->inTransitBills = $values['inTransitBills'] ?? null;
-        $this->inTransitBillsAmount = $values['inTransitBillsAmount'] ?? null;
-        $this->overdueBills = $values['overdueBills'] ?? null;
-        $this->overdueBillsAmount = $values['overdueBillsAmount'] ?? null;
-        $this->paidBills = $values['paidBills'] ?? null;
-        $this->paidBillsAmount = $values['paidBillsAmount'] ?? null;
         $this->pendingBills = $values['pendingBills'] ?? null;
-        $this->pendingBillsAmount = $values['pendingBillsAmount'] ?? null;
+        $this->inTransitBills = $values['inTransitBills'] ?? null;
+        $this->paidBills = $values['paidBills'] ?? null;
+        $this->overdueBills = $values['overdueBills'] ?? null;
+        $this->approvedBills = $values['approvedBills'] ?? null;
+        $this->disapprovedBills = $values['disapprovedBills'] ?? null;
         $this->totalBills = $values['totalBills'] ?? null;
+        $this->activeBillsAmount = $values['activeBillsAmount'] ?? null;
+        $this->pendingBillsAmount = $values['pendingBillsAmount'] ?? null;
+        $this->inTransitBillsAmount = $values['inTransitBillsAmount'] ?? null;
+        $this->paidBillsAmount = $values['paidBillsAmount'] ?? null;
+        $this->overdueBillsAmount = $values['overdueBillsAmount'] ?? null;
+        $this->approvedBillsAmount = $values['approvedBillsAmount'] ?? null;
+        $this->disapprovedBillsAmount = $values['disapprovedBillsAmount'] ?? null;
         $this->totalBillsAmount = $values['totalBillsAmount'] ?? null;
     }
 

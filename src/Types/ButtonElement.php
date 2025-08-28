@@ -5,7 +5,7 @@ namespace Payabli\Types;
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
 
-class ButtomElement extends JsonSerializableType
+class ButtonElement extends JsonSerializableType
 {
     /**
      * @var string $label Label for custom payment button
@@ -14,7 +14,7 @@ class ButtomElement extends JsonSerializableType
     public string $label;
 
     /**
-     * @var ?value-of<ButtomElementSize> $size Specify size of custom payment button
+     * @var ?value-of<ButtonElementSize> $size Specify size of custom payment button
      */
     #[JsonProperty('size')]
     public ?string $size;
@@ -22,7 +22,7 @@ class ButtomElement extends JsonSerializableType
     /**
      * @param array{
      *   label: string,
-     *   size?: ?value-of<ButtomElementSize>,
+     *   size?: ?value-of<ButtonElementSize>,
      * } $values
      */
     public function __construct(

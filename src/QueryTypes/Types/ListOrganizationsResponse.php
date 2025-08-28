@@ -1,29 +1,31 @@
 <?php
 
-namespace Payabli\Query\Types;
+namespace Payabli\QueryTypes\Types;
 
 use Payabli\Core\Json\JsonSerializableType;
+use Payabli\Types\OrganizationQueryRecord;
 use Payabli\Core\Json\JsonProperty;
 use Payabli\Core\Types\ArrayType;
+use Payabli\Types\QuerySummary;
 
-class QueryTransferDetailResponse extends JsonSerializableType
+class ListOrganizationsResponse extends JsonSerializableType
 {
     /**
-     * @var ?array<TransferDetailRecord> $records List of transfer detail records
+     * @var ?array<OrganizationQueryRecord> $records
      */
-    #[JsonProperty('Records'), ArrayType([TransferDetailRecord::class])]
+    #[JsonProperty('Records'), ArrayType([OrganizationQueryRecord::class])]
     public ?array $records;
 
     /**
-     * @var ?QueryTransferSummary $summary Summary of the transfer details query
+     * @var ?QuerySummary $summary
      */
     #[JsonProperty('Summary')]
-    public ?QueryTransferSummary $summary;
+    public ?QuerySummary $summary;
 
     /**
      * @param array{
-     *   records?: ?array<TransferDetailRecord>,
-     *   summary?: ?QueryTransferSummary,
+     *   records?: ?array<OrganizationQueryRecord>,
+     *   summary?: ?QuerySummary,
      * } $values
      */
     public function __construct(

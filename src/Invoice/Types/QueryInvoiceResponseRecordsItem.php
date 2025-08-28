@@ -23,16 +23,16 @@ class QueryInvoiceResponseRecordsItem extends JsonSerializableType
     public int $invoiceId;
 
     /**
-     * @var ?int $customerId
+     * @var int $customerId
      */
     #[JsonProperty('customerId')]
-    public ?int $customerId;
+    public int $customerId;
 
     /**
-     * @var ?int $paypointId
+     * @var int $paypointId
      */
     #[JsonProperty('paypointId')]
-    public ?int $paypointId;
+    public int $paypointId;
 
     /**
      * @var string $invoiceNumber
@@ -125,10 +125,10 @@ class QueryInvoiceResponseRecordsItem extends JsonSerializableType
     public ?float $discount;
 
     /**
-     * @var ?float $invoiceAmount
+     * @var float $invoiceAmount
      */
     #[JsonProperty('invoiceAmount')]
-    public ?float $invoiceAmount;
+    public float $invoiceAmount;
 
     /**
      * @var float $invoicePaidAmount
@@ -281,10 +281,10 @@ class QueryInvoiceResponseRecordsItem extends JsonSerializableType
     public string $paypointEntryname;
 
     /**
-     * @var ?int $parentOrgId
+     * @var int $parentOrgId
      */
     #[JsonProperty('ParentOrgId')]
-    public ?int $parentOrgId;
+    public int $parentOrgId;
 
     /**
      * @var string $parentOrgName
@@ -319,12 +319,15 @@ class QueryInvoiceResponseRecordsItem extends JsonSerializableType
     /**
      * @param array{
      *   invoiceId: int,
+     *   customerId: int,
+     *   paypointId: int,
      *   invoiceNumber: string,
      *   createdAt: DateTime,
      *   invoiceStatus: int,
      *   invoiceType: int,
      *   frequency: value-of<Frequency>,
      *   paymentTerms: string,
+     *   invoiceAmount: float,
      *   invoicePaidAmount: float,
      *   firstName: string,
      *   lastName: string,
@@ -343,10 +346,9 @@ class QueryInvoiceResponseRecordsItem extends JsonSerializableType
      *   paypointLegalname: string,
      *   paypointDbaname: string,
      *   paypointEntryname: string,
+     *   parentOrgId: int,
      *   parentOrgName: string,
      *   externalPaypointId: string,
-     *   customerId?: ?int,
-     *   paypointId?: ?int,
      *   invoiceDate?: ?DateTime,
      *   invoiceDueDate?: ?DateTime,
      *   invoiceSentDate?: ?DateTime,
@@ -356,7 +358,6 @@ class QueryInvoiceResponseRecordsItem extends JsonSerializableType
      *   notes?: ?string,
      *   tax?: ?float,
      *   discount?: ?float,
-     *   invoiceAmount?: ?float,
      *   freightAmount?: ?float,
      *   dutyAmount?: ?float,
      *   purchaseOrder?: ?string,
@@ -364,7 +365,6 @@ class QueryInvoiceResponseRecordsItem extends JsonSerializableType
      *   summaryCommodityCode?: ?string,
      *   billEvents?: ?array<GeneralEvents>,
      *   scheduledOptions?: ?BillOptions,
-     *   parentOrgId?: ?int,
      *   additionalData?: ?array<string, mixed>,
      *   documentsRef?: ?DocumentsRef,
      *   pageIdentifier?: ?string,
@@ -374,8 +374,8 @@ class QueryInvoiceResponseRecordsItem extends JsonSerializableType
         array $values,
     ) {
         $this->invoiceId = $values['invoiceId'];
-        $this->customerId = $values['customerId'] ?? null;
-        $this->paypointId = $values['paypointId'] ?? null;
+        $this->customerId = $values['customerId'];
+        $this->paypointId = $values['paypointId'];
         $this->invoiceNumber = $values['invoiceNumber'];
         $this->invoiceDate = $values['invoiceDate'] ?? null;
         $this->invoiceDueDate = $values['invoiceDueDate'] ?? null;
@@ -391,7 +391,7 @@ class QueryInvoiceResponseRecordsItem extends JsonSerializableType
         $this->notes = $values['notes'] ?? null;
         $this->tax = $values['tax'] ?? null;
         $this->discount = $values['discount'] ?? null;
-        $this->invoiceAmount = $values['invoiceAmount'] ?? null;
+        $this->invoiceAmount = $values['invoiceAmount'];
         $this->invoicePaidAmount = $values['invoicePaidAmount'];
         $this->freightAmount = $values['freightAmount'] ?? null;
         $this->dutyAmount = $values['dutyAmount'] ?? null;
@@ -417,7 +417,7 @@ class QueryInvoiceResponseRecordsItem extends JsonSerializableType
         $this->paypointLegalname = $values['paypointLegalname'];
         $this->paypointDbaname = $values['paypointDbaname'];
         $this->paypointEntryname = $values['paypointEntryname'];
-        $this->parentOrgId = $values['parentOrgId'] ?? null;
+        $this->parentOrgId = $values['parentOrgId'];
         $this->parentOrgName = $values['parentOrgName'];
         $this->additionalData = $values['additionalData'] ?? null;
         $this->documentsRef = $values['documentsRef'] ?? null;

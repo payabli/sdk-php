@@ -45,10 +45,10 @@ class InvoiceResponseWithoutData extends JsonSerializableType
     public ?string $pageidentifier;
 
     /**
-     * @var ?int $roomId
+     * @var int $roomId
      */
     #[JsonProperty('roomId')]
-    public ?int $roomId;
+    public int $roomId;
 
     /**
      * @param array{
@@ -59,8 +59,8 @@ class InvoiceResponseWithoutData extends JsonSerializableType
      *   |int
      * ),
      *   responseText: string,
+     *   roomId: int,
      *   pageidentifier?: ?string,
-     *   roomId?: ?int,
      * } $values
      */
     public function __construct(
@@ -71,7 +71,7 @@ class InvoiceResponseWithoutData extends JsonSerializableType
         $this->responseData = $values['responseData'];
         $this->responseText = $values['responseText'];
         $this->pageidentifier = $values['pageidentifier'] ?? null;
-        $this->roomId = $values['roomId'] ?? null;
+        $this->roomId = $values['roomId'];
     }
 
     /**

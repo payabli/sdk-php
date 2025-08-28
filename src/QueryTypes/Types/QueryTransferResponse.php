@@ -1,6 +1,6 @@
 <?php
 
-namespace Payabli\Query\Types;
+namespace Payabli\QueryTypes\Types;
 
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;

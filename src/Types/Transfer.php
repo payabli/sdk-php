@@ -15,10 +15,10 @@ class Transfer extends JsonSerializableType
     public int $transferId;
 
     /**
-     * @var ?int $paypointId
+     * @var int $paypointId
      */
     #[JsonProperty('paypointId')]
-    public ?int $paypointId;
+    public int $paypointId;
 
     /**
      * @var string $batchNumber
@@ -39,7 +39,7 @@ class Transfer extends JsonSerializableType
     public ?int $batchRecords;
 
     /**
-     * @var string $transferIdentifier Unique identifier for the transfer.
+     * @var string $transferIdentifier
      */
     #[JsonProperty('transferIdentifier')]
     public string $transferIdentifier;
@@ -167,6 +167,7 @@ class Transfer extends JsonSerializableType
     /**
      * @param array{
      *   transferId: int,
+     *   paypointId: int,
      *   batchNumber: string,
      *   transferIdentifier: string,
      *   batchId: int,
@@ -182,7 +183,6 @@ class Transfer extends JsonSerializableType
      *   thirdPartyPaidAmount: float,
      *   adjustmentsAmount: float,
      *   netTransferAmount: float,
-     *   paypointId?: ?int,
      *   batchCurrency?: ?string,
      *   batchRecords?: ?int,
      *   paypointEntryName?: ?string,
@@ -198,7 +198,7 @@ class Transfer extends JsonSerializableType
         array $values,
     ) {
         $this->transferId = $values['transferId'];
-        $this->paypointId = $values['paypointId'] ?? null;
+        $this->paypointId = $values['paypointId'];
         $this->batchNumber = $values['batchNumber'];
         $this->batchCurrency = $values['batchCurrency'] ?? null;
         $this->batchRecords = $values['batchRecords'] ?? null;

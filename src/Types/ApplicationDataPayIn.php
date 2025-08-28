@@ -126,7 +126,7 @@ class ApplicationDataPayIn extends JsonSerializableType
     public ?array $contacts;
 
     /**
-     * @var ?string $creditLimit
+     * @var ?string $creditLimit The maximum amount of credit that our lending partner, has authorized to your business. It's the upper boundary on how much you can spend or owe on a credit account at any given time.
      */
     #[JsonProperty('creditLimit')]
     public ?string $creditLimit;
@@ -240,7 +240,7 @@ class ApplicationDataPayIn extends JsonSerializableType
     public string $phonenumber;
 
     /**
-     * @var value-of<BoardingProcessingRegion> $processingRegion
+     * @var string $processingRegion The business's processing region, either `US` or `CA`.
      */
     #[JsonProperty('processingRegion')]
     public string $processingRegion;
@@ -352,7 +352,7 @@ class ApplicationDataPayIn extends JsonSerializableType
      *   services: ApplicationDataPayInServices,
      *   bankData: ApplicationDataPayInBankData,
      *   phonenumber: string,
-     *   processingRegion: value-of<BoardingProcessingRegion>,
+     *   processingRegion: string,
      *   signer: SignerDataRequest,
      *   whenCharged: value-of<Whencharged>,
      *   whenDelivered: value-of<Whendelivered>,

@@ -32,10 +32,10 @@ class PageSetting extends JsonSerializableType
     public ?FileContent $pageLogo;
 
     /**
-     * @var ?ButtomElement $paymentButton
+     * @var ?ButtonElement $paymentButton
      */
     #[JsonProperty('paymentButton')]
-    public ?ButtomElement $paymentButton;
+    public ?ButtonElement $paymentButton;
 
     /**
      * @var ?bool $redirectAfterApprove Flag indicating if the capability for redirection in the page will be activated
@@ -55,7 +55,7 @@ class PageSetting extends JsonSerializableType
      *   customCssUrl?: ?string,
      *   language?: ?string,
      *   pageLogo?: ?FileContent,
-     *   paymentButton?: ?ButtomElement,
+     *   paymentButton?: ?ButtonElement,
      *   redirectAfterApprove?: ?bool,
      *   redirectAfterApproveUrl?: ?string,
      * } $values
