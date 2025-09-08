@@ -4,8 +4,8 @@ namespace Payabli\PaymentLink;
 
 use GuzzleHttp\ClientInterface;
 use Payabli\Core\Client\RawClient;
-use Payabli\PaymentLink\Requests\PayLinkData;
-use Payabli\Types\PayabliApiResponsePaymentLinks;
+use Payabli\PaymentLink\Requests\PayLinkDataInvoice;
+use Payabli\PaymentLink\Types\PayabliApiResponsePaymentLinks;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -14,11 +14,13 @@ use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Client\ClientExceptionInterface;
+use Payabli\PaymentLink\Requests\PayLinkDataBill;
 use Payabli\PaymentLink\Types\GetPayLinkFromIdResponse;
 use Payabli\Types\PushPayLinkRequest;
 use Payabli\PaymentLink\Requests\RefreshPayLinkFromIdRequest;
 use Payabli\PaymentLink\Requests\SendPayLinkFromIdRequest;
 use Payabli\PaymentLink\Requests\PayLinkUpdateData;
+use Payabli\PaymentLink\Requests\PayLinkDataOut;
 
 class PaymentLinkClient
 {
@@ -60,7 +62,7 @@ class PaymentLinkClient
      * Generates a payment link for an invoice from the invoice ID.
      *
      * @param int $idInvoice Invoice ID
-     * @param PayLinkData $request
+     * @param PayLinkDataInvoice $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -73,7 +75,7 @@ class PaymentLinkClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function addPayLinkFromInvoice(int $idInvoice, PayLinkData $request = new PayLinkData(), ?array $options = null): PayabliApiResponsePaymentLinks
+    public function addPayLinkFromInvoice(int $idInvoice, PayLinkDataInvoice $request, ?array $options = null): PayabliApiResponsePaymentLinks
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -95,7 +97,77 @@ class PaymentLinkClient
                     method: HttpMethod::POST,
                     headers: $headers,
                     query: $query,
-                    body: $request,
+                    body: $request->body,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                return PayabliApiResponsePaymentLinks::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (RequestException $e) {
+            $response = $e->getResponse();
+            if ($response === null) {
+                throw new PayabliException(message: $e->getMessage(), previous: $e);
+            }
+            throw new PayabliApiException(
+                message: "API request failed",
+                statusCode: $response->getStatusCode(),
+                body: $response->getBody()->getContents(),
+            );
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Generates a payment link for a bill from the bill ID.
+     *
+     * @param int $billId The Payabli ID for the bill.
+     * @param PayLinkDataBill $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return PayabliApiResponsePaymentLinks
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function addPayLinkFromBill(int $billId, PayLinkDataBill $request, ?array $options = null): PayabliApiResponsePaymentLinks
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->amountFixed != null) {
+            $query['amountFixed'] = $request->amountFixed;
+        }
+        if ($request->mail2 != null) {
+            $query['mail2'] = $request->mail2;
+        }
+        $headers = [];
+        if ($request->idempotencyKey != null) {
+            $headers['idempotencyKey'] = $request->idempotencyKey;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "PaymentLink/bill/{$billId}",
+                    method: HttpMethod::POST,
+                    headers: $headers,
+                    query: $query,
+                    body: $request->body,
                 ),
                 $options,
             );
@@ -445,6 +517,73 @@ class PaymentLinkClient
                     path: "PaymentLink/update/{$payLinkId}",
                     method: HttpMethod::PUT,
                     body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                return PayabliApiResponsePaymentLinks::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (RequestException $e) {
+            $response = $e->getResponse();
+            if ($response === null) {
+                throw new PayabliException(message: $e->getMessage(), previous: $e);
+            }
+            throw new PayabliApiException(
+                message: "API request failed",
+                statusCode: $response->getStatusCode(),
+                body: $response->getBody()->getContents(),
+            );
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Generates a vendor payment link for a specific bill lot number. This allows you to pay all bills with the same lot number for a vendor with a single payment link.
+     *
+     * @param string $lotNumber Lot number of the bills to pay. All bills with this lot number will be included.
+     * @param PayLinkDataOut $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return PayabliApiResponsePaymentLinks
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function addPayLinkFromBillLotNumber(string $lotNumber, PayLinkDataOut $request, ?array $options = null): PayabliApiResponsePaymentLinks
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        $query['entryPoint'] = $request->entryPoint;
+        $query['vendorNumber'] = $request->vendorNumber;
+        if ($request->mail2 != null) {
+            $query['mail2'] = $request->mail2;
+        }
+        if ($request->amountFixed != null) {
+            $query['amountFixed'] = $request->amountFixed;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "PaymentLink/bill/lotNumber/{$lotNumber}",
+                    method: HttpMethod::POST,
+                    query: $query,
+                    body: $request->body,
                 ),
                 $options,
             );

@@ -1,6 +1,6 @@
 <?php
 
-namespace Payabli\Types;
+namespace Payabli\PaymentLink\Types;
 
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;

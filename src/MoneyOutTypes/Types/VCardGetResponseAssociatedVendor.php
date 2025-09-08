@@ -1,6 +1,6 @@
 <?php
 
-namespace Payabli\MoneyOut\Types;
+namespace Payabli\MoneyOutTypes\Types;
 
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
@@ -96,7 +96,7 @@ class VCardGetResponseAssociatedVendor extends JsonSerializableType
     public ?string $mcc;
 
     /**
-     * @var ?string $locationCode Unique location code for the vendor.
+     * @var ?string $locationCode
      */
     #[JsonProperty('LocationCode')]
     public ?string $locationCode;

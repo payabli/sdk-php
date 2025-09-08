@@ -1,6 +1,6 @@
 <?php
 
-namespace Payabli\MoneyOut\Types;
+namespace Payabli\MoneyOutTypes\Types;
 
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;

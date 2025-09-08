@@ -95,7 +95,7 @@ class VendorDataResponse extends JsonSerializableType
     public string $mcc;
 
     /**
-     * @var string $locationCode Additional location code used to identify the vendor.
+     * @var string $locationCode
      */
     #[JsonProperty('LocationCode')]
     public string $locationCode;
@@ -119,16 +119,16 @@ class VendorDataResponse extends JsonSerializableType
     public string $paymentMethod;
 
     /**
-     * @var ?int $vendorStatus
+     * @var int $vendorStatus
      */
     #[JsonProperty('VendorStatus')]
-    public ?int $vendorStatus;
+    public int $vendorStatus;
 
     /**
-     * @var ?int $vendorId
+     * @var int $vendorId
      */
     #[JsonProperty('VendorId')]
-    public ?int $vendorId;
+    public int $vendorId;
 
     /**
      * @var ?string $enrollmentStatus Vendor enrollment status
@@ -293,6 +293,8 @@ class VendorDataResponse extends JsonSerializableType
      *   contacts: array<ContactsResponse>,
      *   billingData: VendorResponseBillingData,
      *   paymentMethod: value-of<VendorDataResponsePaymentMethod>,
+     *   vendorStatus: int,
+     *   vendorId: int,
      *   summary: VendorResponseSummary,
      *   paypointLegalname: string,
      *   paypointDbaname: string,
@@ -316,8 +318,6 @@ class VendorDataResponse extends JsonSerializableType
      *   externalPaypointId: string,
      *   storedMethods: array<VendorResponseStoredMethod>,
      *   remitEmail?: ?string,
-     *   vendorStatus?: ?int,
-     *   vendorId?: ?int,
      *   enrollmentStatus?: ?string,
      *   customerVendorAccount?: ?string,
      * } $values
@@ -343,8 +343,8 @@ class VendorDataResponse extends JsonSerializableType
         $this->contacts = $values['contacts'];
         $this->billingData = $values['billingData'];
         $this->paymentMethod = $values['paymentMethod'];
-        $this->vendorStatus = $values['vendorStatus'] ?? null;
-        $this->vendorId = $values['vendorId'] ?? null;
+        $this->vendorStatus = $values['vendorStatus'];
+        $this->vendorId = $values['vendorId'];
         $this->enrollmentStatus = $values['enrollmentStatus'] ?? null;
         $this->summary = $values['summary'];
         $this->paypointLegalname = $values['paypointLegalname'];

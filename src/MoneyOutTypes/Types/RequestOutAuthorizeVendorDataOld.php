@@ -1,6 +1,6 @@
 <?php
 
-namespace Payabli\MoneyOut\Types;
+namespace Payabli\MoneyOutTypes\Types;
 
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
@@ -13,7 +13,7 @@ use Payabli\Types\VendorPaymentMethod;
 /**
  * Object containing vendor data.
  */
-class RequestOutAuthorizeVendorData extends JsonSerializableType
+class RequestOutAuthorizeVendorDataOld extends JsonSerializableType
 {
     /**
      * @var ?array<string, ?array<string, mixed>> $additionalData

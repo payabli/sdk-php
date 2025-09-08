@@ -4,8 +4,8 @@ namespace Payabli\MoneyOut;
 
 use GuzzleHttp\ClientInterface;
 use Payabli\Core\Client\RawClient;
-use Payabli\MoneyOut\Requests\RequestOutAuthorize;
-use Payabli\Types\PayabliApiResponse11;
+use Payabli\MoneyOut\Requests\MoneyOutTypesRequestOutAuthorize;
+use Payabli\MoneyOutTypes\Types\AuthCapturePayoutResponse;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -14,15 +14,15 @@ use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Client\ClientExceptionInterface;
-use Payabli\MoneyOut\Types\CaptureAllOutResponse;
+use Payabli\MoneyOutTypes\Types\CaptureAllOutResponse;
 use Payabli\Core\Json\JsonSerializer;
 use Payabli\Types\PayabliApiResponse0000;
 use Payabli\MoneyOut\Requests\CaptureAllOutRequest;
 use Payabli\MoneyOut\Requests\CaptureOutRequest;
 use Payabli\Types\BillDetailResponse;
-use Payabli\MoneyOut\Types\VCardGetResponse;
+use Payabli\MoneyOutTypes\Types\VCardGetResponse;
 use Payabli\MoneyOut\Requests\SendVCardLinkRequest;
-use Payabli\MoneyOut\Types\OperationResult;
+use Payabli\MoneyOutTypes\Types\OperationResult;
 use Payabli\Core\Json\JsonDecoder;
 
 class MoneyOutClient
@@ -64,7 +64,7 @@ class MoneyOutClient
     /**
      * Authorizes transaction for payout. Authorized transactions aren't flagged for settlement until captured. Use `referenceId` returned in the response to capture the transaction.
      *
-     * @param RequestOutAuthorize $request
+     * @param MoneyOutTypesRequestOutAuthorize $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -73,11 +73,11 @@ class MoneyOutClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponse11
+     * @return AuthCapturePayoutResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function authorizeOut(RequestOutAuthorize $request, ?array $options = null): PayabliApiResponse11
+    public function authorizeOut(MoneyOutTypesRequestOutAuthorize $request, ?array $options = null): AuthCapturePayoutResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -109,7 +109,7 @@ class MoneyOutClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
-                return PayabliApiResponse11::fromJson($json);
+                return AuthCapturePayoutResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -318,11 +318,11 @@ class MoneyOutClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponse11
+     * @return AuthCapturePayoutResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function captureOut(string $referenceId, CaptureOutRequest $request = new CaptureOutRequest(), ?array $options = null): PayabliApiResponse11
+    public function captureOut(string $referenceId, CaptureOutRequest $request = new CaptureOutRequest(), ?array $options = null): AuthCapturePayoutResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $headers = [];
@@ -342,7 +342,7 @@ class MoneyOutClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
-                return PayabliApiResponse11::fromJson($json);
+                return AuthCapturePayoutResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

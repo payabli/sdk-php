@@ -1,6 +1,6 @@
 <?php
 
-namespace Payabli\PaymentLink\Requests;
+namespace Payabli\PaymentLink\Types;
 
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Types\ContactElement;
@@ -15,23 +15,8 @@ use Payabli\Types\PayorElement;
 use Payabli\Types\HeaderElement;
 use Payabli\Types\PagelinkSetting;
 
-class PayLinkData extends JsonSerializableType
+class PaymentPageRequestBody extends JsonSerializableType
 {
-    /**
-     * @var ?bool $amountFixed Indicates whether customer can modify the payment amount. A value of `true` means the amount isn't modifiable, a value `false` means the payor can modify the amount to pay.
-     */
-    public ?bool $amountFixed;
-
-    /**
-     * @var ?string $mail2 List of recipient email addresses. When there is more than one, separate them by a semicolon (;).
-     */
-    public ?string $mail2;
-
-    /**
-     * @var ?string $idempotencyKey
-     */
-    public ?string $idempotencyKey;
-
     /**
      * @var ?ContactElement $contactUs ContactUs section of payment link page
      */
@@ -100,9 +85,6 @@ class PayLinkData extends JsonSerializableType
 
     /**
      * @param array{
-     *   amountFixed?: ?bool,
-     *   mail2?: ?string,
-     *   idempotencyKey?: ?string,
      *   contactUs?: ?ContactElement,
      *   invoices?: ?InvoiceElement,
      *   logo?: ?Element,
@@ -119,9 +101,6 @@ class PayLinkData extends JsonSerializableType
     public function __construct(
         array $values = [],
     ) {
-        $this->amountFixed = $values['amountFixed'] ?? null;
-        $this->mail2 = $values['mail2'] ?? null;
-        $this->idempotencyKey = $values['idempotencyKey'] ?? null;
         $this->contactUs = $values['contactUs'] ?? null;
         $this->invoices = $values['invoices'] ?? null;
         $this->logo = $values['logo'] ?? null;
@@ -133,5 +112,13 @@ class PayLinkData extends JsonSerializableType
         $this->payor = $values['payor'] ?? null;
         $this->review = $values['review'] ?? null;
         $this->settings = $values['settings'] ?? null;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->toJson();
     }
 }

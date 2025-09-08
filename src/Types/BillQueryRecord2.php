@@ -161,7 +161,7 @@ class BillQueryRecord2 extends JsonSerializableType
     public ?string $parentOrgName;
 
     /**
-     * @var ?string $paymentId Payment identifier.
+     * @var ?string $paymentId
      */
     #[JsonProperty('PaymentId')]
     public ?string $paymentId;

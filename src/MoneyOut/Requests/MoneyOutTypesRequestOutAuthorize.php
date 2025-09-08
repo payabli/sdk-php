@@ -3,9 +3,9 @@
 namespace Payabli\MoneyOut\Requests;
 
 use Payabli\Core\Json\JsonSerializableType;
-use Payabli\MoneyOut\Types\AuthorizePayoutBody;
+use Payabli\MoneyOutTypes\Types\AuthorizePayoutBody;
 
-class RequestOutAuthorize extends JsonSerializableType
+class MoneyOutTypesRequestOutAuthorize extends JsonSerializableType
 {
     /**
      * @var ?bool $allowDuplicatedBills When `true`, the authorization bypasses the requirement for unique bills, identified by vendor invoice number. This allows you to make more than one payout authorization for a bill, like a split payment.
