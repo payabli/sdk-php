@@ -7,7 +7,7 @@ use Payabli\Core\Json\JsonProperty;
 use Payabli\Types\TypeAccount;
 
 /**
- * Object containing vendor's bank information.
+ * Object containing vendor's bank information. This object is deprecated for this endpoint. Use the `paymentMethod` object in payout authorize requests instead.
  */
 class RequestOutAuthorizeVendorBillingData extends JsonSerializableType
 {

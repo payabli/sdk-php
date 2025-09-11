@@ -55,6 +55,9 @@ class ListTransfersRequest extends JsonSerializableType
      *   - `bankAccountNumber` (ct, nct, ne, eq)
      *   - `bankRoutingNumber` (ct, nct, ne, eq)
      *   - `batchCurrency` (in, nin, ne, eq)
+     *   - `parentOrgName` (ct, nct, ne, eq)
+     *   - `parentOrgId` (ct, nct, ne, eq)
+     *   - `externalPaypointID` (ct, nct)
      *
      * @var ?array<string, ?string> $parameters
      */

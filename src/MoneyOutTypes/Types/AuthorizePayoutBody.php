@@ -4,7 +4,6 @@ namespace Payabli\MoneyOutTypes\Types;
 
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
-use Payabli\Types\VendorPaymentMethod;
 use Payabli\Core\Types\ArrayType;
 
 class AuthorizePayoutBody extends JsonSerializableType
@@ -34,10 +33,10 @@ class AuthorizePayoutBody extends JsonSerializableType
     public ?string $orderDescription;
 
     /**
-     * @var VendorPaymentMethod $paymentMethod
+     * @var AuthorizePaymentMethod $paymentMethod
      */
     #[JsonProperty('paymentMethod')]
-    public VendorPaymentMethod $paymentMethod;
+    public AuthorizePaymentMethod $paymentMethod;
 
     /**
      * @var RequestOutAuthorizePaymentDetails $paymentDetails Object containing payment details.
@@ -46,14 +45,7 @@ class AuthorizePayoutBody extends JsonSerializableType
     public RequestOutAuthorizePaymentDetails $paymentDetails;
 
     /**
-     * Object containing vendor data.
-     * <Note>
-     *   When creating a new vendor in a payout authorization, the system first checks `billingData` for the vendor's billing information.
-     *   If `billingData` is empty, it falls back to the `paymentMethod` object information.
-     *   For existing vendors, `paymentMethod` is ignored unless a `storedMethodId` is provided.
-     * </Note>
-     *
-     * @var RequestOutAuthorizeVendorData $vendorData
+     * @var RequestOutAuthorizeVendorData $vendorData Object containing vendor data.
      */
     #[JsonProperty('vendorData')]
     public RequestOutAuthorizeVendorData $vendorData;
@@ -85,7 +77,7 @@ class AuthorizePayoutBody extends JsonSerializableType
     /**
      * @param array{
      *   entryPoint: string,
-     *   paymentMethod: VendorPaymentMethod,
+     *   paymentMethod: AuthorizePaymentMethod,
      *   paymentDetails: RequestOutAuthorizePaymentDetails,
      *   vendorData: RequestOutAuthorizeVendorData,
      *   invoiceData: array<RequestOutAuthorizeInvoiceData>,

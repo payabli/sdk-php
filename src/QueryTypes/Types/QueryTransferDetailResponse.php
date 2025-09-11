@@ -9,28 +9,28 @@ use Payabli\Core\Types\ArrayType;
 class QueryTransferDetailResponse extends JsonSerializableType
 {
     /**
-     * @var ?array<TransferDetailRecord> $records List of transfer detail records
+     * @var array<TransferDetailRecord> $records List of transfer detail records
      */
     #[JsonProperty('Records'), ArrayType([TransferDetailRecord::class])]
-    public ?array $records;
+    public array $records;
 
     /**
-     * @var ?QueryTransferSummary $summary Summary of the transfer details query
+     * @var QueryTransferSummary $summary Summary of the transfer details query
      */
     #[JsonProperty('Summary')]
-    public ?QueryTransferSummary $summary;
+    public QueryTransferSummary $summary;
 
     /**
      * @param array{
-     *   records?: ?array<TransferDetailRecord>,
-     *   summary?: ?QueryTransferSummary,
+     *   records: array<TransferDetailRecord>,
+     *   summary: QueryTransferSummary,
      * } $values
      */
     public function __construct(
-        array $values = [],
+        array $values,
     ) {
-        $this->records = $values['records'] ?? null;
-        $this->summary = $values['summary'] ?? null;
+        $this->records = $values['records'];
+        $this->summary = $values['summary'];
     }
 
     /**

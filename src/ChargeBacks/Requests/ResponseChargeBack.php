@@ -10,7 +10,7 @@ use Payabli\Core\Types\ArrayType;
 class ResponseChargeBack extends JsonSerializableType
 {
     /**
-     * @var ?string $idempotencyKey A unique ID you can include to prevent duplicating objects or transactions if a request is sent more than once. This key isn't generated in Payabli, you must generate it yourself.
+     * @var ?string $idempotencyKey
      */
     public ?string $idempotencyKey;
 

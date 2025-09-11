@@ -62,6 +62,15 @@ class QueryTransferSummary extends JsonSerializableType
     public ?float $serviceFees;
 
     /**
+     * The net batch amount is the gross batch amount minus any returns, refunds,
+     * billing and fees items, chargebacks, adjustments, and third party payments.
+     *
+     * @var ?float $netBatchAmount
+     */
+    #[JsonProperty('netBatchAmount')]
+    public ?float $netBatchAmount;
+
+    /**
      * @var ?float $transferAmount The transfer amount is the net batch amount plus or minus any returns, refunds,  billing and fees items, chargebacks, adjustments, and third party payments.  This is the amount from the batch that is transferred to the merchant bank account.
      */
     #[JsonProperty('transferAmount')]
@@ -126,6 +135,7 @@ class QueryTransferSummary extends JsonSerializableType
      *   thirdPartyPaid?: ?float,
      *   totalNetAmountTransfer?: ?float,
      *   serviceFees?: ?float,
+     *   netBatchAmount?: ?float,
      *   transferAmount?: ?float,
      *   refunds?: ?float,
      *   heldAmount?: ?float,
@@ -149,6 +159,7 @@ class QueryTransferSummary extends JsonSerializableType
         $this->thirdPartyPaid = $values['thirdPartyPaid'] ?? null;
         $this->totalNetAmountTransfer = $values['totalNetAmountTransfer'] ?? null;
         $this->serviceFees = $values['serviceFees'] ?? null;
+        $this->netBatchAmount = $values['netBatchAmount'] ?? null;
         $this->transferAmount = $values['transferAmount'] ?? null;
         $this->refunds = $values['refunds'] ?? null;
         $this->heldAmount = $values['heldAmount'] ?? null;

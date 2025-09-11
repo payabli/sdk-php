@@ -75,6 +75,30 @@ class Transfer extends JsonSerializableType
     public ?string $paypointLogo;
 
     /**
+     * @var ?string $parentOrgName The parent organization name.
+     */
+    #[JsonProperty('parentOrgName')]
+    public ?string $parentOrgName;
+
+    /**
+     * @var ?int $parentOrgId The parent organization ID.
+     */
+    #[JsonProperty('parentOrgId')]
+    public ?int $parentOrgId;
+
+    /**
+     * @var ?string $parentOrgLogo The parent organization logo URL.
+     */
+    #[JsonProperty('parentOrgLogo')]
+    public ?string $parentOrgLogo;
+
+    /**
+     * @var ?string $externalPaypointId The external paypoint ID.
+     */
+    #[JsonProperty('externalPaypointId')]
+    public ?string $externalPaypointId;
+
+    /**
      * @var ?TransferBankAccount $bankAccount Bank account information for the transfer.
      */
     #[JsonProperty('bankAccount')]
@@ -189,6 +213,10 @@ class Transfer extends JsonSerializableType
      *   paypointLegalName?: ?string,
      *   paypointDbaName?: ?string,
      *   paypointLogo?: ?string,
+     *   parentOrgName?: ?string,
+     *   parentOrgId?: ?int,
+     *   parentOrgLogo?: ?string,
+     *   externalPaypointId?: ?string,
      *   bankAccount?: ?TransferBankAccount,
      *   eventsData?: ?array<GeneralEvents>,
      *   messages?: ?array<TransferMessage>,
@@ -208,6 +236,10 @@ class Transfer extends JsonSerializableType
         $this->paypointLegalName = $values['paypointLegalName'] ?? null;
         $this->paypointDbaName = $values['paypointDbaName'] ?? null;
         $this->paypointLogo = $values['paypointLogo'] ?? null;
+        $this->parentOrgName = $values['parentOrgName'] ?? null;
+        $this->parentOrgId = $values['parentOrgId'] ?? null;
+        $this->parentOrgLogo = $values['parentOrgLogo'] ?? null;
+        $this->externalPaypointId = $values['externalPaypointId'] ?? null;
         $this->bankAccount = $values['bankAccount'] ?? null;
         $this->transferDate = $values['transferDate'];
         $this->processor = $values['processor'];
