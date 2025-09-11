@@ -202,8 +202,8 @@ class PayabliClient
         $defaultHeaders = [
             'X-Fern-Language' => 'PHP',
             'X-Fern-SDK-Name' => 'Payabli',
-            'X-Fern-SDK-Version' => '0.0.371',
-            'User-Agent' => 'payabli/payabli/0.0.371',
+            'X-Fern-SDK-Version' => '0.0.373',
+            'User-Agent' => 'payabli/payabli/0.0.373',
         ];
         if ($apiKey != null) {
             $defaultHeaders['requestToken'] = $apiKey;
