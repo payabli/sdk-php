@@ -18,16 +18,16 @@ class SetApprovedBillResponse extends JsonSerializableType
 
     /**
      * @param array{
+     *   responseText: string,
      *   isSuccess?: ?bool,
-     *   responseText?: ?string,
      *   responseData?: ?int,
      * } $values
      */
     public function __construct(
-        array $values = [],
+        array $values,
     ) {
         $this->isSuccess = $values['isSuccess'] ?? null;
-        $this->responseText = $values['responseText'] ?? null;
+        $this->responseText = $values['responseText'];
         $this->responseData = $values['responseData'] ?? null;
     }
 

@@ -1,22 +1,24 @@
 <?php
 
-namespace Payabli\ChargeBacks;
+namespace Payabli\Notificationlogs;
 
 use GuzzleHttp\ClientInterface;
 use Payabli\Core\Client\RawClient;
-use Payabli\ChargeBacks\Requests\ResponseChargeBack;
-use Payabli\ChargeBacks\Types\AddResponseResponse;
+use Payabli\Notificationlogs\Requests\SearchNotificationLogsRequest;
+use Payabli\Notificationlogs\Types\NotificationLog;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
 use Payabli\Environments;
 use Payabli\Core\Client\HttpMethod;
+use Payabli\Core\Json\JsonDecoder;
 use JsonException;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Client\ClientExceptionInterface;
-use Payabli\ChargeBacks\Types\ChargebackQueryRecords;
+use Payabli\Notificationlogs\Types\NotificationLogDetail;
+use Payabli\Core\Json\JsonSerializer;
 
-class ChargeBacksClient
+class NotificationlogsClient
 {
     /**
      * @var array{
@@ -53,10 +55,13 @@ class ChargeBacksClient
     }
 
     /**
-     * Add a response to a chargeback or ACH return.
+     * Search notification logs with filtering and pagination.
+     *   - Start date and end date cannot be more than 30 days apart
+     *   - Either `orgId` or `paypointId` must be provided
      *
-     * @param int $id ID of the chargeback or return record.
-     * @param ResponseChargeBack $request
+     * This endpoint requires the `notifications_create` OR `notifications_read` permission.
+     *
+     * @param SearchNotificationLogsRequest $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -65,32 +70,35 @@ class ChargeBacksClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return AddResponseResponse
+     * @return array<NotificationLog>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function addResponse(int $id, ResponseChargeBack $request = new ResponseChargeBack(), ?array $options = null): AddResponseResponse
+    public function searchNotificationLogs(SearchNotificationLogsRequest $request, ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
-        $headers = [];
-        if ($request->idempotencyKey != null) {
-            $headers['idempotencyKey'] = $request->idempotencyKey;
+        $query = [];
+        if ($request->pageSize != null) {
+            $query['PageSize'] = $request->pageSize;
+        }
+        if ($request->skip != null) {
+            $query['Skip'] = $request->skip;
         }
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "ChargeBacks/response/{$id}",
+                    path: "/v2/notificationlogs",
                     method: HttpMethod::POST,
-                    headers: $headers,
-                    body: $request,
+                    query: $query,
+                    body: $request->body,
                 ),
                 $options,
             );
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
-                return AddResponseResponse::fromJson($json);
+                return JsonDecoder::decodeArray($json, [NotificationLog::class]); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -115,9 +123,10 @@ class ChargeBacksClient
     }
 
     /**
-     * Retrieves a chargeback record and its details.
+     * Get detailed information for a specific notification log entry.
+     * This endpoint requires the `notifications_create` OR `notifications_read` permission.
      *
-     * @param int $id ID of the chargeback or return record. This is returned as `chargebackId` in the [RecievedChargeback](/developers/developer-guides/webhook-payloads#receivedChargeback) and [ReceivedAchReturn](/developers/developer-guides/webhook-payloads#receivedachreturn) webhook notifications.
+     * @param string $uuid The notification log entry.
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -126,18 +135,18 @@ class ChargeBacksClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ChargebackQueryRecords
+     * @return NotificationLogDetail
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getChargeback(int $id, ?array $options = null): ChargebackQueryRecords
+    public function getNotificationLog(string $uuid, ?array $options = null): NotificationLogDetail
     {
         $options = array_merge($this->options, $options ?? []);
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "ChargeBacks/read/{$id}",
+                    path: "/v2/notificationlogs/{$uuid}",
                     method: HttpMethod::GET,
                 ),
                 $options,
@@ -145,7 +154,7 @@ class ChargeBacksClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
-                return ChargebackQueryRecords::fromJson($json);
+                return NotificationLogDetail::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -170,8 +179,11 @@ class ChargeBacksClient
     }
 
     /**
-     * @param string $fileName The chargeback attachment's file name.
-     * @param int $id The ID of chargeback or return record.
+     * Retry sending a specific notification.
+     *
+     * **Permissions:** notifications_create
+     *
+     * @param string $uuid Unique id
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -180,25 +192,83 @@ class ChargeBacksClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return string
+     * @return NotificationLogDetail
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getChargebackAttachment(string $fileName, int $id, ?array $options = null): string
+    public function retryNotificationLog(string $uuid, ?array $options = null): NotificationLogDetail
     {
         $options = array_merge($this->options, $options ?? []);
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "ChargeBacks/getChargebackAttachments/{$id}/{$fileName}",
+                    path: "/v2/notificationlogs/{$uuid}/retry",
                     method: HttpMethod::GET,
                 ),
                 $options,
             );
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
-                return $response->getBody()->getContents();
+                $json = $response->getBody()->getContents();
+                return NotificationLogDetail::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (RequestException $e) {
+            $response = $e->getResponse();
+            if ($response === null) {
+                throw new PayabliException(message: $e->getMessage(), previous: $e);
+            }
+            throw new PayabliApiException(
+                message: "API request failed",
+                statusCode: $response->getStatusCode(),
+                body: $response->getBody()->getContents(),
+            );
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Retry sending multiple notifications (maximum 50 IDs).
+     * This is an async process, so use the search endpoint again to check the notification status.
+     *
+     * This endpoint requires the `notifications_create` permission.
+     *
+     * @param array<string> $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function bulkRetryNotificationLogs(array $request, ?array $options = null): void
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "/v2/notificationlogs/retry",
+                    method: HttpMethod::POST,
+                    body: JsonSerializer::serializeArray($request, ['string']),
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                return;
             }
         } catch (RequestException $e) {
             $response = $e->getResponse();

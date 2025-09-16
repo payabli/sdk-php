@@ -16,6 +16,7 @@ use Payabli\LineItem\LineItemClient;
 use Payabli\MoneyIn\MoneyInClient;
 use Payabli\MoneyOut\MoneyOutClient;
 use Payabli\Notification\NotificationClient;
+use Payabli\Notificationlogs\NotificationlogsClient;
 use Payabli\Ocr\OcrClient;
 use Payabli\Organization\OrganizationClient;
 use Payabli\PaymentLink\PaymentLinkClient;
@@ -103,6 +104,11 @@ class PayabliClient
      * @var NotificationClient $notification
      */
     public NotificationClient $notification;
+
+    /**
+     * @var NotificationlogsClient $notificationlogs
+     */
+    public NotificationlogsClient $notificationlogs;
 
     /**
      * @var OcrClient $ocr
@@ -202,8 +208,8 @@ class PayabliClient
         $defaultHeaders = [
             'X-Fern-Language' => 'PHP',
             'X-Fern-SDK-Name' => 'Payabli',
-            'X-Fern-SDK-Version' => '0.0.374',
-            'User-Agent' => 'payabli/payabli/0.0.374',
+            'X-Fern-SDK-Version' => '0.0.375',
+            'User-Agent' => 'payabli/payabli/0.0.375',
         ];
         if ($apiKey != null) {
             $defaultHeaders['requestToken'] = $apiKey;
@@ -233,6 +239,7 @@ class PayabliClient
         $this->moneyIn = new MoneyInClient($this->client, $this->options);
         $this->moneyOut = new MoneyOutClient($this->client, $this->options);
         $this->notification = new NotificationClient($this->client, $this->options);
+        $this->notificationlogs = new NotificationlogsClient($this->client, $this->options);
         $this->ocr = new OcrClient($this->client, $this->options);
         $this->organization = new OrganizationClient($this->client, $this->options);
         $this->paymentLink = new PaymentLinkClient($this->client, $this->options);

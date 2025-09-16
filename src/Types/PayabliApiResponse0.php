@@ -29,26 +29,26 @@ class PayabliApiResponse0 extends JsonSerializableType
     public ?PayabliApiResponse0ResponseData $responseData;
 
     /**
-     * @var ?string $responseText
+     * @var string $responseText
      */
     #[JsonProperty('responseText')]
-    public ?string $responseText;
+    public string $responseText;
 
     /**
      * @param array{
+     *   responseText: string,
      *   isSuccess?: ?bool,
      *   pageIdentifier?: ?string,
      *   responseData?: ?PayabliApiResponse0ResponseData,
-     *   responseText?: ?string,
      * } $values
      */
     public function __construct(
-        array $values = [],
+        array $values,
     ) {
         $this->isSuccess = $values['isSuccess'] ?? null;
         $this->pageIdentifier = $values['pageIdentifier'] ?? null;
         $this->responseData = $values['responseData'] ?? null;
-        $this->responseText = $values['responseText'] ?? null;
+        $this->responseText = $values['responseText'];
     }
 
     /**

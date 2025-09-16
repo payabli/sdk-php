@@ -1,8 +1,9 @@
 <?php
 
-namespace Payabli\Types;
+namespace Payabli\ChargeBacks\Types;
 
 use Payabli\Core\Json\JsonSerializableType;
+use Payabli\Types\BoardingApplicationAttachments;
 use Payabli\Core\Json\JsonProperty;
 use DateTime;
 use Payabli\Core\Types\Date;

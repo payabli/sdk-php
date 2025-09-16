@@ -21,10 +21,10 @@ class EditOrganizationResponse extends JsonSerializableType
     public ?string $pageIdentifier;
 
     /**
-     * @var ?int $responseCode
+     * @var int $responseCode
      */
     #[JsonProperty('responseCode')]
-    public ?int $responseCode;
+    public int $responseCode;
 
     /**
      * @var (
@@ -36,31 +36,31 @@ class EditOrganizationResponse extends JsonSerializableType
     public string|int|null $responseData;
 
     /**
-     * @var ?string $responseText
+     * @var string $responseText
      */
     #[JsonProperty('responseText')]
-    public ?string $responseText;
+    public string $responseText;
 
     /**
      * @param array{
+     *   responseCode: int,
+     *   responseText: string,
      *   isSuccess?: ?bool,
      *   pageIdentifier?: ?string,
-     *   responseCode?: ?int,
      *   responseData?: (
      *    string
      *   |int
      * )|null,
-     *   responseText?: ?string,
      * } $values
      */
     public function __construct(
-        array $values = [],
+        array $values,
     ) {
         $this->isSuccess = $values['isSuccess'] ?? null;
         $this->pageIdentifier = $values['pageIdentifier'] ?? null;
-        $this->responseCode = $values['responseCode'] ?? null;
+        $this->responseCode = $values['responseCode'];
         $this->responseData = $values['responseData'] ?? null;
-        $this->responseText = $values['responseText'] ?? null;
+        $this->responseText = $values['responseText'];
     }
 
     /**

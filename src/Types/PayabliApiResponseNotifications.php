@@ -41,13 +41,14 @@ class PayabliApiResponseNotifications extends JsonSerializableType
     public int|string|null $responseData;
 
     /**
-     * @var ?string $responseText
+     * @var string $responseText
      */
     #[JsonProperty('responseText')]
-    public ?string $responseText;
+    public string $responseText;
 
     /**
      * @param array{
+     *   responseText: string,
      *   isSuccess?: ?bool,
      *   pageIdentifier?: ?string,
      *   responseCode?: ?int,
@@ -55,17 +56,16 @@ class PayabliApiResponseNotifications extends JsonSerializableType
      *    int
      *   |string
      * )|null,
-     *   responseText?: ?string,
      * } $values
      */
     public function __construct(
-        array $values = [],
+        array $values,
     ) {
         $this->isSuccess = $values['isSuccess'] ?? null;
         $this->pageIdentifier = $values['pageIdentifier'] ?? null;
         $this->responseCode = $values['responseCode'] ?? null;
         $this->responseData = $values['responseData'] ?? null;
-        $this->responseText = $values['responseText'] ?? null;
+        $this->responseText = $values['responseText'];
     }
 
     /**

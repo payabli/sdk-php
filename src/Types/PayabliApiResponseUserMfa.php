@@ -36,13 +36,14 @@ class PayabliApiResponseUserMfa extends JsonSerializableType
     public string|int|null $responseData;
 
     /**
-     * @var ?string $responseText
+     * @var string $responseText
      */
     #[JsonProperty('responseText')]
-    public ?string $responseText;
+    public string $responseText;
 
     /**
      * @param array{
+     *   responseText: string,
      *   inactiveTokenTime?: ?int,
      *   isSuccess?: ?bool,
      *   remaining?: ?int,
@@ -50,17 +51,16 @@ class PayabliApiResponseUserMfa extends JsonSerializableType
      *    string
      *   |int
      * )|null,
-     *   responseText?: ?string,
      * } $values
      */
     public function __construct(
-        array $values = [],
+        array $values,
     ) {
         $this->inactiveTokenTime = $values['inactiveTokenTime'] ?? null;
         $this->isSuccess = $values['isSuccess'] ?? null;
         $this->remaining = $values['remaining'] ?? null;
         $this->responseData = $values['responseData'] ?? null;
-        $this->responseText = $values['responseText'] ?? null;
+        $this->responseText = $values['responseText'];
     }
 
     /**

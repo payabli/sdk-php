@@ -8,22 +8,22 @@ use Payabli\Core\Json\JsonProperty;
 class PayabliApiResponseOcr extends JsonSerializableType
 {
     /**
-     * @var ?bool $isSuccess
+     * @var bool $isSuccess
      */
     #[JsonProperty('isSuccess')]
-    public ?bool $isSuccess;
+    public bool $isSuccess;
 
     /**
-     * @var ?string $responseText
+     * @var string $responseText
      */
     #[JsonProperty('responseText')]
-    public ?string $responseText;
+    public string $responseText;
 
     /**
-     * @var ?int $responseCode
+     * @var int $responseCode
      */
     #[JsonProperty('responseCode')]
-    public ?int $responseCode;
+    public int $responseCode;
 
     /**
      * @var ?OcrResponseData $responseData Details of the OCR processing result
@@ -33,18 +33,18 @@ class PayabliApiResponseOcr extends JsonSerializableType
 
     /**
      * @param array{
-     *   isSuccess?: ?bool,
-     *   responseText?: ?string,
-     *   responseCode?: ?int,
+     *   isSuccess: bool,
+     *   responseText: string,
+     *   responseCode: int,
      *   responseData?: ?OcrResponseData,
      * } $values
      */
     public function __construct(
-        array $values = [],
+        array $values,
     ) {
-        $this->isSuccess = $values['isSuccess'] ?? null;
-        $this->responseText = $values['responseText'] ?? null;
-        $this->responseCode = $values['responseCode'] ?? null;
+        $this->isSuccess = $values['isSuccess'];
+        $this->responseText = $values['responseText'];
+        $this->responseCode = $values['responseCode'];
         $this->responseData = $values['responseData'] ?? null;
     }
 

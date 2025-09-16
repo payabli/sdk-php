@@ -8,10 +8,10 @@ use Payabli\Core\Json\JsonProperty;
 class PayabliApiResponsePaymentLinks extends JsonSerializableType
 {
     /**
-     * @var ?bool $isSuccess
+     * @var bool $isSuccess
      */
     #[JsonProperty('isSuccess')]
-    public ?bool $isSuccess;
+    public bool $isSuccess;
 
     /**
      * @var ?string $responseData If `isSuccess` = true, this contains the payment link identifier. If `isSuccess` = false, this contains the reason of the error.
@@ -20,24 +20,24 @@ class PayabliApiResponsePaymentLinks extends JsonSerializableType
     public ?string $responseData;
 
     /**
-     * @var ?string $responseText
+     * @var string $responseText
      */
     #[JsonProperty('responseText')]
-    public ?string $responseText;
+    public string $responseText;
 
     /**
      * @param array{
-     *   isSuccess?: ?bool,
+     *   isSuccess: bool,
+     *   responseText: string,
      *   responseData?: ?string,
-     *   responseText?: ?string,
      * } $values
      */
     public function __construct(
-        array $values = [],
+        array $values,
     ) {
-        $this->isSuccess = $values['isSuccess'] ?? null;
+        $this->isSuccess = $values['isSuccess'];
         $this->responseData = $values['responseData'] ?? null;
-        $this->responseText = $values['responseText'] ?? null;
+        $this->responseText = $values['responseText'];
     }
 
     /**

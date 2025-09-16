@@ -17,10 +17,10 @@ class AddSubscriptionResponse extends JsonSerializableType
     public ?int $customerId;
 
     /**
-     * @var ?string $responseText
+     * @var string $responseText
      */
     #[JsonProperty('responseText')]
-    public ?string $responseText;
+    public string $responseText;
 
     /**
      * @var ?bool $isSuccess
@@ -36,9 +36,9 @@ class AddSubscriptionResponse extends JsonSerializableType
 
     /**
      * @param array{
+     *   responseText: string,
      *   responseData: int,
      *   customerId?: ?int,
-     *   responseText?: ?string,
      *   isSuccess?: ?bool,
      * } $values
      */
@@ -46,7 +46,7 @@ class AddSubscriptionResponse extends JsonSerializableType
         array $values,
     ) {
         $this->customerId = $values['customerId'] ?? null;
-        $this->responseText = $values['responseText'] ?? null;
+        $this->responseText = $values['responseText'];
         $this->isSuccess = $values['isSuccess'] ?? null;
         $this->responseData = $values['responseData'];
     }

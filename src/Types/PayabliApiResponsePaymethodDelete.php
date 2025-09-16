@@ -23,24 +23,24 @@ class PayabliApiResponsePaymethodDelete extends JsonSerializableType
     public ?PayabliApiResponsePaymethodDeleteResponseData $responseData;
 
     /**
-     * @var ?string $responseText
+     * @var string $responseText
      */
     #[JsonProperty('responseText')]
-    public ?string $responseText;
+    public string $responseText;
 
     /**
      * @param array{
+     *   responseText: string,
      *   isSuccess?: ?bool,
      *   responseData?: ?PayabliApiResponsePaymethodDeleteResponseData,
-     *   responseText?: ?string,
      * } $values
      */
     public function __construct(
-        array $values = [],
+        array $values,
     ) {
         $this->isSuccess = $values['isSuccess'] ?? null;
         $this->responseData = $values['responseData'] ?? null;
-        $this->responseText = $values['responseText'] ?? null;
+        $this->responseText = $values['responseText'];
     }
 
     /**

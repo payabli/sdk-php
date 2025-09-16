@@ -28,10 +28,10 @@ class UpdateSubscriptionResponse extends JsonSerializableType
     public ?string $responseData;
 
     /**
-     * @var ?string $responseText
+     * @var string $responseText
      */
     #[JsonProperty('responseText')]
-    public ?string $responseText;
+    public string $responseText;
 
     /**
      * @var ?int $customerId
@@ -41,18 +41,18 @@ class UpdateSubscriptionResponse extends JsonSerializableType
 
     /**
      * @param array{
+     *   responseText: string,
      *   isSuccess?: ?bool,
      *   responseData?: ?string,
-     *   responseText?: ?string,
      *   customerId?: ?int,
      * } $values
      */
     public function __construct(
-        array $values = [],
+        array $values,
     ) {
         $this->isSuccess = $values['isSuccess'] ?? null;
         $this->responseData = $values['responseData'] ?? null;
-        $this->responseText = $values['responseText'] ?? null;
+        $this->responseText = $values['responseText'];
         $this->customerId = $values['customerId'] ?? null;
     }
 

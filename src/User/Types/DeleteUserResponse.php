@@ -8,20 +8,20 @@ use Payabli\Core\Json\JsonProperty;
 class DeleteUserResponse extends JsonSerializableType
 {
     /**
-     * @var ?string $responseText
+     * @var string $responseText
      */
     #[JsonProperty('responseText')]
-    public ?string $responseText;
+    public string $responseText;
 
     /**
      * @param array{
-     *   responseText?: ?string,
+     *   responseText: string,
      * } $values
      */
     public function __construct(
-        array $values = [],
+        array $values,
     ) {
-        $this->responseText = $values['responseText'] ?? null;
+        $this->responseText = $values['responseText'];
     }
 
     /**

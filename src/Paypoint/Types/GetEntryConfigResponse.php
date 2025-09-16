@@ -9,10 +9,10 @@ use Payabli\Types\PaypointEntryConfig;
 class GetEntryConfigResponse extends JsonSerializableType
 {
     /**
-     * @var ?bool $isSuccess
+     * @var bool $isSuccess
      */
     #[JsonProperty('isSuccess')]
-    public ?bool $isSuccess;
+    public bool $isSuccess;
 
     /**
      * @var ?string $pageIdentifier
@@ -33,28 +33,28 @@ class GetEntryConfigResponse extends JsonSerializableType
     public ?PaypointEntryConfig $responseData;
 
     /**
-     * @var ?string $responseText
+     * @var string $responseText
      */
     #[JsonProperty('responseText')]
-    public ?string $responseText;
+    public string $responseText;
 
     /**
      * @param array{
-     *   isSuccess?: ?bool,
+     *   isSuccess: bool,
+     *   responseText: string,
      *   pageIdentifier?: ?string,
      *   responseCode?: ?int,
      *   responseData?: ?PaypointEntryConfig,
-     *   responseText?: ?string,
      * } $values
      */
     public function __construct(
-        array $values = [],
+        array $values,
     ) {
-        $this->isSuccess = $values['isSuccess'] ?? null;
+        $this->isSuccess = $values['isSuccess'];
         $this->pageIdentifier = $values['pageIdentifier'] ?? null;
         $this->responseCode = $values['responseCode'] ?? null;
         $this->responseData = $values['responseData'] ?? null;
-        $this->responseText = $values['responseText'] ?? null;
+        $this->responseText = $values['responseText'];
     }
 
     /**

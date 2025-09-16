@@ -38,30 +38,30 @@ class PayabliApiResponseMfaBasic extends JsonSerializableType
     public ?string $responseData;
 
     /**
-     * @var ?string $responseText
+     * @var string $responseText
      */
     #[JsonProperty('responseText')]
-    public ?string $responseText;
+    public string $responseText;
 
     /**
      * @param array{
+     *   responseText: string,
      *   isSuccess?: ?bool,
      *   mfa?: ?bool,
      *   mfaMode?: ?string,
      *   mfaValidationCode?: ?string,
      *   responseData?: ?string,
-     *   responseText?: ?string,
      * } $values
      */
     public function __construct(
-        array $values = [],
+        array $values,
     ) {
         $this->isSuccess = $values['isSuccess'] ?? null;
         $this->mfa = $values['mfa'] ?? null;
         $this->mfaMode = $values['mfaMode'] ?? null;
         $this->mfaValidationCode = $values['mfaValidationCode'] ?? null;
         $this->responseData = $values['responseData'] ?? null;
-        $this->responseText = $values['responseText'] ?? null;
+        $this->responseText = $values['responseText'];
     }
 
     /**

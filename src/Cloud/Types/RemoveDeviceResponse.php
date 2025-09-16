@@ -27,17 +27,17 @@ class RemoveDeviceResponse extends JsonSerializableType
 
     /**
      * @param array{
+     *   responseText: string,
      *   isSuccess?: ?bool,
-     *   responseText?: ?string,
      *   pageIdentifier?: ?string,
      *   responseData?: ?string,
      * } $values
      */
     public function __construct(
-        array $values = [],
+        array $values,
     ) {
         $this->isSuccess = $values['isSuccess'] ?? null;
-        $this->responseText = $values['responseText'] ?? null;
+        $this->responseText = $values['responseText'];
         $this->pageIdentifier = $values['pageIdentifier'] ?? null;
         $this->responseData = $values['responseData'] ?? null;
     }

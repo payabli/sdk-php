@@ -6,7 +6,7 @@ use Payabli\Core\Json\JsonProperty;
 
 /**
  * @property ?bool $isSuccess
- * @property ?string $responseText
+ * @property string $responseText
  */
 trait PayabliApiResponseGeneric2Part
 {
@@ -17,8 +17,8 @@ trait PayabliApiResponseGeneric2Part
     public ?bool $isSuccess;
 
     /**
-     * @var ?string $responseText
+     * @var string $responseText
      */
     #[JsonProperty('responseText')]
-    public ?string $responseText;
+    public string $responseText;
 }
