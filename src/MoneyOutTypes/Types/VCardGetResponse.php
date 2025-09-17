@@ -164,6 +164,12 @@ class VCardGetResponse extends JsonSerializableType
     public ?string $externalPaypointId;
 
     /**
+     * @var ?int $paypointId The unique identifier for the paypoint.
+     */
+    #[JsonProperty('paypointId')]
+    public ?int $paypointId;
+
+    /**
      * @param array{
      *   vcardSent?: ?bool,
      *   cardToken?: ?string,
@@ -191,6 +197,7 @@ class VCardGetResponse extends JsonSerializableType
      *   paypointLegalname?: ?string,
      *   paypointEntryname?: ?string,
      *   externalPaypointId?: ?string,
+     *   paypointId?: ?int,
      * } $values
      */
     public function __construct(
@@ -222,6 +229,7 @@ class VCardGetResponse extends JsonSerializableType
         $this->paypointLegalname = $values['paypointLegalname'] ?? null;
         $this->paypointEntryname = $values['paypointEntryname'] ?? null;
         $this->externalPaypointId = $values['externalPaypointId'] ?? null;
+        $this->paypointId = $values['paypointId'] ?? null;
     }
 
     /**

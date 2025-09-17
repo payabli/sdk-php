@@ -51,7 +51,7 @@ class Transfer extends JsonSerializableType
     public int $batchId;
 
     /**
-     * @var ?string $paypointEntryName The paypoint entry name.
+     * @var ?string $paypointEntryName The paypoint entryname.
      */
     #[JsonProperty('paypointEntryName')]
     public ?string $paypointEntryName;
@@ -87,6 +87,12 @@ class Transfer extends JsonSerializableType
     public ?int $parentOrgId;
 
     /**
+     * @var ?string $parentOrgEntryName The parent organization entryname.
+     */
+    #[JsonProperty('parentOrgEntryName')]
+    public ?string $parentOrgEntryName;
+
+    /**
      * @var ?string $parentOrgLogo The parent organization logo URL.
      */
     #[JsonProperty('parentOrgLogo')]
@@ -95,7 +101,7 @@ class Transfer extends JsonSerializableType
     /**
      * @var ?string $externalPaypointId The external paypoint ID.
      */
-    #[JsonProperty('externalPaypointId')]
+    #[JsonProperty('externalPaypointID')]
     public ?string $externalPaypointId;
 
     /**
@@ -215,6 +221,7 @@ class Transfer extends JsonSerializableType
      *   paypointLogo?: ?string,
      *   parentOrgName?: ?string,
      *   parentOrgId?: ?int,
+     *   parentOrgEntryName?: ?string,
      *   parentOrgLogo?: ?string,
      *   externalPaypointId?: ?string,
      *   bankAccount?: ?TransferBankAccount,
@@ -238,6 +245,7 @@ class Transfer extends JsonSerializableType
         $this->paypointLogo = $values['paypointLogo'] ?? null;
         $this->parentOrgName = $values['parentOrgName'] ?? null;
         $this->parentOrgId = $values['parentOrgId'] ?? null;
+        $this->parentOrgEntryName = $values['parentOrgEntryName'] ?? null;
         $this->parentOrgLogo = $values['parentOrgLogo'] ?? null;
         $this->externalPaypointId = $values['externalPaypointId'] ?? null;
         $this->bankAccount = $values['bankAccount'] ?? null;
