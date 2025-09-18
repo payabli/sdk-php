@@ -27,6 +27,7 @@ namespace Example;
 use Payabli\PayabliClient;
 use Payabli\MoneyIn\Requests\RequestPayment;
 use Payabli\MoneyIn\Types\TransRequestBody;
+use Payabli\Types\PayorDataRequest;
 use Payabli\Types\PaymentDetail;
 use Payabli\Types\PayMethodCredit;
 
@@ -36,12 +37,22 @@ $client = new PayabliClient(
 $client->moneyIn->getpaid(
     new RequestPayment([
         'body' => new TransRequestBody([
+            'customerData' => new PayorDataRequest([
+                'customerId' => 4440,
+            ]),
+            'entryPoint' => 'f743aed24a',
+            'ipaddress' => '255.255.255.255',
             'paymentDetails' => new PaymentDetail([
-                'totalAmount' => 1.1,
+                'serviceFee' => 0,
+                'totalAmount' => 100,
             ]),
             'paymentMethod' => new PayMethodCredit([
-                'cardexp' => 'alpha',
-                'cardnumber' => 'cardnumber',
+                'cardcvv' => '999',
+                'cardexp' => '02/27',
+                'cardHolder' => 'John Cassian',
+                'cardnumber' => '4111111111111111',
+                'cardzip' => '12345',
+                'initiator' => 'payor',
                 'method' => 'card',
             ]),
         ]),
