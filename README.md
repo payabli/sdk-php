@@ -5,6 +5,10 @@
 
 The Payabli PHP library provides convenient access to the Payabli APIs from PHP.
 
+## Documentation
+
+API reference documentation is available [here](https://docs.payabli.com).
+
 ## Requirements
 
 This SDK requires PHP ^8.1.
