@@ -92,7 +92,8 @@ class ListTransactionsRequest extends JsonSerializableType
      * - `deviceId` (ct, nct, in, nin, eq, ne)
      * - `AchSecCode` ( ct, nct, in, nin, eq, ne)
      * - `AchHolderType` (ct, nct, in, nin, eq, and ne)
-     * - `additional-xxx` (ne, eq, ct, nct) where xxx is the additional field name related to customer data - 'invoiceAdditional-xxx' (ne, eq, ct, nct) where xxx is the additional field name related to invoice data
+     * - `additional-xxx` (ne, eq, ct, nct) where xxx is the additional field name related to customer data
+     * - 'invoiceAdditional-xxx' (ne, eq, ct, nct) where xxx is the additional field name related to invoice data
      *
      * **List of comparison operators accepted:**
      * - `eq` or empty => equal

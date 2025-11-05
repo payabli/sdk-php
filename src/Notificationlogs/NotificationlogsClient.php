@@ -81,8 +81,8 @@ class NotificationlogsClient
         if ($request->pageSize != null) {
             $query['PageSize'] = $request->pageSize;
         }
-        if ($request->skip != null) {
-            $query['Skip'] = $request->skip;
+        if ($request->page != null) {
+            $query['Page'] = $request->page;
         }
         try {
             $response = $this->client->sendRequest(

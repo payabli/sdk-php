@@ -56,6 +56,12 @@ class QueryTransferSummary extends JsonSerializableType
     public ?float $totalNetAmountTransfer;
 
     /**
+     * @var ?float $splitAmount The sum of each splitFundingAmount of each record in the transfer.
+     */
+    #[JsonProperty('splitAmount')]
+    public ?float $splitAmount;
+
+    /**
      * @var ?float $serviceFees Service fees are any pass-through fees charged to the customer at the time of payment.  These aren't transferred to the merchant when the batch is transferred and funded.
      */
     #[JsonProperty('serviceFees')]
@@ -134,6 +140,7 @@ class QueryTransferSummary extends JsonSerializableType
      *   releaseAmount?: ?float,
      *   thirdPartyPaid?: ?float,
      *   totalNetAmountTransfer?: ?float,
+     *   splitAmount?: ?float,
      *   serviceFees?: ?float,
      *   netBatchAmount?: ?float,
      *   transferAmount?: ?float,
@@ -158,6 +165,7 @@ class QueryTransferSummary extends JsonSerializableType
         $this->releaseAmount = $values['releaseAmount'] ?? null;
         $this->thirdPartyPaid = $values['thirdPartyPaid'] ?? null;
         $this->totalNetAmountTransfer = $values['totalNetAmountTransfer'] ?? null;
+        $this->splitAmount = $values['splitAmount'] ?? null;
         $this->serviceFees = $values['serviceFees'] ?? null;
         $this->netBatchAmount = $values['netBatchAmount'] ?? null;
         $this->transferAmount = $values['transferAmount'] ?? null;

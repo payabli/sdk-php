@@ -18,7 +18,7 @@ use Payabli\MoneyIn\Types\CaptureResponse;
 use Payabli\MoneyIn\Types\CaptureRequest;
 use Payabli\MoneyIn\Requests\RequestCredit;
 use Payabli\Types\PayabliApiResponse0;
-use Payabli\Types\TransactionQueryRecords;
+use Payabli\Types\TransactionQueryRecordsCustomer;
 use Payabli\MoneyIn\Requests\RequestPayment;
 use Payabli\MoneyIn\Types\PayabliApiResponseGetPaid;
 use Payabli\MoneyIn\Types\ReverseResponse;
@@ -336,11 +336,11 @@ class MoneyInClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return TransactionQueryRecords
+     * @return TransactionQueryRecordsCustomer
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function details(string $transId, ?array $options = null): TransactionQueryRecords
+    public function details(string $transId, ?array $options = null): TransactionQueryRecordsCustomer
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -355,7 +355,7 @@ class MoneyInClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
-                return TransactionQueryRecords::fromJson($json);
+                return TransactionQueryRecordsCustomer::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -404,6 +404,9 @@ class MoneyInClient
         }
         if ($request->forceCustomerCreation != null) {
             $query['forceCustomerCreation'] = $request->forceCustomerCreation;
+        }
+        if ($request->includeDetails != null) {
+            $query['includeDetails'] = $request->includeDetails;
         }
         $headers = [];
         if ($request->idempotencyKey != null) {
@@ -520,7 +523,7 @@ class MoneyInClient
      *
      * Amount to refund from original transaction, minus any service fees charged on the original transaction.
      *
-     * The amount provided can't be greater than the original total amount of the transaction, minus service fees. For example, if a transaction was $90 plus a $10 service fee, you can refund up to $90.
+     * The amount provided can't be greater than the original total amount of the transaction, minus service fees. For example, if a transaction was \$90 plus a \$10 service fee, you can refund up to \$90.
      *
      * An amount equal to zero will refund the total amount authorized minus any service fee.
      *

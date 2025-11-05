@@ -13,9 +13,9 @@ class SearchNotificationLogsRequest extends JsonSerializableType
     public ?int $pageSize;
 
     /**
-     * @var ?int $skip The number of records to skip before starting to collect the result set.
+     * @var ?int $page The page number to retrieve. Defaults to 1 if not provided.
      */
-    public ?int $skip;
+    public ?int $page;
 
     /**
      * @var NotificationLogSearchRequest $body
@@ -26,14 +26,14 @@ class SearchNotificationLogsRequest extends JsonSerializableType
      * @param array{
      *   body: NotificationLogSearchRequest,
      *   pageSize?: ?int,
-     *   skip?: ?int,
+     *   page?: ?int,
      * } $values
      */
     public function __construct(
         array $values,
     ) {
         $this->pageSize = $values['pageSize'] ?? null;
-        $this->skip = $values['skip'] ?? null;
+        $this->page = $values['page'] ?? null;
         $this->body = $values['body'];
     }
 }

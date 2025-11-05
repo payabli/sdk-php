@@ -18,6 +18,11 @@ class RequestPayment extends JsonSerializableType
     public ?bool $forceCustomerCreation;
 
     /**
+     * @var ?bool $includeDetails When `true`, transactionDetails object is returned in the response. See a full example of the `transactionDetails` object in the [Transaction integration guide](/developers/developer-guides/money-in-transaction-add#includedetailstrue-response).
+     */
+    public ?bool $includeDetails;
+
+    /**
      * @var ?string $idempotencyKey
      */
     public ?string $idempotencyKey;
@@ -37,6 +42,7 @@ class RequestPayment extends JsonSerializableType
      *   body: TransRequestBody,
      *   achValidation?: ?bool,
      *   forceCustomerCreation?: ?bool,
+     *   includeDetails?: ?bool,
      *   idempotencyKey?: ?string,
      *   validationCode?: ?string,
      * } $values
@@ -46,6 +52,7 @@ class RequestPayment extends JsonSerializableType
     ) {
         $this->achValidation = $values['achValidation'] ?? null;
         $this->forceCustomerCreation = $values['forceCustomerCreation'] ?? null;
+        $this->includeDetails = $values['includeDetails'] ?? null;
         $this->idempotencyKey = $values['idempotencyKey'] ?? null;
         $this->validationCode = $values['validationCode'] ?? null;
         $this->body = $values['body'];

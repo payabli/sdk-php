@@ -143,7 +143,21 @@ class BillDetailResponse extends JsonSerializableType
     public ?string $source;
 
     /**
-     * @var ?int $status Internal status of transaction.
+     * Internal status of transaction.
+     *
+     * Payout statuses, also known as money out transaction statuses, appear in PartnerHub and PayHub, and the API, and describe where a payout transaction is in its lifecycle.
+     *
+     * | Status | Key | Description | Events |
+     * |--------|-----|-------------|---------|
+     * | **Authorized** | 11 | A payout is authorized. These are queued payouts, and nothing happens with them until they're captured. | Authorized |
+     * | **Captured** | 1 | A payout is captured and is now part of the batch for payout. | Captured |
+     * | **Canceled** | 0 | An authorized payout has been canceled. A captured payout can be canceled before batch close at 5 PM ET. | Cancelled |
+     * | **Processing** | 2 | A payout is being processed. | Waiting funds, Funded, Pending (payment type is pending), Generating check |
+     * | **Processed** | 3 | A payment method is defined for the vendor, and the payout has been sent to the recipient. | Open (vCard issued, ACH sent, check generated but not yet cashed), Processed (Payment Type is no longer pending), Reissued, Returned, Errored |
+     * | **OnHold** | 4 | A payout has been placed on hold and requires review before proceeding. | OnHold |
+     * | **Paid** | 5 | A payout has been paid and the recipient has redeemed the funds. | Paid (check cleared, vCard used, ACH settled) |
+     *
+     * @var ?int $status
      */
     #[JsonProperty('Status')]
     public ?int $status;

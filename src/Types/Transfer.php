@@ -183,6 +183,12 @@ class Transfer extends JsonSerializableType
     public float $netTransferAmount;
 
     /**
+     * @var ?float $splitAmount The sum of each splitFundingAmount of each record in the transfer.
+     */
+    #[JsonProperty('splitAmount')]
+    public ?float $splitAmount;
+
+    /**
      * @var ?array<GeneralEvents> $eventsData List of events associated with the transfer.
      */
     #[JsonProperty('eventsData'), ArrayType([GeneralEvents::class])]
@@ -225,6 +231,7 @@ class Transfer extends JsonSerializableType
      *   parentOrgLogo?: ?string,
      *   externalPaypointId?: ?string,
      *   bankAccount?: ?TransferBankAccount,
+     *   splitAmount?: ?float,
      *   eventsData?: ?array<GeneralEvents>,
      *   messages?: ?array<TransferMessage>,
      * } $values
@@ -261,6 +268,7 @@ class Transfer extends JsonSerializableType
         $this->thirdPartyPaidAmount = $values['thirdPartyPaidAmount'];
         $this->adjustmentsAmount = $values['adjustmentsAmount'];
         $this->netTransferAmount = $values['netTransferAmount'];
+        $this->splitAmount = $values['splitAmount'] ?? null;
         $this->eventsData = $values['eventsData'] ?? null;
         $this->messages = $values['messages'] ?? null;
     }

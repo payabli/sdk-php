@@ -4,7 +4,6 @@ namespace Payabli\Templates;
 
 use GuzzleHttp\ClientInterface;
 use Payabli\Core\Client\RawClient;
-use Payabli\Types\TemplateData;
 use Payabli\Types\PayabliApiResponseTemplateId;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
@@ -53,63 +52,6 @@ class TemplatesClient
     ) {
         $this->client = $client;
         $this->options = $options ?? [];
-    }
-
-    /**
-     * Creates a boarding template in an organization.
-     *
-     * @param int $orgId The numeric identifier for organization, assigned by Payabli.
-     * @param TemplateData $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return PayabliApiResponseTemplateId
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function addTemplate(int $orgId, TemplateData $request, ?array $options = null): PayabliApiResponseTemplateId
-    {
-        $options = array_merge($this->options, $options ?? []);
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "Templates/{$orgId}",
-                    method: HttpMethod::POST,
-                    body: $request,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                return PayabliApiResponseTemplateId::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (RequestException $e) {
-            $response = $e->getResponse();
-            if ($response === null) {
-                throw new PayabliException(message: $e->getMessage(), previous: $e);
-            }
-            throw new PayabliApiException(
-                message: "API request failed",
-                statusCode: $response->getStatusCode(),
-                body: $response->getBody()->getContents(),
-            );
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
     }
 
     /**
@@ -325,63 +267,6 @@ class TemplatesClient
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
                 return TemplateQueryResponse::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (RequestException $e) {
-            $response = $e->getResponse();
-            if ($response === null) {
-                throw new PayabliException(message: $e->getMessage(), previous: $e);
-            }
-            throw new PayabliApiException(
-                message: "API request failed",
-                statusCode: $response->getStatusCode(),
-                body: $response->getBody()->getContents(),
-            );
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Updates a boarding template by ID.
-     *
-     * @param float $templateId The boarding template ID. Can be found at the end of the boarding template URL in PartnerHub. Example: `https://partner-sandbox.payabli.com/myorganization/boarding/edittemplate/80`. Here, the template ID is `80`.
-     * @param TemplateData $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return PayabliApiResponseTemplateId
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function updateTemplate(float $templateId, TemplateData $request, ?array $options = null): PayabliApiResponseTemplateId
-    {
-        $options = array_merge($this->options, $options ?? []);
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "Templates/{$templateId}",
-                    method: HttpMethod::PUT,
-                    body: $request,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                return PayabliApiResponseTemplateId::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

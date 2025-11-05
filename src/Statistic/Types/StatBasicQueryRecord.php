@@ -26,10 +26,24 @@ class StatBasicQueryRecord extends JsonSerializableType
     public float $inTransactionsVolume;
 
     /**
+     * @var int $inWalletTransactions Number of incoming wallet transactions
+     */
+    #[JsonProperty('inWalletTransactions')]
+    public int $inWalletTransactions;
+
+    /**
+     * @var float $inWalletVolume Volume of incoming wallet transactions
+     */
+    #[JsonProperty('inWalletVolume')]
+    public float $inWalletVolume;
+
+    /**
      * @param array{
      *   statX: string,
      *   inTransactions: int,
      *   inTransactionsVolume: float,
+     *   inWalletTransactions: int,
+     *   inWalletVolume: float,
      * } $values
      */
     public function __construct(
@@ -38,6 +52,8 @@ class StatBasicQueryRecord extends JsonSerializableType
         $this->statX = $values['statX'];
         $this->inTransactions = $values['inTransactions'];
         $this->inTransactionsVolume = $values['inTransactionsVolume'];
+        $this->inWalletTransactions = $values['inWalletTransactions'];
+        $this->inWalletVolume = $values['inWalletVolume'];
     }
 
     /**
