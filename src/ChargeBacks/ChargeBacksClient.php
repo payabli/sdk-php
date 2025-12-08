@@ -25,7 +25,7 @@ class ChargeBacksClient
      *   maxRetries?: int,
      *   timeout?: float,
      *   headers?: array<string, string>,
-     * } $options
+     * } $options @phpstan-ignore-next-line Property is used in endpoint methods via HttpEndpointGenerator
      */
     private array $options;
 
@@ -170,8 +170,10 @@ class ChargeBacksClient
     }
 
     /**
-     * @param string $fileName The chargeback attachment's file name.
+     * Retrieves a chargeback attachment file by its file name.
+     *
      * @param int $id The ID of chargeback or return record.
+     * @param string $fileName The chargeback attachment's file name.
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -184,7 +186,7 @@ class ChargeBacksClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getChargebackAttachment(string $fileName, int $id, ?array $options = null): string
+    public function getChargebackAttachment(int $id, string $fileName, ?array $options = null): string
     {
         $options = array_merge($this->options, $options ?? []);
         try {

@@ -53,7 +53,7 @@ class ExportClient
      *   maxRetries?: int,
      *   timeout?: float,
      *   headers?: array<string, string>,
-     * } $options
+     * } $options @phpstan-ignore-next-line Property is used in endpoint methods via HttpEndpointGenerator
      */
     private array $options;
 
@@ -152,8 +152,10 @@ class ExportClient
     }
 
     /**
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
+     * This endpoint is deprecated. Export batch details for a paypoint. Use filters to limit results.
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportBatchDetailsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -167,7 +169,7 @@ class ExportClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportBatchDetails(string $entry, string $format, ExportBatchDetailsRequest $request = new ExportBatchDetailsRequest(), ?array $options = null): array
+    public function exportBatchDetails(string $format, string $entry, ExportBatchDetailsRequest $request = new ExportBatchDetailsRequest(), ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -221,6 +223,8 @@ class ExportClient
     }
 
     /**
+     * This endpoint is deprecated. Export batch details for an organization. Use filters to limit results.
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportBatchDetailsOrgRequest $request
@@ -292,8 +296,8 @@ class ExportClient
     /**
      * Export a list of batches for an entrypoint. Use filters to limit results.
      *
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportBatchesRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -307,7 +311,7 @@ class ExportClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportBatches(string $entry, string $format, ExportBatchesRequest $request = new ExportBatchesRequest(), ?array $options = null): array
+    public function exportBatches(string $format, string $entry, ExportBatchesRequest $request = new ExportBatchesRequest(), ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -434,8 +438,8 @@ class ExportClient
     /**
      * Export a list of money out batches for a paypoint. Use filters to limit results.
      *
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportBatchesOutRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -449,7 +453,7 @@ class ExportClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportBatchesOut(string $entry, string $format, ExportBatchesOutRequest $request = new ExportBatchesOutRequest(), ?array $options = null): array
+    public function exportBatchesOut(string $format, string $entry, ExportBatchesOutRequest $request = new ExportBatchesOutRequest(), ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -576,8 +580,8 @@ class ExportClient
     /**
      * Export a list of bills for an entrypoint. Use filters to limit results.
      *
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportBillsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -591,7 +595,7 @@ class ExportClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportBills(string $entry, string $format, ExportBillsRequest $request = new ExportBillsRequest(), ?array $options = null): array
+    public function exportBills(string $format, string $entry, ExportBillsRequest $request = new ExportBillsRequest(), ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -718,8 +722,8 @@ class ExportClient
     /**
      * Export a list of chargebacks and ACH returns for an entrypoint. Use filters to limit results.
      *
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportChargebacksRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -733,7 +737,7 @@ class ExportClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportChargebacks(string $entry, string $format, ExportChargebacksRequest $request = new ExportChargebacksRequest(), ?array $options = null): array
+    public function exportChargebacks(string $format, string $entry, ExportChargebacksRequest $request = new ExportChargebacksRequest(), ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -860,8 +864,8 @@ class ExportClient
     /**
      * Export a list of customers for an entrypoint. Use filters to limit results.
      *
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportCustomersRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -875,7 +879,7 @@ class ExportClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportCustomers(string $entry, string $format, ExportCustomersRequest $request = new ExportCustomersRequest(), ?array $options = null): array
+    public function exportCustomers(string $format, string $entry, ExportCustomersRequest $request = new ExportCustomersRequest(), ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1002,8 +1006,8 @@ class ExportClient
     /**
      * Export list of invoices for an entrypoint. Use filters to limit results.
      *
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportInvoicesRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -1017,7 +1021,7 @@ class ExportClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportInvoices(string $entry, string $format, ExportInvoicesRequest $request = new ExportInvoicesRequest(), ?array $options = null): array
+    public function exportInvoices(string $format, string $entry, ExportInvoicesRequest $request = new ExportInvoicesRequest(), ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1215,8 +1219,8 @@ class ExportClient
     /**
      * Export a list of payouts and their statuses for an entrypoint. Use filters to limit results.
      *
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportPayoutRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -1230,7 +1234,7 @@ class ExportClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportPayout(string $entry, string $format, ExportPayoutRequest $request = new ExportPayoutRequest(), ?array $options = null): array
+    public function exportPayout(string $format, string $entry, ExportPayoutRequest $request = new ExportPayoutRequest(), ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1428,8 +1432,8 @@ class ExportClient
     /**
      * Export a list of settled transactions for an entrypoint. Use filters to limit results.
      *
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportSettlementsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -1443,7 +1447,7 @@ class ExportClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportSettlements(string $entry, string $format, ExportSettlementsRequest $request = new ExportSettlementsRequest(), ?array $options = null): array
+    public function exportSettlements(string $format, string $entry, ExportSettlementsRequest $request = new ExportSettlementsRequest(), ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1570,8 +1574,8 @@ class ExportClient
     /**
      * Export a list of subscriptions for an entrypoint. Use filters to limit results.
      *
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportSubscriptionsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -1585,7 +1589,7 @@ class ExportClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportSubscriptions(string $entry, string $format, ExportSubscriptionsRequest $request = new ExportSubscriptionsRequest(), ?array $options = null): array
+    public function exportSubscriptions(string $format, string $entry, ExportSubscriptionsRequest $request = new ExportSubscriptionsRequest(), ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1712,8 +1716,8 @@ class ExportClient
     /**
      * Export a list of transactions for an entrypoint in a file in XLXS or CSV format. Use filters to limit results. If you don't specify a date range in the request, the last two months of data are returned.
      *
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportTransactionsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -1727,7 +1731,7 @@ class ExportClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportTransactions(string $entry, string $format, ExportTransactionsRequest $request = new ExportTransactionsRequest(), ?array $options = null): array
+    public function exportTransactions(string $format, string $entry, ExportTransactionsRequest $request = new ExportTransactionsRequest(), ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1854,8 +1858,8 @@ class ExportClient
     /**
      * Export a list of transfer details for an entrypoint. Use filters to limit results.
      *
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param int $transferId Transfer identifier.
      * @param ExportTransferDetailsRequest $request
      * @param ?array{
@@ -1870,7 +1874,7 @@ class ExportClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportTransferDetails(string $entry, string $format, int $transferId, ExportTransferDetailsRequest $request = new ExportTransferDetailsRequest(), ?array $options = null): array
+    public function exportTransferDetails(string $format, string $entry, int $transferId, ExportTransferDetailsRequest $request = new ExportTransferDetailsRequest(), ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -2002,8 +2006,8 @@ class ExportClient
     /**
      * Export a list of vendors for an entrypoint. Use filters to limit results.
      *
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportVendorsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -2017,7 +2021,7 @@ class ExportClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportVendors(string $entry, string $format, ExportVendorsRequest $request = new ExportVendorsRequest(), ?array $options = null): array
+    public function exportVendors(string $format, string $entry, ExportVendorsRequest $request = new ExportVendorsRequest(), ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];

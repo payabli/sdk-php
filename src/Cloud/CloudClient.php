@@ -27,7 +27,7 @@ class CloudClient
      *   maxRetries?: int,
      *   timeout?: float,
      *   headers?: array<string, string>,
-     * } $options
+     * } $options @phpstan-ignore-next-line Property is used in endpoint methods via HttpEndpointGenerator
      */
     private array $options;
 
@@ -119,8 +119,8 @@ class CloudClient
     /**
      * Retrieve the registration history for a device.
      *
-     * @param string $deviceId ID of the cloud device.
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
+     * @param string $deviceId ID of the cloud device.
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -133,7 +133,7 @@ class CloudClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function historyDevice(string $deviceId, string $entry, ?array $options = null): CloudQueryApiResponse
+    public function historyDevice(string $entry, string $deviceId, ?array $options = null): CloudQueryApiResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -236,8 +236,8 @@ class CloudClient
     /**
      * Remove a cloud device from an entrypoint.
      *
-     * @param string $deviceId ID of the cloud device.
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
+     * @param string $deviceId ID of the cloud device.
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -250,7 +250,7 @@ class CloudClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function removeDevice(string $deviceId, string $entry, ?array $options = null): RemoveDeviceResponse
+    public function removeDevice(string $entry, string $deviceId, ?array $options = null): RemoveDeviceResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {

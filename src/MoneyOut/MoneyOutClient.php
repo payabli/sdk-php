@@ -34,7 +34,7 @@ class MoneyOutClient
      *   maxRetries?: int,
      *   timeout?: float,
      *   headers?: array<string, string>,
-     * } $options
+     * } $options @phpstan-ignore-next-line Property is used in endpoint methods via HttpEndpointGenerator
      */
     private array $options;
 
@@ -205,7 +205,7 @@ class MoneyOutClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function cancelOut(string $referenceId, ?array $options = null): PayabliApiResponse0000
+    public function cancelOutGet(string $referenceId, ?array $options = null): PayabliApiResponse0000
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -214,6 +214,61 @@ class MoneyOutClient
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
                     path: "MoneyOut/cancel/{$referenceId}",
                     method: HttpMethod::GET,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                return PayabliApiResponse0000::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (RequestException $e) {
+            $response = $e->getResponse();
+            if ($response === null) {
+                throw new PayabliException(message: $e->getMessage(), previous: $e);
+            }
+            throw new PayabliApiException(
+                message: "API request failed",
+                statusCode: $response->getStatusCode(),
+                body: $response->getBody()->getContents(),
+            );
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Cancel a payout transaction by ID.
+     *
+     * @param string $referenceId The ID for the payout transaction.
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return PayabliApiResponse0000
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function cancelOutDelete(string $referenceId, ?array $options = null): PayabliApiResponse0000
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "MoneyOut/cancel/{$referenceId}",
+                    method: HttpMethod::DELETE,
                 ),
                 $options,
             );

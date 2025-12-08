@@ -41,7 +41,7 @@ class MoneyInClient
      *   maxRetries?: int,
      *   timeout?: float,
      *   headers?: array<string, string>,
-     * } $options
+     * } $options @phpstan-ignore-next-line Property is used in endpoint methods via HttpEndpointGenerator
      */
     private array $options;
 
@@ -144,8 +144,8 @@ class MoneyInClient
      *   Capture an [authorized
      * transaction](/api-reference/moneyin/authorize-a-transaction) to complete the transaction and move funds from the customer to merchant account.
      *
-     * @param float $amount Amount to be captured. The amount can't be greater the original total amount of the transaction. `0` captures the total amount authorized in the transaction. Partial captures aren't supported.
      * @param string $transId ReferenceId for the transaction (PaymentId).
+     * @param float $amount Amount to be captured. The amount can't be greater the original total amount of the transaction. `0` captures the total amount authorized in the transaction. Partial captures aren't supported.
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -158,7 +158,7 @@ class MoneyInClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function capture(float $amount, string $transId, ?array $options = null): CaptureResponse
+    public function capture(string $transId, float $amount, ?array $options = null): CaptureResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -457,6 +457,7 @@ class MoneyInClient
     /**
      * A reversal either refunds or voids a transaction independent of the transaction's settlement status. Send a reversal request for a transaction, and Payabli automatically determines whether it's a refund or void. You don't need to know whether the transaction is settled or not.
      *
+     * @param string $transId ReferenceId for the transaction (PaymentId).
      *
      * Amount to reverse from original transaction, minus any service fees charged on the original transaction.
      *
@@ -465,7 +466,6 @@ class MoneyInClient
      * An amount equal to zero will refunds the total amount authorized minus any service fee.
      *
      * @param float $amount
-     * @param string $transId ReferenceId for the transaction (PaymentId).
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -478,7 +478,7 @@ class MoneyInClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function reverse(float $amount, string $transId, ?array $options = null): ReverseResponse
+    public function reverse(string $transId, float $amount, ?array $options = null): ReverseResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -520,6 +520,7 @@ class MoneyInClient
     /**
      * Refund a transaction that has settled and send money back to the account holder. If a transaction hasn't been settled, void it instead.
      *
+     * @param string $transId ReferenceId for the transaction (PaymentId).
      *
      * Amount to refund from original transaction, minus any service fees charged on the original transaction.
      *
@@ -528,7 +529,6 @@ class MoneyInClient
      * An amount equal to zero will refund the total amount authorized minus any service fee.
      *
      * @param float $amount
-     * @param string $transId ReferenceId for the transaction (PaymentId).
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -541,7 +541,7 @@ class MoneyInClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function refund(float $amount, string $transId, ?array $options = null): RefundResponse
+    public function refund(string $transId, float $amount, ?array $options = null): RefundResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {

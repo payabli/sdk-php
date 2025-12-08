@@ -5,6 +5,19 @@
 
 The Payabli PHP library provides convenient access to the Payabli APIs from PHP.
 
+## Table of Contents
+
+- [Documentation](#documentation)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Exception Handling](#exception-handling)
+- [Advanced](#advanced)
+  - [Custom Client](#custom-client)
+  - [Retries](#retries)
+  - [Timeouts](#timeouts)
+- [Contributing](#contributing)
+
 ## Documentation
 
 API reference documentation is available [here](https://docs.payabli.com).

@@ -17,7 +17,7 @@ class RequestOutAuthorizePaymentDetails extends JsonSerializableType
     public ?string $checkNumber;
 
     /**
-     * @var ?string $currency Currency code ISO-4217. If not code is provided the currency in the paypoint setting is taken. Default is **USD**.
+     * @var ?string $currency Currency code ISO-4217. If no code is provided, then the currency in the paypoint setting is used. Default is **USD**.
      */
     #[JsonProperty('currency')]
     public ?string $currency;
@@ -35,11 +35,18 @@ class RequestOutAuthorizePaymentDetails extends JsonSerializableType
     public ?float $totalAmount;
 
     /**
+     * @var ?bool $unbundled Indicates whether the payout should be bundled into a single transaction or processed separately. If set to `true`, each bill will be processed as a separate payout. If `false` or not provided, then multiple bills will be paid with a single payout.
+     */
+    #[JsonProperty('unbundled')]
+    public ?bool $unbundled;
+
+    /**
      * @param array{
      *   checkNumber?: ?string,
      *   currency?: ?string,
      *   serviceFee?: ?float,
      *   totalAmount?: ?float,
+     *   unbundled?: ?bool,
      * } $values
      */
     public function __construct(
@@ -49,6 +56,7 @@ class RequestOutAuthorizePaymentDetails extends JsonSerializableType
         $this->currency = $values['currency'] ?? null;
         $this->serviceFee = $values['serviceFee'] ?? null;
         $this->totalAmount = $values['totalAmount'] ?? null;
+        $this->unbundled = $values['unbundled'] ?? null;
     }
 
     /**

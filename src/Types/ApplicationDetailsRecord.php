@@ -215,10 +215,10 @@ class ApplicationDetailsRecord extends JsonSerializableType
     public ?string $licenseState;
 
     /**
-     * @var ?FileContent $logo Object containing logo file.
+     * @var ?string $logo A URL pointing to a logo file.
      */
     #[JsonProperty('logo')]
-    public ?FileContent $logo;
+    public ?string $logo;
 
     /**
      * @var ?string $mAddress1
@@ -412,7 +412,7 @@ class ApplicationDetailsRecord extends JsonSerializableType
      *   legalName?: ?string,
      *   license?: ?string,
      *   licenseState?: ?string,
-     *   logo?: ?FileContent,
+     *   logo?: ?string,
      *   mAddress1?: ?string,
      *   mAddress2?: ?string,
      *   mccid?: ?string,

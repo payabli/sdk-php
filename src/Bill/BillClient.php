@@ -38,7 +38,7 @@ class BillClient
      *   maxRetries?: int,
      *   timeout?: float,
      *   headers?: array<string, string>,
-     * } $options
+     * } $options @phpstan-ignore-next-line Property is used in endpoint methods via HttpEndpointGenerator
      */
     private array $options;
 
@@ -130,6 +130,7 @@ class BillClient
     /**
      * Delete a file attached to a bill.
      *
+     * @param int $idBill Payabli ID for the bill. Get this ID by querying `/api/Query/bills/` for the entrypoint or the organization.
      * The filename in Payabli. Filename is `zipName` in response to a
      * request to `/api/Invoice/{idInvoice}`. Here, the filename is
      * `0_Bill.pdf`.
@@ -148,7 +149,6 @@ class BillClient
      *   ```
      *
      * @param string $filename
-     * @param int $idBill Payabli ID for the bill. Get this ID by querying `/api/Query/bills/` for the entrypoint or the organization.
      * @param DeleteAttachedFromBillRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -162,7 +162,7 @@ class BillClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function deleteAttachedFromBill(string $filename, int $idBill, DeleteAttachedFromBillRequest $request = new DeleteAttachedFromBillRequest(), ?array $options = null): BillResponse
+    public function deleteAttachedFromBill(int $idBill, string $filename, DeleteAttachedFromBillRequest $request = new DeleteAttachedFromBillRequest(), ?array $options = null): BillResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -321,6 +321,7 @@ class BillClient
     /**
      * Retrieves a file attached to a bill, either as a binary file or as a Base64-encoded string.
      *
+     * @param int $idBill Payabli ID for the bill. Get this ID by querying `/api/Query/bills/` for the entrypoint or the organization.
      * The filename in Payabli. Filename is `zipName` in response to a request to `/api/Invoice/{idInvoice}`. Here, the filename is `0_Bill.pdf``.
      * "DocumentsRef": {
      *   "zipfile": "inva_269.zip",
@@ -334,7 +335,6 @@ class BillClient
      * }
      *
      * @param string $filename
-     * @param int $idBill Payabli ID for the bill. Get this ID by querying `/api/Query/bills/` for the entrypoint or the organization.
      * @param GetAttachedFromBillRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -348,7 +348,7 @@ class BillClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getAttachedFromBill(string $filename, int $idBill, GetAttachedFromBillRequest $request = new GetAttachedFromBillRequest(), ?array $options = null): FileContent
+    public function getAttachedFromBill(int $idBill, string $filename, GetAttachedFromBillRequest $request = new GetAttachedFromBillRequest(), ?array $options = null): FileContent
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -720,8 +720,8 @@ class BillClient
     /**
      * Approve or disapprove a bill by ID.
      *
-     * @param string $approved String representing the approved status. Accepted values: 'true' or 'false'.
      * @param int $idBill Payabli ID for the bill. Get this ID by querying `/api/Query/bills/` for the entrypoint or the organization.
+     * @param string $approved String representing the approved status. Accepted values: 'true' or 'false'.
      * @param SetApprovedBillRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -735,7 +735,7 @@ class BillClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function setApprovedBill(string $approved, int $idBill, SetApprovedBillRequest $request = new SetApprovedBillRequest(), ?array $options = null): SetApprovedBillResponse
+    public function setApprovedBill(int $idBill, string $approved, SetApprovedBillRequest $request = new SetApprovedBillRequest(), ?array $options = null): SetApprovedBillResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];

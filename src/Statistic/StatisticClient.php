@@ -5,7 +5,7 @@ namespace Payabli\Statistic;
 use GuzzleHttp\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\Statistic\Requests\BasicStatsRequest;
-use Payabli\Statistic\Types\StatBasicQueryRecord;
+use Payabli\Statistic\Types\StatBasicExtendedQueryRecord;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -18,6 +18,7 @@ use Psr\Http\Client\ClientExceptionInterface;
 use Payabli\Statistic\Requests\CustomerBasicStatsRequest;
 use Payabli\Statistic\Types\SubscriptionStatsQueryRecord;
 use Payabli\Statistic\Requests\SubStatsRequest;
+use Payabli\Statistic\Types\StatBasicQueryRecord;
 use Payabli\Statistic\Requests\VendorBasicStatsRequest;
 use Payabli\Statistic\Types\StatisticsVendorQueryRecord;
 
@@ -30,7 +31,7 @@ class StatisticClient
      *   maxRetries?: int,
      *   timeout?: float,
      *   headers?: array<string, string>,
-     * } $options
+     * } $options @phpstan-ignore-next-line Property is used in endpoint methods via HttpEndpointGenerator
      */
     private array $options;
 
@@ -60,22 +61,6 @@ class StatisticClient
     /**
      * Retrieves the basic statistics for an organization or a paypoint, for a given time period, grouped by a particular frequency.
      *
-     * @param int $entryId Identifier in Payabli for the entity.
-     * Frequency to group series. Allowed values:
-     *
-     * - `m` - monthly
-     * - `w` - weekly
-     * - `d` - daily
-     * - `h` - hourly
-     *
-     * For example, `w` groups the results by week.
-     *
-     * @param string $freq
-     * The entry level for the request:
-     *   - 0 for Organization
-     *   - 2 for Paypoint
-     *
-     * @param int $level
      * Mode for the request. Allowed values:
      *
      * - `custom` - Allows you to set a custom date range
@@ -93,6 +78,22 @@ class StatisticClient
      *
      *
      * @param string $mode
+     * Frequency to group series. Allowed values:
+     *
+     * - `m` - monthly
+     * - `w` - weekly
+     * - `d` - daily
+     * - `h` - hourly
+     *
+     * For example, `w` groups the results by week.
+     *
+     * @param string $freq
+     * The entry level for the request:
+     *   - 0 for Organization
+     *   - 2 for Paypoint
+     *
+     * @param int $level
+     * @param int $entryId Identifier in Payabli for the entity.
      * @param BasicStatsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -102,11 +103,11 @@ class StatisticClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<StatBasicQueryRecord>
+     * @return array<StatBasicExtendedQueryRecord>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function basicStats(int $entryId, string $freq, int $level, string $mode, BasicStatsRequest $request = new BasicStatsRequest(), ?array $options = null): array
+    public function basicStats(string $mode, string $freq, int $level, int $entryId, BasicStatsRequest $request = new BasicStatsRequest(), ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -132,7 +133,7 @@ class StatisticClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
-                return JsonDecoder::decodeArray($json, [StatBasicQueryRecord::class]); // @phpstan-ignore-line
+                return JsonDecoder::decodeArray($json, [StatBasicExtendedQueryRecord::class]); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -159,17 +160,6 @@ class StatisticClient
     /**
      * Retrieves the basic statistics for a customer for a specific time period, grouped by a selected frequency.
      *
-     * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in PartnerHub.
-     * Frequency to group series. Allowed values:
-     *
-     * - `m` - monthly
-     * - `w` - weekly
-     * - `d` - daily
-     * - `h` - hourly
-     *
-     * For example, `w` groups the results by week.
-     *
-     * @param string $freq
      * Mode for request. Allowed values:
      *
      * - `ytd` - Year To Date
@@ -185,6 +175,17 @@ class StatisticClient
      * - `yesterday` - Last Day
      *
      * @param string $mode
+     * Frequency to group series. Allowed values:
+     *
+     * - `m` - monthly
+     * - `w` - weekly
+     * - `d` - daily
+     * - `h` - hourly
+     *
+     * For example, `w` groups the results by week.
+     *
+     * @param string $freq
+     * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in PartnerHub.
      * @param CustomerBasicStatsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -198,7 +199,7 @@ class StatisticClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function customerBasicStats(int $customerId, string $freq, string $mode, CustomerBasicStatsRequest $request = new CustomerBasicStatsRequest(), ?array $options = null): array
+    public function customerBasicStats(string $mode, string $freq, int $customerId, CustomerBasicStatsRequest $request = new CustomerBasicStatsRequest(), ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -245,7 +246,6 @@ class StatisticClient
     /**
      * Retrieves the subscription statistics for a given interval for a paypoint or organization.
      *
-     * @param int $entryId Identifier in Payabli for the entity.
      * Interval to get the data. Allowed values:
      *
      * - `all` - all intervals
@@ -260,6 +260,7 @@ class StatisticClient
      *   - 2 for Paypoint
      *
      * @param int $level
+     * @param int $entryId Identifier in Payabli for the entity.
      * @param SubStatsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -273,7 +274,7 @@ class StatisticClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function subStats(int $entryId, string $interval, int $level, SubStatsRequest $request = new SubStatsRequest(), ?array $options = null): array
+    public function subStats(string $interval, int $level, int $entryId, SubStatsRequest $request = new SubStatsRequest(), ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -320,17 +321,6 @@ class StatisticClient
     /**
      * Retrieve the basic statistics about a vendor for a given time period, grouped by frequency.
      *
-     * Frequency to group series. Allowed values:
-     *
-     * - `m` - monthly
-     * - `w` - weekly
-     * - `d` - daily
-     * - `h` - hourly
-     *
-     * For example, `w` groups the results by week.
-     *
-     * @param string $freq
-     * @param int $idVendor Vendor ID.
      * Mode for request. Allowed values:
      *
      * - `ytd` - Year To Date
@@ -346,6 +336,17 @@ class StatisticClient
      * - `yesterday` - Last Day
      *
      * @param string $mode
+     * Frequency to group series. Allowed values:
+     *
+     * - `m` - monthly
+     * - `w` - weekly
+     * - `d` - daily
+     * - `h` - hourly
+     *
+     * For example, `w` groups the results by week.
+     *
+     * @param string $freq
+     * @param int $idVendor Vendor ID.
      * @param VendorBasicStatsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -359,7 +360,7 @@ class StatisticClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function vendorBasicStats(string $freq, int $idVendor, string $mode, VendorBasicStatsRequest $request = new VendorBasicStatsRequest(), ?array $options = null): array
+    public function vendorBasicStats(string $mode, string $freq, int $idVendor, VendorBasicStatsRequest $request = new VendorBasicStatsRequest(), ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];

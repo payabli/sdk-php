@@ -66,6 +66,7 @@ class ListTransactionsRequest extends JsonSerializableType
      * - `settlementStatus` (in, nin, eq, ne)
      * - `batchNumber` (nct, ct)
      * - `invoiceNumber` (ct, nct)
+     * - `ipAddress` (eq, ne)
      * - `authCode` (ct, nct)
      * - `orderDescription` (ct, nct)
      * - `payaccountLastfour` (nct, ct)

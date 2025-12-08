@@ -39,7 +39,7 @@ class UserClient
      *   maxRetries?: int,
      *   timeout?: float,
      *   headers?: array<string, string>,
-     * } $options
+     * } $options @phpstan-ignore-next-line Property is used in endpoint methods via HttpEndpointGenerator
      */
     private array $options;
 
@@ -67,6 +67,8 @@ class UserClient
     }
 
     /**
+     * Use this endpoint to add a new user to an organization.
+     *
      * @param UserData $request
      * @param ?array{
      *   baseUrl?: string,
@@ -121,6 +123,8 @@ class UserClient
     }
 
     /**
+     * Use this endpoint to refresh the authentication token for a user within an organization.
+     *
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -173,6 +177,8 @@ class UserClient
     }
 
     /**
+     * Use this endpoint to initiate a password reset for a user within an organization.
+     *
      * @param UserAuthResetRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -284,6 +290,8 @@ class UserClient
     }
 
     /**
+     * Use this endpoint to change the password for a user within an organization.
+     *
      * @param UserAuthPswResetRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -338,6 +346,8 @@ class UserClient
     }
 
     /**
+     * Use this endpoint to delete a specific user within an organization.
+     *
      * @param int $userId The Payabli-generated `userId` value.
      * @param ?array{
      *   baseUrl?: string,
@@ -391,6 +401,8 @@ class UserClient
     }
 
     /**
+     * Use this endpoint to enable or disable multi-factor authentication (MFA) for a user within an organization.
+     *
      * @param int $userId User Identifier
      * @param MfaData $request
      * @param ?array{
@@ -446,6 +458,8 @@ class UserClient
     }
 
     /**
+     * Use this endpoint to modify the details of a specific user within an organization.
+     *
      * @param int $userId User Identifier
      * @param UserData $request
      * @param ?array{
@@ -501,6 +515,8 @@ class UserClient
     }
 
     /**
+     * Use this endpoint to retrieve information about a specific user within an organization.
+     *
      * @param int $userId The Payabli-generated `userId` value.
      * @param GetUserRequest $request
      * @param ?array{
@@ -563,6 +579,8 @@ class UserClient
     }
 
     /**
+     * Use this endpoint to log a user out from the system.
+     *
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -615,9 +633,11 @@ class UserClient
     }
 
     /**
+     * Resends the MFA code to the user via the selected MFA mode (email or SMS).
+     *
+     * @param string $usrname
      * @param string $entry
      * @param int $entryType
-     * @param string $usrname
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -630,7 +650,7 @@ class UserClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function resendMfaCode(string $entry, int $entryType, string $usrname, ?array $options = null): PayabliApiResponseMfaBasic
+    public function resendMfaCode(string $usrname, string $entry, int $entryType, ?array $options = null): PayabliApiResponseMfaBasic
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -670,6 +690,8 @@ class UserClient
     }
 
     /**
+     * Use this endpoint to validate the multi-factor authentication (MFA) code for a user within an organization.
+     *
      * @param MfaValidationData $request
      * @param ?array{
      *   baseUrl?: string,

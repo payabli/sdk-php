@@ -180,7 +180,7 @@ class QueryResponseSettlementsRecordsItem extends JsonSerializableType
     public ?float $settledAmount;
 
     /**
-     * @var ?DateTime $settlementDate
+     * @var ?DateTime $settlementDate The date and time when the transaction was settled. This field is null when the transaction's `SettlementStatus` is -1, -5, or -6 (Exception, Held, or Released).
      */
     #[JsonProperty('SettlementDate'), Date(Date::TYPE_DATETIME)]
     public ?DateTime $settlementDate;

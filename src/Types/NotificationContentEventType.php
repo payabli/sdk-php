@@ -33,6 +33,7 @@ enum NotificationContentEventType: string
     case ApprovedApplication = "ApprovedApplication";
     case FailedBoardingApplication = "FailedBoardingApplication";
     case SubmittedApplication = "SubmittedApplication";
+    case UnderWritingApplication = "UnderWritingApplication";
     case ActivatedMerchant = "ActivatedMerchant";
     case ReceivedChargeBack = "ReceivedChargeBack";
     case ChargebackUpdated = "ChargebackUpdated";

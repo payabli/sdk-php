@@ -35,7 +35,7 @@ class InvoiceClient
      *   maxRetries?: int,
      *   timeout?: float,
      *   headers?: array<string, string>,
-     * } $options
+     * } $options @phpstan-ignore-next-line Property is used in endpoint methods via HttpEndpointGenerator
      */
     private array $options;
 
@@ -132,6 +132,7 @@ class InvoiceClient
     /**
      * Deletes an invoice that's attached to a file.
      *
+     * @param int $idInvoice Invoice ID
      * The filename in Payabli. Filename is `zipName` in response to a request to `/api/Invoice/{idInvoice}`. Here, the filename is `0_Bill.pdf``.
      * "DocumentsRef": {
      *   "zipfile": "inva_269.zip",
@@ -145,7 +146,6 @@ class InvoiceClient
      * }
      *
      * @param string $filename
-     * @param int $idInvoice Invoice ID
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -158,7 +158,7 @@ class InvoiceClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function deleteAttachedFromInvoice(string $filename, int $idInvoice, ?array $options = null): InvoiceResponseWithoutData
+    public function deleteAttachedFromInvoice(int $idInvoice, string $filename, ?array $options = null): InvoiceResponseWithoutData
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -317,6 +317,7 @@ class InvoiceClient
     /**
      * Retrieves a file attached to an invoice.
      *
+     * @param int $idInvoice Invoice ID
      * The filename in Payabli. Filename is `zipName` in the response to a request to `/api/Invoice/{idInvoice}`. Here, the filename is `0_Bill.pdf``.
      * ```
      *   "DocumentsRef": {
@@ -332,7 +333,6 @@ class InvoiceClient
      *   ```
      *
      * @param string $filename
-     * @param int $idInvoice Invoice ID
      * @param GetAttachedFileFromInvoiceRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -346,7 +346,7 @@ class InvoiceClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getAttachedFileFromInvoice(string $filename, int $idInvoice, GetAttachedFileFromInvoiceRequest $request = new GetAttachedFileFromInvoiceRequest(), ?array $options = null): FileContent
+    public function getAttachedFileFromInvoice(int $idInvoice, string $filename, GetAttachedFileFromInvoiceRequest $request = new GetAttachedFileFromInvoiceRequest(), ?array $options = null): FileContent
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];

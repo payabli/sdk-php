@@ -182,7 +182,7 @@ class PayabliClient
      *   maxRetries?: int,
      *   timeout?: float,
      *   headers?: array<string, string>,
-     * } $options
+     * } $options @phpstan-ignore-next-line Property is used in endpoint methods via HttpEndpointGenerator
      */
     private array $options;
 
@@ -208,14 +208,15 @@ class PayabliClient
         $defaultHeaders = [
             'X-Fern-Language' => 'PHP',
             'X-Fern-SDK-Name' => 'Payabli',
-            'X-Fern-SDK-Version' => '0.0.405',
-            'User-Agent' => 'payabli/payabli/0.0.405',
+            'X-Fern-SDK-Version' => '0.0.406',
+            'User-Agent' => 'payabli/payabli/0.0.406',
         ];
         if ($apiKey != null) {
             $defaultHeaders['requestToken'] = $apiKey;
         }
 
         $this->options = $options ?? [];
+
         $this->options['headers'] = array_merge(
             $defaultHeaders,
             $this->options['headers'] ?? [],
