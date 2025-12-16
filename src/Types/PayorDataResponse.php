@@ -13,9 +13,9 @@ use Payabli\Core\Types\Union;
 class PayorDataResponse extends JsonSerializableType
 {
     /**
-     * @var ?array<string, ?array<string, mixed>> $additionalData
+     * @var ?array<string, string> $additionalData
      */
-    #[JsonProperty('AdditionalData'), ArrayType(['string' => new Union(['string' => 'mixed'], 'null')])]
+    #[JsonProperty('AdditionalData'), ArrayType(['string' => 'string'])]
     public ?array $additionalData;
 
     /**
@@ -146,7 +146,7 @@ class PayorDataResponse extends JsonSerializableType
 
     /**
      * @param array{
-     *   additionalData?: ?array<string, ?array<string, mixed>>,
+     *   additionalData?: ?array<string, string>,
      *   billingAddress1?: ?string,
      *   billingAddress2?: ?string,
      *   billingCity?: ?string,

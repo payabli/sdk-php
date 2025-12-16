@@ -38,10 +38,10 @@ class FrequencyList extends JsonSerializableType
     public ?bool $monthly;
 
     /**
-     * @var ?bool $oneTime Enable or disable frequency
+     * @var ?bool $onetime Enable or disable frequency
      */
-    #[JsonProperty('one-time')]
-    public ?bool $oneTime;
+    #[JsonProperty('onetime')]
+    public ?bool $onetime;
 
     /**
      * @var ?bool $weekly Enable or disable frequency
@@ -56,7 +56,7 @@ class FrequencyList extends JsonSerializableType
      *   every3Months?: ?bool,
      *   every6Months?: ?bool,
      *   monthly?: ?bool,
-     *   oneTime?: ?bool,
+     *   onetime?: ?bool,
      *   weekly?: ?bool,
      * } $values
      */
@@ -68,7 +68,7 @@ class FrequencyList extends JsonSerializableType
         $this->every3Months = $values['every3Months'] ?? null;
         $this->every6Months = $values['every6Months'] ?? null;
         $this->monthly = $values['monthly'] ?? null;
-        $this->oneTime = $values['oneTime'] ?? null;
+        $this->onetime = $values['onetime'] ?? null;
         $this->weekly = $values['weekly'] ?? null;
     }
 
