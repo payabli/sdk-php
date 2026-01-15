@@ -1,6 +1,6 @@
 <?php
 
-namespace Payabli\MoneyIn\Types;
+namespace Payabli\V2MoneyInTypes\Types;
 
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
@@ -8,19 +8,19 @@ use Payabli\Core\Json\JsonProperty;
 /**
  * Response data from payment processor
  */
-class TransactionDetailResponseData extends JsonSerializableType
+class V2TransactionDetailResponseData extends JsonSerializableType
 {
     /**
-     * @var ?string $resultCode Unified result code for the transaction. See [Pay In unified response codes](/developers/references/pay-in-unified-response-codes) for more information.
+     * @var string $resultCode
      */
     #[JsonProperty('resultCode')]
-    public ?string $resultCode;
+    public string $resultCode;
 
     /**
-     * @var ?string $resultCodeText Description of the result code. See [Pay In unified response codes](/developers/references/pay-in-unified-response-codes) for more information.
+     * @var string $resultCodeText
      */
     #[JsonProperty('resultCodeText')]
-    public ?string $resultCodeText;
+    public string $resultCodeText;
 
     /**
      * @var ?string $response
@@ -41,7 +41,7 @@ class TransactionDetailResponseData extends JsonSerializableType
     public ?string $authcode;
 
     /**
-     * @var string $transactionid
+     * @var string $transactionid Unique identifier for the transaction assigned by the payment processor.
      */
     #[JsonProperty('transactionid')]
     public string $transactionid;
@@ -83,13 +83,13 @@ class TransactionDetailResponseData extends JsonSerializableType
     public ?string $type;
 
     /**
-     * @var string $responseCode
+     * @var string $responseCode Processor-specific response code.
      */
     #[JsonProperty('response_code')]
     public string $responseCode;
 
     /**
-     * @var string $responseCodeText
+     * @var string $responseCodeText Description of the response code.
      */
     #[JsonProperty('response_code_text')]
     public string $responseCodeText;
@@ -108,12 +108,12 @@ class TransactionDetailResponseData extends JsonSerializableType
 
     /**
      * @param array{
+     *   resultCode: string,
+     *   resultCodeText: string,
      *   responsetext: string,
      *   transactionid: string,
      *   responseCode: string,
      *   responseCodeText: string,
-     *   resultCode?: ?string,
-     *   resultCodeText?: ?string,
      *   response?: ?string,
      *   authcode?: ?string,
      *   avsresponse?: ?string,
@@ -129,8 +129,8 @@ class TransactionDetailResponseData extends JsonSerializableType
     public function __construct(
         array $values,
     ) {
-        $this->resultCode = $values['resultCode'] ?? null;
-        $this->resultCodeText = $values['resultCodeText'] ?? null;
+        $this->resultCode = $values['resultCode'];
+        $this->resultCodeText = $values['resultCodeText'];
         $this->response = $values['response'] ?? null;
         $this->responsetext = $values['responsetext'];
         $this->authcode = $values['authcode'] ?? null;

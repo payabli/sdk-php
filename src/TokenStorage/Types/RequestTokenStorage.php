@@ -50,6 +50,12 @@ class RequestTokenStorage extends JsonSerializableType
     public TokenizeCard|TokenizeAch|ConvertToken|null $paymentMethod;
 
     /**
+     * @var ?VendorDataRequest $vendorData
+     */
+    #[JsonProperty('vendorData')]
+    public ?VendorDataRequest $vendorData;
+
+    /**
      * @var ?string $source Custom identifier to indicate the source for the request
      */
     #[JsonProperty('source')]
@@ -73,6 +79,7 @@ class RequestTokenStorage extends JsonSerializableType
      *   |TokenizeAch
      *   |ConvertToken
      * )|null,
+     *   vendorData?: ?VendorDataRequest,
      *   source?: ?string,
      *   subdomain?: ?string,
      * } $values
@@ -86,6 +93,7 @@ class RequestTokenStorage extends JsonSerializableType
         $this->fallbackAuthAmount = $values['fallbackAuthAmount'] ?? null;
         $this->methodDescription = $values['methodDescription'] ?? null;
         $this->paymentMethod = $values['paymentMethod'] ?? null;
+        $this->vendorData = $values['vendorData'] ?? null;
         $this->source = $values['source'] ?? null;
         $this->subdomain = $values['subdomain'] ?? null;
     }

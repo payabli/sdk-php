@@ -6,9 +6,9 @@ use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
 use Payabli\Types\AchHolderType;
 use Payabli\Types\BinData;
-use Payabli\Core\Types\ArrayType;
 use DateTime;
 use Payabli\Core\Types\Date;
+use Payabli\Core\Types\ArrayType;
 
 class GetMethodResponseResponseData extends JsonSerializableType
 {
@@ -43,6 +43,12 @@ class GetMethodResponseResponseData extends JsonSerializableType
     public ?BinData $binData;
 
     /**
+     * @var ?DateTime $cardUpdatedOn Timestamp for when card was last updated
+     */
+    #[JsonProperty('cardUpdatedOn'), Date(Date::TYPE_DATETIME)]
+    public ?DateTime $cardUpdatedOn;
+
+    /**
      * @var ?array<GetMethodResponseResponseDataCustomersItem> $customers
      */
     #[JsonProperty('customers'), ArrayType([GetMethodResponseResponseDataCustomersItem::class])]
@@ -71,6 +77,12 @@ class GetMethodResponseResponseData extends JsonSerializableType
      */
     #[JsonProperty('idPmethod')]
     public ?string $idPmethod;
+
+    /**
+     * @var ?bool $isValidatedAch Whether the ACH account has been validated
+     */
+    #[JsonProperty('isValidatedACH')]
+    public ?bool $isValidatedAch;
 
     /**
      * @var ?DateTime $lastUpdated Timestamp for last update of stored method, in UTC
@@ -103,22 +115,31 @@ class GetMethodResponseResponseData extends JsonSerializableType
     public ?string $postalCode;
 
     /**
+     * @var ?array<GetMethodResponseResponseDataVendorsItem> $vendors
+     */
+    #[JsonProperty('vendors'), ArrayType([GetMethodResponseResponseDataVendorsItem::class])]
+    public ?array $vendors;
+
+    /**
      * @param array{
      *   aba?: ?string,
      *   achHolderType?: ?value-of<AchHolderType>,
      *   achSecCode?: ?string,
      *   bin?: ?string,
      *   binData?: ?BinData,
+     *   cardUpdatedOn?: ?DateTime,
      *   customers?: ?array<GetMethodResponseResponseDataCustomersItem>,
      *   descriptor?: ?string,
      *   expDate?: ?string,
      *   holderName?: ?string,
      *   idPmethod?: ?string,
+     *   isValidatedAch?: ?bool,
      *   lastUpdated?: ?DateTime,
      *   maskedAccount?: ?string,
      *   method?: ?string,
      *   methodType?: ?string,
      *   postalCode?: ?string,
+     *   vendors?: ?array<GetMethodResponseResponseDataVendorsItem>,
      * } $values
      */
     public function __construct(
@@ -129,16 +150,19 @@ class GetMethodResponseResponseData extends JsonSerializableType
         $this->achSecCode = $values['achSecCode'] ?? null;
         $this->bin = $values['bin'] ?? null;
         $this->binData = $values['binData'] ?? null;
+        $this->cardUpdatedOn = $values['cardUpdatedOn'] ?? null;
         $this->customers = $values['customers'] ?? null;
         $this->descriptor = $values['descriptor'] ?? null;
         $this->expDate = $values['expDate'] ?? null;
         $this->holderName = $values['holderName'] ?? null;
         $this->idPmethod = $values['idPmethod'] ?? null;
+        $this->isValidatedAch = $values['isValidatedAch'] ?? null;
         $this->lastUpdated = $values['lastUpdated'] ?? null;
         $this->maskedAccount = $values['maskedAccount'] ?? null;
         $this->method = $values['method'] ?? null;
         $this->methodType = $values['methodType'] ?? null;
         $this->postalCode = $values['postalCode'] ?? null;
+        $this->vendors = $values['vendors'] ?? null;
     }
 
     /**

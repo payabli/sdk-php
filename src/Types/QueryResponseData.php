@@ -17,31 +17,31 @@ class QueryResponseData extends JsonSerializableType
     public ?string $authcode;
 
     /**
-     * @var ?string $avsresponse Text code describing the result for address validation (applies only for card transactions).
+     * @var ?string $avsresponse
      */
     #[JsonProperty('avsresponse')]
     public ?string $avsresponse;
 
     /**
-     * @var ?string $avsresponseText Text code describing the result for address validation (applies only for card transactions).
+     * @var ?string $avsresponseText
      */
     #[JsonProperty('avsresponse_text')]
     public ?string $avsresponseText;
 
     /**
-     * @var ?string $cvvresponse Text code describing the result for CVV validation (applies only for card transactions).
+     * @var ?string $cvvresponse
      */
     #[JsonProperty('cvvresponse')]
     public ?string $cvvresponse;
 
     /**
-     * @var ?string $cvvresponseText Text code describing the result for CVV validation (applies only for card transactions).
+     * @var ?string $cvvresponseText
      */
     #[JsonProperty('cvvresponse_text')]
     public ?string $cvvresponseText;
 
     /**
-     * @var ?string $emvAuthResponseData EMV authorization response data, applicable for card transactions.
+     * @var ?string $emvAuthResponseData
      */
     #[JsonProperty('emv_auth_response_data')]
     public ?string $emvAuthResponseData;
@@ -77,6 +77,18 @@ class QueryResponseData extends JsonSerializableType
     public ?string $responsetext;
 
     /**
+     * @var ?string $resultCode
+     */
+    #[JsonProperty('resultCode')]
+    public ?string $resultCode;
+
+    /**
+     * @var ?string $resultCodeText
+     */
+    #[JsonProperty('resultCodeText')]
+    public ?string $resultCodeText;
+
+    /**
      * @var ?string $transactionid The transaction identifier in Payabli.
      */
     #[JsonProperty('transactionid')]
@@ -101,6 +113,8 @@ class QueryResponseData extends JsonSerializableType
      *   responseCode?: ?string,
      *   responseCodeText?: ?string,
      *   responsetext?: ?string,
+     *   resultCode?: ?string,
+     *   resultCodeText?: ?string,
      *   transactionid?: ?string,
      *   type?: ?string,
      * } $values
@@ -119,6 +133,8 @@ class QueryResponseData extends JsonSerializableType
         $this->responseCode = $values['responseCode'] ?? null;
         $this->responseCodeText = $values['responseCodeText'] ?? null;
         $this->responsetext = $values['responsetext'] ?? null;
+        $this->resultCode = $values['resultCode'] ?? null;
+        $this->resultCodeText = $values['resultCodeText'] ?? null;
         $this->transactionid = $values['transactionid'] ?? null;
         $this->type = $values['type'] ?? null;
     }

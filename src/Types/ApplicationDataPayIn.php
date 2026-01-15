@@ -348,6 +348,12 @@ class ApplicationDataPayIn extends JsonSerializableType
     public ?string $repOffice;
 
     /**
+     * @var ?string $onCreate
+     */
+    #[JsonProperty('onCreate')]
+    public ?string $onCreate;
+
+    /**
      * @param array{
      *   services: ApplicationDataPayInServices,
      *   bankData: ApplicationDataPayInBankData,
@@ -405,6 +411,7 @@ class ApplicationDataPayIn extends JsonSerializableType
      *   repCode?: ?string,
      *   repName?: ?string,
      *   repOffice?: ?string,
+     *   onCreate?: ?string,
      * } $values
      */
     public function __construct(
@@ -466,6 +473,7 @@ class ApplicationDataPayIn extends JsonSerializableType
         $this->repCode = $values['repCode'] ?? null;
         $this->repName = $values['repName'] ?? null;
         $this->repOffice = $values['repOffice'] ?? null;
+        $this->onCreate = $values['onCreate'] ?? null;
     }
 
     /**

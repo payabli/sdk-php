@@ -11,16 +11,16 @@ use Payabli\Core\Json\JsonProperty;
 class GetPaidResponseData extends JsonSerializableType
 {
     /**
-     * @var ?TransactionDetailRecord $transactionDetails Details of the transaction. Present only if `includeDetails` query parameter is set to `true` in the request.
-     */
-    #[JsonProperty('transactionDetails')]
-    public ?TransactionDetailRecord $transactionDetails;
-
-    /**
      * @var ?string $authCode
      */
     #[JsonProperty('authCode')]
     public ?string $authCode;
+
+    /**
+     * @var ?TransactionDetailRecord $transactionDetails Details of the transaction. Present only if `includeDetails` query parameter is set to `true` in the request.
+     */
+    #[JsonProperty('transactionDetails')]
+    public ?TransactionDetailRecord $transactionDetails;
 
     /**
      * @var string $referenceId
@@ -72,16 +72,16 @@ class GetPaidResponseData extends JsonSerializableType
      *   avsResponseText: string,
      *   cvvResponseText: string,
      *   customerId: int,
-     *   transactionDetails?: ?TransactionDetailRecord,
      *   authCode?: ?string,
+     *   transactionDetails?: ?TransactionDetailRecord,
      *   methodReferenceId?: ?string,
      * } $values
      */
     public function __construct(
         array $values,
     ) {
-        $this->transactionDetails = $values['transactionDetails'] ?? null;
         $this->authCode = $values['authCode'] ?? null;
+        $this->transactionDetails = $values['transactionDetails'] ?? null;
         $this->referenceId = $values['referenceId'];
         $this->resultCode = $values['resultCode'];
         $this->resultText = $values['resultText'];

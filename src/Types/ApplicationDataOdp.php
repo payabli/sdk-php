@@ -285,6 +285,12 @@ class ApplicationDataOdp extends JsonSerializableType
     public ?string $repOffice;
 
     /**
+     * @var ?string $onCreate
+     */
+    #[JsonProperty('onCreate')]
+    public ?string $onCreate;
+
+    /**
      * @param array{
      *   payoutAverageMonthlyVolume: float,
      *   payoutAverageTicketAmount: float,
@@ -332,6 +338,7 @@ class ApplicationDataOdp extends JsonSerializableType
      *   repCode?: ?string,
      *   repName?: ?string,
      *   repOffice?: ?string,
+     *   onCreate?: ?string,
      * } $values
      */
     public function __construct(
@@ -383,6 +390,7 @@ class ApplicationDataOdp extends JsonSerializableType
         $this->repCode = $values['repCode'] ?? null;
         $this->repName = $values['repName'] ?? null;
         $this->repOffice = $values['repOffice'] ?? null;
+        $this->onCreate = $values['onCreate'] ?? null;
     }
 
     /**
