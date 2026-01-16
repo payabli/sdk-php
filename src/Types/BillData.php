@@ -11,10 +11,10 @@ use Payabli\Core\Types\Date;
 class BillData extends JsonSerializableType
 {
     /**
-     * @var ?string $additionalData
+     * @var ?array<string, string> $additionalData
      */
-    #[JsonProperty('AdditionalData')]
-    public ?string $additionalData;
+    #[JsonProperty('AdditionalData'), ArrayType(['string' => 'string'])]
+    public ?array $additionalData;
 
     /**
      * @var ?array<FileContent> $attachments
@@ -204,7 +204,7 @@ class BillData extends JsonSerializableType
 
     /**
      * @param array{
-     *   additionalData?: ?string,
+     *   additionalData?: ?array<string, string>,
      *   attachments?: ?array<FileContent>,
      *   company?: ?string,
      *   discount?: ?float,
