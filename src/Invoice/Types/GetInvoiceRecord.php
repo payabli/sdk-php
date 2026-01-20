@@ -287,10 +287,10 @@ class GetInvoiceRecord extends JsonSerializableType
     public string $parentOrgName;
 
     /**
-     * @var ?string $additionalData
+     * @var ?array<string, string> $additionalData
      */
-    #[JsonProperty('AdditionalData')]
-    public ?string $additionalData;
+    #[JsonProperty('AdditionalData'), ArrayType(['string' => 'string'])]
+    public ?array $additionalData;
 
     /**
      * @var DocumentsRef $documentsRef
@@ -352,7 +352,7 @@ class GetInvoiceRecord extends JsonSerializableType
      *   lastName?: ?string,
      *   company?: ?string,
      *   billEvents?: ?array<GeneralEvents>,
-     *   additionalData?: ?string,
+     *   additionalData?: ?array<string, string>,
      *   externalPaypointId?: ?string,
      * } $values
      */
