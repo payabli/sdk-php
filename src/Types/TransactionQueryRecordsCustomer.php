@@ -85,7 +85,7 @@ class TransactionQueryRecordsCustomer extends JsonSerializableType
     /**
      * @var ?BillData $invoiceData
      */
-    #[JsonProperty('InvoiceData')]
+    #[JsonProperty('invoiceData')]
     public ?BillData $invoiceData;
 
     /**
