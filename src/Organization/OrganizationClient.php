@@ -232,7 +232,7 @@ class OrganizationClient
     /**
      * Gets an organization's basic information by entry name (entrypoint identifier).
      *
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,

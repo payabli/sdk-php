@@ -55,7 +55,7 @@ class HostedPaymentPagesClient
     /**
      * Loads all of a payment page's details including `pageIdentifier` and `validationCode`. This endpoint requires an `application` API token.
      *
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param string $subdomain Payment page identifier. The subdomain value is the last part of the payment page URL. For example, in`https://paypages-sandbox.payabli.com/513823dc10/pay-your-fees-1`, the subdomain is `pay-your-fees-1`.
      * @param ?array{
      *   baseUrl?: string,
@@ -113,7 +113,7 @@ class HostedPaymentPagesClient
      * Creates a new payment page for a paypoint.
      * Note: this operation doesn't create a new paypoint, just a payment page for an existing paypoint. Paypoints are created by the Payabli team when a boarding application is approved.
      *
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param NewPageRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -175,7 +175,7 @@ class HostedPaymentPagesClient
     /**
      * Updates a payment page in a paypoint.
      *
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param string $subdomain Payment page identifier. The subdomain value is the last part of the payment page URL. For example, in`https://paypages-sandbox.payabli.com/513823dc10/pay-your-fees-1`, the subdomain is `pay-your-fees-1`.
      * @param PayabliPages $request
      * @param ?array{

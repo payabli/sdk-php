@@ -20,9 +20,16 @@ class TransferBankAccount extends JsonSerializableType
     public string $routingNumber;
 
     /**
+     * @var string $bankName
+     */
+    #[JsonProperty('bankName')]
+    public string $bankName;
+
+    /**
      * @param array{
      *   accountNumber: string,
      *   routingNumber: string,
+     *   bankName: string,
      * } $values
      */
     public function __construct(
@@ -30,6 +37,7 @@ class TransferBankAccount extends JsonSerializableType
     ) {
         $this->accountNumber = $values['accountNumber'];
         $this->routingNumber = $values['routingNumber'];
+        $this->bankName = $values['bankName'];
     }
 
     /**

@@ -11,13 +11,13 @@ use Payabli\Core\Json\JsonProperty;
 class TransactionDetailResponseData extends JsonSerializableType
 {
     /**
-     * @var ?string $resultCode Unified result code for the transaction. See [Pay In unified response codes](/developers/references/pay-in-unified-response-codes) for more information.
+     * @var ?string $resultCode Unified result code for the transaction. See [Pay In unified response codes](/guides/pay-in-unified-response-codes-reference) for more information.
      */
     #[JsonProperty('resultCode')]
     public ?string $resultCode;
 
     /**
-     * @var ?string $resultCodeText Description of the result code. See [Pay In unified response codes](/developers/references/pay-in-unified-response-codes) for more information.
+     * @var ?string $resultCodeText Description of the result code. See [Pay In unified response codes](/guides/pay-in-unified-response-codes-reference) for more information.
      */
     #[JsonProperty('resultCodeText')]
     public ?string $resultCodeText;

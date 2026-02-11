@@ -54,6 +54,11 @@ use Payabli\QueryTypes\Types\QueryTransferDetailResponse;
 use Payabli\Query\Requests\ListTransfersRequest;
 use Payabli\Types\TransferQueryResponse;
 use Payabli\Query\Requests\ListTransfersRequestOrg;
+use Payabli\Query\Requests\ListTransfersOutOrgRequest;
+use Payabli\QueryTypes\Types\TransferOutQueryResponse;
+use Payabli\Query\Requests\ListTransfersOutPaypointRequest;
+use Payabli\Query\Requests\ListTransferDetailsOutRequest;
+use Payabli\QueryTypes\Types\TransferOutDetailQueryResponse;
 use Payabli\Query\Requests\ListUsersOrgRequest;
 use Payabli\Types\QueryUserResponse;
 use Payabli\Query\Requests\ListUsersPaypointRequest;
@@ -2083,6 +2088,217 @@ class QueryClient
     }
 
     /**
+     * Retrieve a list of outbound transfers for an organization. Use filters to limit results.
+     *
+     * @param int $orgId The numeric identifier for organization, assigned by Payabli.
+     * @param ListTransfersOutOrgRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return TransferOutQueryResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function listTransfersOutOrg(int $orgId, ListTransfersOutOrgRequest $request = new ListTransfersOutOrgRequest(), ?array $options = null): TransferOutQueryResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->fromRecord != null) {
+            $query['fromRecord'] = $request->fromRecord;
+        }
+        if ($request->limitRecord != null) {
+            $query['limitRecord'] = $request->limitRecord;
+        }
+        if ($request->parameters != null) {
+            $query['parameters'] = $request->parameters;
+        }
+        if ($request->sortBy != null) {
+            $query['sortBy'] = $request->sortBy;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "Query/transfersOut/org/{$orgId}",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                return TransferOutQueryResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (RequestException $e) {
+            $response = $e->getResponse();
+            if ($response === null) {
+                throw new PayabliException(message: $e->getMessage(), previous: $e);
+            }
+            throw new PayabliApiException(
+                message: "API request failed",
+                statusCode: $response->getStatusCode(),
+                body: $response->getBody()->getContents(),
+            );
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Retrieve a list of outbound transfers for a paypoint. Use filters to limit results.
+     *
+     * @param string $entry
+     * @param ListTransfersOutPaypointRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return TransferOutQueryResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function listTransfersOutPaypoint(string $entry, ListTransfersOutPaypointRequest $request = new ListTransfersOutPaypointRequest(), ?array $options = null): TransferOutQueryResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->fromRecord != null) {
+            $query['fromRecord'] = $request->fromRecord;
+        }
+        if ($request->limitRecord != null) {
+            $query['limitRecord'] = $request->limitRecord;
+        }
+        if ($request->parameters != null) {
+            $query['parameters'] = $request->parameters;
+        }
+        if ($request->sortBy != null) {
+            $query['sortBy'] = $request->sortBy;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "Query/transfersOut/{$entry}",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                return TransferOutQueryResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (RequestException $e) {
+            $response = $e->getResponse();
+            if ($response === null) {
+                throw new PayabliException(message: $e->getMessage(), previous: $e);
+            }
+            throw new PayabliApiException(
+                message: "API request failed",
+                statusCode: $response->getStatusCode(),
+                body: $response->getBody()->getContents(),
+            );
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Retrieve details for a specific outbound transfer. Use filters to limit results.
+     *
+     * @param string $entry
+     * @param int $transferId The numeric identifier for the transfer, assigned by Payabli.
+     * @param ListTransferDetailsOutRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return TransferOutDetailQueryResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function listTransferDetailsOut(string $entry, int $transferId, ListTransferDetailsOutRequest $request = new ListTransferDetailsOutRequest(), ?array $options = null): TransferOutDetailQueryResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->fromRecord != null) {
+            $query['fromRecord'] = $request->fromRecord;
+        }
+        if ($request->limitRecord != null) {
+            $query['limitRecord'] = $request->limitRecord;
+        }
+        if ($request->parameters != null) {
+            $query['parameters'] = $request->parameters;
+        }
+        if ($request->sortBy != null) {
+            $query['sortBy'] = $request->sortBy;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "Query/transferDetailsOut/{$entry}/{$transferId}",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                return TransferOutDetailQueryResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (RequestException $e) {
+            $response = $e->getResponse();
+            if ($response === null) {
+                throw new PayabliException(message: $e->getMessage(), previous: $e);
+            }
+            throw new PayabliApiException(
+                message: "API request failed",
+                statusCode: $response->getStatusCode(),
+                body: $response->getBody()->getContents(),
+            );
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
      * Get list of users for an org. Use filters to limit results.
      *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
@@ -2155,7 +2371,7 @@ class QueryClient
     /**
      * Get list of users for a paypoint. Use filters to limit results.
      *
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListUsersPaypointRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -2225,7 +2441,7 @@ class QueryClient
     /**
      * Retrieve a list of vendors for an entrypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListVendorsRequest $request
      * @param ?array{
      *   baseUrl?: string,

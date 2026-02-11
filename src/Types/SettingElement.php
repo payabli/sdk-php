@@ -33,7 +33,7 @@ class SettingElement extends JsonSerializableType
     public ?bool $sendAuto;
 
     /**
-     * @var ?bool $sendManual When `true`, you must send the reciept to the payor manually using the [/MoneyIn/sendreceipt/\{transId\}](/api-reference/moneyin/send-receipt-for-transaction) endpoint.
+     * @var ?bool $sendManual When `true`, you must send the reciept to the payor manually using the [/MoneyIn/sendreceipt/\{transId\}](/developers/api-reference/moneyin/send-receipt-for-transaction) endpoint.
      */
     #[JsonProperty('sendManual')]
     public ?bool $sendManual;

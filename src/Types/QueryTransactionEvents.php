@@ -26,7 +26,7 @@ class QueryTransactionEvents extends JsonSerializableType
     public ?DateTime $eventTime;
 
     /**
-     * @var ?string $transEvent Event descriptor. See [TransEvent Reference](/developers/references/transevents) for more details.
+     * @var ?string $transEvent Event descriptor. See [TransEvent Reference](/guides/pay-in-transevents-reference) for more details.
      */
     #[JsonProperty('TransEvent')]
     public ?string $transEvent;

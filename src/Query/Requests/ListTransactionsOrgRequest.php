@@ -107,7 +107,6 @@ class ListTransactionsOrgRequest extends JsonSerializableType
      * - `in` => inside array
      * - `nin` => not inside array
      *
-     *
      * @var ?array<string, ?string> $parameters
      */
     public ?array $parameters;

@@ -65,7 +65,7 @@ class InvoiceClient
     /**
      * Creates an invoice in an entrypoint.
      *
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param AddInvoiceRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -448,7 +448,7 @@ class InvoiceClient
     /**
      * Retrieves the next available invoice number for a paypoint.
      *
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -503,7 +503,7 @@ class InvoiceClient
     /**
      * Returns a list of invoices for an entrypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/api-reference/api-overview#entrypoint-vs-entry)
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListInvoicesRequest $request
      * @param ?array{
      *   baseUrl?: string,

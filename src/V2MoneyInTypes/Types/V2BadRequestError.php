@@ -42,7 +42,7 @@ class V2BadRequestError extends JsonSerializableType
     public string $instance;
 
     /**
-     * @var string $code Payabli's unified response code for validation errors. Starts with 'E'. See [Pay In unified response codes reference](/developers/references/pay-in-unified-response-codes) for more information.
+     * @var string $code Payabli's unified response code for validation errors. Starts with 'E'. See [Pay In unified response codes reference](/guides/pay-in-unified-response-codes-reference) for more information.
      */
     #[JsonProperty('code')]
     public string $code;

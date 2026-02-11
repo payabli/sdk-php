@@ -24,6 +24,8 @@ use Payabli\MoneyOutTypes\Types\VCardGetResponse;
 use Payabli\MoneyOut\Requests\SendVCardLinkRequest;
 use Payabli\MoneyOutTypes\Types\OperationResult;
 use Payabli\Core\Json\JsonDecoder;
+use Payabli\MoneyOutTypes\Types\AllowedCheckPaymentStatus;
+use Payabli\Types\PayabliApiResponse00Responsedatanonobject;
 
 class MoneyOutClient
 {
@@ -632,6 +634,73 @@ class MoneyOutClient
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
                 return JsonDecoder::decodeString($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (RequestException $e) {
+            $response = $e->getResponse();
+            if ($response === null) {
+                throw new PayabliException(message: $e->getMessage(), previous: $e);
+            }
+            throw new PayabliApiException(
+                message: "API request failed",
+                statusCode: $response->getStatusCode(),
+                body: $response->getBody()->getContents(),
+            );
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Updates the status of a processed check payment transaction. This endpoint handles the status transition, updates related bills, creates audit events, and triggers notifications.
+     *
+     * The transaction must meet all of the following criteria:
+     * - **Status**: Must be in Processing or Processed status.
+     * - **Payment method**: Must be a check payment method.
+     *
+     * ### Allowed status values
+     *
+     * | Value | Status | Description |
+     * |-------|--------|-------------|
+     * | `0` | Cancelled/Voided | Cancels the check transaction. Reverts associated bills to their previous state (Approved or Active), creates "Cancelled" events, and sends a `payout_transaction_voidedcancelled` notification if the notification is enabled. |
+     * | `5` | Paid | Marks the check transaction as paid. Updates associated bills to "Paid" status, creates "Paid" events, and sends a `payout_transaction_paid` notification if the notification is enabled. |
+     *
+     * @param string $transId The Payabli transaction ID for the check payment.
+     * @param value-of<AllowedCheckPaymentStatus> $checkPaymentStatus The new status to apply to the check transaction. To mark a check as `Paid`, send 5. To mark a check as `Cancelled`, send 0.
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return PayabliApiResponse00Responsedatanonobject
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function updateCheckPaymentStatus(string $transId, string $checkPaymentStatus, ?array $options = null): PayabliApiResponse00Responsedatanonobject
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "MoneyOut/status/{$transId}/{$checkPaymentStatus}",
+                    method: HttpMethod::PATCH,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                return PayabliApiResponse00Responsedatanonobject::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

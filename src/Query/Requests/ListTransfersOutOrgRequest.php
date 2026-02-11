@@ -3,30 +3,21 @@
 namespace Payabli\Query\Requests;
 
 use Payabli\Core\Json\JsonSerializableType;
-use Payabli\Types\ExportFormat;
 
-class ListTransfersPaypointRequest extends JsonSerializableType
+class ListTransfersOutOrgRequest extends JsonSerializableType
 {
-    /**
-     * @var ?value-of<ExportFormat> $exportFormat
-     */
-    public ?string $exportFormat;
-
     /**
      * @var ?int $fromRecord The number of records to skip before starting to collect the result set.
      */
     public ?int $fromRecord;
 
     /**
-     * @var ?int $limitRecord
+     * @var ?int $limitRecord Max number of records to return for the query. Use `0` or negative value to return all records.
      */
     public ?int $limitRecord;
 
     /**
-     *
-     * Collection of field names, conditions, and values used to filter
-     * the query.
-     *
+     * Collection of field names, conditions, and values used to filter the query. See [Filters and Conditions Reference](/developers/developer-guides/pay-ops-reporting-engine-overview#filters-and-conditions-reference) for more information.
      * <Info>
      *   **You must remove `parameters=` from the request before you send it, otherwise Payabli will ignore the filters.**
      *
@@ -40,27 +31,20 @@ class ListTransfersPaypointRequest extends JsonSerializableType
      *
      *   --url https://api-sandbox.payabli.com/api/Query/transactions/org/236?totalAmount(gt)=1000&limitRecord=20
      * </Info>
+     * List of field names accepted:
      *
-     * See [Filters and Conditions
-     * Reference](/developers/developer-guides/pay-ops-reporting-engine-overview#filters-and-conditions-reference)
-     * for more information.
-     *
-     *
-     * **List of field names accepted:**
-     *
+     *   - `transferDate` (gt, ge, lt, le, eq, ne)
      *   - `grossAmount` (gt, ge, lt, le, eq, ne)
-     *   - `chargeBackAmount` (gt, ge, lt, le, eq, ne)
      *   - `returnedAmount` (gt, ge, lt, le, eq, ne)
      *   - `billingFeeAmount` (gt, ge, lt, le, eq, ne)
-     *   - `thirdPartyPaidAmount` (gt, ge, lt, le, eq, ne)
      *   - `netFundedAmount` (gt, ge, lt, le, eq, ne)
-     *   - `adjustmentAmount` (gt, ge, lt, le, eq, ne)
-     *   - `splitFundingAmount` (gt, ge, lt, le, eq, ne)
-     *   - `operation` (in, nin, eq, ne)
-     *   - `transactionId` (eq, ne, in, nin)
-     *   - `category` (eq, ne, ct, nct)
-     *   - `type` (eq, ne, in, nin)
-     *   - `method` (eq, ne, in, nin)
+     *   - `processor` (ne, eq, ct, nct)
+     *   - `transferStatus` (ne, eq, in, nin)
+     *   - `transferId` (ne, eq, in, nin)
+     *   - `paypointLegalName` (ne, eq, ct, nct)
+     *   - `paypointDbaName` (ne, eq, ct, nct)
+     *   - `batchNumber` (ne, eq, ct, nct)
+     *   - `batchId` (ne, eq, in, nin)
      *
      * @var ?array<string, ?string> $parameters
      */
@@ -73,7 +57,6 @@ class ListTransfersPaypointRequest extends JsonSerializableType
 
     /**
      * @param array{
-     *   exportFormat?: ?value-of<ExportFormat>,
      *   fromRecord?: ?int,
      *   limitRecord?: ?int,
      *   parameters?: ?array<string, ?string>,
@@ -83,7 +66,6 @@ class ListTransfersPaypointRequest extends JsonSerializableType
     public function __construct(
         array $values = [],
     ) {
-        $this->exportFormat = $values['exportFormat'] ?? null;
         $this->fromRecord = $values['fromRecord'] ?? null;
         $this->limitRecord = $values['limitRecord'] ?? null;
         $this->parameters = $values['parameters'] ?? null;
