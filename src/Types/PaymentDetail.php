@@ -51,6 +51,12 @@ class PaymentDetail extends JsonSerializableType
     public ?array $splitFunding;
 
     /**
+     * @var ?string $checkUniqueId Unique identifier for a processed check image. Required for RDC (Remote Deposit Capture) transactions where `achCode` is `BOC`. Use the `id` value from the [check processing](/developers/api-reference/checkcapture/process-a-check-image) response.
+     */
+    #[JsonProperty('checkUniqueId')]
+    public ?string $checkUniqueId;
+
+    /**
      * @var float $totalAmount Total amount to be charged. If a service fee is sent, then this amount should include the service fee."
      */
     #[JsonProperty('totalAmount')]
@@ -65,6 +71,7 @@ class PaymentDetail extends JsonSerializableType
      *   currency?: ?string,
      *   serviceFee?: ?float,
      *   splitFunding?: ?array<SplitFundingContent>,
+     *   checkUniqueId?: ?string,
      * } $values
      */
     public function __construct(
@@ -76,6 +83,7 @@ class PaymentDetail extends JsonSerializableType
         $this->currency = $values['currency'] ?? null;
         $this->serviceFee = $values['serviceFee'] ?? null;
         $this->splitFunding = $values['splitFunding'] ?? null;
+        $this->checkUniqueId = $values['checkUniqueId'] ?? null;
         $this->totalAmount = $values['totalAmount'];
     }
 

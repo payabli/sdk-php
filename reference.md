@@ -7874,7 +7874,9 @@ Import a list of bills from a CSV file. See the [Import Guide](/developers/devel
 ```php
 $client->import->importBills(
     '8cfec329267',
-    new ImportBillsRequest([]),
+    new ImportBillsRequest([
+        'file' => File::createFromString("example_file", "example_file"),
+    ]),
 );
 ```
 </dd>
@@ -7931,7 +7933,9 @@ Import a list of customers from a CSV file. See the [Import Guide](/developers/d
 ```php
 $client->import->importCustomer(
     '8cfec329267',
-    new ImportCustomerRequest([]),
+    new ImportCustomerRequest([
+        'file' => File::createFromString("example_file", "example_file"),
+    ]),
 );
 ```
 </dd>
@@ -7996,7 +8000,9 @@ Import a list of vendors from a CSV file. See the [Import Guide](/developers/dev
 ```php
 $client->import->importVendor(
     '8cfec329267',
-    new ImportVendorRequest([]),
+    new ImportVendorRequest([
+        'file' => File::createFromString("example_file", "example_file"),
+    ]),
 );
 ```
 </dd>
