@@ -30,7 +30,7 @@ use Payabli\TokenStorage\TokenStorageClient;
 use Payabli\User\UserClient;
 use Payabli\Vendor\VendorClient;
 use Payabli\Wallet\WalletClient;
-use GuzzleHttp\ClientInterface;
+use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 
 class PayabliClient
@@ -208,8 +208,8 @@ class PayabliClient
         $defaultHeaders = [
             'X-Fern-Language' => 'PHP',
             'X-Fern-SDK-Name' => 'Payabli',
-            'X-Fern-SDK-Version' => '0.0.414',
-            'User-Agent' => 'payabli/payabli/0.0.414',
+            'X-Fern-SDK-Version' => '0.0.415',
+            'User-Agent' => 'payabli/payabli/0.0.415',
         ];
         if ($apiKey != null) {
             $defaultHeaders['requestToken'] = $apiKey;

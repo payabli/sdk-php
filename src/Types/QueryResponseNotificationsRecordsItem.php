@@ -46,10 +46,10 @@ class QueryResponseNotificationsRecordsItem extends JsonSerializableType
     public ?int $notificationId;
 
     /**
-     * @var ?string $ownerId
+     * @var ?int $ownerId
      */
     #[JsonProperty('ownerId')]
-    public ?string $ownerId;
+    public ?int $ownerId;
 
     /**
      * @var ?string $ownerName Name of entity owner of notification.
@@ -89,7 +89,7 @@ class QueryResponseNotificationsRecordsItem extends JsonSerializableType
      *   lastUpdated?: ?DateTime,
      *   method?: ?value-of<Methodnotification>,
      *   notificationId?: ?int,
-     *   ownerId?: ?string,
+     *   ownerId?: ?int,
      *   ownerName?: ?string,
      *   ownerType?: ?int,
      *   source?: ?string,

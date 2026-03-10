@@ -3,7 +3,7 @@
 namespace Payabli\PaymentLink\Requests;
 
 use Payabli\Core\Json\JsonSerializableType;
-use Payabli\PaymentLink\Types\PaymentPageRequestBody;
+use Payabli\PaymentLink\Types\PaymentPageRequestBodyOut;
 
 class PayLinkDataOut extends JsonSerializableType
 {
@@ -28,15 +28,15 @@ class PayLinkDataOut extends JsonSerializableType
     public ?string $amountFixed;
 
     /**
-     * @var PaymentPageRequestBody $body
+     * @var PaymentPageRequestBodyOut $body
      */
-    public PaymentPageRequestBody $body;
+    public PaymentPageRequestBodyOut $body;
 
     /**
      * @param array{
      *   entryPoint: string,
      *   vendorNumber: string,
-     *   body: PaymentPageRequestBody,
+     *   body: PaymentPageRequestBodyOut,
      *   mail2?: ?string,
      *   amountFixed?: ?string,
      * } $values

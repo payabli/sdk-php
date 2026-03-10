@@ -50,7 +50,7 @@ class PayabliCredentials extends JsonSerializableType
     public ?float $minticket;
 
     /**
-     * @var ?int $mode
+     * @var ?int $mode The payment mode supported by this service. `0` for one-time payments, `1` for recurring payments, `2` for both.
      */
     #[JsonProperty('mode')]
     public ?int $mode;
@@ -62,7 +62,7 @@ class PayabliCredentials extends JsonSerializableType
     public ?int $referenceId;
 
     /**
-     * @var ?string $service
+     * @var ?string $service The payment service that this credential applies to. A paypoint can support multiple services, each represented by its own credential object in the array. Possible values are `card` (credit/debit card), `ach` (ACH bank transfer), `check` (paper check), `vcard` (virtual card), `cloud` (card-present), `cash`, `managed` (managed payment service), and `wallet`.
      */
     #[JsonProperty('service')]
     public ?string $service;

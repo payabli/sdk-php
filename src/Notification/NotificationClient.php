@@ -2,7 +2,7 @@
 
 namespace Payabli\Notification;
 
-use GuzzleHttp\ClientInterface;
+use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\Types\NotificationStandardRequest;
 use Payabli\Types\NotificationReportRequest;
@@ -15,7 +15,6 @@ use Payabli\Core\Client\HttpMethod;
 use Payabli\Core\Json\JsonSerializer;
 use Payabli\Core\Types\Union;
 use JsonException;
-use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Payabli\Types\NotificationQueryRecord;
 use Payabli\Core\Json\JsonDecoder;
@@ -95,16 +94,6 @@ class NotificationClient
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (RequestException $e) {
-            $response = $e->getResponse();
-            if ($response === null) {
-                throw new PayabliException(message: $e->getMessage(), previous: $e);
-            }
-            throw new PayabliApiException(
-                message: "API request failed",
-                statusCode: $response->getStatusCode(),
-                body: $response->getBody()->getContents(),
-            );
         } catch (ClientExceptionInterface $e) {
             throw new PayabliException(message: $e->getMessage(), previous: $e);
         }
@@ -150,16 +139,6 @@ class NotificationClient
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (RequestException $e) {
-            $response = $e->getResponse();
-            if ($response === null) {
-                throw new PayabliException(message: $e->getMessage(), previous: $e);
-            }
-            throw new PayabliApiException(
-                message: "API request failed",
-                statusCode: $response->getStatusCode(),
-                body: $response->getBody()->getContents(),
-            );
         } catch (ClientExceptionInterface $e) {
             throw new PayabliException(message: $e->getMessage(), previous: $e);
         }
@@ -205,16 +184,6 @@ class NotificationClient
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (RequestException $e) {
-            $response = $e->getResponse();
-            if ($response === null) {
-                throw new PayabliException(message: $e->getMessage(), previous: $e);
-            }
-            throw new PayabliApiException(
-                message: "API request failed",
-                statusCode: $response->getStatusCode(),
-                body: $response->getBody()->getContents(),
-            );
         } catch (ClientExceptionInterface $e) {
             throw new PayabliException(message: $e->getMessage(), previous: $e);
         }
@@ -265,16 +234,6 @@ class NotificationClient
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (RequestException $e) {
-            $response = $e->getResponse();
-            if ($response === null) {
-                throw new PayabliException(message: $e->getMessage(), previous: $e);
-            }
-            throw new PayabliApiException(
-                message: "API request failed",
-                statusCode: $response->getStatusCode(),
-                body: $response->getBody()->getContents(),
-            );
         } catch (ClientExceptionInterface $e) {
             throw new PayabliException(message: $e->getMessage(), previous: $e);
         }
@@ -320,16 +279,6 @@ class NotificationClient
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (RequestException $e) {
-            $response = $e->getResponse();
-            if ($response === null) {
-                throw new PayabliException(message: $e->getMessage(), previous: $e);
-            }
-            throw new PayabliApiException(
-                message: "API request failed",
-                statusCode: $response->getStatusCode(),
-                body: $response->getBody()->getContents(),
-            );
         } catch (ClientExceptionInterface $e) {
             throw new PayabliException(message: $e->getMessage(), previous: $e);
         }

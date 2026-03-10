@@ -2,7 +2,7 @@
 
 namespace Payabli\PaymentLink;
 
-use GuzzleHttp\ClientInterface;
+use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\PaymentLink\Requests\PayLinkDataInvoice;
 use Payabli\PaymentLink\Types\PayabliApiResponsePaymentLinks;
@@ -12,7 +12,6 @@ use Payabli\Core\Json\JsonApiRequest;
 use Payabli\Environments;
 use Payabli\Core\Client\HttpMethod;
 use JsonException;
-use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Payabli\PaymentLink\Requests\PayLinkDataBill;
 use Payabli\PaymentLink\Types\GetPayLinkFromIdResponse;
@@ -21,6 +20,8 @@ use Payabli\PaymentLink\Requests\RefreshPayLinkFromIdRequest;
 use Payabli\PaymentLink\Requests\SendPayLinkFromIdRequest;
 use Payabli\PaymentLink\Requests\PayLinkUpdateData;
 use Payabli\PaymentLink\Requests\PayLinkDataOut;
+use Payabli\PaymentLink\Types\PatchOutPaymentLinkRequest;
+use Payabli\PaymentLink\Types\PaymentPageRequestBodyOut;
 
 class PaymentLinkClient
 {
@@ -108,16 +109,6 @@ class PaymentLinkClient
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (RequestException $e) {
-            $response = $e->getResponse();
-            if ($response === null) {
-                throw new PayabliException(message: $e->getMessage(), previous: $e);
-            }
-            throw new PayabliApiException(
-                message: "API request failed",
-                statusCode: $response->getStatusCode(),
-                body: $response->getBody()->getContents(),
-            );
         } catch (ClientExceptionInterface $e) {
             throw new PayabliException(message: $e->getMessage(), previous: $e);
         }
@@ -129,7 +120,7 @@ class PaymentLinkClient
     }
 
     /**
-     * Generates a payment link for a bill from the bill ID.
+     * Generates a payment link for a bill from the bill ID. The vendor receives a secure page where they can select their preferred payment method (ACH, virtual card, or check) and complete the payment.
      *
      * @param int $billId The Payabli ID for the bill.
      * @param PayLinkDataBill $request
@@ -178,16 +169,6 @@ class PaymentLinkClient
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (RequestException $e) {
-            $response = $e->getResponse();
-            if ($response === null) {
-                throw new PayabliException(message: $e->getMessage(), previous: $e);
-            }
-            throw new PayabliApiException(
-                message: "API request failed",
-                statusCode: $response->getStatusCode(),
-                body: $response->getBody()->getContents(),
-            );
         } catch (ClientExceptionInterface $e) {
             throw new PayabliException(message: $e->getMessage(), previous: $e);
         }
@@ -233,16 +214,6 @@ class PaymentLinkClient
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (RequestException $e) {
-            $response = $e->getResponse();
-            if ($response === null) {
-                throw new PayabliException(message: $e->getMessage(), previous: $e);
-            }
-            throw new PayabliApiException(
-                message: "API request failed",
-                statusCode: $response->getStatusCode(),
-                body: $response->getBody()->getContents(),
-            );
         } catch (ClientExceptionInterface $e) {
             throw new PayabliException(message: $e->getMessage(), previous: $e);
         }
@@ -288,16 +259,6 @@ class PaymentLinkClient
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (RequestException $e) {
-            $response = $e->getResponse();
-            if ($response === null) {
-                throw new PayabliException(message: $e->getMessage(), previous: $e);
-            }
-            throw new PayabliApiException(
-                message: "API request failed",
-                statusCode: $response->getStatusCode(),
-                body: $response->getBody()->getContents(),
-            );
         } catch (ClientExceptionInterface $e) {
             throw new PayabliException(message: $e->getMessage(), previous: $e);
         }
@@ -345,16 +306,6 @@ class PaymentLinkClient
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (RequestException $e) {
-            $response = $e->getResponse();
-            if ($response === null) {
-                throw new PayabliException(message: $e->getMessage(), previous: $e);
-            }
-            throw new PayabliApiException(
-                message: "API request failed",
-                statusCode: $response->getStatusCode(),
-                body: $response->getBody()->getContents(),
-            );
         } catch (ClientExceptionInterface $e) {
             throw new PayabliException(message: $e->getMessage(), previous: $e);
         }
@@ -406,16 +357,6 @@ class PaymentLinkClient
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (RequestException $e) {
-            $response = $e->getResponse();
-            if ($response === null) {
-                throw new PayabliException(message: $e->getMessage(), previous: $e);
-            }
-            throw new PayabliApiException(
-                message: "API request failed",
-                statusCode: $response->getStatusCode(),
-                body: $response->getBody()->getContents(),
-            );
         } catch (ClientExceptionInterface $e) {
             throw new PayabliException(message: $e->getMessage(), previous: $e);
         }
@@ -470,16 +411,6 @@ class PaymentLinkClient
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (RequestException $e) {
-            $response = $e->getResponse();
-            if ($response === null) {
-                throw new PayabliException(message: $e->getMessage(), previous: $e);
-            }
-            throw new PayabliApiException(
-                message: "API request failed",
-                statusCode: $response->getStatusCode(),
-                body: $response->getBody()->getContents(),
-            );
         } catch (ClientExceptionInterface $e) {
             throw new PayabliException(message: $e->getMessage(), previous: $e);
         }
@@ -527,16 +458,6 @@ class PaymentLinkClient
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (RequestException $e) {
-            $response = $e->getResponse();
-            if ($response === null) {
-                throw new PayabliException(message: $e->getMessage(), previous: $e);
-            }
-            throw new PayabliApiException(
-                message: "API request failed",
-                statusCode: $response->getStatusCode(),
-                body: $response->getBody()->getContents(),
-            );
         } catch (ClientExceptionInterface $e) {
             throw new PayabliException(message: $e->getMessage(), previous: $e);
         }
@@ -594,16 +515,100 @@ class PaymentLinkClient
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (RequestException $e) {
-            $response = $e->getResponse();
-            if ($response === null) {
-                throw new PayabliException(message: $e->getMessage(), previous: $e);
-            }
-            throw new PayabliApiException(
-                message: "API request failed",
-                statusCode: $response->getStatusCode(),
-                body: $response->getBody()->getContents(),
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Partially updates a Pay Out payment link's content, expiration date, and/or status. Use this to modify the payment page configuration, extend or change the expiration, or cancel a link. Updating the expiration date of an expired link reactivates it to Active status.
+     *
+     * @param string $paylinkId ID for the payment link.
+     * @param PatchOutPaymentLinkRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return PayabliApiResponsePaymentLinks
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function patchOutPaymentLink(string $paylinkId, PatchOutPaymentLinkRequest $request, ?array $options = null): PayabliApiResponsePaymentLinks
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "PaymentLink/out/{$paylinkId}",
+                    method: HttpMethod::PATCH,
+                    body: $request,
+                ),
+                $options,
             );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                return PayabliApiResponsePaymentLinks::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Updates the payment page content for a Pay Out payment link. Use this to change the branding, messaging, payment methods offered, or other page configuration.
+     *
+     * @param string $paylinkId ID for the payment link.
+     * @param PaymentPageRequestBodyOut $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return PayabliApiResponsePaymentLinks
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function updatePayLinkOutFromId(string $paylinkId, PaymentPageRequestBodyOut $request, ?array $options = null): PayabliApiResponsePaymentLinks
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "PaymentLink/updateOut/{$paylinkId}",
+                    method: HttpMethod::PATCH,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                return PayabliApiResponsePaymentLinks::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
         } catch (ClientExceptionInterface $e) {
             throw new PayabliException(message: $e->getMessage(), previous: $e);
         }

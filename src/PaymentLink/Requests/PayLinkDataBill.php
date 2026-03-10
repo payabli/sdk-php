@@ -3,7 +3,7 @@
 namespace Payabli\PaymentLink\Requests;
 
 use Payabli\Core\Json\JsonSerializableType;
-use Payabli\PaymentLink\Types\PaymentPageRequestBody;
+use Payabli\PaymentLink\Types\PaymentPageRequestBodyOut;
 
 class PayLinkDataBill extends JsonSerializableType
 {
@@ -23,13 +23,13 @@ class PayLinkDataBill extends JsonSerializableType
     public ?string $idempotencyKey;
 
     /**
-     * @var PaymentPageRequestBody $body
+     * @var PaymentPageRequestBodyOut $body
      */
-    public PaymentPageRequestBody $body;
+    public PaymentPageRequestBodyOut $body;
 
     /**
      * @param array{
-     *   body: PaymentPageRequestBody,
+     *   body: PaymentPageRequestBodyOut,
      *   amountFixed?: ?bool,
      *   mail2?: ?string,
      *   idempotencyKey?: ?string,

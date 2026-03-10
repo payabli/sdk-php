@@ -29,10 +29,10 @@ class NotificationReportRequest extends JsonSerializableType
     public string $method;
 
     /**
-     * @var ?string $ownerId
+     * @var ?int $ownerId
      */
     #[JsonProperty('ownerId')]
-    public ?string $ownerId;
+    public ?int $ownerId;
 
     /**
      * @var int $ownerType
@@ -65,7 +65,7 @@ class NotificationReportRequest extends JsonSerializableType
      *   method: value-of<NotificationReportRequestMethod>,
      *   ownerType: int,
      *   target: string,
-     *   ownerId?: ?string,
+     *   ownerId?: ?int,
      *   status?: ?int,
      * } $values
      */

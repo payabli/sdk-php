@@ -45,10 +45,10 @@ class ApplicationData extends JsonSerializableType
     public ?string $baddress1;
 
     /**
-     * @var ?Bank $bankData
+     * @var ?array<Bank> $bankData
      */
-    #[JsonProperty('bankData')]
-    public ?Bank $bankData;
+    #[JsonProperty('bankData'), ArrayType([Bank::class])]
+    public ?array $bankData;
 
     /**
      * @var ?string $bcity
@@ -352,7 +352,7 @@ class ApplicationData extends JsonSerializableType
      *   avgmonthly?: ?float,
      *   baddress?: ?string,
      *   baddress1?: ?string,
-     *   bankData?: ?Bank,
+     *   bankData?: ?array<Bank>,
      *   bcity?: ?string,
      *   bcountry?: ?string,
      *   binperson?: ?int,

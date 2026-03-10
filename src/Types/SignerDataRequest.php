@@ -4,6 +4,7 @@ namespace Payabli\Types;
 
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
+use Payabli\Core\Types\ArrayType;
 
 /**
  * Information about the application's signer.
@@ -101,10 +102,10 @@ class SignerDataRequest extends JsonSerializableType
     public ?string $attestationDate;
 
     /**
-     * @var ?string $additionalData
+     * @var ?array<string, string> $additionalData
      */
-    #[JsonProperty('additionalData')]
-    public ?string $additionalData;
+    #[JsonProperty('additionalData'), ArrayType(['string' => 'string'])]
+    public ?array $additionalData;
 
     /**
      * @var ?string $signDate
@@ -129,7 +130,7 @@ class SignerDataRequest extends JsonSerializableType
      *   signedDocumentReference?: ?string,
      *   pciAttestation?: ?bool,
      *   attestationDate?: ?string,
-     *   additionalData?: ?string,
+     *   additionalData?: ?array<string, string>,
      *   signDate?: ?string,
      * } $values
      */

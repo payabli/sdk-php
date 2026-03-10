@@ -3,6 +3,7 @@
 namespace Payabli\Tests\Core\Json;
 
 use PHPUnit\Framework\TestCase;
+use Payabli\Core\Json\JsonEncoder;
 use Payabli\Core\Json\JsonProperty;
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Types\ArrayType;
@@ -51,13 +52,12 @@ class EmptyArrayTest extends TestCase
 {
     public function testEmptyArray(): void
     {
-        $expectedJson = json_encode(
+        $expectedJson = JsonEncoder::encode(
             [
                 'empty_string_array' => [],
                 'empty_map_array' => [],
                 'empty_dates_array' => []
             ],
-            JSON_THROW_ON_ERROR
         );
 
         $object = EmptyArray::fromJson($expectedJson);

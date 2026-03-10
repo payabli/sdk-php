@@ -365,10 +365,10 @@ class ApplicationQueryRecord extends JsonSerializableType
     public ?string $whenrefund;
 
     /**
-     * @var ?string $additionalData
+     * @var ?array<string, string> $additionalData
      */
-    #[JsonProperty('additionalData')]
-    public ?string $additionalData;
+    #[JsonProperty('additionalData'), ArrayType(['string' => 'string'])]
+    public ?array $additionalData;
 
     /**
      * @var ?string $repCode
@@ -449,7 +449,7 @@ class ApplicationQueryRecord extends JsonSerializableType
      *   whendelivered?: ?value-of<Whendelivered>,
      *   whenProvided?: ?value-of<Whenprovided>,
      *   whenrefund?: ?value-of<Whenrefunded>,
-     *   additionalData?: ?string,
+     *   additionalData?: ?array<string, string>,
      *   repCode?: ?string,
      *   repName?: ?string,
      *   repOffice?: ?string,

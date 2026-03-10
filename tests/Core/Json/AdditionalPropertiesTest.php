@@ -3,6 +3,7 @@
 namespace Payabli\Tests\Core\Json;
 
 use PHPUnit\Framework\TestCase;
+use Payabli\Core\Json\JsonEncoder;
 use Payabli\Core\Json\JsonProperty;
 use Payabli\Core\Json\JsonSerializableType;
 
@@ -54,13 +55,12 @@ class AdditionalPropertiesTest extends TestCase
 {
     public function testExtraProperties(): void
     {
-        $expectedJson = json_encode(
+        $expectedJson = JsonEncoder::encode(
             [
                 'name' => 'john.doe',
                 'email' => 'john.doe@example.com',
                 'age' => 42
             ],
-            JSON_THROW_ON_ERROR
         );
 
         $person = Person::fromJson($expectedJson);

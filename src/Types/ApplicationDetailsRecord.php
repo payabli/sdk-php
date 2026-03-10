@@ -371,10 +371,10 @@ class ApplicationDetailsRecord extends JsonSerializableType
     public ?string $whenrefund;
 
     /**
-     * @var ?string $additionalData
+     * @var ?array<string, string> $additionalData
      */
-    #[JsonProperty('additionalData')]
-    public ?string $additionalData;
+    #[JsonProperty('additionalData'), ArrayType(['string' => 'string'])]
+    public ?array $additionalData;
 
     /**
      * @param array{
@@ -438,7 +438,7 @@ class ApplicationDetailsRecord extends JsonSerializableType
      *   whendelivered?: ?value-of<Whendelivered>,
      *   whenProvided?: ?value-of<Whenprovided>,
      *   whenrefund?: ?value-of<Whenrefunded>,
-     *   additionalData?: ?string,
+     *   additionalData?: ?array<string, string>,
      * } $values
      */
     public function __construct(

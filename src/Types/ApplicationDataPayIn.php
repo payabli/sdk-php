@@ -54,10 +54,10 @@ class ApplicationDataPayIn extends JsonSerializableType
     public ?string $baddress1;
 
     /**
-     * @var ApplicationDataPayInBankData $bankData
+     * @var array<Bank> $bankData
      */
-    #[JsonProperty('bankData')]
-    public ApplicationDataPayInBankData $bankData;
+    #[JsonProperty('bankData'), ArrayType([Bank::class])]
+    public array $bankData;
 
     /**
      * @var ?string $bcity
@@ -126,7 +126,7 @@ class ApplicationDataPayIn extends JsonSerializableType
     public ?array $contacts;
 
     /**
-     * @var ?string $creditLimit The maximum amount of credit that our lending partner, has authorized to your business. It's the upper boundary on how much you can spend or owe on a credit account at any given time.
+     * @var ?string $creditLimit The maximum amount of credit that our lending partner has authorized to your business for Pay In processing. It's the upper boundary on how much you can spend or owe on a credit account at any given time. For on-demand payout (Pay Out) credit limits, see `payoutCreditLimit`.
      */
     #[JsonProperty('creditLimit')]
     public ?string $creditLimit;
@@ -324,10 +324,10 @@ class ApplicationDataPayIn extends JsonSerializableType
     public string $whenRefunded;
 
     /**
-     * @var ?string $additionalData
+     * @var ?array<string, string> $additionalData
      */
-    #[JsonProperty('additionalData')]
-    public ?string $additionalData;
+    #[JsonProperty('additionalData'), ArrayType(['string' => 'string'])]
+    public ?array $additionalData;
 
     /**
      * @var ?string $repCode
@@ -356,7 +356,7 @@ class ApplicationDataPayIn extends JsonSerializableType
     /**
      * @param array{
      *   services: ApplicationDataPayInServices,
-     *   bankData: ApplicationDataPayInBankData,
+     *   bankData: array<Bank>,
      *   phonenumber: string,
      *   processingRegion: string,
      *   signer: SignerDataRequest,
@@ -407,7 +407,7 @@ class ApplicationDataPayIn extends JsonSerializableType
      *   templateId?: ?int,
      *   ticketamt?: ?float,
      *   website?: ?string,
-     *   additionalData?: ?string,
+     *   additionalData?: ?array<string, string>,
      *   repCode?: ?string,
      *   repName?: ?string,
      *   repOffice?: ?string,

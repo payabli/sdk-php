@@ -51,7 +51,7 @@ class PaymentDetail extends JsonSerializableType
     public ?array $splitFunding;
 
     /**
-     * @var ?string $checkUniqueId Unique identifier for a processed check image. Required for RDC (Remote Deposit Capture) transactions where `achCode` is `BOC`. Use the `id` value from the [check processing](/developers/api-reference/checkcapture/process-a-check-image) response.
+     * @var ?string $checkUniqueId Unique identifier for a processed check image. Required for RDC (Remote Deposit Capture) transactions where `achCode` is `BOC`. Use the `id` value from the [check processing](/developers/api-reference/moneyin/check-capture) response.
      */
     #[JsonProperty('checkUniqueId')]
     public ?string $checkUniqueId;
