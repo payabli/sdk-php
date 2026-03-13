@@ -203,10 +203,10 @@ class TransactionDetailInvoiceData extends JsonSerializableType
     public ?array $attachments;
 
     /**
-     * @var ?string $additionalData
+     * @var ?array<string, string> $additionalData
      */
-    #[JsonProperty('additionalData')]
-    public ?string $additionalData;
+    #[JsonProperty('additionalData'), ArrayType(['string' => 'string'])]
+    public ?array $additionalData;
 
     /**
      * @param array{
@@ -241,7 +241,7 @@ class TransactionDetailInvoiceData extends JsonSerializableType
      *   summaryCommodityCode?: ?string,
      *   items?: ?array<BillItem>,
      *   attachments?: ?array<FileContent>,
-     *   additionalData?: ?string,
+     *   additionalData?: ?array<string, string>,
      * } $values
      */
     public function __construct(

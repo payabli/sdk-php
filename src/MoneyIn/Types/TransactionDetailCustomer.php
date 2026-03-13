@@ -139,10 +139,10 @@ class TransactionDetailCustomer extends JsonSerializableType
     public int $customerStatus;
 
     /**
-     * @var ?string $additionalData
+     * @var ?array<string, string> $additionalData
      */
-    #[JsonProperty('additionalData')]
-    public ?string $additionalData;
+    #[JsonProperty('additionalData'), ArrayType(['string' => 'string'])]
+    public ?array $additionalData;
 
     /**
      * @param array{
@@ -167,7 +167,7 @@ class TransactionDetailCustomer extends JsonSerializableType
      *   customerId: int,
      *   customerStatus: int,
      *   identifiers?: ?array<?string>,
-     *   additionalData?: ?string,
+     *   additionalData?: ?array<string, string>,
      * } $values
      */
     public function __construct(

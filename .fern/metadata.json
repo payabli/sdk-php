@@ -5,5 +5,5 @@
   "generatorConfig": {
     "enable-wire-tests": false
   },
-  "sdkVersion": "0.0.415"
+  "sdkVersion": "0.0.416"
 }
