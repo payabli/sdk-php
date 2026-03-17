@@ -34,7 +34,7 @@ class TokenizeAch extends JsonSerializableType
     public ?string $achCode;
 
     /**
-     * @var string $achHolder
+     * @var string $achHolder Bank account holder. This field is **required** when `method` is `ach`. Only letters, numbers, spaces, hyphens, apostrophes, and periods are allowed.
      */
     #[JsonProperty('achHolder')]
     public string $achHolder;

@@ -11,7 +11,7 @@ use Payabli\Core\Types\Date;
 class BillDetailResponse extends JsonSerializableType
 {
     /**
-     * @var ?array<BillDetailsResponse> $bills Events associated to this transaction.
+     * @var ?array<BillDetailsResponse> $bills Bills associated with this transaction.
      */
     #[JsonProperty('Bills'), ArrayType([BillDetailsResponse::class])]
     public ?array $bills;
@@ -163,7 +163,7 @@ class BillDetailResponse extends JsonSerializableType
     public ?int $status;
 
     /**
-     * @var ?string $statusText Status of payout transaction.
+     * @var ?string $statusText Text description of the payout transaction status.
      */
     #[JsonProperty('StatusText')]
     public ?string $statusText;

@@ -8,7 +8,7 @@ use Payabli\Core\Json\JsonProperty;
 class PayabliCredentials extends JsonSerializableType
 {
     /**
-     * @var ?string $accountId
+     * @var ?string $accountId The identifier for the payment connector, matching the `accountId` of the linked bank account.
      */
     #[JsonProperty('accountId')]
     public ?string $accountId;
@@ -68,6 +68,24 @@ class PayabliCredentials extends JsonSerializableType
     public ?string $service;
 
     /**
+     * @var ?bool $greaterValueAllowed
+     */
+    #[JsonProperty('greaterValueAllowed')]
+    public ?bool $greaterValueAllowed;
+
+    /**
+     * @var ?bool $absorbDifference
+     */
+    #[JsonProperty('absorbDifference')]
+    public ?bool $absorbDifference;
+
+    /**
+     * @var ?bool $allowOverride
+     */
+    #[JsonProperty('allowOverride')]
+    public ?bool $allowOverride;
+
+    /**
      * @param array{
      *   accountId?: ?string,
      *   cfeeFix?: ?float,
@@ -79,6 +97,9 @@ class PayabliCredentials extends JsonSerializableType
      *   mode?: ?int,
      *   referenceId?: ?int,
      *   service?: ?string,
+     *   greaterValueAllowed?: ?bool,
+     *   absorbDifference?: ?bool,
+     *   allowOverride?: ?bool,
      * } $values
      */
     public function __construct(
@@ -94,6 +115,9 @@ class PayabliCredentials extends JsonSerializableType
         $this->mode = $values['mode'] ?? null;
         $this->referenceId = $values['referenceId'] ?? null;
         $this->service = $values['service'] ?? null;
+        $this->greaterValueAllowed = $values['greaterValueAllowed'] ?? null;
+        $this->absorbDifference = $values['absorbDifference'] ?? null;
+        $this->allowOverride = $values['allowOverride'] ?? null;
     }
 
     /**

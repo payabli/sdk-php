@@ -15,10 +15,10 @@ class BillingDataResponse extends JsonSerializableType
     public int $id;
 
     /**
-     * @var mixed $accountId
+     * @var ?string $accountId An identifier for the bank account. If not provided during creation or update, the system generates one in the format `acct-{first_digit}xxxxx{last_4_digits}` based on the account number. If a duplicate exists within the same service at the paypoint, a numeric suffix is appended, such as `-2`. This value is also used as the identifier for the bank account's associated payment connector.
      */
     #[JsonProperty('accountId')]
-    public mixed $accountId;
+    public ?string $accountId;
 
     /**
      * @var string $nickname
@@ -112,7 +112,7 @@ class BillingDataResponse extends JsonSerializableType
      *   status: int,
      *   services: array<mixed>,
      *   default: bool,
-     *   accountId?: mixed,
+     *   accountId?: ?string,
      * } $values
      */
     public function __construct(

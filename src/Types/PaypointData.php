@@ -141,6 +141,12 @@ class PaypointData extends JsonSerializableType
     public ?string $zip;
 
     /**
+     * @var ?StatementEmailConfig $statementEmail Configuration for billing statement email recipients and sender address. `null` if not configured.
+     */
+    #[JsonProperty('statementEmail')]
+    public ?StatementEmailConfig $statementEmail;
+
+    /**
      * @param array{
      *   address1?: ?string,
      *   address2?: ?string,
@@ -164,6 +170,7 @@ class PaypointData extends JsonSerializableType
      *   timeZone?: ?int,
      *   websiteAddress?: ?string,
      *   zip?: ?string,
+     *   statementEmail?: ?StatementEmailConfig,
      * } $values
      */
     public function __construct(
@@ -191,6 +198,7 @@ class PaypointData extends JsonSerializableType
         $this->timeZone = $values['timeZone'] ?? null;
         $this->websiteAddress = $values['websiteAddress'] ?? null;
         $this->zip = $values['zip'] ?? null;
+        $this->statementEmail = $values['statementEmail'] ?? null;
     }
 
     /**

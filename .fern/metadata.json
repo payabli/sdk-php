@@ -1,9 +1,9 @@
 {
   "cliVersion": "3.79.2",
   "generatorName": "fernapi/fern-php-sdk",
-  "generatorVersion": "2.1.5",
+  "generatorVersion": "2.2.0",
   "generatorConfig": {
     "enable-wire-tests": false
   },
-  "sdkVersion": "0.0.416"
+  "sdkVersion": "0.0.417"
 }

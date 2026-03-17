@@ -11816,6 +11816,94 @@ $client->moneyOut->updateCheckPaymentStatus(
 </dl>
 </details>
 
+<details><summary><code>$client-&gt;moneyOut-&gt;reissueOut($request) -> ReissuePayoutResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Reissues a payout transaction with a new payment method. This creates a new transaction linked to the original and marks the original transaction as reissued.
+
+The original transaction must be in **Processing** or **Processed** status. The payment method in the request body is used directly. The endpoint doesn't fall back to vendor-managed payment methods.
+
+The new transaction goes through the standard authorize-and-capture flow automatically. Both the original and new transactions are linked through their event histories for audit purposes.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->moneyOut->reissueOut(
+    new ReissueOutRequest([
+        'transId' => '129-219',
+        'body' => new ReissuePayoutBody([
+            'paymentMethod' => new ReissuePaymentMethod([
+                'method' => 'ach',
+                'achAccount' => '9876543210',
+                'achAccountType' => 'savings',
+                'achRouting' => '021000021',
+                'achHolder' => 'Acme Corp',
+                'achHolderType' => AchHolderType::Business->value,
+            ]),
+        ]),
+    ]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$transId:** `string` — The transaction ID of the payout to reissue.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$idempotencyKey:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$request:** `ReissuePayoutBody` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Notification
 <details><summary><code>$client-&gt;notification-&gt;addNotification($request) -> PayabliApiResponseNotifications</code></summary>
 <dl>

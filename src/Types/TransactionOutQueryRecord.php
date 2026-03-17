@@ -143,13 +143,13 @@ class TransactionOutQueryRecord extends JsonSerializableType
     public ?QueryPaymentData $paymentData;
 
     /**
-     * @var ?array<BillPayOutData> $bills Events associated to this transaction.
+     * @var ?array<BillPayOutData> $bills Bills associated with this transaction.
      */
     #[JsonProperty('Bills'), ArrayType([BillPayOutData::class])]
     public ?array $bills;
 
     /**
-     * @var ?array<QueryTransactionEvents> $events Events associated to this transaction.
+     * @var ?array<QueryTransactionEvents> $events Events associated with this transaction.
      */
     #[JsonProperty('Events'), ArrayType([QueryTransactionEvents::class])]
     public ?array $events;

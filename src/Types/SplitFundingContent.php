@@ -14,7 +14,7 @@ class SplitFundingContent extends JsonSerializableType
     public ?string $accountId;
 
     /**
-     * @var ?float $amount Amount from the transaction to sent to this recipient.
+     * @var ?float $amount Amount from the transaction to send to this recipient.
      */
     #[JsonProperty('amount')]
     public ?float $amount;

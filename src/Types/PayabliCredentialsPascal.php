@@ -56,7 +56,7 @@ class PayabliCredentialsPascal extends JsonSerializableType
     public ?float $cfeeMax;
 
     /**
-     * @var ?string $accountId
+     * @var ?string $accountId The identifier for the payment connector, matching the `accountId` of the linked bank account.
      */
     #[JsonProperty('AccountId')]
     public ?string $accountId;
@@ -80,6 +80,24 @@ class PayabliCredentialsPascal extends JsonSerializableType
     public ?string $currency;
 
     /**
+     * @var ?bool $greaterValueAllowed
+     */
+    #[JsonProperty('GreaterValueAllowed')]
+    public ?bool $greaterValueAllowed;
+
+    /**
+     * @var ?bool $absorbDifference
+     */
+    #[JsonProperty('AbsorbDifference')]
+    public ?bool $absorbDifference;
+
+    /**
+     * @var ?bool $allowOverride
+     */
+    #[JsonProperty('AllowOverride')]
+    public ?bool $allowOverride;
+
+    /**
      * @param array{
      *   service?: ?string,
      *   mode?: ?int,
@@ -93,6 +111,9 @@ class PayabliCredentialsPascal extends JsonSerializableType
      *   referenceId?: ?int,
      *   acceptSameDayAch?: ?bool,
      *   currency?: ?string,
+     *   greaterValueAllowed?: ?bool,
+     *   absorbDifference?: ?bool,
+     *   allowOverride?: ?bool,
      * } $values
      */
     public function __construct(
@@ -110,6 +131,9 @@ class PayabliCredentialsPascal extends JsonSerializableType
         $this->referenceId = $values['referenceId'] ?? null;
         $this->acceptSameDayAch = $values['acceptSameDayAch'] ?? null;
         $this->currency = $values['currency'] ?? null;
+        $this->greaterValueAllowed = $values['greaterValueAllowed'] ?? null;
+        $this->absorbDifference = $values['absorbDifference'] ?? null;
+        $this->allowOverride = $values['allowOverride'] ?? null;
     }
 
     /**

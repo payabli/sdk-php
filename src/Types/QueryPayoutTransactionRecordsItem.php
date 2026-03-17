@@ -23,7 +23,7 @@ class QueryPayoutTransactionRecordsItem extends JsonSerializableType
     public ?int $batchId;
 
     /**
-     * @var ?array<BillPayOutData> $bills Events associated with this transaction.
+     * @var ?array<BillPayOutData> $bills Bills associated with this transaction.
      */
     #[JsonProperty('Bills'), ArrayType([BillPayOutData::class])]
     public ?array $bills;

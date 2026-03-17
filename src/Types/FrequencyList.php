@@ -8,43 +8,43 @@ use Payabli\Core\Json\JsonProperty;
 class FrequencyList extends JsonSerializableType
 {
     /**
-     * @var ?bool $annually Enable or disable frequency
+     * @var ?bool $annually Enable or disable the annual frequency.
      */
     #[JsonProperty('annually')]
     public ?bool $annually;
 
     /**
-     * @var ?bool $every2Weeks Enable or disable frequency
+     * @var ?bool $every2Weeks Enable or disable the every-two-weeks frequency.
      */
     #[JsonProperty('every2Weeks')]
     public ?bool $every2Weeks;
 
     /**
-     * @var ?bool $every3Months Enable or disable frequency
+     * @var ?bool $every3Months Enable or disable the every-three-months frequency.
      */
     #[JsonProperty('every3Months')]
     public ?bool $every3Months;
 
     /**
-     * @var ?bool $every6Months Enable or disable frequency
+     * @var ?bool $every6Months Enable or disable the every-six-months frequency.
      */
     #[JsonProperty('every6Months')]
     public ?bool $every6Months;
 
     /**
-     * @var ?bool $monthly Enable or disable frequency
+     * @var ?bool $monthly Enable or disable the monthly frequency.
      */
     #[JsonProperty('monthly')]
     public ?bool $monthly;
 
     /**
-     * @var ?bool $onetime Enable or disable frequency
+     * @var ?bool $onetime Enable or disable the one-time frequency.
      */
     #[JsonProperty('onetime')]
     public ?bool $onetime;
 
     /**
-     * @var ?bool $weekly Enable or disable frequency
+     * @var ?bool $weekly Enable or disable the weekly frequency.
      */
     #[JsonProperty('weekly')]
     public ?bool $weekly;
