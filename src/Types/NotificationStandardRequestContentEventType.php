@@ -4,19 +4,7 @@ namespace Payabli\Types;
 
 enum NotificationStandardRequestContentEventType: string
 {
-    case PayinTransactionInitiated = "payin_transaction_initiated";
-    case PayinTransactionAuthorized = "payin_transaction_authorized";
-    case PayinTransactionApprovedcaptured = "payin_transaction_approvedcaptured";
-    case PayinTransactionDeclined = "payin_transaction_declined";
-    case PayinTransactionTechnicaldecline = "payin_transaction_technicaldecline";
-    case PayinTransactionFailed = "payin_transaction_failed";
-    case PayinTransactionError = "payin_transaction_error";
-    case PayinTransactionPaid = "payin_transaction_paid";
-    case PayinTransactionReturned = "payin_transaction_returned";
     case PayinTransactionRejected = "payin_transaction_rejected";
-    case PayinTransactionVoidedcancelled = "payin_transaction_voidedcancelled";
-    case PayinTransactionProcessing = "payin_transaction_processing";
-    case PayinTransactionProcessed = "payin_transaction_processed";
     case PayinTransactionOnhold = "payin_transaction_onhold";
     case PayinTransactionReleased = "payin_transaction_released";
     case PayinTransactionRecovered = "payin_transaction_recovered";
@@ -36,18 +24,8 @@ enum NotificationStandardRequestContentEventType: string
     case PayoutTransactionOnhold = "payout_transaction_onhold";
     case PayoutTransactionReleased = "payout_transaction_released";
     case PayoutTransactionRecovered = "payout_transaction_recovered";
-    case PayinBatchOpen = "payin_batch_open";
     case PayinBatchOnhold = "payin_batch_onhold";
     case PayinBatchReleased = "payin_batch_released";
-    case PayinBatchProcessed = "payin_batch_processed";
-    case PayinBatchPaid = "payin_batch_paid";
-    case PayinBatchFunded = "payin_batch_funded";
-    case PayinBatchClosed = "payin_batch_closed";
-    case PayinBatchNotclosed = "payin_batch_notclosed";
-    case PayinBatchFundpending = "payin_batch_fundpending";
-    case PayinBatchCancelled = "payin_batch_cancelled";
-    case PayinBatchTransferred = "payin_batch_transferred";
-    case PayinBatchResolved = "payin_batch_resolved";
     case PayoutBatchOpen = "payout_batch_open";
     case PayoutBatchOnhold = "payout_batch_onhold";
     case PayoutBatchReleased = "payout_batch_released";
@@ -60,15 +38,6 @@ enum NotificationStandardRequestContentEventType: string
     case PayoutBatchCancelled = "payout_batch_cancelled";
     case PayoutBatchTransferred = "payout_batch_transferred";
     case PayoutBatchResolved = "payout_batch_resolved";
-    case PayinBatchSettlementPending = "payin_batch_settlement_pending";
-    case PayinBatchSettlementIntransit = "payin_batch_settlement_intransit";
-    case PayinBatchSettlementTransferred = "payin_batch_settlement_transferred";
-    case PayinBatchSettlementFunded = "payin_batch_settlement_funded";
-    case PayinBatchSettlementResolved = "payin_batch_settlement_resolved";
-    case PayinBatchSettlementException = "payin_batch_settlement_exception";
-    case PayinBatchSettlementAchreturn = "payin_batch_settlement_achreturn";
-    case PayinBatchSettlementHeld = "payin_batch_settlement_held";
-    case PayinBatchSettlementReleased = "payin_batch_settlement_released";
     case PayoutBatchSettlementPending = "payout_batch_settlement_pending";
     case PayoutBatchSettlementIntransit = "payout_batch_settlement_intransit";
     case PayoutBatchSettlementTransferred = "payout_batch_settlement_transferred";
