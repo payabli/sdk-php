@@ -67,11 +67,11 @@ class CustomerClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseCustomerQuery
+     * @return ?PayabliApiResponseCustomerQuery
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function addCustomer(string $entry, AddCustomerRequest $request, ?array $options = null): PayabliApiResponseCustomerQuery
+    public function addCustomer(string $entry, AddCustomerRequest $request, ?array $options = null): ?PayabliApiResponseCustomerQuery
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -100,6 +100,9 @@ class CustomerClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponseCustomerQuery::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -126,11 +129,11 @@ class CustomerClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponse00Responsedatanonobject
+     * @return ?PayabliApiResponse00Responsedatanonobject
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function deleteCustomer(int $customerId, ?array $options = null): PayabliApiResponse00Responsedatanonobject
+    public function deleteCustomer(int $customerId, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -145,6 +148,9 @@ class CustomerClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponse00Responsedatanonobject::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -171,11 +177,11 @@ class CustomerClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return CustomerQueryRecords
+     * @return ?CustomerQueryRecords
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getCustomer(int $customerId, ?array $options = null): CustomerQueryRecords
+    public function getCustomer(int $customerId, ?array $options = null): ?CustomerQueryRecords
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -190,6 +196,9 @@ class CustomerClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return CustomerQueryRecords::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -217,11 +226,11 @@ class CustomerClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponse00Responsedatanonobject
+     * @return ?PayabliApiResponse00Responsedatanonobject
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function linkCustomerTransaction(int $customerId, string $transId, ?array $options = null): PayabliApiResponse00Responsedatanonobject
+    public function linkCustomerTransaction(int $customerId, string $transId, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -236,6 +245,9 @@ class CustomerClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponse00Responsedatanonobject::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -262,11 +274,11 @@ class CustomerClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponse00Responsedatanonobject
+     * @return ?PayabliApiResponse00Responsedatanonobject
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function requestConsent(int $customerId, ?array $options = null): PayabliApiResponse00Responsedatanonobject
+    public function requestConsent(int $customerId, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -281,6 +293,9 @@ class CustomerClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponse00Responsedatanonobject::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -308,11 +323,11 @@ class CustomerClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponse00Responsedatanonobject
+     * @return ?PayabliApiResponse00Responsedatanonobject
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function updateCustomer(int $customerId, CustomerData $request, ?array $options = null): PayabliApiResponse00Responsedatanonobject
+    public function updateCustomer(int $customerId, CustomerData $request, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -328,6 +343,9 @@ class CustomerClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponse00Responsedatanonobject::fromJson($json);
             }
         } catch (JsonException $e) {

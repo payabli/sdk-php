@@ -65,11 +65,11 @@ class TemplatesClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseTemplateId
+     * @return ?PayabliApiResponseTemplateId
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function deleteTemplate(float $templateId, ?array $options = null): PayabliApiResponseTemplateId
+    public function deleteTemplate(float $templateId, ?array $options = null): ?PayabliApiResponseTemplateId
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -84,6 +84,9 @@ class TemplatesClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponseTemplateId::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -111,11 +114,11 @@ class TemplatesClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return BoardingLinkApiResponse
+     * @return ?BoardingLinkApiResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getlinkTemplate(float $templateId, bool $ignoreEmpty, ?array $options = null): BoardingLinkApiResponse
+    public function getlinkTemplate(float $templateId, bool $ignoreEmpty, ?array $options = null): ?BoardingLinkApiResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -130,6 +133,9 @@ class TemplatesClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return BoardingLinkApiResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -156,11 +162,11 @@ class TemplatesClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return TemplateQueryRecord
+     * @return ?TemplateQueryRecord
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getTemplate(float $templateId, ?array $options = null): TemplateQueryRecord
+    public function getTemplate(float $templateId, ?array $options = null): ?TemplateQueryRecord
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -175,6 +181,9 @@ class TemplatesClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return TemplateQueryRecord::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -202,11 +211,11 @@ class TemplatesClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return TemplateQueryResponse
+     * @return ?TemplateQueryResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listTemplates(int $orgId, ListTemplatesRequest $request = new ListTemplatesRequest(), ?array $options = null): TemplateQueryResponse
+    public function listTemplates(int $orgId, ListTemplatesRequest $request = new ListTemplatesRequest(), ?array $options = null): ?TemplateQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -235,6 +244,9 @@ class TemplatesClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return TemplateQueryResponse::fromJson($json);
             }
         } catch (JsonException $e) {

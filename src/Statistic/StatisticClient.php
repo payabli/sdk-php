@@ -102,11 +102,11 @@ class StatisticClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<StatBasicExtendedQueryRecord>
+     * @return ?array<StatBasicExtendedQueryRecord>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function basicStats(string $mode, string $freq, int $level, int $entryId, BasicStatsRequest $request = new BasicStatsRequest(), ?array $options = null): array
+    public function basicStats(string $mode, string $freq, int $level, int $entryId, BasicStatsRequest $request = new BasicStatsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -132,6 +132,9 @@ class StatisticClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, [StatBasicExtendedQueryRecord::class]); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -184,11 +187,11 @@ class StatisticClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<SubscriptionStatsQueryRecord>
+     * @return ?array<SubscriptionStatsQueryRecord>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function customerBasicStats(string $mode, string $freq, int $customerId, CustomerBasicStatsRequest $request = new CustomerBasicStatsRequest(), ?array $options = null): array
+    public function customerBasicStats(string $mode, string $freq, int $customerId, CustomerBasicStatsRequest $request = new CustomerBasicStatsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -208,6 +211,9 @@ class StatisticClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, [SubscriptionStatsQueryRecord::class]); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -249,11 +255,11 @@ class StatisticClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<StatBasicQueryRecord>
+     * @return ?array<StatBasicQueryRecord>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function subStats(string $interval, int $level, int $entryId, SubStatsRequest $request = new SubStatsRequest(), ?array $options = null): array
+    public function subStats(string $interval, int $level, int $entryId, SubStatsRequest $request = new SubStatsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -273,6 +279,9 @@ class StatisticClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, [StatBasicQueryRecord::class]); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -325,11 +334,11 @@ class StatisticClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<StatisticsVendorQueryRecord>
+     * @return ?array<StatisticsVendorQueryRecord>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function vendorBasicStats(string $mode, string $freq, int $idVendor, VendorBasicStatsRequest $request = new VendorBasicStatsRequest(), ?array $options = null): array
+    public function vendorBasicStats(string $mode, string $freq, int $idVendor, VendorBasicStatsRequest $request = new VendorBasicStatsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -349,6 +358,9 @@ class StatisticClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, [StatisticsVendorQueryRecord::class]); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {

@@ -64,11 +64,11 @@ class HostedPaymentPagesClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliPages
+     * @return ?PayabliPages
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function loadPage(string $entry, string $subdomain, ?array $options = null): PayabliPages
+    public function loadPage(string $entry, string $subdomain, ?array $options = null): ?PayabliPages
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -83,6 +83,9 @@ class HostedPaymentPagesClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliPages::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -112,11 +115,11 @@ class HostedPaymentPagesClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponse00Responsedatanonobject
+     * @return ?PayabliApiResponse00Responsedatanonobject
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function newPage(string $entry, NewPageRequest $request, ?array $options = null): PayabliApiResponse00Responsedatanonobject
+    public function newPage(string $entry, NewPageRequest $request, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
     {
         $options = array_merge($this->options, $options ?? []);
         $headers = [];
@@ -137,6 +140,9 @@ class HostedPaymentPagesClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponse00Responsedatanonobject::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -165,11 +171,11 @@ class HostedPaymentPagesClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponse00Responsedatanonobject
+     * @return ?PayabliApiResponse00Responsedatanonobject
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function savePage(string $entry, string $subdomain, PayabliPages $request, ?array $options = null): PayabliApiResponse00Responsedatanonobject
+    public function savePage(string $entry, string $subdomain, PayabliPages $request, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -185,6 +191,9 @@ class HostedPaymentPagesClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponse00Responsedatanonobject::fromJson($json);
             }
         } catch (JsonException $e) {

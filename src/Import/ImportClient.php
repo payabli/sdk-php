@@ -65,11 +65,11 @@ class ImportClient
      *   headers?: array<string, string>,
      *   queryParameters?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseImport
+     * @return ?PayabliApiResponseImport
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function importBills(string $entry, ImportBillsRequest $request, ?array $options = null): PayabliApiResponseImport
+    public function importBills(string $entry, ImportBillsRequest $request, ?array $options = null): ?PayabliApiResponseImport
     {
         $options = array_merge($this->options, $options ?? []);
         $body = new MultipartFormData();
@@ -87,6 +87,9 @@ class ImportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponseImport::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -113,11 +116,11 @@ class ImportClient
      *   headers?: array<string, string>,
      *   queryParameters?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseImport
+     * @return ?PayabliApiResponseImport
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function importCustomer(string $entry, ImportCustomerRequest $request, ?array $options = null): PayabliApiResponseImport
+    public function importCustomer(string $entry, ImportCustomerRequest $request, ?array $options = null): ?PayabliApiResponseImport
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -140,6 +143,9 @@ class ImportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponseImport::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -166,11 +172,11 @@ class ImportClient
      *   headers?: array<string, string>,
      *   queryParameters?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseImport
+     * @return ?PayabliApiResponseImport
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function importVendor(string $entry, ImportVendorRequest $request, ?array $options = null): PayabliApiResponseImport
+    public function importVendor(string $entry, ImportVendorRequest $request, ?array $options = null): ?PayabliApiResponseImport
     {
         $options = array_merge($this->options, $options ?? []);
         $body = new MultipartFormData();
@@ -188,6 +194,9 @@ class ImportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponseImport::fromJson($json);
             }
         } catch (JsonException $e) {

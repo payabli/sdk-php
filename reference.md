@@ -1,6 +1,6 @@
 # Reference
 ## Bill
-<details><summary><code>$client-&gt;bill-&gt;addBill($entry, $request) -> BillResponse</code></summary>
+<details><summary><code>$client-&gt;bill-&gt;addBill($entry, $request) -> ?BillResponse</code></summary>
 <dl>
 <dd>
 
@@ -115,7 +115,7 @@ $client->bill->addBill(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;bill-&gt;deleteAttachedFromBill($idBill, $filename, $request) -> BillResponse</code></summary>
+<details><summary><code>$client-&gt;bill-&gt;deleteAttachedFromBill($idBill, $filename, $request) -> ?BillResponse</code></summary>
 <dl>
 <dd>
 
@@ -206,7 +206,7 @@ request to `/api/Invoice/{idInvoice}`. Here, the filename is
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;bill-&gt;deleteBill($idBill) -> BillResponse</code></summary>
+<details><summary><code>$client-&gt;bill-&gt;deleteBill($idBill) -> ?BillResponse</code></summary>
 <dl>
 <dd>
 
@@ -262,7 +262,7 @@ $client->bill->deleteBill(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;bill-&gt;editBill($idBill, $request) -> EditBillResponse</code></summary>
+<details><summary><code>$client-&gt;bill-&gt;editBill($idBill, $request) -> ?EditBillResponse</code></summary>
 <dl>
 <dd>
 
@@ -330,7 +330,7 @@ $client->bill->editBill(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;bill-&gt;getAttachedFromBill($idBill, $filename, $request) -> FileContent</code></summary>
+<details><summary><code>$client-&gt;bill-&gt;getAttachedFromBill($idBill, $filename, $request) -> ?FileContent</code></summary>
 <dl>
 <dd>
 
@@ -418,7 +418,7 @@ The filename in Payabli. Filename is `zipName` in response to a request to `/api
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;bill-&gt;getBill($idBill) -> GetBillResponse</code></summary>
+<details><summary><code>$client-&gt;bill-&gt;getBill($idBill) -> ?GetBillResponse</code></summary>
 <dl>
 <dd>
 
@@ -474,7 +474,7 @@ $client->bill->getBill(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;bill-&gt;listBills($entry, $request) -> BillQueryResponse</code></summary>
+<details><summary><code>$client-&gt;bill-&gt;listBills($entry, $request) -> ?BillQueryResponse</code></summary>
 <dl>
 <dd>
 
@@ -619,7 +619,7 @@ Example: `totalAmount(gt)=20` returns all records with a `totalAmount` that's gr
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;bill-&gt;listBillsOrg($orgId, $request) -> BillQueryResponse</code></summary>
+<details><summary><code>$client-&gt;bill-&gt;listBillsOrg($orgId, $request) -> ?BillQueryResponse</code></summary>
 <dl>
 <dd>
 
@@ -764,7 +764,7 @@ Example: totalAmount(gt)=20 return all records with totalAmount greater than 20.
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;bill-&gt;modifyApprovalBill($idBill, $request) -> ModifyApprovalBillResponse</code></summary>
+<details><summary><code>$client-&gt;bill-&gt;modifyApprovalBill($idBill, $request) -> ?ModifyApprovalBillResponse</code></summary>
 <dl>
 <dd>
 
@@ -831,7 +831,7 @@ $client->bill->modifyApprovalBill(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;bill-&gt;sendToApprovalBill($idBill, $request) -> BillResponse</code></summary>
+<details><summary><code>$client-&gt;bill-&gt;sendToApprovalBill($idBill, $request) -> ?BillResponse</code></summary>
 <dl>
 <dd>
 
@@ -917,7 +917,7 @@ $client->bill->sendToApprovalBill(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;bill-&gt;setApprovedBill($idBill, $approved, $request) -> SetApprovedBillResponse</code></summary>
+<details><summary><code>$client-&gt;bill-&gt;setApprovedBill($idBill, $approved, $request) -> ?SetApprovedBillResponse</code></summary>
 <dl>
 <dd>
 
@@ -992,7 +992,7 @@ $client->bill->setApprovedBill(
 </details>
 
 ## Boarding
-<details><summary><code>$client-&gt;boarding-&gt;addApplication($request) -> PayabliApiResponse00Responsedatanonobject</code></summary>
+<details><summary><code>$client-&gt;boarding-&gt;addApplication($request) -> ?PayabliApiResponse00Responsedatanonobject</code></summary>
 <dl>
 <dd>
 
@@ -1176,7 +1176,7 @@ $client->boarding->addApplication(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;boarding-&gt;deleteApplication($appId) -> PayabliApiResponse00Responsedatanonobject</code></summary>
+<details><summary><code>$client-&gt;boarding-&gt;deleteApplication($appId) -> ?PayabliApiResponse00Responsedatanonobject</code></summary>
 <dl>
 <dd>
 
@@ -1232,7 +1232,7 @@ $client->boarding->deleteApplication(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;boarding-&gt;getApplication($appId) -> ApplicationDetailsRecord</code></summary>
+<details><summary><code>$client-&gt;boarding-&gt;getApplication($appId) -> ?ApplicationDetailsRecord</code></summary>
 <dl>
 <dd>
 
@@ -1288,7 +1288,7 @@ $client->boarding->getApplication(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;boarding-&gt;getApplicationByAuth($xId, $request) -> ApplicationQueryRecord</code></summary>
+<details><summary><code>$client-&gt;boarding-&gt;getApplicationByAuth($xId, $request) -> ?ApplicationQueryRecord</code></summary>
 <dl>
 <dd>
 
@@ -1364,7 +1364,7 @@ $client->boarding->getApplicationByAuth(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;boarding-&gt;getByIdLinkApplication($boardingLinkId) -> BoardingLinkQueryRecord</code></summary>
+<details><summary><code>$client-&gt;boarding-&gt;getByIdLinkApplication($boardingLinkId) -> ?BoardingLinkQueryRecord</code></summary>
 <dl>
 <dd>
 
@@ -1420,7 +1420,7 @@ $client->boarding->getByIdLinkApplication(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;boarding-&gt;getByTemplateIdLinkApplication($templateId) -> BoardingLinkQueryRecord</code></summary>
+<details><summary><code>$client-&gt;boarding-&gt;getByTemplateIdLinkApplication($templateId) -> ?BoardingLinkQueryRecord</code></summary>
 <dl>
 <dd>
 
@@ -1476,7 +1476,7 @@ $client->boarding->getByTemplateIdLinkApplication(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;boarding-&gt;getExternalApplication($appId, $mail2, $request) -> PayabliApiResponse00</code></summary>
+<details><summary><code>$client-&gt;boarding-&gt;getExternalApplication($appId, $mail2, $request) -> ?PayabliApiResponse00</code></summary>
 <dl>
 <dd>
 
@@ -1550,7 +1550,7 @@ $client->boarding->getExternalApplication(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;boarding-&gt;getLinkApplication($boardingLinkReference) -> BoardingLinkQueryRecord</code></summary>
+<details><summary><code>$client-&gt;boarding-&gt;getLinkApplication($boardingLinkReference) -> ?BoardingLinkQueryRecord</code></summary>
 <dl>
 <dd>
 
@@ -1606,7 +1606,7 @@ $client->boarding->getLinkApplication(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;boarding-&gt;listApplications($orgId, $request) -> QueryBoardingAppsListResponse</code></summary>
+<details><summary><code>$client-&gt;boarding-&gt;listApplications($orgId, $request) -> ?QueryBoardingAppsListResponse</code></summary>
 <dl>
 <dd>
 
@@ -1743,7 +1743,7 @@ List of comparison accepted - enclosed between parentheses:
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;boarding-&gt;listBoardingLinks($orgId, $request) -> QueryBoardingLinksResponse</code></summary>
+<details><summary><code>$client-&gt;boarding-&gt;listBoardingLinks($orgId, $request) -> ?QueryBoardingLinksResponse</code></summary>
 <dl>
 <dd>
 
@@ -1868,7 +1868,7 @@ Example: templateName(ct)=hoa return all records with template title containing 
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;boarding-&gt;updateApplication($appId, $request) -> PayabliApiResponse00Responsedatanonobject</code></summary>
+<details><summary><code>$client-&gt;boarding-&gt;updateApplication($appId, $request) -> ?PayabliApiResponse00Responsedatanonobject</code></summary>
 <dl>
 <dd>
 
@@ -1934,7 +1934,7 @@ $client->boarding->updateApplication(
 </details>
 
 ## ChargeBacks
-<details><summary><code>$client-&gt;chargeBacks-&gt;addResponse($id, $request) -> AddResponseResponse</code></summary>
+<details><summary><code>$client-&gt;chargeBacks-&gt;addResponse($id, $request) -> ?AddResponseResponse</code></summary>
 <dl>
 <dd>
 
@@ -2033,7 +2033,7 @@ $client->chargeBacks->addResponse(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;chargeBacks-&gt;getChargeback($id) -> ChargebackQueryRecords</code></summary>
+<details><summary><code>$client-&gt;chargeBacks-&gt;getChargeback($id) -> ?ChargebackQueryRecords</code></summary>
 <dl>
 <dd>
 
@@ -2155,7 +2155,7 @@ $client->chargeBacks->getChargebackAttachment(
 </details>
 
 ## CheckCapture
-<details><summary><code>$client-&gt;checkCapture-&gt;checkProcessing($request) -> CheckCaptureResponse</code></summary>
+<details><summary><code>$client-&gt;checkCapture-&gt;checkProcessing($request) -> ?CheckCaptureResponse</code></summary>
 <dl>
 <dd>
 
@@ -2241,7 +2241,7 @@ $client->checkCapture->checkProcessing(
 </details>
 
 ## Cloud
-<details><summary><code>$client-&gt;cloud-&gt;addDevice($entry, $request) -> AddDeviceResponse</code></summary>
+<details><summary><code>$client-&gt;cloud-&gt;addDevice($entry, $request) -> ?AddDeviceResponse</code></summary>
 <dl>
 <dd>
 
@@ -2331,7 +2331,7 @@ The device registration code or serial number, depending on the model.
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;cloud-&gt;historyDevice($entry, $deviceId) -> CloudQueryApiResponse</code></summary>
+<details><summary><code>$client-&gt;cloud-&gt;historyDevice($entry, $deviceId) -> ?CloudQueryApiResponse</code></summary>
 <dl>
 <dd>
 
@@ -2396,7 +2396,7 @@ $client->cloud->historyDevice(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;cloud-&gt;listDevice($entry, $request) -> CloudQueryApiResponse</code></summary>
+<details><summary><code>$client-&gt;cloud-&gt;listDevice($entry, $request) -> ?CloudQueryApiResponse</code></summary>
 <dl>
 <dd>
 
@@ -2461,7 +2461,7 @@ $client->cloud->listDevice(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;cloud-&gt;removeDevice($entry, $deviceId) -> RemoveDeviceResponse</code></summary>
+<details><summary><code>$client-&gt;cloud-&gt;removeDevice($entry, $deviceId) -> ?RemoveDeviceResponse</code></summary>
 <dl>
 <dd>
 
@@ -2527,7 +2527,7 @@ $client->cloud->removeDevice(
 </details>
 
 ## Customer
-<details><summary><code>$client-&gt;customer-&gt;addCustomer($entry, $request) -> PayabliApiResponseCustomerQuery</code></summary>
+<details><summary><code>$client-&gt;customer-&gt;addCustomer($entry, $request) -> ?PayabliApiResponseCustomerQuery</code></summary>
 <dl>
 <dd>
 
@@ -2633,7 +2633,7 @@ $client->customer->addCustomer(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;customer-&gt;deleteCustomer($customerId) -> PayabliApiResponse00Responsedatanonobject</code></summary>
+<details><summary><code>$client-&gt;customer-&gt;deleteCustomer($customerId) -> ?PayabliApiResponse00Responsedatanonobject</code></summary>
 <dl>
 <dd>
 
@@ -2689,7 +2689,7 @@ $client->customer->deleteCustomer(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;customer-&gt;getCustomer($customerId) -> CustomerQueryRecords</code></summary>
+<details><summary><code>$client-&gt;customer-&gt;getCustomer($customerId) -> ?CustomerQueryRecords</code></summary>
 <dl>
 <dd>
 
@@ -2745,7 +2745,7 @@ $client->customer->getCustomer(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;customer-&gt;linkCustomerTransaction($customerId, $transId) -> PayabliApiResponse00Responsedatanonobject</code></summary>
+<details><summary><code>$client-&gt;customer-&gt;linkCustomerTransaction($customerId, $transId) -> ?PayabliApiResponse00Responsedatanonobject</code></summary>
 <dl>
 <dd>
 
@@ -2810,7 +2810,7 @@ $client->customer->linkCustomerTransaction(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;customer-&gt;requestConsent($customerId) -> PayabliApiResponse00Responsedatanonobject</code></summary>
+<details><summary><code>$client-&gt;customer-&gt;requestConsent($customerId) -> ?PayabliApiResponse00Responsedatanonobject</code></summary>
 <dl>
 <dd>
 
@@ -2866,7 +2866,7 @@ $client->customer->requestConsent(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;customer-&gt;updateCustomer($customerId, $request) -> PayabliApiResponse00Responsedatanonobject</code></summary>
+<details><summary><code>$client-&gt;customer-&gt;updateCustomer($customerId, $request) -> ?PayabliApiResponse00Responsedatanonobject</code></summary>
 <dl>
 <dd>
 
@@ -2940,7 +2940,7 @@ $client->customer->updateCustomer(
 </details>
 
 ## Export
-<details><summary><code>$client-&gt;export-&gt;exportApplications($format, $orgId, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportApplications($format, $orgId, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -3095,7 +3095,7 @@ Example: `dbaname(ct)=hoa` returns all records with a `dbaname` containing "hoa"
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportBatchDetails($format, $entry, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportBatchDetails($format, $entry, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -3261,7 +3261,7 @@ Example: `amount(gt)=20` return all records with amount greater than 20.00
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportBatchDetailsOrg($format, $orgId, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportBatchDetailsOrg($format, $orgId, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -3427,7 +3427,7 @@ Example: `amount(gt)=20` return all records with amount greater than 20.00
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportBatches($format, $entry, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportBatches($format, $entry, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -3583,7 +3583,7 @@ Example: `batchAmount(gt)=20` returns all records with a `batchAmount` greater t
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportBatchesOrg($format, $orgId, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportBatchesOrg($format, $orgId, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -3737,7 +3737,7 @@ Example: `batchAmount(gt)=20` returns all records with a `batchAmount` greater t
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportBatchesOut($format, $entry, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportBatchesOut($format, $entry, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -3873,7 +3873,7 @@ Example: `batchAmount(gt)=20` returns all records with a `batchAmount` greater t
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportBatchesOutOrg($format, $orgId, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportBatchesOutOrg($format, $orgId, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -4009,7 +4009,7 @@ Example: `batchAmount(gt)=20` returns all records with a `batchAmount` greater t
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportBills($format, $entry, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportBills($format, $entry, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -4163,7 +4163,7 @@ Example: totalAmount(gt)=20  return all records with totalAmount greater than 20
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportBillsOrg($format, $orgId, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportBillsOrg($format, $orgId, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -4317,7 +4317,7 @@ Example: totalAmount(gt)=20  return all records with totalAmount greater than 20
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportChargebacks($format, $entry, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportChargebacks($format, $entry, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -4492,7 +4492,7 @@ Example: `netAmount(gt)=20` returns all records with a `netAmount` greater than 
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportChargebacksOrg($format, $orgId, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportChargebacksOrg($format, $orgId, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -4667,7 +4667,7 @@ Example: `netAmount(gt)=20` returns all records with a `netAmount` greater than 
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportCustomers($format, $entry, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportCustomers($format, $entry, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -4835,7 +4835,7 @@ balance(gt)=20 return all records with balance greater than 20.00
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportCustomersOrg($format, $orgId, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportCustomersOrg($format, $orgId, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -5003,7 +5003,7 @@ balance(gt)=20 return all records with balance greater than 20.00
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportInvoices($format, $entry, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportInvoices($format, $entry, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -5181,7 +5181,7 @@ Example: `totalAmount(gt)=20` returns all records with `totalAmount` greater tha
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportInvoicesOrg($format, $orgId, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportInvoicesOrg($format, $orgId, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -5359,7 +5359,7 @@ Example: totalAmount(gt)=20  return all records with totalAmount greater than 20
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportOrganizations($format, $orgId, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportOrganizations($format, $orgId, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -5512,7 +5512,7 @@ Example: name(ct)=hoa  return all records where name contains "hoa"
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportPayout($format, $entry, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportPayout($format, $entry, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -5664,7 +5664,7 @@ Example: totalAmount(gt)=20 return all records with totalAmount greater than 20.
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportPayoutOrg($format, $orgId, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportPayoutOrg($format, $orgId, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -5816,7 +5816,7 @@ Example: totalAmount(gt)=20 return all records with totalAmount greater than 20.
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportPaypoints($format, $orgId, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportPaypoints($format, $orgId, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -5970,7 +5970,7 @@ Example: `dbaname(ct)=hoa` returns all records with `dbaname` containing "hoa"
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportSettlements($format, $entry, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportSettlements($format, $entry, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -6144,7 +6144,7 @@ Example: `settledAmount(gt)=20` returns all records with a `settledAmount` great
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportSettlementsOrg($format, $orgId, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportSettlementsOrg($format, $orgId, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -6318,7 +6318,7 @@ Example: `settledAmount(gt)=20` returns all records with a `settledAmount` great
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportSubscriptions($format, $entry, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportSubscriptions($format, $entry, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -6494,7 +6494,7 @@ Example: `netAmount(gt)=20` returns all records with a `netAmount` greater than 
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportSubscriptionsOrg($format, $orgId, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportSubscriptionsOrg($format, $orgId, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -6670,7 +6670,7 @@ Example: `netAmount(gt)=20` returns all records with a `netAmount` greater than 
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportTransactions($format, $entry, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportTransactions($format, $entry, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -6850,7 +6850,7 @@ Example: `netAmount(gt)=20` returns all records with a `netAmount` greater than 
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportTransactionsOrg($format, $orgId, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportTransactionsOrg($format, $orgId, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -7030,7 +7030,7 @@ Example: `netAmount(gt)=20` returns all records with a `netAmount` greater than 
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportTransferDetails($format, $entry, $transferId, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportTransferDetails($format, $entry, $transferId, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -7192,7 +7192,7 @@ List of field names accepted:
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportTransfers($entry, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportTransfers($entry, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -7337,7 +7337,7 @@ List of field names accepted:
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportVendors($format, $entry, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportVendors($format, $entry, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -7495,7 +7495,7 @@ Example: `netAmount(gt)=20` returns all records with a `netAmount` greater than 
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;export-&gt;exportVendorsOrg($format, $orgId, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;export-&gt;exportVendorsOrg($format, $orgId, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -7653,8 +7653,290 @@ Example: `netAmount(gt)=20` returns all records with a `netAmount` greater than 
 </dl>
 </details>
 
+## GhostCard
+<details><summary><code>$client-&gt;ghostCard-&gt;createGhostCard($entry, $request) -> ?CreateGhostCardResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Creates a ghost card, a multi-use virtual debit card issued to a vendor for recurring or discretionary spend.
+
+Unlike single-use virtual cards issued as part of a payout transaction, ghost cards aren't tied to a specific payout. They're issued directly to a vendor and can be reused up to a configurable number of times within the card's spending limits.
+
+Only one ghost card can exist per vendor per paypoint. To issue a new card to the same vendor, cancel the existing card first.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->ghostCard->createGhostCard(
+    '8cfec2e0fa',
+    new CreateGhostCardRequestBody([
+        'vendorId' => 42,
+        'expenseLimit' => 500,
+        'amount' => 500,
+        'maxNumberOfUses' => 3,
+        'exactAmount' => false,
+        'expenseLimitPeriod' => 'monthly',
+        'billingCycle' => 'monthly',
+        'billingCycleDay' => '1',
+        'dailyTransactionCount' => 5,
+        'dailyAmountLimit' => 200,
+        'transactionAmountLimit' => 100,
+        'mcc' => '5411',
+        'tcc' => 'R',
+        'misc1' => 'PO-98765',
+        'misc2' => 'Dept-Finance',
+    ]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$entry:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$vendorId:** `int` — ID of the vendor who receives the card. The vendor must belong to the paypoint and have an active status.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$expenseLimit:** `float` — Spending limit for the card. Must be greater than `0` and can't exceed the paypoint's configured payout credit limit.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$expirationDate:** `?string` — Requested expiration date for the card. If not provided, defaults to 30 days from creation.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$amount:** `float` — Initial load amount for the card.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$maxNumberOfUses:** `int` — Maximum number of times the card can be used. Ignored and set to `1` when `exactAmount` is `true`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$exactAmount:** `bool` — When `true`, restricts the card to a single use. `maxNumberOfUses` is automatically set to `1` regardless of any other value provided.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$expenseLimitPeriod:** `string` — Time period over which `expenseLimit` applies (for example, `monthly` or `weekly`).
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$billingCycle:** `string` — Billing cycle identifier.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$billingCycleDay:** `string` — Day within the billing cycle.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$dailyTransactionCount:** `int` — Maximum number of transactions allowed per day.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$dailyAmountLimit:** `float` — Maximum total spend allowed per day.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$transactionAmountLimit:** `int` — Maximum spend allowed per single transaction.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$mcc:** `?string` — Merchant Category Code to restrict where the card can be used. Must be a valid MCC if provided.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$tcc:** `?string` — Transaction Category Code to restrict where the card can be used. Must be a valid TCC if provided.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$misc1:** `?string` — Custom metadata field. Stored on the card record.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$misc2:** `?string` — Custom metadata field. Stored on the card record.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;ghostCard-&gt;updateCard($entry, $request) -> ?PayabliApiResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Updates the status of a virtual card (including ghost cards) under a paypoint.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->ghostCard->updateCard(
+    '8cfec2e0fa',
+    new UpdateCardRequestBody([
+        'cardToken' => 'gc_abc123def456',
+        'status' => CardStatus::Cancelled->value,
+    ]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$entry:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$cardToken:** `string` — Token that uniquely identifies the card. This is the `ReferenceId` returned when the card was created.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$status:** `?string` — The new status to set on the card.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## HostedPaymentPages
-<details><summary><code>$client-&gt;hostedPaymentPages-&gt;loadPage($entry, $subdomain) -> PayabliPages</code></summary>
+<details><summary><code>$client-&gt;hostedPaymentPages-&gt;loadPage($entry, $subdomain) -> ?PayabliPages</code></summary>
 <dl>
 <dd>
 
@@ -7719,7 +8001,7 @@ $client->hostedPaymentPages->loadPage(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;hostedPaymentPages-&gt;newPage($entry, $request) -> PayabliApiResponse00Responsedatanonobject</code></summary>
+<details><summary><code>$client-&gt;hostedPaymentPages-&gt;newPage($entry, $request) -> ?PayabliApiResponse00Responsedatanonobject</code></summary>
 <dl>
 <dd>
 
@@ -7797,7 +8079,7 @@ $client->hostedPaymentPages->newPage(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;hostedPaymentPages-&gt;savePage($entry, $subdomain, $request) -> PayabliApiResponse00Responsedatanonobject</code></summary>
+<details><summary><code>$client-&gt;hostedPaymentPages-&gt;savePage($entry, $subdomain, $request) -> ?PayabliApiResponse00Responsedatanonobject</code></summary>
 <dl>
 <dd>
 
@@ -7872,7 +8154,7 @@ $client->hostedPaymentPages->savePage(
 </details>
 
 ## Import
-<details><summary><code>$client-&gt;import-&gt;importBills($entry, $request) -> PayabliApiResponseImport</code></summary>
+<details><summary><code>$client-&gt;import-&gt;importBills($entry, $request) -> ?PayabliApiResponseImport</code></summary>
 <dl>
 <dd>
 
@@ -7931,7 +8213,7 @@ $client->import->importBills(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;import-&gt;importCustomer($entry, $request) -> PayabliApiResponseImport</code></summary>
+<details><summary><code>$client-&gt;import-&gt;importCustomer($entry, $request) -> ?PayabliApiResponseImport</code></summary>
 <dl>
 <dd>
 
@@ -7998,7 +8280,7 @@ $client->import->importCustomer(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;import-&gt;importVendor($entry, $request) -> PayabliApiResponseImport</code></summary>
+<details><summary><code>$client-&gt;import-&gt;importVendor($entry, $request) -> ?PayabliApiResponseImport</code></summary>
 <dl>
 <dd>
 
@@ -8058,7 +8340,7 @@ $client->import->importVendor(
 </details>
 
 ## Invoice
-<details><summary><code>$client-&gt;invoice-&gt;addInvoice($entry, $request) -> InvoiceResponseWithoutData</code></summary>
+<details><summary><code>$client-&gt;invoice-&gt;addInvoice($entry, $request) -> ?InvoiceResponseWithoutData</code></summary>
 <dl>
 <dd>
 
@@ -8173,7 +8455,7 @@ $client->invoice->addInvoice(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;invoice-&gt;deleteAttachedFromInvoice($idInvoice, $filename) -> InvoiceResponseWithoutData</code></summary>
+<details><summary><code>$client-&gt;invoice-&gt;deleteAttachedFromInvoice($idInvoice, $filename) -> ?InvoiceResponseWithoutData</code></summary>
 <dl>
 <dd>
 
@@ -8250,7 +8532,7 @@ The filename in Payabli. Filename is `zipName` in response to a request to `/api
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;invoice-&gt;deleteInvoice($idInvoice) -> InvoiceResponseWithoutData</code></summary>
+<details><summary><code>$client-&gt;invoice-&gt;deleteInvoice($idInvoice) -> ?InvoiceResponseWithoutData</code></summary>
 <dl>
 <dd>
 
@@ -8306,7 +8588,7 @@ $client->invoice->deleteInvoice(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;invoice-&gt;editInvoice($idInvoice, $request) -> InvoiceResponseWithoutData</code></summary>
+<details><summary><code>$client-&gt;invoice-&gt;editInvoice($idInvoice, $request) -> ?InvoiceResponseWithoutData</code></summary>
 <dl>
 <dd>
 
@@ -8395,7 +8677,7 @@ $client->invoice->editInvoice(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;invoice-&gt;getAttachedFileFromInvoice($idInvoice, $filename, $request) -> FileContent</code></summary>
+<details><summary><code>$client-&gt;invoice-&gt;getAttachedFileFromInvoice($idInvoice, $filename, $request) -> ?FileContent</code></summary>
 <dl>
 <dd>
 
@@ -8483,7 +8765,7 @@ The filename in Payabli. Filename is `zipName` in the response to a request to `
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;invoice-&gt;getInvoice($idInvoice) -> GetInvoiceRecord</code></summary>
+<details><summary><code>$client-&gt;invoice-&gt;getInvoice($idInvoice) -> ?GetInvoiceRecord</code></summary>
 <dl>
 <dd>
 
@@ -8539,7 +8821,7 @@ $client->invoice->getInvoice(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;invoice-&gt;getInvoiceNumber($entry) -> InvoiceNumberResponse</code></summary>
+<details><summary><code>$client-&gt;invoice-&gt;getInvoiceNumber($entry) -> ?InvoiceNumberResponse</code></summary>
 <dl>
 <dd>
 
@@ -8595,7 +8877,7 @@ $client->invoice->getInvoiceNumber(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;invoice-&gt;listInvoices($entry, $request) -> QueryInvoiceResponse</code></summary>
+<details><summary><code>$client-&gt;invoice-&gt;listInvoices($entry, $request) -> ?QueryInvoiceResponse</code></summary>
 <dl>
 <dd>
 
@@ -8760,7 +9042,7 @@ Example: totalAmount(gt)=20 return all records with totalAmount greater than 20.
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;invoice-&gt;listInvoicesOrg($orgId, $request) -> QueryInvoiceResponse</code></summary>
+<details><summary><code>$client-&gt;invoice-&gt;listInvoicesOrg($orgId, $request) -> ?QueryInvoiceResponse</code></summary>
 <dl>
 <dd>
 
@@ -8925,7 +9207,7 @@ Example: totalAmount(gt)=20 return all records with totalAmount greater than 20.
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;invoice-&gt;sendInvoice($idInvoice, $request) -> SendInvoiceResponse</code></summary>
+<details><summary><code>$client-&gt;invoice-&gt;sendInvoice($idInvoice, $request) -> ?SendInvoiceResponse</code></summary>
 <dl>
 <dd>
 
@@ -9001,7 +9283,7 @@ $client->invoice->sendInvoice(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;invoice-&gt;getInvoicePdf($idInvoice) -> array</code></summary>
+<details><summary><code>$client-&gt;invoice-&gt;getInvoicePdf($idInvoice) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -9058,7 +9340,7 @@ $client->invoice->getInvoicePdf(
 </details>
 
 ## LineItem
-<details><summary><code>$client-&gt;lineItem-&gt;addItem($entry, $request) -> PayabliApiResponse6</code></summary>
+<details><summary><code>$client-&gt;lineItem-&gt;addItem($entry, $request) -> ?PayabliApiResponse6</code></summary>
 <dl>
 <dd>
 
@@ -9142,7 +9424,7 @@ $client->lineItem->addItem(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;lineItem-&gt;deleteItem($lineItemId) -> DeleteItemResponse</code></summary>
+<details><summary><code>$client-&gt;lineItem-&gt;deleteItem($lineItemId) -> ?DeleteItemResponse</code></summary>
 <dl>
 <dd>
 
@@ -9198,7 +9480,7 @@ $client->lineItem->deleteItem(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;lineItem-&gt;getItem($lineItemId) -> LineItemQueryRecord</code></summary>
+<details><summary><code>$client-&gt;lineItem-&gt;getItem($lineItemId) -> ?LineItemQueryRecord</code></summary>
 <dl>
 <dd>
 
@@ -9254,7 +9536,7 @@ $client->lineItem->getItem(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;lineItem-&gt;listLineItems($entry, $request) -> QueryResponseItems</code></summary>
+<details><summary><code>$client-&gt;lineItem-&gt;listLineItems($entry, $request) -> ?QueryResponseItems</code></summary>
 <dl>
 <dd>
 
@@ -9403,7 +9685,7 @@ Example: name(ct)=john return all records with name containing john
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;lineItem-&gt;updateItem($lineItemId, $request) -> PayabliApiResponse6</code></summary>
+<details><summary><code>$client-&gt;lineItem-&gt;updateItem($lineItemId, $request) -> ?PayabliApiResponse6</code></summary>
 <dl>
 <dd>
 
@@ -9472,7 +9754,7 @@ $client->lineItem->updateItem(
 </details>
 
 ## MoneyIn
-<details><summary><code>$client-&gt;moneyIn-&gt;authorize($request) -> AuthResponse</code></summary>
+<details><summary><code>$client-&gt;moneyIn-&gt;authorize($request) -> ?AuthResponse</code></summary>
 <dl>
 <dd>
 
@@ -9569,7 +9851,7 @@ $client->moneyIn->authorize(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyIn-&gt;capture($transId, $amount) -> CaptureResponse</code></summary>
+<details><summary><code>$client-&gt;moneyIn-&gt;capture($transId, $amount) -> ?CaptureResponse</code></summary>
 <dl>
 <dd>
 
@@ -9639,7 +9921,7 @@ $client->moneyIn->capture(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyIn-&gt;captureAuth($transId, $request) -> CaptureResponse</code></summary>
+<details><summary><code>$client-&gt;moneyIn-&gt;captureAuth($transId, $request) -> ?CaptureResponse</code></summary>
 <dl>
 <dd>
 
@@ -9715,7 +9997,7 @@ $client->moneyIn->captureAuth(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyIn-&gt;credit($request) -> PayabliApiResponse0</code></summary>
+<details><summary><code>$client-&gt;moneyIn-&gt;credit($request) -> ?PayabliApiResponse0</code></summary>
 <dl>
 <dd>
 
@@ -9871,7 +10153,7 @@ $client->moneyIn->credit(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyIn-&gt;details($transId) -> TransactionQueryRecordsCustomer</code></summary>
+<details><summary><code>$client-&gt;moneyIn-&gt;details($transId) -> ?TransactionQueryRecordsCustomer</code></summary>
 <dl>
 <dd>
 
@@ -9927,7 +10209,7 @@ $client->moneyIn->details(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyIn-&gt;getpaid($request) -> PayabliApiResponseGetPaid</code></summary>
+<details><summary><code>$client-&gt;moneyIn-&gt;getpaid($request) -> ?PayabliApiResponseGetPaid</code></summary>
 <dl>
 <dd>
 
@@ -10048,7 +10330,7 @@ $client->moneyIn->getpaid(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyIn-&gt;reverse($transId, $amount) -> ReverseResponse</code></summary>
+<details><summary><code>$client-&gt;moneyIn-&gt;reverse($transId, $amount) -> ?ReverseResponse</code></summary>
 <dl>
 <dd>
 
@@ -10120,7 +10402,7 @@ An amount equal to zero will refunds the total amount authorized minus any servi
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyIn-&gt;refund($transId, $amount) -> RefundResponse</code></summary>
+<details><summary><code>$client-&gt;moneyIn-&gt;refund($transId, $amount) -> ?RefundResponse</code></summary>
 <dl>
 <dd>
 
@@ -10196,7 +10478,7 @@ An amount equal to zero will refund the total amount authorized minus any servic
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyIn-&gt;refundWithInstructions($transId, $request) -> RefundWithInstructionsResponse</code></summary>
+<details><summary><code>$client-&gt;moneyIn-&gt;refundWithInstructions($transId, $request) -> ?RefundWithInstructionsResponse</code></summary>
 <dl>
 <dd>
 
@@ -10337,7 +10619,7 @@ An amount equal to zero will refund the total amount authorized minus any servic
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyIn-&gt;reverseCredit($transId) -> PayabliApiResponse</code></summary>
+<details><summary><code>$client-&gt;moneyIn-&gt;reverseCredit($transId) -> ?PayabliApiResponse</code></summary>
 <dl>
 <dd>
 
@@ -10393,7 +10675,7 @@ $client->moneyIn->reverseCredit(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyIn-&gt;sendReceipt2Trans($transId, $request) -> ReceiptResponse</code></summary>
+<details><summary><code>$client-&gt;moneyIn-&gt;sendReceipt2Trans($transId, $request) -> ?ReceiptResponse</code></summary>
 <dl>
 <dd>
 
@@ -10464,7 +10746,7 @@ If not provided, the email address on file for the user owner of the transaction
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyIn-&gt;validate($request) -> ValidateResponse</code></summary>
+<details><summary><code>$client-&gt;moneyIn-&gt;validate($request) -> ?ValidateResponse</code></summary>
 <dl>
 <dd>
 
@@ -10570,7 +10852,7 @@ $client->moneyIn->validate(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyIn-&gt;void($transId) -> VoidResponse</code></summary>
+<details><summary><code>$client-&gt;moneyIn-&gt;void($transId) -> ?VoidResponse</code></summary>
 <dl>
 <dd>
 
@@ -10630,7 +10912,7 @@ $client->moneyIn->void(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyIn-&gt;getpaidv2($request) -> V2TransactionResponseWrapper</code></summary>
+<details><summary><code>$client-&gt;moneyIn-&gt;getpaidv2($request) -> ?V2TransactionResponseWrapper</code></summary>
 <dl>
 <dd>
 
@@ -10739,7 +11021,7 @@ $client->moneyIn->getpaidv2(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyIn-&gt;authorizev2($request) -> V2TransactionResponseWrapper</code></summary>
+<details><summary><code>$client-&gt;moneyIn-&gt;authorizev2($request) -> ?V2TransactionResponseWrapper</code></summary>
 <dl>
 <dd>
 
@@ -10834,7 +11116,7 @@ $client->moneyIn->authorizev2(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyIn-&gt;capturev2($transId, $request) -> V2TransactionResponseWrapper</code></summary>
+<details><summary><code>$client-&gt;moneyIn-&gt;capturev2($transId, $request) -> ?V2TransactionResponseWrapper</code></summary>
 <dl>
 <dd>
 
@@ -10904,7 +11186,7 @@ $client->moneyIn->capturev2(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyIn-&gt;refundv2($transId) -> V2TransactionResponseWrapper</code></summary>
+<details><summary><code>$client-&gt;moneyIn-&gt;refundv2($transId) -> ?V2TransactionResponseWrapper</code></summary>
 <dl>
 <dd>
 
@@ -10962,7 +11244,7 @@ $client->moneyIn->refundv2(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyIn-&gt;refundv2Amount($transId, $amount) -> V2TransactionResponseWrapper</code></summary>
+<details><summary><code>$client-&gt;moneyIn-&gt;refundv2Amount($transId, $amount) -> ?V2TransactionResponseWrapper</code></summary>
 <dl>
 <dd>
 
@@ -11029,7 +11311,7 @@ $client->moneyIn->refundv2Amount(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyIn-&gt;voidv2($transId) -> V2TransactionResponseWrapper</code></summary>
+<details><summary><code>$client-&gt;moneyIn-&gt;voidv2($transId) -> ?V2TransactionResponseWrapper</code></summary>
 <dl>
 <dd>
 
@@ -11086,7 +11368,7 @@ $client->moneyIn->voidv2(
 </details>
 
 ## MoneyOut
-<details><summary><code>$client-&gt;moneyOut-&gt;authorizeOut($request) -> AuthCapturePayoutResponse</code></summary>
+<details><summary><code>$client-&gt;moneyOut-&gt;authorizeOut($request) -> ?AuthCapturePayoutResponse</code></summary>
 <dl>
 <dd>
 
@@ -11194,7 +11476,7 @@ $client->moneyOut->authorizeOut(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyOut-&gt;cancelAllOut($request) -> CaptureAllOutResponse</code></summary>
+<details><summary><code>$client-&gt;moneyOut-&gt;cancelAllOut($request) -> ?CaptureAllOutResponse</code></summary>
 <dl>
 <dd>
 
@@ -11254,7 +11536,7 @@ $client->moneyOut->cancelAllOut(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyOut-&gt;cancelOutGet($referenceId) -> PayabliApiResponse0000</code></summary>
+<details><summary><code>$client-&gt;moneyOut-&gt;cancelOutGet($referenceId) -> ?PayabliApiResponse0000</code></summary>
 <dl>
 <dd>
 
@@ -11310,7 +11592,7 @@ $client->moneyOut->cancelOutGet(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyOut-&gt;cancelOutDelete($referenceId) -> PayabliApiResponse0000</code></summary>
+<details><summary><code>$client-&gt;moneyOut-&gt;cancelOutDelete($referenceId) -> ?PayabliApiResponse0000</code></summary>
 <dl>
 <dd>
 
@@ -11366,7 +11648,7 @@ $client->moneyOut->cancelOutDelete(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyOut-&gt;captureAllOut($request) -> CaptureAllOutResponse</code></summary>
+<details><summary><code>$client-&gt;moneyOut-&gt;captureAllOut($request) -> ?CaptureAllOutResponse</code></summary>
 <dl>
 <dd>
 
@@ -11436,7 +11718,7 @@ $client->moneyOut->captureAllOut(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyOut-&gt;captureOut($referenceId, $request) -> AuthCapturePayoutResponse</code></summary>
+<details><summary><code>$client-&gt;moneyOut-&gt;captureOut($referenceId, $request) -> ?AuthCapturePayoutResponse</code></summary>
 <dl>
 <dd>
 
@@ -11501,7 +11783,7 @@ $client->moneyOut->captureOut(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyOut-&gt;payoutDetails($transId) -> BillDetailResponse</code></summary>
+<details><summary><code>$client-&gt;moneyOut-&gt;payoutDetails($transId) -> ?BillDetailResponse</code></summary>
 <dl>
 <dd>
 
@@ -11557,7 +11839,7 @@ $client->moneyOut->payoutDetails(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyOut-&gt;vCardGet($cardToken) -> VCardGetResponse</code></summary>
+<details><summary><code>$client-&gt;moneyOut-&gt;vCardGet($cardToken) -> ?VCardGetResponse</code></summary>
 <dl>
 <dd>
 
@@ -11613,7 +11895,7 @@ $client->moneyOut->vCardGet(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyOut-&gt;sendVCardLink($request) -> OperationResult</code></summary>
+<details><summary><code>$client-&gt;moneyOut-&gt;sendVCardLink($request) -> ?OperationResult</code></summary>
 <dl>
 <dd>
 
@@ -11671,7 +11953,7 @@ $client->moneyOut->sendVCardLink(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyOut-&gt;getCheckImage($assetName) -> string</code></summary>
+<details><summary><code>$client-&gt;moneyOut-&gt;getCheckImage($assetName) -> ?string</code></summary>
 <dl>
 <dd>
 
@@ -11740,7 +12022,7 @@ in the response when you make a GET request to `/MoneyOut/details/{transId}`.
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyOut-&gt;updateCheckPaymentStatus($transId, $checkPaymentStatus) -> PayabliApiResponse00Responsedatanonobject</code></summary>
+<details><summary><code>$client-&gt;moneyOut-&gt;updateCheckPaymentStatus($transId, $checkPaymentStatus) -> ?PayabliApiResponse00Responsedatanonobject</code></summary>
 <dl>
 <dd>
 
@@ -11816,7 +12098,7 @@ $client->moneyOut->updateCheckPaymentStatus(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;moneyOut-&gt;reissueOut($request) -> ReissuePayoutResponse</code></summary>
+<details><summary><code>$client-&gt;moneyOut-&gt;reissueOut($request) -> ?ReissuePayoutResponse</code></summary>
 <dl>
 <dd>
 
@@ -11905,7 +12187,7 @@ $client->moneyOut->reissueOut(
 </details>
 
 ## Notification
-<details><summary><code>$client-&gt;notification-&gt;addNotification($request) -> PayabliApiResponseNotifications</code></summary>
+<details><summary><code>$client-&gt;notification-&gt;addNotification($request) -> ?PayabliApiResponseNotifications</code></summary>
 <dl>
 <dd>
 
@@ -11971,7 +12253,7 @@ $client->notification->addNotification(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;notification-&gt;deleteNotification($nId) -> PayabliApiResponseNotifications</code></summary>
+<details><summary><code>$client-&gt;notification-&gt;deleteNotification($nId) -> ?PayabliApiResponseNotifications</code></summary>
 <dl>
 <dd>
 
@@ -12027,7 +12309,7 @@ $client->notification->deleteNotification(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;notification-&gt;getNotification($nId) -> NotificationQueryRecord</code></summary>
+<details><summary><code>$client-&gt;notification-&gt;getNotification($nId) -> ?NotificationQueryRecord</code></summary>
 <dl>
 <dd>
 
@@ -12083,7 +12365,7 @@ $client->notification->getNotification(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;notification-&gt;updateNotification($nId, $request) -> PayabliApiResponseNotifications</code></summary>
+<details><summary><code>$client-&gt;notification-&gt;updateNotification($nId, $request) -> ?PayabliApiResponseNotifications</code></summary>
 <dl>
 <dd>
 
@@ -12158,7 +12440,7 @@ $client->notification->updateNotification(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;notification-&gt;getReportFile($id) -> array</code></summary>
+<details><summary><code>$client-&gt;notification-&gt;getReportFile($id) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -12215,7 +12497,7 @@ $client->notification->getReportFile(
 </details>
 
 ## Notificationlogs
-<details><summary><code>$client-&gt;notificationlogs-&gt;searchNotificationLogs($request) -> array</code></summary>
+<details><summary><code>$client-&gt;notificationlogs-&gt;searchNotificationLogs($request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -12300,7 +12582,7 @@ $client->notificationlogs->searchNotificationLogs(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;notificationlogs-&gt;getNotificationLog($uuid) -> NotificationLogDetail</code></summary>
+<details><summary><code>$client-&gt;notificationlogs-&gt;getNotificationLog($uuid) -> ?NotificationLogDetail</code></summary>
 <dl>
 <dd>
 
@@ -12357,7 +12639,7 @@ $client->notificationlogs->getNotificationLog(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;notificationlogs-&gt;retryNotificationLog($uuid) -> NotificationLogDetail</code></summary>
+<details><summary><code>$client-&gt;notificationlogs-&gt;retryNotificationLog($uuid) -> ?NotificationLogDetail</code></summary>
 <dl>
 <dd>
 
@@ -12479,7 +12761,7 @@ $client->notificationlogs->bulkRetryNotificationLogs(
 </details>
 
 ## Ocr
-<details><summary><code>$client-&gt;ocr-&gt;ocrDocumentForm($typeResult, $request) -> PayabliApiResponseOcr</code></summary>
+<details><summary><code>$client-&gt;ocr-&gt;ocrDocumentForm($typeResult, $request) -> ?PayabliApiResponseOcr</code></summary>
 <dl>
 <dd>
 
@@ -12544,7 +12826,7 @@ $client->ocr->ocrDocumentForm(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;ocr-&gt;ocrDocumentJson($typeResult, $request) -> PayabliApiResponseOcr</code></summary>
+<details><summary><code>$client-&gt;ocr-&gt;ocrDocumentJson($typeResult, $request) -> ?PayabliApiResponseOcr</code></summary>
 <dl>
 <dd>
 
@@ -12610,7 +12892,7 @@ $client->ocr->ocrDocumentJson(
 </details>
 
 ## Organization
-<details><summary><code>$client-&gt;organization-&gt;addOrganization($request) -> AddOrganizationResponse</code></summary>
+<details><summary><code>$client-&gt;organization-&gt;addOrganization($request) -> ?AddOrganizationResponse</code></summary>
 <dl>
 <dd>
 
@@ -12858,7 +13140,7 @@ $client->organization->addOrganization(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;organization-&gt;deleteOrganization($orgId) -> DeleteOrganizationResponse</code></summary>
+<details><summary><code>$client-&gt;organization-&gt;deleteOrganization($orgId) -> ?DeleteOrganizationResponse</code></summary>
 <dl>
 <dd>
 
@@ -12914,7 +13196,7 @@ $client->organization->deleteOrganization(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;organization-&gt;editOrganization($orgId, $request) -> EditOrganizationResponse</code></summary>
+<details><summary><code>$client-&gt;organization-&gt;editOrganization($orgId, $request) -> ?EditOrganizationResponse</code></summary>
 <dl>
 <dd>
 
@@ -13143,7 +13425,7 @@ $client->organization->editOrganization(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;organization-&gt;getBasicOrganization($entry) -> OrganizationQueryRecord</code></summary>
+<details><summary><code>$client-&gt;organization-&gt;getBasicOrganization($entry) -> ?OrganizationQueryRecord</code></summary>
 <dl>
 <dd>
 
@@ -13199,7 +13481,7 @@ $client->organization->getBasicOrganization(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;organization-&gt;getBasicOrganizationById($orgId) -> OrganizationQueryRecord</code></summary>
+<details><summary><code>$client-&gt;organization-&gt;getBasicOrganizationById($orgId) -> ?OrganizationQueryRecord</code></summary>
 <dl>
 <dd>
 
@@ -13255,7 +13537,7 @@ $client->organization->getBasicOrganizationById(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;organization-&gt;getOrganization($orgId) -> OrganizationQueryRecord</code></summary>
+<details><summary><code>$client-&gt;organization-&gt;getOrganization($orgId) -> ?OrganizationQueryRecord</code></summary>
 <dl>
 <dd>
 
@@ -13311,7 +13593,7 @@ $client->organization->getOrganization(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;organization-&gt;getSettingsOrganization($orgId) -> SettingsQueryRecord</code></summary>
+<details><summary><code>$client-&gt;organization-&gt;getSettingsOrganization($orgId) -> ?SettingsQueryRecord</code></summary>
 <dl>
 <dd>
 
@@ -13368,7 +13650,7 @@ $client->organization->getSettingsOrganization(
 </details>
 
 ## PaymentLink
-<details><summary><code>$client-&gt;paymentLink-&gt;addPayLinkFromInvoice($idInvoice, $request) -> PayabliApiResponsePaymentLinks</code></summary>
+<details><summary><code>$client-&gt;paymentLink-&gt;addPayLinkFromInvoice($idInvoice, $request) -> ?PayabliApiResponsePaymentLinks</code></summary>
 <dl>
 <dd>
 
@@ -13568,7 +13850,7 @@ $client->paymentLink->addPayLinkFromInvoice(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paymentLink-&gt;addPayLinkFromBill($billId, $request) -> PayabliApiResponsePaymentLinks</code></summary>
+<details><summary><code>$client-&gt;paymentLink-&gt;addPayLinkFromBill($billId, $request) -> ?PayabliApiResponsePaymentLinks</code></summary>
 <dl>
 <dd>
 
@@ -13719,7 +14001,7 @@ $client->paymentLink->addPayLinkFromBill(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paymentLink-&gt;deletePayLinkFromId($payLinkId) -> PayabliApiResponsePaymentLinks</code></summary>
+<details><summary><code>$client-&gt;paymentLink-&gt;deletePayLinkFromId($payLinkId) -> ?PayabliApiResponsePaymentLinks</code></summary>
 <dl>
 <dd>
 
@@ -13775,7 +14057,7 @@ $client->paymentLink->deletePayLinkFromId(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paymentLink-&gt;getPayLinkFromId($paylinkId) -> GetPayLinkFromIdResponse</code></summary>
+<details><summary><code>$client-&gt;paymentLink-&gt;getPayLinkFromId($paylinkId) -> ?GetPayLinkFromIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -13831,7 +14113,7 @@ $client->paymentLink->getPayLinkFromId(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paymentLink-&gt;pushPayLinkFromId($payLinkId, $request) -> PayabliApiResponsePaymentLinks</code></summary>
+<details><summary><code>$client-&gt;paymentLink-&gt;pushPayLinkFromId($payLinkId, $request) -> ?PayabliApiResponsePaymentLinks</code></summary>
 <dl>
 <dd>
 
@@ -13896,7 +14178,7 @@ $client->paymentLink->pushPayLinkFromId(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paymentLink-&gt;refreshPayLinkFromId($payLinkId, $request) -> PayabliApiResponsePaymentLinks</code></summary>
+<details><summary><code>$client-&gt;paymentLink-&gt;refreshPayLinkFromId($payLinkId, $request) -> ?PayabliApiResponsePaymentLinks</code></summary>
 <dl>
 <dd>
 
@@ -13961,7 +14243,7 @@ $client->paymentLink->refreshPayLinkFromId(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paymentLink-&gt;sendPayLinkFromId($payLinkId, $request) -> PayabliApiResponsePaymentLinks</code></summary>
+<details><summary><code>$client-&gt;paymentLink-&gt;sendPayLinkFromId($payLinkId, $request) -> ?PayabliApiResponsePaymentLinks</code></summary>
 <dl>
 <dd>
 
@@ -14036,7 +14318,7 @@ $client->paymentLink->sendPayLinkFromId(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paymentLink-&gt;updatePayLinkFromId($payLinkId, $request) -> PayabliApiResponsePaymentLinks</code></summary>
+<details><summary><code>$client-&gt;paymentLink-&gt;updatePayLinkFromId($payLinkId, $request) -> ?PayabliApiResponsePaymentLinks</code></summary>
 <dl>
 <dd>
 
@@ -14178,7 +14460,7 @@ $client->paymentLink->updatePayLinkFromId(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paymentLink-&gt;addPayLinkFromBillLotNumber($lotNumber, $request) -> PayabliApiResponsePaymentLinks</code></summary>
+<details><summary><code>$client-&gt;paymentLink-&gt;addPayLinkFromBillLotNumber($lotNumber, $request) -> ?PayabliApiResponsePaymentLinks</code></summary>
 <dl>
 <dd>
 
@@ -14340,7 +14622,7 @@ $client->paymentLink->addPayLinkFromBillLotNumber(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paymentLink-&gt;patchOutPaymentLink($paylinkId, $request) -> PayabliApiResponsePaymentLinks</code></summary>
+<details><summary><code>$client-&gt;paymentLink-&gt;patchOutPaymentLink($paylinkId, $request) -> ?PayabliApiResponsePaymentLinks</code></summary>
 <dl>
 <dd>
 
@@ -14408,7 +14690,7 @@ $client->paymentLink->patchOutPaymentLink(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paymentLink-&gt;updatePayLinkOutFromId($paylinkId, $request) -> PayabliApiResponsePaymentLinks</code></summary>
+<details><summary><code>$client-&gt;paymentLink-&gt;updatePayLinkOutFromId($paylinkId, $request) -> ?PayabliApiResponsePaymentLinks</code></summary>
 <dl>
 <dd>
 
@@ -14533,7 +14815,7 @@ $client->paymentLink->updatePayLinkOutFromId(
 </details>
 
 ## PaymentMethodDomain
-<details><summary><code>$client-&gt;paymentMethodDomain-&gt;addPaymentMethodDomain($request) -> AddPaymentMethodDomainApiResponse</code></summary>
+<details><summary><code>$client-&gt;paymentMethodDomain-&gt;addPaymentMethodDomain($request) -> ?AddPaymentMethodDomainApiResponse</code></summary>
 <dl>
 <dd>
 
@@ -14631,7 +14913,7 @@ $client->paymentMethodDomain->addPaymentMethodDomain(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paymentMethodDomain-&gt;cascadePaymentMethodDomain($domainId) -> PaymentMethodDomainGeneralResponse</code></summary>
+<details><summary><code>$client-&gt;paymentMethodDomain-&gt;cascadePaymentMethodDomain($domainId) -> ?PaymentMethodDomainGeneralResponse</code></summary>
 <dl>
 <dd>
 
@@ -14687,7 +14969,7 @@ $client->paymentMethodDomain->cascadePaymentMethodDomain(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paymentMethodDomain-&gt;deletePaymentMethodDomain($domainId) -> DeletePaymentMethodDomainResponse</code></summary>
+<details><summary><code>$client-&gt;paymentMethodDomain-&gt;deletePaymentMethodDomain($domainId) -> ?DeletePaymentMethodDomainResponse</code></summary>
 <dl>
 <dd>
 
@@ -14743,7 +15025,7 @@ $client->paymentMethodDomain->deletePaymentMethodDomain(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paymentMethodDomain-&gt;getPaymentMethodDomain($domainId) -> PaymentMethodDomainApiResponse</code></summary>
+<details><summary><code>$client-&gt;paymentMethodDomain-&gt;getPaymentMethodDomain($domainId) -> ?PaymentMethodDomainApiResponse</code></summary>
 <dl>
 <dd>
 
@@ -14799,7 +15081,7 @@ $client->paymentMethodDomain->getPaymentMethodDomain(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paymentMethodDomain-&gt;listPaymentMethodDomains($request) -> ListPaymentMethodDomainsResponse</code></summary>
+<details><summary><code>$client-&gt;paymentMethodDomain-&gt;listPaymentMethodDomains($request) -> ?ListPaymentMethodDomainsResponse</code></summary>
 <dl>
 <dd>
 
@@ -14890,7 +15172,7 @@ The type of entity. Valid values:
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paymentMethodDomain-&gt;updatePaymentMethodDomain($domainId, $request) -> PaymentMethodDomainGeneralResponse</code></summary>
+<details><summary><code>$client-&gt;paymentMethodDomain-&gt;updatePaymentMethodDomain($domainId, $request) -> ?PaymentMethodDomainGeneralResponse</code></summary>
 <dl>
 <dd>
 
@@ -14970,7 +15252,7 @@ $client->paymentMethodDomain->updatePaymentMethodDomain(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paymentMethodDomain-&gt;verifyPaymentMethodDomain($domainId) -> PaymentMethodDomainGeneralResponse</code></summary>
+<details><summary><code>$client-&gt;paymentMethodDomain-&gt;verifyPaymentMethodDomain($domainId) -> ?PaymentMethodDomainGeneralResponse</code></summary>
 <dl>
 <dd>
 
@@ -15026,8 +15308,284 @@ $client->paymentMethodDomain->verifyPaymentMethodDomain(
 </dl>
 </details>
 
+## PayoutSubscription
+<details><summary><code>$client-&gt;payoutSubscription-&gt;createPayoutSubscription($request) -> ?AddPayoutSubscriptionResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Creates a payout subscription to automatically send payouts to a vendor on a recurring schedule. See [Manage payout subscriptions](/guides/pay-out-developer-payout-subscriptions-manage) for a step-by-step guide.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->payoutSubscription->createPayoutSubscription(
+    new RequestPayoutSchedule([
+        'body' => new PayoutSubscriptionRequestBody([
+            'entryPoint' => 'd193cf9a46',
+            'paymentMethod' => new AuthorizePaymentMethod([
+                'method' => 'ach',
+                'achHolder' => 'Herman Coatings',
+                'achRouting' => '021000021',
+                'achAccount' => '3453445666',
+                'achAccountType' => 'checking',
+            ]),
+            'paymentDetails' => new PayoutPaymentDetail([
+                'totalAmount' => 500,
+                'serviceFee' => 0,
+                'currency' => 'USD',
+            ]),
+            'vendorData' => new RequestOutAuthorizeVendorData([
+                'vendorId' => 1501,
+            ]),
+            'billData' => [
+                new BillPayOutDataRequest([
+                    'invoiceNumber' => 'INV-5001',
+                    'netAmount' => '500',
+                    'invoiceDate' => new DateTime('2025-08-01'),
+                    'dueDate' => new DateTime('2025-08-15'),
+                ]),
+            ],
+            'scheduleDetails' => new PayoutScheduleDetail([
+                'startDate' => '09/01/2025',
+                'endDate' => '09/01/2026',
+                'frequency' => Frequency::Monthly->value,
+            ]),
+        ]),
+    ]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$idempotencyKey:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$request:** `PayoutSubscriptionRequestBody` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;payoutSubscription-&gt;getPayoutSubscription($id) -> ?GetPayoutSubscriptionResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieves a single payout subscription's details. See [Manage payout subscriptions](/guides/pay-out-developer-payout-subscriptions-manage) for more information.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->payoutSubscription->getPayoutSubscription(
+    42,
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$id:** `int` — The payout subscription ID.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;payoutSubscription-&gt;updatePayoutSubscription($id, $request) -> ?UpdatePayoutSubscriptionResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Updates a payout subscription's details. See [Manage payout subscriptions](/guides/pay-out-developer-payout-subscriptions-manage) for more information.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->payoutSubscription->updatePayoutSubscription(
+    42,
+    new UpdatePayoutSubscriptionBody([
+        'setPause' => true,
+    ]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$id:** `int` — The payout subscription ID.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$request:** `UpdatePayoutSubscriptionBody` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;payoutSubscription-&gt;deletePayoutSubscription($id) -> ?DeletePayoutSubscriptionResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Deletes a payout subscription and prevents future payouts. See [Manage payout subscriptions](/guides/pay-out-developer-payout-subscriptions-manage) for more information.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->payoutSubscription->deletePayoutSubscription(
+    42,
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$id:** `int` — The payout subscription ID.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Paypoint
-<details><summary><code>$client-&gt;paypoint-&gt;getBasicEntry($entry) -> GetBasicEntryResponse</code></summary>
+<details><summary><code>$client-&gt;paypoint-&gt;getBasicEntry($entry) -> ?GetBasicEntryResponse</code></summary>
 <dl>
 <dd>
 
@@ -15083,7 +15641,7 @@ $client->paypoint->getBasicEntry(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paypoint-&gt;getBasicEntryById($idPaypoint) -> GetBasicEntryByIdResponse</code></summary>
+<details><summary><code>$client-&gt;paypoint-&gt;getBasicEntryById($idPaypoint) -> ?GetBasicEntryByIdResponse</code></summary>
 <dl>
 <dd>
 
@@ -15139,7 +15697,7 @@ $client->paypoint->getBasicEntryById(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paypoint-&gt;getEntryConfig($entry, $request) -> GetEntryConfigResponse</code></summary>
+<details><summary><code>$client-&gt;paypoint-&gt;getEntryConfig($entry, $request) -> ?GetEntryConfigResponse</code></summary>
 <dl>
 <dd>
 
@@ -15204,7 +15762,7 @@ $client->paypoint->getEntryConfig(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paypoint-&gt;getPage($entry, $subdomain) -> PayabliPages</code></summary>
+<details><summary><code>$client-&gt;paypoint-&gt;getPage($entry, $subdomain) -> ?PayabliPages</code></summary>
 <dl>
 <dd>
 
@@ -15269,7 +15827,7 @@ $client->paypoint->getPage(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paypoint-&gt;removePage($entry, $subdomain) -> PayabliApiResponseGeneric2Part</code></summary>
+<details><summary><code>$client-&gt;paypoint-&gt;removePage($entry, $subdomain) -> ?PayabliApiResponseGeneric2Part</code></summary>
 <dl>
 <dd>
 
@@ -15334,7 +15892,7 @@ $client->paypoint->removePage(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paypoint-&gt;saveLogo($entry, $request) -> PayabliApiResponse00Responsedatanonobject</code></summary>
+<details><summary><code>$client-&gt;paypoint-&gt;saveLogo($entry, $request) -> ?PayabliApiResponse00Responsedatanonobject</code></summary>
 <dl>
 <dd>
 
@@ -15399,7 +15957,7 @@ $client->paypoint->saveLogo(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paypoint-&gt;settingsPage($entry) -> SettingsQueryRecord</code></summary>
+<details><summary><code>$client-&gt;paypoint-&gt;settingsPage($entry) -> ?SettingsQueryRecord</code></summary>
 <dl>
 <dd>
 
@@ -15455,7 +16013,7 @@ $client->paypoint->settingsPage(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;paypoint-&gt;migrate($request) -> MigratePaypointResponse</code></summary>
+<details><summary><code>$client-&gt;paypoint-&gt;migrate($request) -> ?MigratePaypointResponse</code></summary>
 <dl>
 <dd>
 
@@ -15524,7 +16082,7 @@ $client->paypoint->migrate(
 </details>
 
 ## Query
-<details><summary><code>$client-&gt;query-&gt;listBatchDetails($entry, $request) -> QueryBatchesDetailResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listBatchDetails($entry, $request) -> ?QueryBatchesDetailResponse</code></summary>
 <dl>
 <dd>
 
@@ -15703,7 +16261,7 @@ Example: `settledAmount(gt)=20` returns all records with a `settledAmount` great
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listBatchDetailsOrg($orgId, $request) -> QueryResponseSettlements</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listBatchDetailsOrg($orgId, $request) -> ?QueryResponseSettlements</code></summary>
 <dl>
 <dd>
 
@@ -15880,7 +16438,7 @@ Example: `settledAmount(gt)=20` returns all records with a `settledAmount` great
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listBatches($entry, $request) -> QueryBatchesResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listBatches($entry, $request) -> ?QueryBatchesResponse</code></summary>
 <dl>
 <dd>
 
@@ -16036,7 +16594,7 @@ Example: `batchAmount(gt)=20` returns all records with a `batchAmount` greater t
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listBatchesOrg($orgId, $request) -> QueryBatchesResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listBatchesOrg($orgId, $request) -> ?QueryBatchesResponse</code></summary>
 <dl>
 <dd>
 
@@ -16192,7 +16750,7 @@ Example: `batchAmount(gt)=20` returns all records with a `batchAmount` greater t
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listBatchesOut($entry, $request) -> QueryBatchesOutResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listBatchesOut($entry, $request) -> ?QueryBatchesOutResponse</code></summary>
 <dl>
 <dd>
 
@@ -16310,7 +16868,7 @@ Collection of field names, conditions, and values used to filter the query. See 
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listBatchesOutOrg($orgId, $request) -> QueryBatchesOutResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listBatchesOutOrg($orgId, $request) -> ?QueryBatchesOutResponse</code></summary>
 <dl>
 <dd>
 
@@ -16443,7 +17001,7 @@ See [Filters and Conditions Reference](/developers/developer-guides/pay-ops-repo
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listChargebacks($entry, $request) -> QueryChargebacksResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listChargebacks($entry, $request) -> ?QueryChargebacksResponse</code></summary>
 <dl>
 <dd>
 
@@ -16616,7 +17174,7 @@ Example: `netAmount(gt)=20` returns all records with a `netAmount` greater than 
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listChargebacksOrg($orgId, $request) -> QueryChargebacksResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listChargebacksOrg($orgId, $request) -> ?QueryChargebacksResponse</code></summary>
 <dl>
 <dd>
 
@@ -16791,7 +17349,7 @@ Example: `netAmount(gt)=20` returns all records with a `netAmount` greater than 
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listCustomers($entry, $request) -> QueryCustomerResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listCustomers($entry, $request) -> ?QueryCustomerResponse</code></summary>
 <dl>
 <dd>
 
@@ -16958,7 +17516,7 @@ See [Filters and Conditions Reference](/developers/developer-guides/pay-ops-repo
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listCustomersOrg($orgId, $request) -> QueryCustomerResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listCustomersOrg($orgId, $request) -> ?QueryCustomerResponse</code></summary>
 <dl>
 <dd>
 
@@ -17125,7 +17683,7 @@ See [Filters and Conditions Reference](/developers/developer-guides/pay-ops-repo
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listNotificationReports($entry, $request) -> QueryResponseNotificationReports</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listNotificationReports($entry, $request) -> ?QueryResponseNotificationReports</code></summary>
 <dl>
 <dd>
 
@@ -17257,7 +17815,7 @@ Example: reportName(ct)=tr  return all records containing the string "tr"
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listNotificationReportsOrg($orgId, $request) -> QueryResponseNotificationReports</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listNotificationReportsOrg($orgId, $request) -> ?QueryResponseNotificationReports</code></summary>
 <dl>
 <dd>
 
@@ -17387,7 +17945,7 @@ Example: reportName(ct)=tr  return all records containing the string "tr"
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listNotifications($entry, $request) -> QueryResponseNotifications</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listNotifications($entry, $request) -> ?QueryResponseNotifications</code></summary>
 <dl>
 <dd>
 
@@ -17521,7 +18079,7 @@ Example: totalAmount(gt)=20  return all records with totalAmount greater than 20
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listNotificationsOrg($orgId, $request) -> QueryResponseNotifications</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listNotificationsOrg($orgId, $request) -> ?QueryResponseNotifications</code></summary>
 <dl>
 <dd>
 
@@ -17655,7 +18213,7 @@ Example: totalAmount(gt)=20  return all records with totalAmount greater than 20
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listOrganizations($orgId, $request) -> ListOrganizationsResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listOrganizations($orgId, $request) -> ?ListOrganizationsResponse</code></summary>
 <dl>
 <dd>
 
@@ -17809,7 +18367,7 @@ Example: `dbaname(ct)=hoa` returns all records with a `dbaname` containing "hoa"
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listPayout($entry, $request) -> QueryPayoutTransaction</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listPayout($entry, $request) -> ?QueryPayoutTransaction</code></summary>
 <dl>
 <dd>
 
@@ -17990,7 +18548,7 @@ List of field names accepted:
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listPayoutOrg($orgId, $request) -> QueryPayoutTransaction</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listPayoutOrg($orgId, $request) -> ?QueryPayoutTransaction</code></summary>
 <dl>
 <dd>
 
@@ -18170,7 +18728,7 @@ List of field names accepted:
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listPaypoints($orgId, $request) -> QueryEntrypointResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listPaypoints($orgId, $request) -> ?QueryEntrypointResponse</code></summary>
 <dl>
 <dd>
 
@@ -18329,7 +18887,7 @@ Example: `dbaname(ct)=hoa` returns all records with a `dbaname` containing "hoa"
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listSettlements($entry, $request) -> QueryResponseSettlements</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listSettlements($entry, $request) -> ?QueryResponseSettlements</code></summary>
 <dl>
 <dd>
 
@@ -18507,7 +19065,7 @@ Example: `settledAmount(gt)=20` returns all records with a `settledAmount` great
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listSettlementsOrg($orgId, $request) -> QueryResponseSettlements</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listSettlementsOrg($orgId, $request) -> ?QueryResponseSettlements</code></summary>
 <dl>
 <dd>
 
@@ -18685,7 +19243,7 @@ Example: `settledAmount(gt)=20` returns all records with a `settledAmount` great
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listSubscriptions($entry, $request) -> QuerySubscriptionResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listSubscriptions($entry, $request) -> ?QuerySubscriptionResponse</code></summary>
 <dl>
 <dd>
 
@@ -18863,7 +19421,7 @@ See [Filters and Conditions Reference](/developers/developer-guides/pay-ops-repo
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listSubscriptionsOrg($orgId, $request) -> QuerySubscriptionResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listSubscriptionsOrg($orgId, $request) -> ?QuerySubscriptionResponse</code></summary>
 <dl>
 <dd>
 
@@ -19041,7 +19599,339 @@ See [Filters and Conditions Reference](/developers/developer-guides/pay-ops-repo
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listTransactions($entry, $request) -> QueryResponseTransactions</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listPayoutSubscriptions($entry, $request) -> ?QueryPayoutSubscriptionResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Returns a list of payout subscriptions for a single paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response. See [Manage payout subscriptions](/guides/pay-out-developer-payout-subscriptions-manage) for more information.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->query->listPayoutSubscriptions(
+    '8cfec329267',
+    new ListPayoutSubscriptionsRequest([
+        'fromRecord' => 0,
+        'limitRecord' => 20,
+        'sortBy' => 'desc(field_name)',
+    ]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$entry:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$exportFormat:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$fromRecord:** `?int` — The number of records to skip before starting to collect the result set.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$limitRecord:** `?int` — Max number of records to return for the query. Use `0` or negative value to return all records.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$parameters:** `?array` 
+
+
+Collection of field names, conditions, and values used to filter the query.
+<Info>
+  **You must remove `parameters=` from the request before you send it, otherwise Payabli will ignore the filters.**
+
+  Because of a technical limitation, you can't make a request that includes filters from the API console on this page. The response won't be filtered. Instead, copy the request, remove `parameters=` and run the request in a different client.
+
+  For example:
+
+  --url https://api-sandbox.payabli.com/api/Query/payoutsubscriptions/entry123?parameters=totalAmount(gt)=1000&limitRecord=20
+
+  should become:
+
+  --url https://api-sandbox.payabli.com/api/Query/payoutsubscriptions/entry123?totalAmount(gt)=1000&limitRecord=20
+</Info>
+See [Filters and Conditions Reference](/developers/developer-guides/pay-ops-reporting-engine-overview#filters-and-conditions-reference) for more information.
+**List of field names accepted:**
+
+- `startDate` (gt, ge, lt, le, eq, ne)
+- `endDate` (gt, ge, lt, le, eq, ne)
+- `nextDate` (gt, ge, lt, le, eq, ne)
+- `frequency` (in, nin, ne, eq)
+- `method` (in, nin, eq, ne)
+- `totalAmount` (gt, ge, lt, le, eq, ne)
+- `netAmount` (gt, ge, lt, le, eq, ne)
+- `feeAmount` (gt, ge, lt, le, eq, ne)
+- `status` (in, nin, eq, ne)
+- `untilcancelled` (eq, ne)
+- `payaccountLastfour` (ct, nct)
+- `payaccountType` (ne, eq, in, nin)
+- `payaccountCurrency` (ne, eq, in, nin)
+- `paypointId` (ne, eq)
+- `paypointLegal` (ne, eq, ct, nct)
+- `paypointDba` (ne, eq, ct, nct)
+- `orgName` (ne, eq, ct, nct, nin, in)
+- `parentOrgId` (ne, eq, nin, in)
+- `subscriptionId` (eq, ne)
+- `orderDescription` (ct, nct)
+- `cycles` (eq, ne, gt, ge, lt, le)
+- `leftcycles` (eq, ne, gt, ge, lt, le)
+- `createdAt` (eq, ne, gt, ge, lt, le)
+- `updatedOn` (eq, ne, gt, ge, lt, le)
+- `vendorNumber` (ne, eq, ct, nct)
+- `name` (ne, eq, ct, nct)
+- `phone` (ne, eq, ct, nct)
+- `email` (ne, eq, ct, nct)
+- `address` (ne, eq, ct, nct)
+- `remitAddress` (ct, nct)
+- `city` (ne, eq, ct, nct)
+- `state` (ne, eq, ct, nct)
+- `country` (ne, eq, ct, nct)
+- `zip` (ne, eq, ct, nct)
+
+**List of comparison operators accepted:**
+- `eq` or empty => equal
+- `gt` => greater than
+- `ge` => greater or equal
+- `lt` => less than
+- `le` => less or equal
+- `ne` => not equal
+- `ct` => contains
+- `nct` => not contains
+- `in` => inside array
+- `nin` => not inside array
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$sortBy:** `?string` — The field name to use for sorting results. Use `desc(field_name)` to sort descending by `field_name`, and use `asc(field_name)` to sort ascending by `field_name`.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;query-&gt;listPayoutSubscriptionsOrg($orgId, $request) -> ?QueryPayoutSubscriptionResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Returns a list of payout subscriptions for a single org. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response. See [Manage payout subscriptions](/guides/pay-out-developer-payout-subscriptions-manage) for more information.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->query->listPayoutSubscriptionsOrg(
+    123,
+    new ListPayoutSubscriptionsOrgRequest([
+        'fromRecord' => 0,
+        'limitRecord' => 20,
+        'sortBy' => 'desc(field_name)',
+    ]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$orgId:** `int` — The numeric identifier for organization, assigned by Payabli.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$exportFormat:** `?string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$fromRecord:** `?int` — The number of records to skip before starting to collect the result set.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$limitRecord:** `?int` — Max number of records to return for the query. Use `0` or negative value to return all records.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$parameters:** `?array` 
+
+
+Collection of field names, conditions, and values used to filter the query.
+<Info>
+  **You must remove `parameters=` from the request before you send it, otherwise Payabli will ignore the filters.**
+
+  Because of a technical limitation, you can't make a request that includes filters from the API console on this page. The response won't be filtered. Instead, copy the request, remove `parameters=` and run the request in a different client.
+
+  For example:
+
+  --url https://api-sandbox.payabli.com/api/Query/payoutsubscriptions/org/236?parameters=totalAmount(gt)=1000&limitRecord=20
+
+  should become:
+
+  --url https://api-sandbox.payabli.com/api/Query/payoutsubscriptions/org/236?totalAmount(gt)=1000&limitRecord=20
+</Info>
+See [Filters and Conditions Reference](/developers/developer-guides/pay-ops-reporting-engine-overview#filters-and-conditions-reference) for more information.
+**List of field names accepted:**
+
+- `startDate` (gt, ge, lt, le, eq, ne)
+- `endDate` (gt, ge, lt, le, eq, ne)
+- `nextDate` (gt, ge, lt, le, eq, ne)
+- `frequency` (in, nin, ne, eq)
+- `method` (in, nin, eq, ne)
+- `totalAmount` (gt, ge, lt, le, eq, ne)
+- `netAmount` (gt, ge, lt, le, eq, ne)
+- `feeAmount` (gt, ge, lt, le, eq, ne)
+- `status` (in, nin, eq, ne)
+- `untilcancelled` (eq, ne)
+- `payaccountLastfour` (ct, nct)
+- `payaccountType` (ne, eq, in, nin)
+- `payaccountCurrency` (ne, eq, in, nin)
+- `paypointId` (ne, eq)
+- `paypointLegal` (ne, eq, ct, nct)
+- `paypointDba` (ne, eq, ct, nct)
+- `orgName` (ne, eq, ct, nct, nin, in)
+- `parentOrgId` (ne, eq, nin, in)
+- `subscriptionId` (eq, ne)
+- `orderDescription` (ct, nct)
+- `cycles` (eq, ne, gt, ge, lt, le)
+- `leftcycles` (eq, ne, gt, ge, lt, le)
+- `createdAt` (eq, ne, gt, ge, lt, le)
+- `updatedOn` (eq, ne, gt, ge, lt, le)
+- `vendorNumber` (ne, eq, ct, nct)
+- `name` (ne, eq, ct, nct)
+- `phone` (ne, eq, ct, nct)
+- `email` (ne, eq, ct, nct)
+- `address` (ne, eq, ct, nct)
+- `remitAddress` (ct, nct)
+- `city` (ne, eq, ct, nct)
+- `state` (ne, eq, ct, nct)
+- `country` (ne, eq, ct, nct)
+- `zip` (ne, eq, ct, nct)
+
+**List of comparison operators accepted:**
+- `eq` or empty => equal
+- `gt` => greater than
+- `ge` => greater or equal
+- `lt` => less than
+- `le` => less or equal
+- `ne` => not equal
+- `ct` => contains
+- `nct` => not contains
+- `in` => inside array
+- `nin` => not inside array
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$sortBy:** `?string` — The field name to use for sorting results. Use `desc(field_name)` to sort descending by `field_name`, and use `asc(field_name)` to sort ascending by `field_name`.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;query-&gt;listTransactions($entry, $request) -> ?QueryResponseTransactions</code></summary>
 <dl>
 <dd>
 
@@ -19056,9 +19946,8 @@ See [Filters and Conditions Reference](/developers/developer-guides/pay-ops-repo
 Retrieve a list of transactions for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
 By default, this endpoint returns only transactions from the last 60 days. To query transactions outside of this period, include `transactionDate` filters.
 For example, this request parameters filter for transactions between April 01, 2024 and April 09, 2024. 
-``` curl --request GET \
-  --url https://sandbox.payabli.com/api/Query/transactions/org/1?limitRecord=20&fromRecord=0&transactionDate(ge)=2024-04-01T00:00:00&transactionDate(le)=2024-04-09T23:59:59\
-  --header 'requestToken: <api-key>'
+``` curl -X GET https://sandbox.payabli.com/api/Query/transactions/org/1?limitRecord=20&fromRecord=0&transactionDate(ge)=2024-04-01T00:00:00&transactionDate(le)=2024-04-09T23:59:59\
+  -H 'requestToken: <API TOKEN>'
 
   ```
 </dd>
@@ -19234,7 +20123,7 @@ See [Filters and Conditions Reference](/developers/developer-guides/pay-ops-repo
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listTransactionsOrg($orgId, $request) -> QueryResponseTransactions</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listTransactionsOrg($orgId, $request) -> ?QueryResponseTransactions</code></summary>
 <dl>
 <dd>
 
@@ -19256,9 +20145,8 @@ By default, this endpoint returns only transactions from the last 60 days. To qu
 For example, this request parameters filter for transactions between April 01, 2024 and April 09, 2024. 
 
 ```
-curl --request GET \
-  --url https://sandbox.payabli.com/api/Query/transactions/org/1?limitRecord=20&fromRecord=0&transactionDate(ge)=2024-04-01T00:00:00&transactionDate(le)=2024-04-09T23:59:59\
-  --header 'requestToken: <api-key>'
+curl -X GET "https://sandbox.payabli.com/api/Query/transactions/org/1?limitRecord=20&fromRecord=0&transactionDate(ge)=2024-04-01T00:00:00&transactionDate(le)=2024-04-09T23:59:59"\
+  -H 'requestToken: <API TOKEN>'
 
   ```
 </dd>
@@ -19433,7 +20321,7 @@ See [Filters and Conditions Reference](/developers/developer-guides/pay-ops-repo
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listTransferDetails($entry, $transferId, $request) -> QueryTransferDetailResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listTransferDetails($entry, $transferId, $request) -> ?QueryTransferDetailResponse</code></summary>
 <dl>
 <dd>
 
@@ -19578,7 +20466,7 @@ for more information.
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listTransfers($entry, $request) -> TransferQueryResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listTransfers($entry, $request) -> ?TransferQueryResponse</code></summary>
 <dl>
 <dd>
 
@@ -19714,7 +20602,7 @@ List of field names accepted:
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listTransfersOrg($orgId, $request) -> TransferQueryResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listTransfersOrg($orgId, $request) -> ?TransferQueryResponse</code></summary>
 <dl>
 <dd>
 
@@ -19847,7 +20735,7 @@ List of field names accepted:
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listTransfersOutOrg($orgId, $request) -> TransferOutQueryResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listTransfersOutOrg($orgId, $request) -> ?TransferOutQueryResponse</code></summary>
 <dl>
 <dd>
 
@@ -19968,7 +20856,7 @@ List of field names accepted:
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listTransfersOutPaypoint($entry, $request) -> TransferOutQueryResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listTransfersOutPaypoint($entry, $request) -> ?TransferOutQueryResponse</code></summary>
 <dl>
 <dd>
 
@@ -20089,7 +20977,7 @@ List of field names accepted:
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listTransferDetailsOut($entry, $transferId, $request) -> TransferOutDetailQueryResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listTransferDetailsOut($entry, $transferId, $request) -> ?TransferOutDetailQueryResponse</code></summary>
 <dl>
 <dd>
 
@@ -20218,7 +21106,7 @@ List of field names accepted:
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listUsersOrg($orgId, $request) -> QueryUserResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listUsersOrg($orgId, $request) -> ?QueryUserResponse</code></summary>
 <dl>
 <dd>
 
@@ -20354,7 +21242,7 @@ Example: `name(ct)=john`  return all records with name containing 'john'.
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listUsersPaypoint($entry, $request) -> QueryUserResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listUsersPaypoint($entry, $request) -> ?QueryUserResponse</code></summary>
 <dl>
 <dd>
 
@@ -20490,7 +21378,7 @@ Example: `name(ct)=john`  return all records with name containing 'john'
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listVendors($entry, $request) -> QueryResponseVendors</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listVendors($entry, $request) -> ?QueryResponseVendors</code></summary>
 <dl>
 <dd>
 
@@ -20646,7 +21534,7 @@ Example: `netAmount(gt)=20` returns all records with a `netAmount` greater than 
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listVendorsOrg($orgId, $request) -> QueryResponseVendors</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listVendorsOrg($orgId, $request) -> ?QueryResponseVendors</code></summary>
 <dl>
 <dd>
 
@@ -20802,7 +21690,7 @@ Example: `netAmount(gt)=20` returns all records with a `netAmount` greater than 
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listVcards($entry, $request) -> VCardQueryResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listVcards($entry, $request) -> ?VCardQueryResponse</code></summary>
 <dl>
 <dd>
 
@@ -20950,7 +21838,7 @@ List of comparison accepted - enclosed between parentheses:
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listVcardsOrg($orgId, $request) -> VCardQueryResponse</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listVcardsOrg($orgId, $request) -> ?VCardQueryResponse</code></summary>
 <dl>
 <dd>
 
@@ -21099,7 +21987,7 @@ List of comparison accepted - enclosed between parentheses:
 </details>
 
 ## Statistic
-<details><summary><code>$client-&gt;statistic-&gt;basicStats($mode, $freq, $level, $entryId, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;statistic-&gt;basicStats($mode, $freq, $level, $entryId, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -21253,7 +22141,7 @@ Valid formats:
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;statistic-&gt;customerBasicStats($mode, $freq, $customerId, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;statistic-&gt;customerBasicStats($mode, $freq, $customerId, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -21359,7 +22247,7 @@ For example, `w` groups the results by week.
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;statistic-&gt;subStats($interval, $level, $entryId, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;statistic-&gt;subStats($interval, $level, $entryId, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -21454,7 +22342,7 @@ The entry level for the request:
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;statistic-&gt;vendorBasicStats($mode, $freq, $idVendor, $request) -> array</code></summary>
+<details><summary><code>$client-&gt;statistic-&gt;vendorBasicStats($mode, $freq, $idVendor, $request) -> ?array</code></summary>
 <dl>
 <dd>
 
@@ -21561,7 +22449,7 @@ For example, `w` groups the results by week.
 </details>
 
 ## Subscription
-<details><summary><code>$client-&gt;subscription-&gt;getSubscription($subId) -> SubscriptionQueryRecords</code></summary>
+<details><summary><code>$client-&gt;subscription-&gt;getSubscription($subId) -> ?SubscriptionQueryRecords</code></summary>
 <dl>
 <dd>
 
@@ -21617,7 +22505,7 @@ $client->subscription->getSubscription(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;subscription-&gt;newSubscription($request) -> AddSubscriptionResponse</code></summary>
+<details><summary><code>$client-&gt;subscription-&gt;newSubscription($request) -> ?AddSubscriptionResponse</code></summary>
 <dl>
 <dd>
 
@@ -21715,7 +22603,7 @@ $client->subscription->newSubscription(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;subscription-&gt;removeSubscription($subId) -> RemoveSubscriptionResponse</code></summary>
+<details><summary><code>$client-&gt;subscription-&gt;removeSubscription($subId) -> ?RemoveSubscriptionResponse</code></summary>
 <dl>
 <dd>
 
@@ -21771,7 +22659,7 @@ $client->subscription->removeSubscription(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;subscription-&gt;updateSubscription($subId, $request) -> UpdateSubscriptionResponse</code></summary>
+<details><summary><code>$client-&gt;subscription-&gt;updateSubscription($subId, $request) -> ?UpdateSubscriptionResponse</code></summary>
 <dl>
 <dd>
 
@@ -21855,7 +22743,7 @@ $client->subscription->updateSubscription(
 </details>
 
 ## Templates
-<details><summary><code>$client-&gt;templates-&gt;deleteTemplate($templateId) -> PayabliApiResponseTemplateId</code></summary>
+<details><summary><code>$client-&gt;templates-&gt;deleteTemplate($templateId) -> ?PayabliApiResponseTemplateId</code></summary>
 <dl>
 <dd>
 
@@ -21911,7 +22799,7 @@ $client->templates->deleteTemplate(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;templates-&gt;getlinkTemplate($templateId, $ignoreEmpty) -> BoardingLinkApiResponse</code></summary>
+<details><summary><code>$client-&gt;templates-&gt;getlinkTemplate($templateId, $ignoreEmpty) -> ?BoardingLinkApiResponse</code></summary>
 <dl>
 <dd>
 
@@ -21976,7 +22864,7 @@ $client->templates->getlinkTemplate(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;templates-&gt;getTemplate($templateId) -> TemplateQueryRecord</code></summary>
+<details><summary><code>$client-&gt;templates-&gt;getTemplate($templateId) -> ?TemplateQueryRecord</code></summary>
 <dl>
 <dd>
 
@@ -22032,7 +22920,7 @@ $client->templates->getTemplate(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;templates-&gt;listTemplates($orgId, $request) -> TemplateQueryResponse</code></summary>
+<details><summary><code>$client-&gt;templates-&gt;listTemplates($orgId, $request) -> ?TemplateQueryResponse</code></summary>
 <dl>
 <dd>
 
@@ -22171,7 +23059,7 @@ Example: title(ct)=hoa return all records with title containing "hoa"
 </details>
 
 ## TokenStorage
-<details><summary><code>$client-&gt;tokenStorage-&gt;addMethod($request) -> AddMethodResponse</code></summary>
+<details><summary><code>$client-&gt;tokenStorage-&gt;addMethod($request) -> ?AddMethodResponse</code></summary>
 <dl>
 <dd>
 
@@ -22286,7 +23174,7 @@ $client->tokenStorage->addMethod(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;tokenStorage-&gt;getMethod($methodId, $request) -> GetMethodResponse</code></summary>
+<details><summary><code>$client-&gt;tokenStorage-&gt;getMethod($methodId, $request) -> ?GetMethodResponse</code></summary>
 <dl>
 <dd>
 
@@ -22372,7 +23260,7 @@ Accepted values:
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;tokenStorage-&gt;removeMethod($methodId) -> PayabliApiResponsePaymethodDelete</code></summary>
+<details><summary><code>$client-&gt;tokenStorage-&gt;removeMethod($methodId) -> ?PayabliApiResponsePaymethodDelete</code></summary>
 <dl>
 <dd>
 
@@ -22428,7 +23316,7 @@ $client->tokenStorage->removeMethod(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;tokenStorage-&gt;updateMethod($methodId, $request) -> PayabliApiResponsePaymethodDelete</code></summary>
+<details><summary><code>$client-&gt;tokenStorage-&gt;updateMethod($methodId, $request) -> ?PayabliApiResponsePaymethodDelete</code></summary>
 <dl>
 <dd>
 
@@ -22518,7 +23406,7 @@ $client->tokenStorage->updateMethod(
 </details>
 
 ## User
-<details><summary><code>$client-&gt;user-&gt;addUser($request) -> AddUserResponse</code></summary>
+<details><summary><code>$client-&gt;user-&gt;addUser($request) -> ?AddUserResponse</code></summary>
 <dl>
 <dd>
 
@@ -22574,7 +23462,7 @@ $client->user->addUser(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;user-&gt;authRefreshUser() -> PayabliApiResponseUserMfa</code></summary>
+<details><summary><code>$client-&gt;user-&gt;authRefreshUser() -> ?PayabliApiResponseUserMfa</code></summary>
 <dl>
 <dd>
 
@@ -22613,7 +23501,7 @@ $client->user->authRefreshUser();
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;user-&gt;authResetUser($request) -> AuthResetUserResponse</code></summary>
+<details><summary><code>$client-&gt;user-&gt;authResetUser($request) -> ?AuthResetUserResponse</code></summary>
 <dl>
 <dd>
 
@@ -22685,7 +23573,7 @@ $client->user->authResetUser(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;user-&gt;authUser($provider, $request) -> PayabliApiResponseMfaBasic</code></summary>
+<details><summary><code>$client-&gt;user-&gt;authUser($provider, $request) -> ?PayabliApiResponseMfaBasic</code></summary>
 <dl>
 <dd>
 
@@ -22790,7 +23678,7 @@ $client->user->authUser(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;user-&gt;changePswUser($request) -> ChangePswUserResponse</code></summary>
+<details><summary><code>$client-&gt;user-&gt;changePswUser($request) -> ?ChangePswUserResponse</code></summary>
 <dl>
 <dd>
 
@@ -22846,7 +23734,7 @@ $client->user->changePswUser(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;user-&gt;deleteUser($userId) -> DeleteUserResponse</code></summary>
+<details><summary><code>$client-&gt;user-&gt;deleteUser($userId) -> ?DeleteUserResponse</code></summary>
 <dl>
 <dd>
 
@@ -22902,7 +23790,7 @@ $client->user->deleteUser(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;user-&gt;editMfaUser($userId, $request) -> EditMfaUserResponse</code></summary>
+<details><summary><code>$client-&gt;user-&gt;editMfaUser($userId, $request) -> ?EditMfaUserResponse</code></summary>
 <dl>
 <dd>
 
@@ -22967,7 +23855,7 @@ $client->user->editMfaUser(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;user-&gt;editUser($userId, $request) -> PayabliApiResponse</code></summary>
+<details><summary><code>$client-&gt;user-&gt;editUser($userId, $request) -> ?PayabliApiResponse</code></summary>
 <dl>
 <dd>
 
@@ -23032,7 +23920,7 @@ $client->user->editUser(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;user-&gt;getUser($userId, $request) -> UserQueryRecord</code></summary>
+<details><summary><code>$client-&gt;user-&gt;getUser($userId, $request) -> ?UserQueryRecord</code></summary>
 <dl>
 <dd>
 
@@ -23107,7 +23995,7 @@ $client->user->getUser(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;user-&gt;logoutUser() -> LogoutUserResponse</code></summary>
+<details><summary><code>$client-&gt;user-&gt;logoutUser() -> ?LogoutUserResponse</code></summary>
 <dl>
 <dd>
 
@@ -23146,7 +24034,7 @@ $client->user->logoutUser();
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;user-&gt;resendMfaCode($usrname, $entry, $entryType) -> PayabliApiResponseMfaBasic</code></summary>
+<details><summary><code>$client-&gt;user-&gt;resendMfaCode($usrname, $entry, $entryType) -> ?PayabliApiResponseMfaBasic</code></summary>
 <dl>
 <dd>
 
@@ -23220,7 +24108,7 @@ $client->user->resendMfaCode(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;user-&gt;validateMfaUser($request) -> PayabliApiResponseUserMfa</code></summary>
+<details><summary><code>$client-&gt;user-&gt;validateMfaUser($request) -> ?PayabliApiResponseUserMfa</code></summary>
 <dl>
 <dd>
 
@@ -23285,7 +24173,7 @@ $client->user->validateMfaUser(
 </details>
 
 ## Vendor
-<details><summary><code>$client-&gt;vendor-&gt;addVendor($entry, $request) -> PayabliApiResponseVendors</code></summary>
+<details><summary><code>$client-&gt;vendor-&gt;addVendor($entry, $request) -> ?PayabliApiResponseVendors</code></summary>
 <dl>
 <dd>
 
@@ -23395,7 +24283,7 @@ $client->vendor->addVendor(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;vendor-&gt;deleteVendor($idVendor) -> PayabliApiResponseVendors</code></summary>
+<details><summary><code>$client-&gt;vendor-&gt;deleteVendor($idVendor) -> ?PayabliApiResponseVendors</code></summary>
 <dl>
 <dd>
 
@@ -23451,7 +24339,7 @@ $client->vendor->deleteVendor(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;vendor-&gt;editVendor($idVendor, $request) -> PayabliApiResponseVendors</code></summary>
+<details><summary><code>$client-&gt;vendor-&gt;editVendor($idVendor, $request) -> ?PayabliApiResponseVendors</code></summary>
 <dl>
 <dd>
 
@@ -23518,7 +24406,7 @@ $client->vendor->editVendor(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;vendor-&gt;getVendor($idVendor) -> VendorQueryRecord</code></summary>
+<details><summary><code>$client-&gt;vendor-&gt;getVendor($idVendor) -> ?VendorQueryRecord</code></summary>
 <dl>
 <dd>
 
@@ -23575,7 +24463,7 @@ $client->vendor->getVendor(
 </details>
 
 ## Wallet
-<details><summary><code>$client-&gt;wallet-&gt;configureApplePayOrganization($request) -> ConfigureApplePayOrganizationApiResponse</code></summary>
+<details><summary><code>$client-&gt;wallet-&gt;configureApplePayOrganization($request) -> ?ConfigureApplePayOrganizationApiResponse</code></summary>
 <dl>
 <dd>
 
@@ -23651,7 +24539,7 @@ $client->wallet->configureApplePayOrganization(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;wallet-&gt;configureApplePayPaypoint($request) -> ConfigureApplePaypointApiResponse</code></summary>
+<details><summary><code>$client-&gt;wallet-&gt;configureApplePayPaypoint($request) -> ?ConfigureApplePaypointApiResponse</code></summary>
 <dl>
 <dd>
 
@@ -23718,7 +24606,7 @@ $client->wallet->configureApplePayPaypoint(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;wallet-&gt;configureGooglePayOrganization($request) -> ConfigureApplePayOrganizationApiResponse</code></summary>
+<details><summary><code>$client-&gt;wallet-&gt;configureGooglePayOrganization($request) -> ?ConfigureApplePayOrganizationApiResponse</code></summary>
 <dl>
 <dd>
 
@@ -23794,7 +24682,7 @@ $client->wallet->configureGooglePayOrganization(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;wallet-&gt;configureGooglePayPaypoint($request) -> ConfigureGooglePaypointApiResponse</code></summary>
+<details><summary><code>$client-&gt;wallet-&gt;configureGooglePayPaypoint($request) -> ?ConfigureGooglePaypointApiResponse</code></summary>
 <dl>
 <dd>
 

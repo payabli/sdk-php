@@ -68,11 +68,11 @@ class PaymentMethodDomainClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return AddPaymentMethodDomainApiResponse
+     * @return ?AddPaymentMethodDomainApiResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function addPaymentMethodDomain(AddPaymentMethodDomainRequest $request = new AddPaymentMethodDomainRequest(), ?array $options = null): AddPaymentMethodDomainApiResponse
+    public function addPaymentMethodDomain(AddPaymentMethodDomainRequest $request = new AddPaymentMethodDomainRequest(), ?array $options = null): ?AddPaymentMethodDomainApiResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -88,6 +88,9 @@ class PaymentMethodDomainClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return AddPaymentMethodDomainApiResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -114,11 +117,11 @@ class PaymentMethodDomainClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PaymentMethodDomainGeneralResponse
+     * @return ?PaymentMethodDomainGeneralResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function cascadePaymentMethodDomain(string $domainId, ?array $options = null): PaymentMethodDomainGeneralResponse
+    public function cascadePaymentMethodDomain(string $domainId, ?array $options = null): ?PaymentMethodDomainGeneralResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -133,6 +136,9 @@ class PaymentMethodDomainClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PaymentMethodDomainGeneralResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -159,11 +165,11 @@ class PaymentMethodDomainClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return DeletePaymentMethodDomainResponse
+     * @return ?DeletePaymentMethodDomainResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function deletePaymentMethodDomain(string $domainId, ?array $options = null): DeletePaymentMethodDomainResponse
+    public function deletePaymentMethodDomain(string $domainId, ?array $options = null): ?DeletePaymentMethodDomainResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -178,6 +184,9 @@ class PaymentMethodDomainClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return DeletePaymentMethodDomainResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -204,11 +213,11 @@ class PaymentMethodDomainClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PaymentMethodDomainApiResponse
+     * @return ?PaymentMethodDomainApiResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getPaymentMethodDomain(string $domainId, ?array $options = null): PaymentMethodDomainApiResponse
+    public function getPaymentMethodDomain(string $domainId, ?array $options = null): ?PaymentMethodDomainApiResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -223,6 +232,9 @@ class PaymentMethodDomainClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PaymentMethodDomainApiResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -249,11 +261,11 @@ class PaymentMethodDomainClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ListPaymentMethodDomainsResponse
+     * @return ?ListPaymentMethodDomainsResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listPaymentMethodDomains(ListPaymentMethodDomainsRequest $request = new ListPaymentMethodDomainsRequest(), ?array $options = null): ListPaymentMethodDomainsResponse
+    public function listPaymentMethodDomains(ListPaymentMethodDomainsRequest $request = new ListPaymentMethodDomainsRequest(), ?array $options = null): ?ListPaymentMethodDomainsResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -282,6 +294,9 @@ class PaymentMethodDomainClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return ListPaymentMethodDomainsResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -309,11 +324,11 @@ class PaymentMethodDomainClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PaymentMethodDomainGeneralResponse
+     * @return ?PaymentMethodDomainGeneralResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function updatePaymentMethodDomain(string $domainId, UpdatePaymentMethodDomainRequest $request = new UpdatePaymentMethodDomainRequest(), ?array $options = null): PaymentMethodDomainGeneralResponse
+    public function updatePaymentMethodDomain(string $domainId, UpdatePaymentMethodDomainRequest $request = new UpdatePaymentMethodDomainRequest(), ?array $options = null): ?PaymentMethodDomainGeneralResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -329,6 +344,9 @@ class PaymentMethodDomainClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PaymentMethodDomainGeneralResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -355,11 +373,11 @@ class PaymentMethodDomainClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PaymentMethodDomainGeneralResponse
+     * @return ?PaymentMethodDomainGeneralResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function verifyPaymentMethodDomain(string $domainId, ?array $options = null): PaymentMethodDomainGeneralResponse
+    public function verifyPaymentMethodDomain(string $domainId, ?array $options = null): ?PaymentMethodDomainGeneralResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -374,6 +392,9 @@ class PaymentMethodDomainClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PaymentMethodDomainGeneralResponse::fromJson($json);
             }
         } catch (JsonException $e) {

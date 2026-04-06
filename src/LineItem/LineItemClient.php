@@ -68,11 +68,11 @@ class LineItemClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponse6
+     * @return ?PayabliApiResponse6
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function addItem(string $entry, AddItemRequest $request, ?array $options = null): PayabliApiResponse6
+    public function addItem(string $entry, AddItemRequest $request, ?array $options = null): ?PayabliApiResponse6
     {
         $options = array_merge($this->options, $options ?? []);
         $headers = [];
@@ -93,6 +93,9 @@ class LineItemClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponse6::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -119,11 +122,11 @@ class LineItemClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return DeleteItemResponse
+     * @return ?DeleteItemResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function deleteItem(int $lineItemId, ?array $options = null): DeleteItemResponse
+    public function deleteItem(int $lineItemId, ?array $options = null): ?DeleteItemResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -138,6 +141,9 @@ class LineItemClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return DeleteItemResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -164,11 +170,11 @@ class LineItemClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return LineItemQueryRecord
+     * @return ?LineItemQueryRecord
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getItem(int $lineItemId, ?array $options = null): LineItemQueryRecord
+    public function getItem(int $lineItemId, ?array $options = null): ?LineItemQueryRecord
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -183,6 +189,9 @@ class LineItemClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return LineItemQueryRecord::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -210,11 +219,11 @@ class LineItemClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryResponseItems
+     * @return ?QueryResponseItems
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listLineItems(string $entry, ListLineItemsRequest $request = new ListLineItemsRequest(), ?array $options = null): QueryResponseItems
+    public function listLineItems(string $entry, ListLineItemsRequest $request = new ListLineItemsRequest(), ?array $options = null): ?QueryResponseItems
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -243,6 +252,9 @@ class LineItemClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryResponseItems::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -270,11 +282,11 @@ class LineItemClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponse6
+     * @return ?PayabliApiResponse6
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function updateItem(int $lineItemId, LineItem $request, ?array $options = null): PayabliApiResponse6
+    public function updateItem(int $lineItemId, LineItem $request, ?array $options = null): ?PayabliApiResponse6
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -290,6 +302,9 @@ class LineItemClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponse6::fromJson($json);
             }
         } catch (JsonException $e) {

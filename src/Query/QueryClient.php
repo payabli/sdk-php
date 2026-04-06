@@ -45,6 +45,9 @@ use Payabli\Query\Requests\ListSettlementsOrgRequest;
 use Payabli\Query\Requests\ListSubscriptionsRequest;
 use Payabli\Types\QuerySubscriptionResponse;
 use Payabli\Query\Requests\ListSubscriptionsOrgRequest;
+use Payabli\Query\Requests\ListPayoutSubscriptionsRequest;
+use Payabli\PayoutSubscription\Types\QueryPayoutSubscriptionResponse;
+use Payabli\Query\Requests\ListPayoutSubscriptionsOrgRequest;
 use Payabli\Query\Requests\ListTransactionsRequest;
 use Payabli\Types\QueryResponseTransactions;
 use Payabli\Query\Requests\ListTransactionsOrgRequest;
@@ -118,11 +121,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryBatchesDetailResponse
+     * @return ?QueryBatchesDetailResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listBatchDetails(string $entry, ListBatchDetailsRequest $request = new ListBatchDetailsRequest(), ?array $options = null): QueryBatchesDetailResponse
+    public function listBatchDetails(string $entry, ListBatchDetailsRequest $request = new ListBatchDetailsRequest(), ?array $options = null): ?QueryBatchesDetailResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -154,6 +157,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryBatchesDetailResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -181,11 +187,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryResponseSettlements
+     * @return ?QueryResponseSettlements
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listBatchDetailsOrg(int $orgId, ListBatchDetailsOrgRequest $request = new ListBatchDetailsOrgRequest(), ?array $options = null): QueryResponseSettlements
+    public function listBatchDetailsOrg(int $orgId, ListBatchDetailsOrgRequest $request = new ListBatchDetailsOrgRequest(), ?array $options = null): ?QueryResponseSettlements
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -217,6 +223,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryResponseSettlements::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -244,11 +253,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryBatchesResponse
+     * @return ?QueryBatchesResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listBatches(string $entry, ListBatchesRequest $request = new ListBatchesRequest(), ?array $options = null): QueryBatchesResponse
+    public function listBatches(string $entry, ListBatchesRequest $request = new ListBatchesRequest(), ?array $options = null): ?QueryBatchesResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -280,6 +289,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryBatchesResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -307,11 +319,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryBatchesResponse
+     * @return ?QueryBatchesResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listBatchesOrg(int $orgId, ListBatchesOrgRequest $request = new ListBatchesOrgRequest(), ?array $options = null): QueryBatchesResponse
+    public function listBatchesOrg(int $orgId, ListBatchesOrgRequest $request = new ListBatchesOrgRequest(), ?array $options = null): ?QueryBatchesResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -343,6 +355,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryBatchesResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -370,11 +385,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryBatchesOutResponse
+     * @return ?QueryBatchesOutResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listBatchesOut(string $entry, ListBatchesOutRequest $request = new ListBatchesOutRequest(), ?array $options = null): QueryBatchesOutResponse
+    public function listBatchesOut(string $entry, ListBatchesOutRequest $request = new ListBatchesOutRequest(), ?array $options = null): ?QueryBatchesOutResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -406,6 +421,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryBatchesOutResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -433,11 +451,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryBatchesOutResponse
+     * @return ?QueryBatchesOutResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listBatchesOutOrg(int $orgId, ListBatchesOutOrgRequest $request = new ListBatchesOutOrgRequest(), ?array $options = null): QueryBatchesOutResponse
+    public function listBatchesOutOrg(int $orgId, ListBatchesOutOrgRequest $request = new ListBatchesOutOrgRequest(), ?array $options = null): ?QueryBatchesOutResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -469,6 +487,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryBatchesOutResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -496,11 +517,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryChargebacksResponse
+     * @return ?QueryChargebacksResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listChargebacks(string $entry, ListChargebacksRequest $request = new ListChargebacksRequest(), ?array $options = null): QueryChargebacksResponse
+    public function listChargebacks(string $entry, ListChargebacksRequest $request = new ListChargebacksRequest(), ?array $options = null): ?QueryChargebacksResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -532,6 +553,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryChargebacksResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -559,11 +583,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryChargebacksResponse
+     * @return ?QueryChargebacksResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listChargebacksOrg(int $orgId, ListChargebacksOrgRequest $request = new ListChargebacksOrgRequest(), ?array $options = null): QueryChargebacksResponse
+    public function listChargebacksOrg(int $orgId, ListChargebacksOrgRequest $request = new ListChargebacksOrgRequest(), ?array $options = null): ?QueryChargebacksResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -595,6 +619,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryChargebacksResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -622,11 +649,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryCustomerResponse
+     * @return ?QueryCustomerResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listCustomers(string $entry, ListCustomersRequest $request = new ListCustomersRequest(), ?array $options = null): QueryCustomerResponse
+    public function listCustomers(string $entry, ListCustomersRequest $request = new ListCustomersRequest(), ?array $options = null): ?QueryCustomerResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -658,6 +685,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryCustomerResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -685,11 +715,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryCustomerResponse
+     * @return ?QueryCustomerResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listCustomersOrg(int $orgId, ListCustomersOrgRequest $request = new ListCustomersOrgRequest(), ?array $options = null): QueryCustomerResponse
+    public function listCustomersOrg(int $orgId, ListCustomersOrgRequest $request = new ListCustomersOrgRequest(), ?array $options = null): ?QueryCustomerResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -721,6 +751,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryCustomerResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -748,11 +781,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryResponseNotificationReports
+     * @return ?QueryResponseNotificationReports
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listNotificationReports(string $entry, ListNotificationReportsRequest $request = new ListNotificationReportsRequest(), ?array $options = null): QueryResponseNotificationReports
+    public function listNotificationReports(string $entry, ListNotificationReportsRequest $request = new ListNotificationReportsRequest(), ?array $options = null): ?QueryResponseNotificationReports
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -781,6 +814,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryResponseNotificationReports::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -808,11 +844,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryResponseNotificationReports
+     * @return ?QueryResponseNotificationReports
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listNotificationReportsOrg(int $orgId, ListNotificationReportsOrgRequest $request = new ListNotificationReportsOrgRequest(), ?array $options = null): QueryResponseNotificationReports
+    public function listNotificationReportsOrg(int $orgId, ListNotificationReportsOrgRequest $request = new ListNotificationReportsOrgRequest(), ?array $options = null): ?QueryResponseNotificationReports
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -841,6 +877,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryResponseNotificationReports::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -868,11 +907,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryResponseNotifications
+     * @return ?QueryResponseNotifications
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listNotifications(string $entry, ListNotificationsRequest $request = new ListNotificationsRequest(), ?array $options = null): QueryResponseNotifications
+    public function listNotifications(string $entry, ListNotificationsRequest $request = new ListNotificationsRequest(), ?array $options = null): ?QueryResponseNotifications
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -901,6 +940,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryResponseNotifications::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -928,11 +970,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryResponseNotifications
+     * @return ?QueryResponseNotifications
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listNotificationsOrg(int $orgId, ListNotificationsOrgRequest $request = new ListNotificationsOrgRequest(), ?array $options = null): QueryResponseNotifications
+    public function listNotificationsOrg(int $orgId, ListNotificationsOrgRequest $request = new ListNotificationsOrgRequest(), ?array $options = null): ?QueryResponseNotifications
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -961,6 +1003,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryResponseNotifications::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -988,11 +1033,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ListOrganizationsResponse
+     * @return ?ListOrganizationsResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listOrganizations(int $orgId, ListOrganizationsRequest $request = new ListOrganizationsRequest(), ?array $options = null): ListOrganizationsResponse
+    public function listOrganizations(int $orgId, ListOrganizationsRequest $request = new ListOrganizationsRequest(), ?array $options = null): ?ListOrganizationsResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1024,6 +1069,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return ListOrganizationsResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -1051,11 +1099,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryPayoutTransaction
+     * @return ?QueryPayoutTransaction
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listPayout(string $entry, ListPayoutRequest $request = new ListPayoutRequest(), ?array $options = null): QueryPayoutTransaction
+    public function listPayout(string $entry, ListPayoutRequest $request = new ListPayoutRequest(), ?array $options = null): ?QueryPayoutTransaction
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1087,6 +1135,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryPayoutTransaction::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -1114,11 +1165,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryPayoutTransaction
+     * @return ?QueryPayoutTransaction
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listPayoutOrg(int $orgId, ListPayoutOrgRequest $request = new ListPayoutOrgRequest(), ?array $options = null): QueryPayoutTransaction
+    public function listPayoutOrg(int $orgId, ListPayoutOrgRequest $request = new ListPayoutOrgRequest(), ?array $options = null): ?QueryPayoutTransaction
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1150,6 +1201,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryPayoutTransaction::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -1177,11 +1231,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryEntrypointResponse
+     * @return ?QueryEntrypointResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listPaypoints(int $orgId, ListPaypointsRequest $request = new ListPaypointsRequest(), ?array $options = null): QueryEntrypointResponse
+    public function listPaypoints(int $orgId, ListPaypointsRequest $request = new ListPaypointsRequest(), ?array $options = null): ?QueryEntrypointResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1213,6 +1267,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryEntrypointResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -1240,11 +1297,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryResponseSettlements
+     * @return ?QueryResponseSettlements
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listSettlements(string $entry, ListSettlementsRequest $request = new ListSettlementsRequest(), ?array $options = null): QueryResponseSettlements
+    public function listSettlements(string $entry, ListSettlementsRequest $request = new ListSettlementsRequest(), ?array $options = null): ?QueryResponseSettlements
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1276,6 +1333,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryResponseSettlements::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -1303,11 +1363,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryResponseSettlements
+     * @return ?QueryResponseSettlements
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listSettlementsOrg(int $orgId, ListSettlementsOrgRequest $request = new ListSettlementsOrgRequest(), ?array $options = null): QueryResponseSettlements
+    public function listSettlementsOrg(int $orgId, ListSettlementsOrgRequest $request = new ListSettlementsOrgRequest(), ?array $options = null): ?QueryResponseSettlements
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1339,6 +1399,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryResponseSettlements::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -1366,11 +1429,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QuerySubscriptionResponse
+     * @return ?QuerySubscriptionResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listSubscriptions(string $entry, ListSubscriptionsRequest $request = new ListSubscriptionsRequest(), ?array $options = null): QuerySubscriptionResponse
+    public function listSubscriptions(string $entry, ListSubscriptionsRequest $request = new ListSubscriptionsRequest(), ?array $options = null): ?QuerySubscriptionResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1402,6 +1465,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QuerySubscriptionResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -1429,11 +1495,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QuerySubscriptionResponse
+     * @return ?QuerySubscriptionResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listSubscriptionsOrg(int $orgId, ListSubscriptionsOrgRequest $request = new ListSubscriptionsOrgRequest(), ?array $options = null): QuerySubscriptionResponse
+    public function listSubscriptionsOrg(int $orgId, ListSubscriptionsOrgRequest $request = new ListSubscriptionsOrgRequest(), ?array $options = null): ?QuerySubscriptionResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1465,7 +1531,142 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QuerySubscriptionResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Returns a list of payout subscriptions for a single paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response. See [Manage payout subscriptions](/guides/pay-out-developer-payout-subscriptions-manage) for more information.
+     *
+     * @param string $entry
+     * @param ListPayoutSubscriptionsRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?QueryPayoutSubscriptionResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function listPayoutSubscriptions(string $entry, ListPayoutSubscriptionsRequest $request = new ListPayoutSubscriptionsRequest(), ?array $options = null): ?QueryPayoutSubscriptionResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
+        if ($request->fromRecord != null) {
+            $query['fromRecord'] = $request->fromRecord;
+        }
+        if ($request->limitRecord != null) {
+            $query['limitRecord'] = $request->limitRecord;
+        }
+        if ($request->parameters != null) {
+            $query['parameters'] = $request->parameters;
+        }
+        if ($request->sortBy != null) {
+            $query['sortBy'] = $request->sortBy;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "Query/payoutsubscriptions/{$entry}",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return QueryPayoutSubscriptionResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Returns a list of payout subscriptions for a single org. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response. See [Manage payout subscriptions](/guides/pay-out-developer-payout-subscriptions-manage) for more information.
+     *
+     * @param int $orgId The numeric identifier for organization, assigned by Payabli.
+     * @param ListPayoutSubscriptionsOrgRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?QueryPayoutSubscriptionResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function listPayoutSubscriptionsOrg(int $orgId, ListPayoutSubscriptionsOrgRequest $request = new ListPayoutSubscriptionsOrgRequest(), ?array $options = null): ?QueryPayoutSubscriptionResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
+        if ($request->fromRecord != null) {
+            $query['fromRecord'] = $request->fromRecord;
+        }
+        if ($request->limitRecord != null) {
+            $query['limitRecord'] = $request->limitRecord;
+        }
+        if ($request->parameters != null) {
+            $query['parameters'] = $request->parameters;
+        }
+        if ($request->sortBy != null) {
+            $query['sortBy'] = $request->sortBy;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "Query/payoutsubscriptions/org/{$orgId}",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return QueryPayoutSubscriptionResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -1483,9 +1684,8 @@ class QueryClient
      * Retrieve a list of transactions for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      * By default, this endpoint returns only transactions from the last 60 days. To query transactions outside of this period, include `transactionDate` filters.
      * For example, this request parameters filter for transactions between April 01, 2024 and April 09, 2024.
-     * ``` curl --request GET \
-     *   --url https://sandbox.payabli.com/api/Query/transactions/org/1?limitRecord=20&fromRecord=0&transactionDate(ge)=2024-04-01T00:00:00&transactionDate(le)=2024-04-09T23:59:59\
-     *   --header 'requestToken: <api-key>'
+     * ``` curl -X GET https://sandbox.payabli.com/api/Query/transactions/org/1?limitRecord=20&fromRecord=0&transactionDate(ge)=2024-04-01T00:00:00&transactionDate(le)=2024-04-09T23:59:59\
+     *   -H 'requestToken: <API TOKEN>'
      *
      *   ```
      *
@@ -1499,11 +1699,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryResponseTransactions
+     * @return ?QueryResponseTransactions
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listTransactions(string $entry, ListTransactionsRequest $request = new ListTransactionsRequest(), ?array $options = null): QueryResponseTransactions
+    public function listTransactions(string $entry, ListTransactionsRequest $request = new ListTransactionsRequest(), ?array $options = null): ?QueryResponseTransactions
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1535,6 +1735,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryResponseTransactions::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -1560,9 +1763,8 @@ class QueryClient
      * For example, this request parameters filter for transactions between April 01, 2024 and April 09, 2024.
      *
      * ```
-     * curl --request GET \
-     *   --url https://sandbox.payabli.com/api/Query/transactions/org/1?limitRecord=20&fromRecord=0&transactionDate(ge)=2024-04-01T00:00:00&transactionDate(le)=2024-04-09T23:59:59\
-     *   --header 'requestToken: <api-key>'
+     * curl -X GET "https://sandbox.payabli.com/api/Query/transactions/org/1?limitRecord=20&fromRecord=0&transactionDate(ge)=2024-04-01T00:00:00&transactionDate(le)=2024-04-09T23:59:59"\
+     *   -H 'requestToken: <API TOKEN>'
      *
      *   ```
      *
@@ -1576,11 +1778,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryResponseTransactions
+     * @return ?QueryResponseTransactions
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listTransactionsOrg(int $orgId, ListTransactionsOrgRequest $request = new ListTransactionsOrgRequest(), ?array $options = null): QueryResponseTransactions
+    public function listTransactionsOrg(int $orgId, ListTransactionsOrgRequest $request = new ListTransactionsOrgRequest(), ?array $options = null): ?QueryResponseTransactions
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1612,6 +1814,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryResponseTransactions::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -1640,11 +1845,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryTransferDetailResponse
+     * @return ?QueryTransferDetailResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listTransferDetails(string $entry, int $transferId, ListTransfersPaypointRequest $request = new ListTransfersPaypointRequest(), ?array $options = null): QueryTransferDetailResponse
+    public function listTransferDetails(string $entry, int $transferId, ListTransfersPaypointRequest $request = new ListTransfersPaypointRequest(), ?array $options = null): ?QueryTransferDetailResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1676,6 +1881,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryTransferDetailResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -1703,11 +1911,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return TransferQueryResponse
+     * @return ?TransferQueryResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listTransfers(string $entry, ListTransfersRequest $request = new ListTransfersRequest(), ?array $options = null): TransferQueryResponse
+    public function listTransfers(string $entry, ListTransfersRequest $request = new ListTransfersRequest(), ?array $options = null): ?TransferQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1739,6 +1947,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return TransferQueryResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -1766,11 +1977,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return TransferQueryResponse
+     * @return ?TransferQueryResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listTransfersOrg(int $orgId, ListTransfersRequestOrg $request = new ListTransfersRequestOrg(), ?array $options = null): TransferQueryResponse
+    public function listTransfersOrg(int $orgId, ListTransfersRequestOrg $request = new ListTransfersRequestOrg(), ?array $options = null): ?TransferQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1802,6 +2013,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return TransferQueryResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -1829,11 +2043,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return TransferOutQueryResponse
+     * @return ?TransferOutQueryResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listTransfersOutOrg(int $orgId, ListTransfersOutOrgRequest $request = new ListTransfersOutOrgRequest(), ?array $options = null): TransferOutQueryResponse
+    public function listTransfersOutOrg(int $orgId, ListTransfersOutOrgRequest $request = new ListTransfersOutOrgRequest(), ?array $options = null): ?TransferOutQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1862,6 +2076,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return TransferOutQueryResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -1889,11 +2106,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return TransferOutQueryResponse
+     * @return ?TransferOutQueryResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listTransfersOutPaypoint(string $entry, ListTransfersOutPaypointRequest $request = new ListTransfersOutPaypointRequest(), ?array $options = null): TransferOutQueryResponse
+    public function listTransfersOutPaypoint(string $entry, ListTransfersOutPaypointRequest $request = new ListTransfersOutPaypointRequest(), ?array $options = null): ?TransferOutQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1922,6 +2139,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return TransferOutQueryResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -1950,11 +2170,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return TransferOutDetailQueryResponse
+     * @return ?TransferOutDetailQueryResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listTransferDetailsOut(string $entry, int $transferId, ListTransferDetailsOutRequest $request = new ListTransferDetailsOutRequest(), ?array $options = null): TransferOutDetailQueryResponse
+    public function listTransferDetailsOut(string $entry, int $transferId, ListTransferDetailsOutRequest $request = new ListTransferDetailsOutRequest(), ?array $options = null): ?TransferOutDetailQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1983,6 +2203,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return TransferOutDetailQueryResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -2010,11 +2233,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryUserResponse
+     * @return ?QueryUserResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listUsersOrg(int $orgId, ListUsersOrgRequest $request = new ListUsersOrgRequest(), ?array $options = null): QueryUserResponse
+    public function listUsersOrg(int $orgId, ListUsersOrgRequest $request = new ListUsersOrgRequest(), ?array $options = null): ?QueryUserResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -2043,6 +2266,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryUserResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -2070,11 +2296,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryUserResponse
+     * @return ?QueryUserResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listUsersPaypoint(string $entry, ListUsersPaypointRequest $request = new ListUsersPaypointRequest(), ?array $options = null): QueryUserResponse
+    public function listUsersPaypoint(string $entry, ListUsersPaypointRequest $request = new ListUsersPaypointRequest(), ?array $options = null): ?QueryUserResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -2103,6 +2329,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryUserResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -2130,11 +2359,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryResponseVendors
+     * @return ?QueryResponseVendors
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listVendors(string $entry, ListVendorsRequest $request = new ListVendorsRequest(), ?array $options = null): QueryResponseVendors
+    public function listVendors(string $entry, ListVendorsRequest $request = new ListVendorsRequest(), ?array $options = null): ?QueryResponseVendors
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -2166,6 +2395,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryResponseVendors::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -2193,11 +2425,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryResponseVendors
+     * @return ?QueryResponseVendors
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listVendorsOrg(int $orgId, ListVendorsOrgRequest $request = new ListVendorsOrgRequest(), ?array $options = null): QueryResponseVendors
+    public function listVendorsOrg(int $orgId, ListVendorsOrgRequest $request = new ListVendorsOrgRequest(), ?array $options = null): ?QueryResponseVendors
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -2229,6 +2461,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryResponseVendors::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -2256,11 +2491,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return VCardQueryResponse
+     * @return ?VCardQueryResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listVcards(string $entry, ListVcardsRequest $request = new ListVcardsRequest(), ?array $options = null): VCardQueryResponse
+    public function listVcards(string $entry, ListVcardsRequest $request = new ListVcardsRequest(), ?array $options = null): ?VCardQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -2292,6 +2527,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return VCardQueryResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -2319,11 +2557,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return VCardQueryResponse
+     * @return ?VCardQueryResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listVcardsOrg(int $orgId, ListVcardsOrgRequest $request = new ListVcardsOrgRequest(), ?array $options = null): VCardQueryResponse
+    public function listVcardsOrg(int $orgId, ListVcardsOrgRequest $request = new ListVcardsOrgRequest(), ?array $options = null): ?VCardQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -2355,6 +2593,9 @@ class QueryClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return VCardQueryResponse::fromJson($json);
             }
         } catch (JsonException $e) {

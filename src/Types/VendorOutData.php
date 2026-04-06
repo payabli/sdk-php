@@ -16,13 +16,13 @@ class VendorOutData extends JsonSerializableType
     public ?array $additionalData;
 
     /**
-     * @var ?string $address1 Vendor's address
+     * @var ?string $address1 Vendor's street address. Allowed characters are letters, numbers, spaces, and `. ,
      */
     #[JsonProperty('Address1')]
     public ?string $address1;
 
     /**
-     * @var ?string $address2 Additional line for vendor's address.
+     * @var ?string $address2 Additional line for vendor's address, such as a suite or unit number.
      */
     #[JsonProperty('Address2')]
     public ?string $address2;
@@ -46,7 +46,7 @@ class VendorOutData extends JsonSerializableType
     public ?array $contacts;
 
     /**
-     * @var string $country Vendor's country.
+     * @var string $country Vendor's country. `US` or `CA`.
      */
     #[JsonProperty('Country')]
     public string $country;
@@ -58,7 +58,7 @@ class VendorOutData extends JsonSerializableType
     public ?string $customerVendorAccount;
 
     /**
-     * @var string $ein EIN/Tax ID for vendor. In reponses, this field is masked, and looks like: `XXXXX6789`.
+     * @var string $ein EIN/Tax ID for vendor. Must be nine digits formatted as `XX-XXXXXXX`. In responses, this field is masked and looks like: `XXXXX6789`.
      */
     #[JsonProperty('EIN')]
     public string $ein;
@@ -88,13 +88,13 @@ class VendorOutData extends JsonSerializableType
     public ?string $mcc;
 
     /**
-     * @var string $name1 Primary name for vendor. Required for new vendor.
+     * @var string $name1 Primary name for vendor. Required for new vendor. Allowed characters are letters, numbers, spaces, and `. , ' & ( )
      */
     #[JsonProperty('Name1')]
     public string $name1;
 
     /**
-     * @var ?string $name2 Secondary name for vendor.
+     * @var ?string $name2 Secondary name for vendor. If provided, allowed characters are the same as `Name1`.
      */
     #[JsonProperty('Name2')]
     public ?string $name2;
@@ -118,7 +118,7 @@ class VendorOutData extends JsonSerializableType
     public ?VendorPaymentMethod $paymentMethod;
 
     /**
-     * @var string $phone Vendor's phone number
+     * @var string $phone Vendor's phone number. Digits only when creating or updating a vendor.
      */
     #[JsonProperty('Phone')]
     public string $phone;
@@ -160,7 +160,7 @@ class VendorOutData extends JsonSerializableType
     public ?string $remitZip;
 
     /**
-     * @var string $state Vendor's state. Must be a 2 character state code.
+     * @var string $state Vendor's state or province. Must be a valid US state or Canadian province abbreviation, depending on the `Country` value.
      */
     #[JsonProperty('State')]
     public string $state;
@@ -184,7 +184,7 @@ class VendorOutData extends JsonSerializableType
     public ?int $vendorStatus;
 
     /**
-     * @var string $zip Vendor's zip code.
+     * @var string $zip Vendor's ZIP or postal code. For US addresses, five digits (`12345`) or ZIP+4 format (`12345-6789`).
      */
     #[JsonProperty('Zip')]
     public string $zip;

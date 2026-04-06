@@ -72,11 +72,11 @@ class PaymentLinkClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponsePaymentLinks
+     * @return ?PayabliApiResponsePaymentLinks
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function addPayLinkFromInvoice(int $idInvoice, PayLinkDataInvoice $request, ?array $options = null): PayabliApiResponsePaymentLinks
+    public function addPayLinkFromInvoice(int $idInvoice, PayLinkDataInvoice $request, ?array $options = null): ?PayabliApiResponsePaymentLinks
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -105,6 +105,9 @@ class PaymentLinkClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponsePaymentLinks::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -132,11 +135,11 @@ class PaymentLinkClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponsePaymentLinks
+     * @return ?PayabliApiResponsePaymentLinks
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function addPayLinkFromBill(int $billId, PayLinkDataBill $request, ?array $options = null): PayabliApiResponsePaymentLinks
+    public function addPayLinkFromBill(int $billId, PayLinkDataBill $request, ?array $options = null): ?PayabliApiResponsePaymentLinks
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -165,6 +168,9 @@ class PaymentLinkClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponsePaymentLinks::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -191,11 +197,11 @@ class PaymentLinkClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponsePaymentLinks
+     * @return ?PayabliApiResponsePaymentLinks
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function deletePayLinkFromId(string $payLinkId, ?array $options = null): PayabliApiResponsePaymentLinks
+    public function deletePayLinkFromId(string $payLinkId, ?array $options = null): ?PayabliApiResponsePaymentLinks
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -210,6 +216,9 @@ class PaymentLinkClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponsePaymentLinks::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -236,11 +245,11 @@ class PaymentLinkClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return GetPayLinkFromIdResponse
+     * @return ?GetPayLinkFromIdResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getPayLinkFromId(string $paylinkId, ?array $options = null): GetPayLinkFromIdResponse
+    public function getPayLinkFromId(string $paylinkId, ?array $options = null): ?GetPayLinkFromIdResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -255,6 +264,9 @@ class PaymentLinkClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return GetPayLinkFromIdResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -282,11 +294,11 @@ class PaymentLinkClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponsePaymentLinks
+     * @return ?PayabliApiResponsePaymentLinks
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function pushPayLinkFromId(string $payLinkId, PushPayLinkRequest $request, ?array $options = null): PayabliApiResponsePaymentLinks
+    public function pushPayLinkFromId(string $payLinkId, PushPayLinkRequest $request, ?array $options = null): ?PayabliApiResponsePaymentLinks
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -302,6 +314,9 @@ class PaymentLinkClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponsePaymentLinks::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -329,11 +344,11 @@ class PaymentLinkClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponsePaymentLinks
+     * @return ?PayabliApiResponsePaymentLinks
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function refreshPayLinkFromId(string $payLinkId, RefreshPayLinkFromIdRequest $request = new RefreshPayLinkFromIdRequest(), ?array $options = null): PayabliApiResponsePaymentLinks
+    public function refreshPayLinkFromId(string $payLinkId, RefreshPayLinkFromIdRequest $request = new RefreshPayLinkFromIdRequest(), ?array $options = null): ?PayabliApiResponsePaymentLinks
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -353,6 +368,9 @@ class PaymentLinkClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponsePaymentLinks::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -380,11 +398,11 @@ class PaymentLinkClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponsePaymentLinks
+     * @return ?PayabliApiResponsePaymentLinks
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function sendPayLinkFromId(string $payLinkId, SendPayLinkFromIdRequest $request = new SendPayLinkFromIdRequest(), ?array $options = null): PayabliApiResponsePaymentLinks
+    public function sendPayLinkFromId(string $payLinkId, SendPayLinkFromIdRequest $request = new SendPayLinkFromIdRequest(), ?array $options = null): ?PayabliApiResponsePaymentLinks
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -407,6 +425,9 @@ class PaymentLinkClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponsePaymentLinks::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -434,11 +455,11 @@ class PaymentLinkClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponsePaymentLinks
+     * @return ?PayabliApiResponsePaymentLinks
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function updatePayLinkFromId(string $payLinkId, PayLinkUpdateData $request = new PayLinkUpdateData(), ?array $options = null): PayabliApiResponsePaymentLinks
+    public function updatePayLinkFromId(string $payLinkId, PayLinkUpdateData $request = new PayLinkUpdateData(), ?array $options = null): ?PayabliApiResponsePaymentLinks
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -454,6 +475,9 @@ class PaymentLinkClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponsePaymentLinks::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -481,11 +505,11 @@ class PaymentLinkClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponsePaymentLinks
+     * @return ?PayabliApiResponsePaymentLinks
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function addPayLinkFromBillLotNumber(string $lotNumber, PayLinkDataOut $request, ?array $options = null): PayabliApiResponsePaymentLinks
+    public function addPayLinkFromBillLotNumber(string $lotNumber, PayLinkDataOut $request, ?array $options = null): ?PayabliApiResponsePaymentLinks
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -511,6 +535,9 @@ class PaymentLinkClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponsePaymentLinks::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -538,11 +565,11 @@ class PaymentLinkClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponsePaymentLinks
+     * @return ?PayabliApiResponsePaymentLinks
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function patchOutPaymentLink(string $paylinkId, PatchOutPaymentLinkRequest $request, ?array $options = null): PayabliApiResponsePaymentLinks
+    public function patchOutPaymentLink(string $paylinkId, PatchOutPaymentLinkRequest $request, ?array $options = null): ?PayabliApiResponsePaymentLinks
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -558,6 +585,9 @@ class PaymentLinkClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponsePaymentLinks::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -585,11 +615,11 @@ class PaymentLinkClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponsePaymentLinks
+     * @return ?PayabliApiResponsePaymentLinks
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function updatePayLinkOutFromId(string $paylinkId, PaymentPageRequestBodyOut $request, ?array $options = null): PayabliApiResponsePaymentLinks
+    public function updatePayLinkOutFromId(string $paylinkId, PaymentPageRequestBodyOut $request, ?array $options = null): ?PayabliApiResponsePaymentLinks
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -605,6 +635,9 @@ class PaymentLinkClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponsePaymentLinks::fromJson($json);
             }
         } catch (JsonException $e) {

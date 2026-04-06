@@ -93,11 +93,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportApplications(string $format, int $orgId, ExportApplicationsRequest $request = new ExportApplicationsRequest(), ?array $options = null): array
+    public function exportApplications(string $format, int $orgId, ExportApplicationsRequest $request = new ExportApplicationsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -126,6 +126,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -154,11 +157,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportBatchDetails(string $format, string $entry, ExportBatchDetailsRequest $request = new ExportBatchDetailsRequest(), ?array $options = null): array
+    public function exportBatchDetails(string $format, string $entry, ExportBatchDetailsRequest $request = new ExportBatchDetailsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -187,6 +190,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -215,11 +221,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportBatchDetailsOrg(string $format, int $orgId, ExportBatchDetailsOrgRequest $request = new ExportBatchDetailsOrgRequest(), ?array $options = null): array
+    public function exportBatchDetailsOrg(string $format, int $orgId, ExportBatchDetailsOrgRequest $request = new ExportBatchDetailsOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -248,6 +254,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -276,11 +285,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportBatches(string $format, string $entry, ExportBatchesRequest $request = new ExportBatchesRequest(), ?array $options = null): array
+    public function exportBatches(string $format, string $entry, ExportBatchesRequest $request = new ExportBatchesRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -309,6 +318,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -337,11 +349,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportBatchesOrg(string $format, int $orgId, ExportBatchesOrgRequest $request = new ExportBatchesOrgRequest(), ?array $options = null): array
+    public function exportBatchesOrg(string $format, int $orgId, ExportBatchesOrgRequest $request = new ExportBatchesOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -370,6 +382,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -398,11 +413,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportBatchesOut(string $format, string $entry, ExportBatchesOutRequest $request = new ExportBatchesOutRequest(), ?array $options = null): array
+    public function exportBatchesOut(string $format, string $entry, ExportBatchesOutRequest $request = new ExportBatchesOutRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -431,6 +446,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -459,11 +477,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportBatchesOutOrg(string $format, int $orgId, ExportBatchesOutOrgRequest $request = new ExportBatchesOutOrgRequest(), ?array $options = null): array
+    public function exportBatchesOutOrg(string $format, int $orgId, ExportBatchesOutOrgRequest $request = new ExportBatchesOutOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -492,6 +510,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -520,11 +541,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportBills(string $format, string $entry, ExportBillsRequest $request = new ExportBillsRequest(), ?array $options = null): array
+    public function exportBills(string $format, string $entry, ExportBillsRequest $request = new ExportBillsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -553,6 +574,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -581,11 +605,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportBillsOrg(string $format, int $orgId, ExportBillsOrgRequest $request = new ExportBillsOrgRequest(), ?array $options = null): array
+    public function exportBillsOrg(string $format, int $orgId, ExportBillsOrgRequest $request = new ExportBillsOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -614,6 +638,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -642,11 +669,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportChargebacks(string $format, string $entry, ExportChargebacksRequest $request = new ExportChargebacksRequest(), ?array $options = null): array
+    public function exportChargebacks(string $format, string $entry, ExportChargebacksRequest $request = new ExportChargebacksRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -675,6 +702,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -703,11 +733,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportChargebacksOrg(string $format, int $orgId, ExportChargebacksOrgRequest $request = new ExportChargebacksOrgRequest(), ?array $options = null): array
+    public function exportChargebacksOrg(string $format, int $orgId, ExportChargebacksOrgRequest $request = new ExportChargebacksOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -736,6 +766,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -764,11 +797,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportCustomers(string $format, string $entry, ExportCustomersRequest $request = new ExportCustomersRequest(), ?array $options = null): array
+    public function exportCustomers(string $format, string $entry, ExportCustomersRequest $request = new ExportCustomersRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -797,6 +830,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -825,11 +861,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportCustomersOrg(string $format, int $orgId, ExportCustomersOrgRequest $request = new ExportCustomersOrgRequest(), ?array $options = null): array
+    public function exportCustomersOrg(string $format, int $orgId, ExportCustomersOrgRequest $request = new ExportCustomersOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -858,6 +894,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -886,11 +925,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportInvoices(string $format, string $entry, ExportInvoicesRequest $request = new ExportInvoicesRequest(), ?array $options = null): array
+    public function exportInvoices(string $format, string $entry, ExportInvoicesRequest $request = new ExportInvoicesRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -919,6 +958,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -947,11 +989,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportInvoicesOrg(string $format, int $orgId, ExportInvoicesOrgRequest $request = new ExportInvoicesOrgRequest(), ?array $options = null): array
+    public function exportInvoicesOrg(string $format, int $orgId, ExportInvoicesOrgRequest $request = new ExportInvoicesOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -980,6 +1022,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -1008,11 +1053,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportOrganizations(string $format, int $orgId, ExportOrganizationsRequest $request = new ExportOrganizationsRequest(), ?array $options = null): array
+    public function exportOrganizations(string $format, int $orgId, ExportOrganizationsRequest $request = new ExportOrganizationsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1041,6 +1086,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -1069,11 +1117,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportPayout(string $format, string $entry, ExportPayoutRequest $request = new ExportPayoutRequest(), ?array $options = null): array
+    public function exportPayout(string $format, string $entry, ExportPayoutRequest $request = new ExportPayoutRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1102,6 +1150,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -1130,11 +1181,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportPayoutOrg(string $format, int $orgId, ExportPayoutOrgRequest $request = new ExportPayoutOrgRequest(), ?array $options = null): array
+    public function exportPayoutOrg(string $format, int $orgId, ExportPayoutOrgRequest $request = new ExportPayoutOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1163,6 +1214,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -1191,11 +1245,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportPaypoints(string $format, int $orgId, ExportPaypointsRequest $request = new ExportPaypointsRequest(), ?array $options = null): array
+    public function exportPaypoints(string $format, int $orgId, ExportPaypointsRequest $request = new ExportPaypointsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1224,6 +1278,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -1252,11 +1309,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportSettlements(string $format, string $entry, ExportSettlementsRequest $request = new ExportSettlementsRequest(), ?array $options = null): array
+    public function exportSettlements(string $format, string $entry, ExportSettlementsRequest $request = new ExportSettlementsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1285,6 +1342,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -1313,11 +1373,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportSettlementsOrg(string $format, int $orgId, ExportSettlementsOrgRequest $request = new ExportSettlementsOrgRequest(), ?array $options = null): array
+    public function exportSettlementsOrg(string $format, int $orgId, ExportSettlementsOrgRequest $request = new ExportSettlementsOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1346,6 +1406,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -1374,11 +1437,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportSubscriptions(string $format, string $entry, ExportSubscriptionsRequest $request = new ExportSubscriptionsRequest(), ?array $options = null): array
+    public function exportSubscriptions(string $format, string $entry, ExportSubscriptionsRequest $request = new ExportSubscriptionsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1407,6 +1470,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -1435,11 +1501,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportSubscriptionsOrg(string $format, int $orgId, ExportSubscriptionsOrgRequest $request = new ExportSubscriptionsOrgRequest(), ?array $options = null): array
+    public function exportSubscriptionsOrg(string $format, int $orgId, ExportSubscriptionsOrgRequest $request = new ExportSubscriptionsOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1468,6 +1534,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -1496,11 +1565,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportTransactions(string $format, string $entry, ExportTransactionsRequest $request = new ExportTransactionsRequest(), ?array $options = null): array
+    public function exportTransactions(string $format, string $entry, ExportTransactionsRequest $request = new ExportTransactionsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1529,6 +1598,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -1557,11 +1629,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportTransactionsOrg(string $format, int $orgId, ExportTransactionsOrgRequest $request = new ExportTransactionsOrgRequest(), ?array $options = null): array
+    public function exportTransactionsOrg(string $format, int $orgId, ExportTransactionsOrgRequest $request = new ExportTransactionsOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1590,6 +1662,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -1619,11 +1694,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportTransferDetails(string $format, string $entry, int $transferId, ExportTransferDetailsRequest $request = new ExportTransferDetailsRequest(), ?array $options = null): array
+    public function exportTransferDetails(string $format, string $entry, int $transferId, ExportTransferDetailsRequest $request = new ExportTransferDetailsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1655,6 +1730,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -1682,11 +1760,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportTransfers(string $entry, ExportTransfersRequest $request = new ExportTransfersRequest(), ?array $options = null): array
+    public function exportTransfers(string $entry, ExportTransfersRequest $request = new ExportTransfersRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1718,6 +1796,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -1746,11 +1827,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportVendors(string $format, string $entry, ExportVendorsRequest $request = new ExportVendorsRequest(), ?array $options = null): array
+    public function exportVendors(string $format, string $entry, ExportVendorsRequest $request = new ExportVendorsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1779,6 +1860,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -1807,11 +1891,11 @@ class ExportClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function exportVendorsOrg(string $format, int $orgId, ExportVendorsOrgRequest $request = new ExportVendorsOrgRequest(), ?array $options = null): array
+    public function exportVendorsOrg(string $format, int $orgId, ExportVendorsOrgRequest $request = new ExportVendorsOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -1840,6 +1924,9 @@ class ExportClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {

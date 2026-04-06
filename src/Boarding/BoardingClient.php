@@ -82,11 +82,11 @@ class BoardingClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponse00Responsedatanonobject
+     * @return ?PayabliApiResponse00Responsedatanonobject
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function addApplication(ApplicationDataPayIn|ApplicationDataManaged|ApplicationDataOdp|ApplicationData $request, ?array $options = null): PayabliApiResponse00Responsedatanonobject
+    public function addApplication(ApplicationDataPayIn|ApplicationDataManaged|ApplicationDataOdp|ApplicationData $request, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -102,6 +102,9 @@ class BoardingClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponse00Responsedatanonobject::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -128,11 +131,11 @@ class BoardingClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponse00Responsedatanonobject
+     * @return ?PayabliApiResponse00Responsedatanonobject
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function deleteApplication(int $appId, ?array $options = null): PayabliApiResponse00Responsedatanonobject
+    public function deleteApplication(int $appId, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -147,6 +150,9 @@ class BoardingClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponse00Responsedatanonobject::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -173,11 +179,11 @@ class BoardingClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ApplicationDetailsRecord
+     * @return ?ApplicationDetailsRecord
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getApplication(int $appId, ?array $options = null): ApplicationDetailsRecord
+    public function getApplication(int $appId, ?array $options = null): ?ApplicationDetailsRecord
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -192,6 +198,9 @@ class BoardingClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return ApplicationDetailsRecord::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -219,11 +228,11 @@ class BoardingClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ApplicationQueryRecord
+     * @return ?ApplicationQueryRecord
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getApplicationByAuth(string $xId, RequestAppByAuth $request = new RequestAppByAuth(), ?array $options = null): ApplicationQueryRecord
+    public function getApplicationByAuth(string $xId, RequestAppByAuth $request = new RequestAppByAuth(), ?array $options = null): ?ApplicationQueryRecord
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -239,6 +248,9 @@ class BoardingClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return ApplicationQueryRecord::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -265,11 +277,11 @@ class BoardingClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return BoardingLinkQueryRecord
+     * @return ?BoardingLinkQueryRecord
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getByIdLinkApplication(int $boardingLinkId, ?array $options = null): BoardingLinkQueryRecord
+    public function getByIdLinkApplication(int $boardingLinkId, ?array $options = null): ?BoardingLinkQueryRecord
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -284,6 +296,9 @@ class BoardingClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return BoardingLinkQueryRecord::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -310,11 +325,11 @@ class BoardingClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return BoardingLinkQueryRecord
+     * @return ?BoardingLinkQueryRecord
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getByTemplateIdLinkApplication(float $templateId, ?array $options = null): BoardingLinkQueryRecord
+    public function getByTemplateIdLinkApplication(float $templateId, ?array $options = null): ?BoardingLinkQueryRecord
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -329,6 +344,9 @@ class BoardingClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return BoardingLinkQueryRecord::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -357,11 +375,11 @@ class BoardingClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponse00
+     * @return ?PayabliApiResponse00
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getExternalApplication(int $appId, string $mail2, GetExternalApplicationRequest $request = new GetExternalApplicationRequest(), ?array $options = null): PayabliApiResponse00
+    public function getExternalApplication(int $appId, string $mail2, GetExternalApplicationRequest $request = new GetExternalApplicationRequest(), ?array $options = null): ?PayabliApiResponse00
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -381,6 +399,9 @@ class BoardingClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponse00::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -407,11 +428,11 @@ class BoardingClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return BoardingLinkQueryRecord
+     * @return ?BoardingLinkQueryRecord
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getLinkApplication(string $boardingLinkReference, ?array $options = null): BoardingLinkQueryRecord
+    public function getLinkApplication(string $boardingLinkReference, ?array $options = null): ?BoardingLinkQueryRecord
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -426,6 +447,9 @@ class BoardingClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return BoardingLinkQueryRecord::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -453,11 +477,11 @@ class BoardingClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryBoardingAppsListResponse
+     * @return ?QueryBoardingAppsListResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listApplications(int $orgId, ListApplicationsRequest $request = new ListApplicationsRequest(), ?array $options = null): QueryBoardingAppsListResponse
+    public function listApplications(int $orgId, ListApplicationsRequest $request = new ListApplicationsRequest(), ?array $options = null): ?QueryBoardingAppsListResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -489,6 +513,9 @@ class BoardingClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryBoardingAppsListResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -516,11 +543,11 @@ class BoardingClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryBoardingLinksResponse
+     * @return ?QueryBoardingLinksResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listBoardingLinks(int $orgId, ListBoardingLinksRequest $request = new ListBoardingLinksRequest(), ?array $options = null): QueryBoardingLinksResponse
+    public function listBoardingLinks(int $orgId, ListBoardingLinksRequest $request = new ListBoardingLinksRequest(), ?array $options = null): ?QueryBoardingLinksResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -549,6 +576,9 @@ class BoardingClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryBoardingLinksResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -576,11 +606,11 @@ class BoardingClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponse00Responsedatanonobject
+     * @return ?PayabliApiResponse00Responsedatanonobject
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function updateApplication(int $appId, ApplicationData $request, ?array $options = null): PayabliApiResponse00Responsedatanonobject
+    public function updateApplication(int $appId, ApplicationData $request, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -596,6 +626,9 @@ class BoardingClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponse00Responsedatanonobject::fromJson($json);
             }
         } catch (JsonException $e) {

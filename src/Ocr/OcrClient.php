@@ -63,11 +63,11 @@ class OcrClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseOcr
+     * @return ?PayabliApiResponseOcr
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function ocrDocumentForm(string $typeResult, FileContentImageOnly $request, ?array $options = null): PayabliApiResponseOcr
+    public function ocrDocumentForm(string $typeResult, FileContentImageOnly $request, ?array $options = null): ?PayabliApiResponseOcr
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -83,6 +83,9 @@ class OcrClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponseOcr::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -110,11 +113,11 @@ class OcrClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseOcr
+     * @return ?PayabliApiResponseOcr
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function ocrDocumentJson(string $typeResult, FileContentImageOnly $request, ?array $options = null): PayabliApiResponseOcr
+    public function ocrDocumentJson(string $typeResult, FileContentImageOnly $request, ?array $options = null): ?PayabliApiResponseOcr
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -130,6 +133,9 @@ class OcrClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponseOcr::fromJson($json);
             }
         } catch (JsonException $e) {

@@ -71,11 +71,11 @@ class PaypointClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return GetBasicEntryResponse
+     * @return ?GetBasicEntryResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getBasicEntry(string $entry, ?array $options = null): GetBasicEntryResponse
+    public function getBasicEntry(string $entry, ?array $options = null): ?GetBasicEntryResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -90,6 +90,9 @@ class PaypointClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return GetBasicEntryResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -116,11 +119,11 @@ class PaypointClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return GetBasicEntryByIdResponse
+     * @return ?GetBasicEntryByIdResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getBasicEntryById(string $idPaypoint, ?array $options = null): GetBasicEntryByIdResponse
+    public function getBasicEntryById(string $idPaypoint, ?array $options = null): ?GetBasicEntryByIdResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -135,6 +138,9 @@ class PaypointClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return GetBasicEntryByIdResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -162,11 +168,11 @@ class PaypointClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return GetEntryConfigResponse
+     * @return ?GetEntryConfigResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getEntryConfig(string $entry, GetEntryConfigRequest $request = new GetEntryConfigRequest(), ?array $options = null): GetEntryConfigResponse
+    public function getEntryConfig(string $entry, GetEntryConfigRequest $request = new GetEntryConfigRequest(), ?array $options = null): ?GetEntryConfigResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -186,6 +192,9 @@ class PaypointClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return GetEntryConfigResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -213,11 +222,11 @@ class PaypointClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliPages
+     * @return ?PayabliPages
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getPage(string $entry, string $subdomain, ?array $options = null): PayabliPages
+    public function getPage(string $entry, string $subdomain, ?array $options = null): ?PayabliPages
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -232,6 +241,9 @@ class PaypointClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliPages::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -259,11 +271,11 @@ class PaypointClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseGeneric2Part
+     * @return ?PayabliApiResponseGeneric2Part
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function removePage(string $entry, string $subdomain, ?array $options = null): PayabliApiResponseGeneric2Part
+    public function removePage(string $entry, string $subdomain, ?array $options = null): ?PayabliApiResponseGeneric2Part
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -278,6 +290,9 @@ class PaypointClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponseGeneric2Part::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -305,11 +320,11 @@ class PaypointClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponse00Responsedatanonobject
+     * @return ?PayabliApiResponse00Responsedatanonobject
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function saveLogo(string $entry, FileContent $request, ?array $options = null): PayabliApiResponse00Responsedatanonobject
+    public function saveLogo(string $entry, FileContent $request, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -325,6 +340,9 @@ class PaypointClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponse00Responsedatanonobject::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -351,11 +369,11 @@ class PaypointClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return SettingsQueryRecord
+     * @return ?SettingsQueryRecord
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function settingsPage(string $entry, ?array $options = null): SettingsQueryRecord
+    public function settingsPage(string $entry, ?array $options = null): ?SettingsQueryRecord
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -370,6 +388,9 @@ class PaypointClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return SettingsQueryRecord::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -396,11 +417,11 @@ class PaypointClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return MigratePaypointResponse
+     * @return ?MigratePaypointResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function migrate(PaypointMoveRequest $request, ?array $options = null): MigratePaypointResponse
+    public function migrate(PaypointMoveRequest $request, ?array $options = null): ?MigratePaypointResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -416,6 +437,9 @@ class PaypointClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return MigratePaypointResponse::fromJson($json);
             }
         } catch (JsonException $e) {

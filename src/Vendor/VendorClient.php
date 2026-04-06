@@ -64,11 +64,11 @@ class VendorClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseVendors
+     * @return ?PayabliApiResponseVendors
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function addVendor(string $entry, VendorData $request, ?array $options = null): PayabliApiResponseVendors
+    public function addVendor(string $entry, VendorData $request, ?array $options = null): ?PayabliApiResponseVendors
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -84,6 +84,9 @@ class VendorClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponseVendors::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -110,11 +113,11 @@ class VendorClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseVendors
+     * @return ?PayabliApiResponseVendors
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function deleteVendor(int $idVendor, ?array $options = null): PayabliApiResponseVendors
+    public function deleteVendor(int $idVendor, ?array $options = null): ?PayabliApiResponseVendors
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -129,6 +132,9 @@ class VendorClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponseVendors::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -156,11 +162,11 @@ class VendorClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseVendors
+     * @return ?PayabliApiResponseVendors
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function editVendor(int $idVendor, VendorData $request, ?array $options = null): PayabliApiResponseVendors
+    public function editVendor(int $idVendor, VendorData $request, ?array $options = null): ?PayabliApiResponseVendors
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -176,6 +182,9 @@ class VendorClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponseVendors::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -202,11 +211,11 @@ class VendorClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return VendorQueryRecord
+     * @return ?VendorQueryRecord
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getVendor(int $idVendor, ?array $options = null): VendorQueryRecord
+    public function getVendor(int $idVendor, ?array $options = null): ?VendorQueryRecord
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -221,6 +230,9 @@ class VendorClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return VendorQueryRecord::fromJson($json);
             }
         } catch (JsonException $e) {

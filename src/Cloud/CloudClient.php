@@ -66,11 +66,11 @@ class CloudClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return AddDeviceResponse
+     * @return ?AddDeviceResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function addDevice(string $entry, DeviceEntry $request = new DeviceEntry(), ?array $options = null): AddDeviceResponse
+    public function addDevice(string $entry, DeviceEntry $request = new DeviceEntry(), ?array $options = null): ?AddDeviceResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $headers = [];
@@ -91,6 +91,9 @@ class CloudClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return AddDeviceResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -118,11 +121,11 @@ class CloudClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return CloudQueryApiResponse
+     * @return ?CloudQueryApiResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function historyDevice(string $entry, string $deviceId, ?array $options = null): CloudQueryApiResponse
+    public function historyDevice(string $entry, string $deviceId, ?array $options = null): ?CloudQueryApiResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -137,6 +140,9 @@ class CloudClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return CloudQueryApiResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -164,11 +170,11 @@ class CloudClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return CloudQueryApiResponse
+     * @return ?CloudQueryApiResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listDevice(string $entry, ListDeviceRequest $request = new ListDeviceRequest(), ?array $options = null): CloudQueryApiResponse
+    public function listDevice(string $entry, ListDeviceRequest $request = new ListDeviceRequest(), ?array $options = null): ?CloudQueryApiResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -188,6 +194,9 @@ class CloudClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return CloudQueryApiResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -215,11 +224,11 @@ class CloudClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return RemoveDeviceResponse
+     * @return ?RemoveDeviceResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function removeDevice(string $entry, string $deviceId, ?array $options = null): RemoveDeviceResponse
+    public function removeDevice(string $entry, string $deviceId, ?array $options = null): ?RemoveDeviceResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -234,6 +243,9 @@ class CloudClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return RemoveDeviceResponse::fromJson($json);
             }
         } catch (JsonException $e) {

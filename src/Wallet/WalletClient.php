@@ -67,11 +67,11 @@ class WalletClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ConfigureApplePayOrganizationApiResponse
+     * @return ?ConfigureApplePayOrganizationApiResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function configureApplePayOrganization(ConfigureOrganizationRequestApplePay $request = new ConfigureOrganizationRequestApplePay(), ?array $options = null): ConfigureApplePayOrganizationApiResponse
+    public function configureApplePayOrganization(ConfigureOrganizationRequestApplePay $request = new ConfigureOrganizationRequestApplePay(), ?array $options = null): ?ConfigureApplePayOrganizationApiResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -87,6 +87,9 @@ class WalletClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return ConfigureApplePayOrganizationApiResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -113,11 +116,11 @@ class WalletClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ConfigureApplePaypointApiResponse
+     * @return ?ConfigureApplePaypointApiResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function configureApplePayPaypoint(ConfigurePaypointRequestApplePay $request = new ConfigurePaypointRequestApplePay(), ?array $options = null): ConfigureApplePaypointApiResponse
+    public function configureApplePayPaypoint(ConfigurePaypointRequestApplePay $request = new ConfigurePaypointRequestApplePay(), ?array $options = null): ?ConfigureApplePaypointApiResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -133,6 +136,9 @@ class WalletClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return ConfigureApplePaypointApiResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -159,11 +165,11 @@ class WalletClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ConfigureApplePayOrganizationApiResponse
+     * @return ?ConfigureApplePayOrganizationApiResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function configureGooglePayOrganization(ConfigureOrganizationRequestGooglePay $request = new ConfigureOrganizationRequestGooglePay(), ?array $options = null): ConfigureApplePayOrganizationApiResponse
+    public function configureGooglePayOrganization(ConfigureOrganizationRequestGooglePay $request = new ConfigureOrganizationRequestGooglePay(), ?array $options = null): ?ConfigureApplePayOrganizationApiResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -179,6 +185,9 @@ class WalletClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return ConfigureApplePayOrganizationApiResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -205,11 +214,11 @@ class WalletClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ConfigureGooglePaypointApiResponse
+     * @return ?ConfigureGooglePaypointApiResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function configureGooglePayPaypoint(ConfigurePaypointRequestGooglePay $request = new ConfigurePaypointRequestGooglePay(), ?array $options = null): ConfigureGooglePaypointApiResponse
+    public function configureGooglePayPaypoint(ConfigurePaypointRequestGooglePay $request = new ConfigurePaypointRequestGooglePay(), ?array $options = null): ?ConfigureGooglePaypointApiResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -225,6 +234,9 @@ class WalletClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return ConfigureGooglePaypointApiResponse::fromJson($json);
             }
         } catch (JsonException $e) {

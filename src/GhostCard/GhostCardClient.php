@@ -1,11 +1,11 @@
 <?php
 
-namespace Payabli\ChargeBacks;
+namespace Payabli\GhostCard;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
-use Payabli\ChargeBacks\Requests\ResponseChargeBack;
-use Payabli\ChargeBacks\Types\AddResponseResponse;
+use Payabli\GhostCard\Requests\CreateGhostCardRequestBody;
+use Payabli\GhostCard\Types\CreateGhostCardResponse;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -13,9 +13,10 @@ use Payabli\Environments;
 use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
-use Payabli\ChargeBacks\Types\ChargebackQueryRecords;
+use Payabli\GhostCard\Requests\UpdateCardRequestBody;
+use Payabli\Types\PayabliApiResponse;
 
-class ChargeBacksClient
+class GhostCardClient
 {
     /**
      * @var array{
@@ -52,10 +53,14 @@ class ChargeBacksClient
     }
 
     /**
-     * Add a response to a chargeback or ACH return.
+     * Creates a ghost card, a multi-use virtual debit card issued to a vendor for recurring or discretionary spend.
      *
-     * @param int $id ID of the chargeback or return record.
-     * @param ResponseChargeBack $request
+     * Unlike single-use virtual cards issued as part of a payout transaction, ghost cards aren't tied to a specific payout. They're issued directly to a vendor and can be reused up to a configurable number of times within the card's spending limits.
+     *
+     * Only one ghost card can exist per vendor per paypoint. To issue a new card to the same vendor, cancel the existing card first.
+     *
+     * @param string $entry
+     * @param CreateGhostCardRequestBody $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -64,24 +69,19 @@ class ChargeBacksClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?AddResponseResponse
+     * @return ?CreateGhostCardResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function addResponse(int $id, ResponseChargeBack $request = new ResponseChargeBack(), ?array $options = null): ?AddResponseResponse
+    public function createGhostCard(string $entry, CreateGhostCardRequestBody $request, ?array $options = null): ?CreateGhostCardResponse
     {
         $options = array_merge($this->options, $options ?? []);
-        $headers = [];
-        if ($request->idempotencyKey != null) {
-            $headers['idempotencyKey'] = $request->idempotencyKey;
-        }
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "ChargeBacks/response/{$id}",
+                    path: "MoneyOutCard/GhostCard/{$entry}",
                     method: HttpMethod::POST,
-                    headers: $headers,
                     body: $request,
                 ),
                 $options,
@@ -92,7 +92,7 @@ class ChargeBacksClient
                 if (empty($json)) {
                     return null;
                 }
-                return AddResponseResponse::fromJson($json);
+                return CreateGhostCardResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -107,9 +107,10 @@ class ChargeBacksClient
     }
 
     /**
-     * Retrieves a chargeback record and its details.
+     * Updates the status of a virtual card (including ghost cards) under a paypoint.
      *
-     * @param int $id ID of the chargeback or return record. This is returned as `chargebackId` in the [RecievedChargeback](/developers/developer-guides/webhook-payloads#receivedChargeback) and [ReceivedAchReturn](/developers/developer-guides/webhook-payloads#receivedachreturn) webhook notifications.
+     * @param string $entry
+     * @param UpdateCardRequestBody $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -118,19 +119,20 @@ class ChargeBacksClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?ChargebackQueryRecords
+     * @return ?PayabliApiResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getChargeback(int $id, ?array $options = null): ?ChargebackQueryRecords
+    public function updateCard(string $entry, UpdateCardRequestBody $request, ?array $options = null): ?PayabliApiResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "ChargeBacks/read/{$id}",
-                    method: HttpMethod::GET,
+                    path: "MoneyOutCard/card/{$entry}",
+                    method: HttpMethod::PATCH,
+                    body: $request,
                 ),
                 $options,
             );
@@ -140,53 +142,10 @@ class ChargeBacksClient
                 if (empty($json)) {
                     return null;
                 }
-                return ChargebackQueryRecords::fromJson($json);
+                return PayabliApiResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Retrieves a chargeback attachment file by its file name.
-     *
-     * @param int $id The ID of chargeback or return record.
-     * @param string $fileName The chargeback attachment's file name.
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return string
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function getChargebackAttachment(int $id, string $fileName, ?array $options = null): string
-    {
-        $options = array_merge($this->options, $options ?? []);
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "ChargeBacks/getChargebackAttachments/{$id}/{$fileName}",
-                    method: HttpMethod::GET,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                return $response->getBody()->getContents();
-            }
         } catch (ClientExceptionInterface $e) {
             throw new PayabliException(message: $e->getMessage(), previous: $e);
         }

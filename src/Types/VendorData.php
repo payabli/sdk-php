@@ -22,13 +22,13 @@ class VendorData extends JsonSerializableType
     public ?array $additionalData;
 
     /**
-     * @var ?string $address1 Vendor's address
+     * @var ?string $address1 Vendor's street address. If any address field is provided, this field is required along with `city`, `state`, and `zip`. Allowed characters are letters, numbers, spaces, and `. ,
      */
     #[JsonProperty('address1')]
     public ?string $address1;
 
     /**
-     * @var ?string $address2 Additional line for vendor's address.
+     * @var ?string $address2 Additional line for vendor's address, such as a suite or unit number. Always optional.
      */
     #[JsonProperty('address2')]
     public ?string $address2;
@@ -40,7 +40,7 @@ class VendorData extends JsonSerializableType
     public ?BillingData $billingData;
 
     /**
-     * @var ?string $city Vendor's city.
+     * @var ?string $city Vendor's city. Required if any address field is provided.
      */
     #[JsonProperty('city')]
     public ?string $city;
@@ -52,7 +52,7 @@ class VendorData extends JsonSerializableType
     public ?array $contacts;
 
     /**
-     * @var ?string $country Vendor's country.
+     * @var ?string $country Vendor's country. Must be `US` or `CA`. Defaults to `US` if not provided.
      */
     #[JsonProperty('country')]
     public ?string $country;
@@ -184,7 +184,7 @@ class VendorData extends JsonSerializableType
     public ?string $remitZip;
 
     /**
-     * @var ?string $state Vendor's state. Must be a 2 character state code.
+     * @var ?string $state Vendor's state or province. Required if any address field is provided. Must be a valid US state abbreviation (such as `CA`, `NY`) or Canadian province abbreviation (such as `ON`, `BC`), depending on the `country` value.
      */
     #[JsonProperty('state')]
     public ?string $state;
@@ -196,7 +196,7 @@ class VendorData extends JsonSerializableType
     public ?int $vendorStatus;
 
     /**
-     * @var ?string $zip Vendor's zip code.
+     * @var ?string $zip Vendor's ZIP or postal code. Required if any address field is provided. For US addresses, use five digits (`12345`) or ZIP+4 format (`12345-6789`).
      */
     #[JsonProperty('zip')]
     public ?string $zip;

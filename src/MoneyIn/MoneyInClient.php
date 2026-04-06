@@ -86,11 +86,11 @@ class MoneyInClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return AuthResponse
+     * @return ?AuthResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function authorize(RequestPaymentAuthorize $request, ?array $options = null): AuthResponse
+    public function authorize(RequestPaymentAuthorize $request, ?array $options = null): ?AuthResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -116,6 +116,9 @@ class MoneyInClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return AuthResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -148,11 +151,11 @@ class MoneyInClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return CaptureResponse
+     * @return ?CaptureResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function capture(string $transId, float $amount, ?array $options = null): CaptureResponse
+    public function capture(string $transId, float $amount, ?array $options = null): ?CaptureResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -167,6 +170,9 @@ class MoneyInClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return CaptureResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -200,11 +206,11 @@ class MoneyInClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return CaptureResponse
+     * @return ?CaptureResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function captureAuth(string $transId, CaptureRequest $request, ?array $options = null): CaptureResponse
+    public function captureAuth(string $transId, CaptureRequest $request, ?array $options = null): ?CaptureResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -220,6 +226,9 @@ class MoneyInClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return CaptureResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -248,11 +257,11 @@ class MoneyInClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponse0
+     * @return ?PayabliApiResponse0
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function credit(RequestCredit $request, ?array $options = null): PayabliApiResponse0
+    public function credit(RequestCredit $request, ?array $options = null): ?PayabliApiResponse0
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -278,6 +287,9 @@ class MoneyInClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponse0::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -304,11 +316,11 @@ class MoneyInClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return TransactionQueryRecordsCustomer
+     * @return ?TransactionQueryRecordsCustomer
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function details(string $transId, ?array $options = null): TransactionQueryRecordsCustomer
+    public function details(string $transId, ?array $options = null): ?TransactionQueryRecordsCustomer
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -323,6 +335,9 @@ class MoneyInClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return TransactionQueryRecordsCustomer::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -353,11 +368,11 @@ class MoneyInClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseGetPaid
+     * @return ?PayabliApiResponseGetPaid
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getpaid(RequestPayment $request, ?array $options = null): PayabliApiResponseGetPaid
+    public function getpaid(RequestPayment $request, ?array $options = null): ?PayabliApiResponseGetPaid
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -392,6 +407,9 @@ class MoneyInClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponseGetPaid::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -426,11 +444,11 @@ class MoneyInClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ReverseResponse
+     * @return ?ReverseResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function reverse(string $transId, float $amount, ?array $options = null): ReverseResponse
+    public function reverse(string $transId, float $amount, ?array $options = null): ?ReverseResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -445,6 +463,9 @@ class MoneyInClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return ReverseResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -483,11 +504,11 @@ class MoneyInClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return RefundResponse
+     * @return ?RefundResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function refund(string $transId, float $amount, ?array $options = null): RefundResponse
+    public function refund(string $transId, float $amount, ?array $options = null): ?RefundResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -502,6 +523,9 @@ class MoneyInClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return RefundResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -529,11 +553,11 @@ class MoneyInClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return RefundWithInstructionsResponse
+     * @return ?RefundWithInstructionsResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function refundWithInstructions(string $transId, RequestRefund $request = new RequestRefund(), ?array $options = null): RefundWithInstructionsResponse
+    public function refundWithInstructions(string $transId, RequestRefund $request = new RequestRefund(), ?array $options = null): ?RefundWithInstructionsResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $headers = [];
@@ -554,6 +578,9 @@ class MoneyInClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return RefundWithInstructionsResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -580,11 +607,11 @@ class MoneyInClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponse
+     * @return ?PayabliApiResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function reverseCredit(string $transId, ?array $options = null): PayabliApiResponse
+    public function reverseCredit(string $transId, ?array $options = null): ?PayabliApiResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -599,6 +626,9 @@ class MoneyInClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -626,11 +656,11 @@ class MoneyInClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ReceiptResponse
+     * @return ?ReceiptResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function sendReceipt2Trans(string $transId, SendReceipt2TransRequest $request = new SendReceipt2TransRequest(), ?array $options = null): ReceiptResponse
+    public function sendReceipt2Trans(string $transId, SendReceipt2TransRequest $request = new SendReceipt2TransRequest(), ?array $options = null): ?ReceiptResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -650,6 +680,9 @@ class MoneyInClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return ReceiptResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -676,11 +709,11 @@ class MoneyInClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ValidateResponse
+     * @return ?ValidateResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function validate(RequestPaymentValidate $request, ?array $options = null): ValidateResponse
+    public function validate(RequestPaymentValidate $request, ?array $options = null): ?ValidateResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $headers = [];
@@ -701,6 +734,9 @@ class MoneyInClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return ValidateResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -731,11 +767,11 @@ class MoneyInClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return VoidResponse
+     * @return ?VoidResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function void(string $transId, ?array $options = null): VoidResponse
+    public function void(string $transId, ?array $options = null): ?VoidResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -750,6 +786,9 @@ class MoneyInClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return VoidResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -776,11 +815,11 @@ class MoneyInClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return V2TransactionResponseWrapper
+     * @return ?V2TransactionResponseWrapper
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getpaidv2(RequestPaymentV2 $request, ?array $options = null): V2TransactionResponseWrapper
+    public function getpaidv2(RequestPaymentV2 $request, ?array $options = null): ?V2TransactionResponseWrapper
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -812,6 +851,9 @@ class MoneyInClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return V2TransactionResponseWrapper::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -840,11 +882,11 @@ class MoneyInClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return V2TransactionResponseWrapper
+     * @return ?V2TransactionResponseWrapper
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function authorizev2(RequestPaymentAuthorizeV2 $request, ?array $options = null): V2TransactionResponseWrapper
+    public function authorizev2(RequestPaymentAuthorizeV2 $request, ?array $options = null): ?V2TransactionResponseWrapper
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -870,6 +912,9 @@ class MoneyInClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return V2TransactionResponseWrapper::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -897,11 +942,11 @@ class MoneyInClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return V2TransactionResponseWrapper
+     * @return ?V2TransactionResponseWrapper
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function capturev2(string $transId, CaptureRequest $request, ?array $options = null): V2TransactionResponseWrapper
+    public function capturev2(string $transId, CaptureRequest $request, ?array $options = null): ?V2TransactionResponseWrapper
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -917,6 +962,9 @@ class MoneyInClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return V2TransactionResponseWrapper::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -945,11 +993,11 @@ class MoneyInClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return V2TransactionResponseWrapper
+     * @return ?V2TransactionResponseWrapper
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function refundv2(string $transId, ?array $options = null): V2TransactionResponseWrapper
+    public function refundv2(string $transId, ?array $options = null): ?V2TransactionResponseWrapper
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -964,6 +1012,9 @@ class MoneyInClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return V2TransactionResponseWrapper::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -993,11 +1044,11 @@ class MoneyInClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return V2TransactionResponseWrapper
+     * @return ?V2TransactionResponseWrapper
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function refundv2Amount(string $transId, float $amount, ?array $options = null): V2TransactionResponseWrapper
+    public function refundv2Amount(string $transId, float $amount, ?array $options = null): ?V2TransactionResponseWrapper
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -1012,6 +1063,9 @@ class MoneyInClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return V2TransactionResponseWrapper::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -1038,11 +1092,11 @@ class MoneyInClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return V2TransactionResponseWrapper
+     * @return ?V2TransactionResponseWrapper
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function voidv2(string $transId, ?array $options = null): V2TransactionResponseWrapper
+    public function voidv2(string $transId, ?array $options = null): ?V2TransactionResponseWrapper
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -1057,6 +1111,9 @@ class MoneyInClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return V2TransactionResponseWrapper::fromJson($json);
             }
         } catch (JsonException $e) {

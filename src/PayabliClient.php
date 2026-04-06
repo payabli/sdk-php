@@ -9,6 +9,7 @@ use Payabli\CheckCapture\CheckCaptureClient;
 use Payabli\Cloud\CloudClient;
 use Payabli\Customer\CustomerClient;
 use Payabli\Export\ExportClient;
+use Payabli\GhostCard\GhostCardClient;
 use Payabli\HostedPaymentPages\HostedPaymentPagesClient;
 use Payabli\Import\ImportClient;
 use Payabli\Invoice\InvoiceClient;
@@ -21,6 +22,7 @@ use Payabli\Ocr\OcrClient;
 use Payabli\Organization\OrganizationClient;
 use Payabli\PaymentLink\PaymentLinkClient;
 use Payabli\PaymentMethodDomain\PaymentMethodDomainClient;
+use Payabli\PayoutSubscription\PayoutSubscriptionClient;
 use Payabli\Paypoint\PaypointClient;
 use Payabli\Query\QueryClient;
 use Payabli\Statistic\StatisticClient;
@@ -69,6 +71,11 @@ class PayabliClient
      * @var ExportClient $export
      */
     public ExportClient $export;
+
+    /**
+     * @var GhostCardClient $ghostCard
+     */
+    public GhostCardClient $ghostCard;
 
     /**
      * @var HostedPaymentPagesClient $hostedPaymentPages
@@ -129,6 +136,11 @@ class PayabliClient
      * @var PaymentMethodDomainClient $paymentMethodDomain
      */
     public PaymentMethodDomainClient $paymentMethodDomain;
+
+    /**
+     * @var PayoutSubscriptionClient $payoutSubscription
+     */
+    public PayoutSubscriptionClient $payoutSubscription;
 
     /**
      * @var PaypointClient $paypoint
@@ -208,8 +220,8 @@ class PayabliClient
         $defaultHeaders = [
             'X-Fern-Language' => 'PHP',
             'X-Fern-SDK-Name' => 'Payabli',
-            'X-Fern-SDK-Version' => '0.0.418',
-            'User-Agent' => 'payabli/payabli/0.0.418',
+            'X-Fern-SDK-Version' => '0.0.419',
+            'User-Agent' => 'payabli/payabli/0.0.419',
         ];
         if ($apiKey != null) {
             $defaultHeaders['requestToken'] = $apiKey;
@@ -233,6 +245,7 @@ class PayabliClient
         $this->cloud = new CloudClient($this->client, $this->options);
         $this->customer = new CustomerClient($this->client, $this->options);
         $this->export = new ExportClient($this->client, $this->options);
+        $this->ghostCard = new GhostCardClient($this->client, $this->options);
         $this->hostedPaymentPages = new HostedPaymentPagesClient($this->client, $this->options);
         $this->import = new ImportClient($this->client, $this->options);
         $this->invoice = new InvoiceClient($this->client, $this->options);
@@ -245,6 +258,7 @@ class PayabliClient
         $this->organization = new OrganizationClient($this->client, $this->options);
         $this->paymentLink = new PaymentLinkClient($this->client, $this->options);
         $this->paymentMethodDomain = new PaymentMethodDomainClient($this->client, $this->options);
+        $this->payoutSubscription = new PayoutSubscriptionClient($this->client, $this->options);
         $this->paypoint = new PaypointClient($this->client, $this->options);
         $this->query = new QueryClient($this->client, $this->options);
         $this->statistic = new StatisticClient($this->client, $this->options);

@@ -77,11 +77,11 @@ class UserClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return AddUserResponse
+     * @return ?AddUserResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function addUser(UserData $request, ?array $options = null): AddUserResponse
+    public function addUser(UserData $request, ?array $options = null): ?AddUserResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -97,6 +97,9 @@ class UserClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return AddUserResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -122,11 +125,11 @@ class UserClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseUserMfa
+     * @return ?PayabliApiResponseUserMfa
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function authRefreshUser(?array $options = null): PayabliApiResponseUserMfa
+    public function authRefreshUser(?array $options = null): ?PayabliApiResponseUserMfa
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -141,6 +144,9 @@ class UserClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponseUserMfa::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -167,11 +173,11 @@ class UserClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return AuthResetUserResponse
+     * @return ?AuthResetUserResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function authResetUser(UserAuthResetRequest $request = new UserAuthResetRequest(), ?array $options = null): AuthResetUserResponse
+    public function authResetUser(UserAuthResetRequest $request = new UserAuthResetRequest(), ?array $options = null): ?AuthResetUserResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -187,6 +193,9 @@ class UserClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return AuthResetUserResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -214,11 +223,11 @@ class UserClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseMfaBasic
+     * @return ?PayabliApiResponseMfaBasic
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function authUser(string $provider, UserAuthRequest $request = new UserAuthRequest(), ?array $options = null): PayabliApiResponseMfaBasic
+    public function authUser(string $provider, UserAuthRequest $request = new UserAuthRequest(), ?array $options = null): ?PayabliApiResponseMfaBasic
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -234,6 +243,9 @@ class UserClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponseMfaBasic::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -260,11 +272,11 @@ class UserClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ChangePswUserResponse
+     * @return ?ChangePswUserResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function changePswUser(UserAuthPswResetRequest $request = new UserAuthPswResetRequest(), ?array $options = null): ChangePswUserResponse
+    public function changePswUser(UserAuthPswResetRequest $request = new UserAuthPswResetRequest(), ?array $options = null): ?ChangePswUserResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -280,6 +292,9 @@ class UserClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return ChangePswUserResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -306,11 +321,11 @@ class UserClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return DeleteUserResponse
+     * @return ?DeleteUserResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function deleteUser(int $userId, ?array $options = null): DeleteUserResponse
+    public function deleteUser(int $userId, ?array $options = null): ?DeleteUserResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -325,6 +340,9 @@ class UserClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return DeleteUserResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -352,11 +370,11 @@ class UserClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return EditMfaUserResponse
+     * @return ?EditMfaUserResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function editMfaUser(int $userId, MfaData $request, ?array $options = null): EditMfaUserResponse
+    public function editMfaUser(int $userId, MfaData $request, ?array $options = null): ?EditMfaUserResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -372,6 +390,9 @@ class UserClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return EditMfaUserResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -399,11 +420,11 @@ class UserClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponse
+     * @return ?PayabliApiResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function editUser(int $userId, UserData $request, ?array $options = null): PayabliApiResponse
+    public function editUser(int $userId, UserData $request, ?array $options = null): ?PayabliApiResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -419,6 +440,9 @@ class UserClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -446,11 +470,11 @@ class UserClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return UserQueryRecord
+     * @return ?UserQueryRecord
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getUser(int $userId, GetUserRequest $request = new GetUserRequest(), ?array $options = null): UserQueryRecord
+    public function getUser(int $userId, GetUserRequest $request = new GetUserRequest(), ?array $options = null): ?UserQueryRecord
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -473,6 +497,9 @@ class UserClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return UserQueryRecord::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -498,11 +525,11 @@ class UserClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return LogoutUserResponse
+     * @return ?LogoutUserResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function logoutUser(?array $options = null): LogoutUserResponse
+    public function logoutUser(?array $options = null): ?LogoutUserResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -517,6 +544,9 @@ class UserClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return LogoutUserResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -545,11 +575,11 @@ class UserClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseMfaBasic
+     * @return ?PayabliApiResponseMfaBasic
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function resendMfaCode(string $usrname, string $entry, int $entryType, ?array $options = null): PayabliApiResponseMfaBasic
+    public function resendMfaCode(string $usrname, string $entry, int $entryType, ?array $options = null): ?PayabliApiResponseMfaBasic
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -564,6 +594,9 @@ class UserClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponseMfaBasic::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -590,11 +623,11 @@ class UserClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseUserMfa
+     * @return ?PayabliApiResponseUserMfa
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function validateMfaUser(MfaValidationData $request = new MfaValidationData(), ?array $options = null): PayabliApiResponseUserMfa
+    public function validateMfaUser(MfaValidationData $request = new MfaValidationData(), ?array $options = null): ?PayabliApiResponseUserMfa
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -610,6 +643,9 @@ class UserClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponseUserMfa::fromJson($json);
             }
         } catch (JsonException $e) {

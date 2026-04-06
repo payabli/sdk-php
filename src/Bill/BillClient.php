@@ -77,11 +77,11 @@ class BillClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return BillResponse
+     * @return ?BillResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function addBill(string $entry, AddBillRequest $request, ?array $options = null): BillResponse
+    public function addBill(string $entry, AddBillRequest $request, ?array $options = null): ?BillResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $headers = [];
@@ -102,6 +102,9 @@ class BillClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return BillResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -147,11 +150,11 @@ class BillClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return BillResponse
+     * @return ?BillResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function deleteAttachedFromBill(int $idBill, string $filename, DeleteAttachedFromBillRequest $request = new DeleteAttachedFromBillRequest(), ?array $options = null): BillResponse
+    public function deleteAttachedFromBill(int $idBill, string $filename, DeleteAttachedFromBillRequest $request = new DeleteAttachedFromBillRequest(), ?array $options = null): ?BillResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -171,6 +174,9 @@ class BillClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return BillResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -197,11 +203,11 @@ class BillClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return BillResponse
+     * @return ?BillResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function deleteBill(int $idBill, ?array $options = null): BillResponse
+    public function deleteBill(int $idBill, ?array $options = null): ?BillResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -216,6 +222,9 @@ class BillClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return BillResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -243,11 +252,11 @@ class BillClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return EditBillResponse
+     * @return ?EditBillResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function editBill(int $idBill, BillOutData $request, ?array $options = null): EditBillResponse
+    public function editBill(int $idBill, BillOutData $request, ?array $options = null): ?EditBillResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -263,6 +272,9 @@ class BillClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return EditBillResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -303,11 +315,11 @@ class BillClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return FileContent
+     * @return ?FileContent
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getAttachedFromBill(int $idBill, string $filename, GetAttachedFromBillRequest $request = new GetAttachedFromBillRequest(), ?array $options = null): FileContent
+    public function getAttachedFromBill(int $idBill, string $filename, GetAttachedFromBillRequest $request = new GetAttachedFromBillRequest(), ?array $options = null): ?FileContent
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -327,6 +339,9 @@ class BillClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return FileContent::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -353,11 +368,11 @@ class BillClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return GetBillResponse
+     * @return ?GetBillResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getBill(int $idBill, ?array $options = null): GetBillResponse
+    public function getBill(int $idBill, ?array $options = null): ?GetBillResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -372,6 +387,9 @@ class BillClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return GetBillResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -399,11 +417,11 @@ class BillClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return BillQueryResponse
+     * @return ?BillQueryResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listBills(string $entry, ListBillsRequest $request = new ListBillsRequest(), ?array $options = null): BillQueryResponse
+    public function listBills(string $entry, ListBillsRequest $request = new ListBillsRequest(), ?array $options = null): ?BillQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -435,6 +453,9 @@ class BillClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return BillQueryResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -462,11 +483,11 @@ class BillClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return BillQueryResponse
+     * @return ?BillQueryResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listBillsOrg(int $orgId, ListBillsOrgRequest $request = new ListBillsOrgRequest(), ?array $options = null): BillQueryResponse
+    public function listBillsOrg(int $orgId, ListBillsOrgRequest $request = new ListBillsOrgRequest(), ?array $options = null): ?BillQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -498,6 +519,9 @@ class BillClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return BillQueryResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -525,11 +549,11 @@ class BillClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ModifyApprovalBillResponse
+     * @return ?ModifyApprovalBillResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function modifyApprovalBill(int $idBill, array $request, ?array $options = null): ModifyApprovalBillResponse
+    public function modifyApprovalBill(int $idBill, array $request, ?array $options = null): ?ModifyApprovalBillResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -545,6 +569,9 @@ class BillClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return ModifyApprovalBillResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -572,11 +599,11 @@ class BillClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return BillResponse
+     * @return ?BillResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function sendToApprovalBill(int $idBill, SendToApprovalBillRequest $request, ?array $options = null): BillResponse
+    public function sendToApprovalBill(int $idBill, SendToApprovalBillRequest $request, ?array $options = null): ?BillResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -602,6 +629,9 @@ class BillClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return BillResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -630,11 +660,11 @@ class BillClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return SetApprovedBillResponse
+     * @return ?SetApprovedBillResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function setApprovedBill(int $idBill, string $approved, SetApprovedBillRequest $request = new SetApprovedBillRequest(), ?array $options = null): SetApprovedBillResponse
+    public function setApprovedBill(int $idBill, string $approved, SetApprovedBillRequest $request = new SetApprovedBillRequest(), ?array $options = null): ?SetApprovedBillResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -654,6 +684,9 @@ class BillClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return SetApprovedBillResponse::fromJson($json);
             }
         } catch (JsonException $e) {

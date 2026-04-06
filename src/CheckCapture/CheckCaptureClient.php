@@ -62,11 +62,11 @@ class CheckCaptureClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return CheckCaptureResponse
+     * @return ?CheckCaptureResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function checkProcessing(CheckCaptureRequestBody $request, ?array $options = null): CheckCaptureResponse
+    public function checkProcessing(CheckCaptureRequestBody $request, ?array $options = null): ?CheckCaptureResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -82,6 +82,9 @@ class CheckCaptureClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return CheckCaptureResponse::fromJson($json);
             }
         } catch (JsonException $e) {

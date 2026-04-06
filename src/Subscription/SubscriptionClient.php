@@ -66,11 +66,11 @@ class SubscriptionClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return SubscriptionQueryRecords
+     * @return ?SubscriptionQueryRecords
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getSubscription(int $subId, ?array $options = null): SubscriptionQueryRecords
+    public function getSubscription(int $subId, ?array $options = null): ?SubscriptionQueryRecords
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -85,6 +85,9 @@ class SubscriptionClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return SubscriptionQueryRecords::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -111,11 +114,11 @@ class SubscriptionClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return AddSubscriptionResponse
+     * @return ?AddSubscriptionResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function newSubscription(RequestSchedule $request, ?array $options = null): AddSubscriptionResponse
+    public function newSubscription(RequestSchedule $request, ?array $options = null): ?AddSubscriptionResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -141,6 +144,9 @@ class SubscriptionClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return AddSubscriptionResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -167,11 +173,11 @@ class SubscriptionClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return RemoveSubscriptionResponse
+     * @return ?RemoveSubscriptionResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function removeSubscription(int $subId, ?array $options = null): RemoveSubscriptionResponse
+    public function removeSubscription(int $subId, ?array $options = null): ?RemoveSubscriptionResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -186,6 +192,9 @@ class SubscriptionClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return RemoveSubscriptionResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -213,11 +222,11 @@ class SubscriptionClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return UpdateSubscriptionResponse
+     * @return ?UpdateSubscriptionResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function updateSubscription(int $subId, RequestUpdateSchedule $request = new RequestUpdateSchedule(), ?array $options = null): UpdateSubscriptionResponse
+    public function updateSubscription(int $subId, RequestUpdateSchedule $request = new RequestUpdateSchedule(), ?array $options = null): ?UpdateSubscriptionResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -233,6 +242,9 @@ class SubscriptionClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return UpdateSubscriptionResponse::fromJson($json);
             }
         } catch (JsonException $e) {

@@ -69,11 +69,11 @@ class NotificationlogsClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<NotificationLog>
+     * @return ?array<NotificationLog>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function searchNotificationLogs(SearchNotificationLogsRequest $request, ?array $options = null): array
+    public function searchNotificationLogs(SearchNotificationLogsRequest $request, ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -97,6 +97,9 @@ class NotificationlogsClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, [NotificationLog::class]); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
@@ -124,11 +127,11 @@ class NotificationlogsClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return NotificationLogDetail
+     * @return ?NotificationLogDetail
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getNotificationLog(string $uuid, ?array $options = null): NotificationLogDetail
+    public function getNotificationLog(string $uuid, ?array $options = null): ?NotificationLogDetail
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -143,6 +146,9 @@ class NotificationlogsClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return NotificationLogDetail::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -171,11 +177,11 @@ class NotificationlogsClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return NotificationLogDetail
+     * @return ?NotificationLogDetail
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function retryNotificationLog(string $uuid, ?array $options = null): NotificationLogDetail
+    public function retryNotificationLog(string $uuid, ?array $options = null): ?NotificationLogDetail
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -190,6 +196,9 @@ class NotificationlogsClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return NotificationLogDetail::fromJson($json);
             }
         } catch (JsonException $e) {

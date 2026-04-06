@@ -74,11 +74,11 @@ class InvoiceClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return InvoiceResponseWithoutData
+     * @return ?InvoiceResponseWithoutData
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function addInvoice(string $entry, AddInvoiceRequest $request, ?array $options = null): InvoiceResponseWithoutData
+    public function addInvoice(string $entry, AddInvoiceRequest $request, ?array $options = null): ?InvoiceResponseWithoutData
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -104,6 +104,9 @@ class InvoiceClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return InvoiceResponseWithoutData::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -143,11 +146,11 @@ class InvoiceClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return InvoiceResponseWithoutData
+     * @return ?InvoiceResponseWithoutData
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function deleteAttachedFromInvoice(int $idInvoice, string $filename, ?array $options = null): InvoiceResponseWithoutData
+    public function deleteAttachedFromInvoice(int $idInvoice, string $filename, ?array $options = null): ?InvoiceResponseWithoutData
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -162,6 +165,9 @@ class InvoiceClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return InvoiceResponseWithoutData::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -188,11 +194,11 @@ class InvoiceClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return InvoiceResponseWithoutData
+     * @return ?InvoiceResponseWithoutData
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function deleteInvoice(int $idInvoice, ?array $options = null): InvoiceResponseWithoutData
+    public function deleteInvoice(int $idInvoice, ?array $options = null): ?InvoiceResponseWithoutData
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -207,6 +213,9 @@ class InvoiceClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return InvoiceResponseWithoutData::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -234,11 +243,11 @@ class InvoiceClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return InvoiceResponseWithoutData
+     * @return ?InvoiceResponseWithoutData
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function editInvoice(int $idInvoice, EditInvoiceRequest $request, ?array $options = null): InvoiceResponseWithoutData
+    public function editInvoice(int $idInvoice, EditInvoiceRequest $request, ?array $options = null): ?InvoiceResponseWithoutData
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -259,6 +268,9 @@ class InvoiceClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return InvoiceResponseWithoutData::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -301,11 +313,11 @@ class InvoiceClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return FileContent
+     * @return ?FileContent
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getAttachedFileFromInvoice(int $idInvoice, string $filename, GetAttachedFileFromInvoiceRequest $request = new GetAttachedFileFromInvoiceRequest(), ?array $options = null): FileContent
+    public function getAttachedFileFromInvoice(int $idInvoice, string $filename, GetAttachedFileFromInvoiceRequest $request = new GetAttachedFileFromInvoiceRequest(), ?array $options = null): ?FileContent
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -325,6 +337,9 @@ class InvoiceClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return FileContent::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -351,11 +366,11 @@ class InvoiceClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return GetInvoiceRecord
+     * @return ?GetInvoiceRecord
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getInvoice(int $idInvoice, ?array $options = null): GetInvoiceRecord
+    public function getInvoice(int $idInvoice, ?array $options = null): ?GetInvoiceRecord
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -370,6 +385,9 @@ class InvoiceClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return GetInvoiceRecord::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -396,11 +414,11 @@ class InvoiceClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return InvoiceNumberResponse
+     * @return ?InvoiceNumberResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getInvoiceNumber(string $entry, ?array $options = null): InvoiceNumberResponse
+    public function getInvoiceNumber(string $entry, ?array $options = null): ?InvoiceNumberResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -415,6 +433,9 @@ class InvoiceClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return InvoiceNumberResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -442,11 +463,11 @@ class InvoiceClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryInvoiceResponse
+     * @return ?QueryInvoiceResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listInvoices(string $entry, ListInvoicesRequest $request = new ListInvoicesRequest(), ?array $options = null): QueryInvoiceResponse
+    public function listInvoices(string $entry, ListInvoicesRequest $request = new ListInvoicesRequest(), ?array $options = null): ?QueryInvoiceResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -478,6 +499,9 @@ class InvoiceClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryInvoiceResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -505,11 +529,11 @@ class InvoiceClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return QueryInvoiceResponse
+     * @return ?QueryInvoiceResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listInvoicesOrg(int $orgId, ListInvoicesOrgRequest $request = new ListInvoicesOrgRequest(), ?array $options = null): QueryInvoiceResponse
+    public function listInvoicesOrg(int $orgId, ListInvoicesOrgRequest $request = new ListInvoicesOrgRequest(), ?array $options = null): ?QueryInvoiceResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -541,6 +565,9 @@ class InvoiceClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return QueryInvoiceResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -568,11 +595,11 @@ class InvoiceClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return SendInvoiceResponse
+     * @return ?SendInvoiceResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function sendInvoice(int $idInvoice, SendInvoiceRequest $request = new SendInvoiceRequest(), ?array $options = null): SendInvoiceResponse
+    public function sendInvoice(int $idInvoice, SendInvoiceRequest $request = new SendInvoiceRequest(), ?array $options = null): ?SendInvoiceResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -595,6 +622,9 @@ class InvoiceClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return SendInvoiceResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -621,11 +651,11 @@ class InvoiceClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getInvoicePdf(int $idInvoice, ?array $options = null): array
+    public function getInvoicePdf(int $idInvoice, ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -640,6 +670,9 @@ class InvoiceClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {

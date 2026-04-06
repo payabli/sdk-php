@@ -1,11 +1,11 @@
 <?php
 
-namespace Payabli\TokenStorage;
+namespace Payabli\PayoutSubscription;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
-use Payabli\TokenStorage\Requests\AddMethodRequest;
-use Payabli\TokenStorage\Types\AddMethodResponse;
+use Payabli\PayoutSubscription\Requests\RequestPayoutSchedule;
+use Payabli\PayoutSubscription\Types\AddPayoutSubscriptionResponse;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -13,12 +13,12 @@ use Payabli\Environments;
 use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
-use Payabli\TokenStorage\Requests\GetMethodRequest;
-use Payabli\TokenStorage\Types\GetMethodResponse;
-use Payabli\Types\PayabliApiResponsePaymethodDelete;
-use Payabli\TokenStorage\Requests\UpdateMethodRequest;
+use Payabli\PayoutSubscription\Types\GetPayoutSubscriptionResponse;
+use Payabli\PayoutSubscription\Types\UpdatePayoutSubscriptionBody;
+use Payabli\PayoutSubscription\Types\UpdatePayoutSubscriptionResponse;
+use Payabli\PayoutSubscription\Types\DeletePayoutSubscriptionResponse;
 
-class TokenStorageClient
+class PayoutSubscriptionClient
 {
     /**
      * @var array{
@@ -55,9 +55,9 @@ class TokenStorageClient
     }
 
     /**
-     * Saves a payment method for reuse. This call exchanges sensitive payment information for a token that can be used to process future transactions. The `ReferenceId` value in the response is the `storedMethodId` to use with transactions.
+     * Creates a payout subscription to automatically send payouts to a vendor on a recurring schedule. See [Manage payout subscriptions](/guides/pay-out-developer-payout-subscriptions-manage) for a step-by-step guide.
      *
-     * @param AddMethodRequest $request
+     * @param RequestPayoutSchedule $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -66,26 +66,13 @@ class TokenStorageClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?AddMethodResponse
+     * @return ?AddPayoutSubscriptionResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function addMethod(AddMethodRequest $request, ?array $options = null): ?AddMethodResponse
+    public function createPayoutSubscription(RequestPayoutSchedule $request, ?array $options = null): ?AddPayoutSubscriptionResponse
     {
         $options = array_merge($this->options, $options ?? []);
-        $query = [];
-        if ($request->achValidation != null) {
-            $query['achValidation'] = $request->achValidation;
-        }
-        if ($request->createAnonymous != null) {
-            $query['createAnonymous'] = $request->createAnonymous;
-        }
-        if ($request->forceCustomerCreation != null) {
-            $query['forceCustomerCreation'] = $request->forceCustomerCreation;
-        }
-        if ($request->temporary != null) {
-            $query['temporary'] = $request->temporary;
-        }
         $headers = [];
         if ($request->idempotencyKey != null) {
             $headers['idempotencyKey'] = $request->idempotencyKey;
@@ -94,10 +81,9 @@ class TokenStorageClient
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "TokenStorage/add",
+                    path: "PayoutSubscription",
                     method: HttpMethod::POST,
                     headers: $headers,
-                    query: $query,
                     body: $request->body,
                 ),
                 $options,
@@ -108,7 +94,7 @@ class TokenStorageClient
                 if (empty($json)) {
                     return null;
                 }
-                return AddMethodResponse::fromJson($json);
+                return AddPayoutSubscriptionResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -123,10 +109,9 @@ class TokenStorageClient
     }
 
     /**
-     * Retrieves details for a saved payment method.
+     * Retrieves a single payout subscription's details. See [Manage payout subscriptions](/guides/pay-out-developer-payout-subscriptions-manage) for more information.
      *
-     * @param string $methodId The saved payment method ID.
-     * @param GetMethodRequest $request
+     * @param int $id The payout subscription ID.
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -135,27 +120,19 @@ class TokenStorageClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?GetMethodResponse
+     * @return ?GetPayoutSubscriptionResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getMethod(string $methodId, GetMethodRequest $request = new GetMethodRequest(), ?array $options = null): ?GetMethodResponse
+    public function getPayoutSubscription(int $id, ?array $options = null): ?GetPayoutSubscriptionResponse
     {
         $options = array_merge($this->options, $options ?? []);
-        $query = [];
-        if ($request->cardExpirationFormat != null) {
-            $query['cardExpirationFormat'] = $request->cardExpirationFormat;
-        }
-        if ($request->includeTemporary != null) {
-            $query['includeTemporary'] = $request->includeTemporary;
-        }
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "TokenStorage/{$methodId}",
+                    path: "PayoutSubscription/{$id}",
                     method: HttpMethod::GET,
-                    query: $query,
                 ),
                 $options,
             );
@@ -165,7 +142,7 @@ class TokenStorageClient
                 if (empty($json)) {
                     return null;
                 }
-                return GetMethodResponse::fromJson($json);
+                return GetPayoutSubscriptionResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -180,9 +157,10 @@ class TokenStorageClient
     }
 
     /**
-     * Deletes a saved payment method.
+     * Updates a payout subscription's details. See [Manage payout subscriptions](/guides/pay-out-developer-payout-subscriptions-manage) for more information.
      *
-     * @param string $methodId The saved payment method ID.
+     * @param int $id The payout subscription ID.
+     * @param UpdatePayoutSubscriptionBody $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -191,18 +169,67 @@ class TokenStorageClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?PayabliApiResponsePaymethodDelete
+     * @return ?UpdatePayoutSubscriptionResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function removeMethod(string $methodId, ?array $options = null): ?PayabliApiResponsePaymethodDelete
+    public function updatePayoutSubscription(int $id, UpdatePayoutSubscriptionBody $request, ?array $options = null): ?UpdatePayoutSubscriptionResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "TokenStorage/{$methodId}",
+                    path: "PayoutSubscription/{$id}",
+                    method: HttpMethod::PUT,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return UpdatePayoutSubscriptionResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Deletes a payout subscription and prevents future payouts. See [Manage payout subscriptions](/guides/pay-out-developer-payout-subscriptions-manage) for more information.
+     *
+     * @param int $id The payout subscription ID.
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?DeletePayoutSubscriptionResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function deletePayoutSubscription(int $id, ?array $options = null): ?DeletePayoutSubscriptionResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "PayoutSubscription/{$id}",
                     method: HttpMethod::DELETE,
                 ),
                 $options,
@@ -213,62 +240,7 @@ class TokenStorageClient
                 if (empty($json)) {
                     return null;
                 }
-                return PayabliApiResponsePaymethodDelete::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Updates a saved payment method.
-     *
-     * @param string $methodId The saved payment method ID.
-     * @param UpdateMethodRequest $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?PayabliApiResponsePaymethodDelete
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function updateMethod(string $methodId, UpdateMethodRequest $request, ?array $options = null): ?PayabliApiResponsePaymethodDelete
-    {
-        $options = array_merge($this->options, $options ?? []);
-        $query = [];
-        if ($request->achValidation != null) {
-            $query['achValidation'] = $request->achValidation;
-        }
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "TokenStorage/{$methodId}",
-                    method: HttpMethod::PUT,
-                    query: $query,
-                    body: $request->body,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return PayabliApiResponsePaymethodDelete::fromJson($json);
+                return DeletePayoutSubscriptionResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

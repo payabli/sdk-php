@@ -10,7 +10,10 @@ The Payabli PHP library provides convenient access to the Payabli APIs from PHP.
 - [Documentation](#documentation)
 - [Requirements](#requirements)
 - [Installation](#installation)
+- [Changelog](#changelog)
+- [Getting Started](#getting-started)
 - [Usage](#usage)
+- [Environments](#environments)
 - [Exception Handling](#exception-handling)
 - [Advanced](#advanced)
   - [Custom Client](#custom-client)
@@ -31,6 +34,16 @@ This SDK requires PHP ^8.1.
 ```sh
 composer require payabli/payabli
 ```
+
+## Changelog
+
+The changelog for the official Payabli PHP SDK is available on the Payabli Docs site. See [PHP SDK Changelog](https://docs.payabli.com/changelog/php-sdk) for more information.
+
+
+## Getting Started
+
+Visit the Payabli Docs site to get started with the official Payabli PHP SDK. See [Use the PHP SDK](https://docs.payabli.com/developers/platform-sdk-php-guide) for more information.
+
 
 ## Usage
 
@@ -76,6 +89,30 @@ $client->moneyIn->getpaid(
     ]),
 );
 
+```
+
+## Environments
+
+This SDK allows you to configure different environments for API requests.
+
+```php
+The SDK defaults to the `Sandbox` environment. To use a different environment, pass it to the client constructor:
+
+```php
+use Payabli\PayabliClient;
+use Payabli\Environments;
+
+$client = new PayabliClient(
+    token: '<YOUR_TOKEN>',
+    options: [
+        'baseUrl' => Environments::Staging->value
+    ]
+);
+```
+
+Available environments:
+- `Environments::Sandbox`
+- `Environments::Production`
 ```
 
 ## Exception Handling

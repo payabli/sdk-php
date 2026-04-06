@@ -70,11 +70,11 @@ class NotificationClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseNotifications
+     * @return ?PayabliApiResponseNotifications
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function addNotification(NotificationStandardRequest|NotificationReportRequest $request, ?array $options = null): PayabliApiResponseNotifications
+    public function addNotification(NotificationStandardRequest|NotificationReportRequest $request, ?array $options = null): ?PayabliApiResponseNotifications
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -90,6 +90,9 @@ class NotificationClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponseNotifications::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -116,11 +119,11 @@ class NotificationClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseNotifications
+     * @return ?PayabliApiResponseNotifications
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function deleteNotification(string $nId, ?array $options = null): PayabliApiResponseNotifications
+    public function deleteNotification(string $nId, ?array $options = null): ?PayabliApiResponseNotifications
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -135,6 +138,9 @@ class NotificationClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponseNotifications::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -161,11 +167,11 @@ class NotificationClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return NotificationQueryRecord
+     * @return ?NotificationQueryRecord
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getNotification(string $nId, ?array $options = null): NotificationQueryRecord
+    public function getNotification(string $nId, ?array $options = null): ?NotificationQueryRecord
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -180,6 +186,9 @@ class NotificationClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return NotificationQueryRecord::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -210,11 +219,11 @@ class NotificationClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return PayabliApiResponseNotifications
+     * @return ?PayabliApiResponseNotifications
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function updateNotification(string $nId, NotificationStandardRequest|NotificationReportRequest $request, ?array $options = null): PayabliApiResponseNotifications
+    public function updateNotification(string $nId, NotificationStandardRequest|NotificationReportRequest $request, ?array $options = null): ?PayabliApiResponseNotifications
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -230,6 +239,9 @@ class NotificationClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return PayabliApiResponseNotifications::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -256,11 +268,11 @@ class NotificationClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return array<string, mixed>
+     * @return ?array<string, mixed>
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getReportFile(int $id, ?array $options = null): array
+    public function getReportFile(int $id, ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -275,6 +287,9 @@ class NotificationClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return JsonDecoder::decodeArray($json, ['string' => 'mixed']); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {

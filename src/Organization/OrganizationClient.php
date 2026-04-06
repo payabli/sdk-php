@@ -67,11 +67,11 @@ class OrganizationClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return AddOrganizationResponse
+     * @return ?AddOrganizationResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function addOrganization(AddOrganizationRequest $request, ?array $options = null): AddOrganizationResponse
+    public function addOrganization(AddOrganizationRequest $request, ?array $options = null): ?AddOrganizationResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $headers = [];
@@ -92,6 +92,9 @@ class OrganizationClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return AddOrganizationResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -118,11 +121,11 @@ class OrganizationClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return DeleteOrganizationResponse
+     * @return ?DeleteOrganizationResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function deleteOrganization(int $orgId, ?array $options = null): DeleteOrganizationResponse
+    public function deleteOrganization(int $orgId, ?array $options = null): ?DeleteOrganizationResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -137,6 +140,9 @@ class OrganizationClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return DeleteOrganizationResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -164,11 +170,11 @@ class OrganizationClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return EditOrganizationResponse
+     * @return ?EditOrganizationResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function editOrganization(int $orgId, OrganizationData $request = new OrganizationData(), ?array $options = null): EditOrganizationResponse
+    public function editOrganization(int $orgId, OrganizationData $request = new OrganizationData(), ?array $options = null): ?EditOrganizationResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -184,6 +190,9 @@ class OrganizationClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return EditOrganizationResponse::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -210,11 +219,11 @@ class OrganizationClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return OrganizationQueryRecord
+     * @return ?OrganizationQueryRecord
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getBasicOrganization(string $entry, ?array $options = null): OrganizationQueryRecord
+    public function getBasicOrganization(string $entry, ?array $options = null): ?OrganizationQueryRecord
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -229,6 +238,9 @@ class OrganizationClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return OrganizationQueryRecord::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -255,11 +267,11 @@ class OrganizationClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return OrganizationQueryRecord
+     * @return ?OrganizationQueryRecord
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getBasicOrganizationById(int $orgId, ?array $options = null): OrganizationQueryRecord
+    public function getBasicOrganizationById(int $orgId, ?array $options = null): ?OrganizationQueryRecord
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -274,6 +286,9 @@ class OrganizationClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return OrganizationQueryRecord::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -300,11 +315,11 @@ class OrganizationClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return OrganizationQueryRecord
+     * @return ?OrganizationQueryRecord
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getOrganization(int $orgId, ?array $options = null): OrganizationQueryRecord
+    public function getOrganization(int $orgId, ?array $options = null): ?OrganizationQueryRecord
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -319,6 +334,9 @@ class OrganizationClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return OrganizationQueryRecord::fromJson($json);
             }
         } catch (JsonException $e) {
@@ -345,11 +363,11 @@ class OrganizationClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return SettingsQueryRecord
+     * @return ?SettingsQueryRecord
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getSettingsOrganization(int $orgId, ?array $options = null): SettingsQueryRecord
+    public function getSettingsOrganization(int $orgId, ?array $options = null): ?SettingsQueryRecord
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -364,6 +382,9 @@ class OrganizationClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
                 return SettingsQueryRecord::fromJson($json);
             }
         } catch (JsonException $e) {
