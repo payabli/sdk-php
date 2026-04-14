@@ -11380,7 +11380,7 @@ $client->moneyIn->voidv2(
 <dl>
 <dd>
 
-Authorizes transaction for payout. Authorized transactions aren't flagged for settlement until captured. Use `referenceId` returned in the response to capture the transaction. 
+Authorizes transaction for payout.  If you don't pass the `autoCapture` field with a value of `true`, authorized transactions aren't flagged for settlement until captured.  Use `referenceId` returned in the response to capture the transaction. 
 </dd>
 </dl>
 </dd>
@@ -11399,6 +11399,7 @@ $client->moneyOut->authorizeOut(
     new MoneyOutTypesRequestOutAuthorize([
         'body' => new AuthorizePayoutBody([
             'entryPoint' => '48acde49',
+            'autoCapture' => true,
             'invoiceData' => [
                 new RequestOutAuthorizeInvoiceData([
                     'billId' => 54323,
@@ -11730,7 +11731,7 @@ $client->moneyOut->captureAllOut(
 <dl>
 <dd>
 
-Captures a single authorized payout transaction by ID.
+Captures a single authorized payout transaction by ID. If the transaction was authorized with `autoCapture` set to `true`,  you don't need to call this endpoint to capture the transaction for processing.
 </dd>
 </dl>
 </dd>
@@ -24418,7 +24419,7 @@ $client->vendor->editVendor(
 <dl>
 <dd>
 
-Retrieves a vendor's details.
+Retrieves a vendor's details, including enrichment status and payment acceptance info when available.
 </dd>
 </dl>
 </dd>
@@ -24451,6 +24452,83 @@ $client->vendor->getVendor(
 <dd>
 
 **$idVendor:** `int` — Vendor ID.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;vendor-&gt;enrichVendor($entry, $request) -> ?VendorEnrichResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Triggers AI-powered vendor enrichment for an existing vendor. Runs one or more enrichment stages (invoice scan, web search) based on the `scope` parameter. Can automatically apply extracted payment acceptance info and vendor contact information to the vendor record, or return raw results for manual review. Contact Payabli to enable this feature.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->vendor->enrichVendor(
+    '8cfec329267',
+    new VendorEnrichRequest([
+        'vendorId' => 3890,
+        'scope' => [
+            'invoice_scan',
+        ],
+        'applyEnrichmentData' => false,
+        'fallbackMethod' => 'check',
+        'invoiceFile' => new FileContent([
+            'ftype' => FileContentFtype::Pdf->value,
+            'filename' => 'invoice-2026-001.pdf',
+            'fContent' => '<base64-encoded-pdf>',
+        ]),
+    ]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$entry:** `string` — Entrypoint identifier.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$request:** `VendorEnrichRequest` 
     
 </dd>
 </dl>

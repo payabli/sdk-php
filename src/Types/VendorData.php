@@ -202,6 +202,26 @@ class VendorData extends JsonSerializableType
     public ?string $zip;
 
     /**
+     * @var ?string $defaultMethodId Identifier for the vendor's default stored payment method.
+     */
+    #[JsonProperty('defaultMethodId')]
+    public ?string $defaultMethodId;
+
+    /**
+     * PDF invoice attachment for AI-powered vendor enrichment.
+     * When this feature is enabled and you include an attachment, the invoice is scanned and extracted vendor information is merged into the request.
+     * Fields in the request body take precedence over extracted data.
+     * If the scan fails, vendor creation proceeds with the original request data.
+     *
+     * See the [vendor enrichment guide](/guides/pay-out-vendor-enrichment-overview) for details.
+     * Contact Payabli to enable this feature.
+     *
+     * @var ?FileContent $attachment
+     */
+    #[JsonProperty('attachment')]
+    public ?FileContent $attachment;
+
+    /**
      * @param array{
      *   vendorNumber?: ?string,
      *   additionalData?: ?array<string, ?array<string, mixed>>,
@@ -235,6 +255,8 @@ class VendorData extends JsonSerializableType
      *   state?: ?string,
      *   vendorStatus?: ?int,
      *   zip?: ?string,
+     *   defaultMethodId?: ?string,
+     *   attachment?: ?FileContent,
      * } $values
      */
     public function __construct(
@@ -272,6 +294,8 @@ class VendorData extends JsonSerializableType
         $this->state = $values['state'] ?? null;
         $this->vendorStatus = $values['vendorStatus'] ?? null;
         $this->zip = $values['zip'] ?? null;
+        $this->defaultMethodId = $values['defaultMethodId'] ?? null;
+        $this->attachment = $values['attachment'] ?? null;
     }
 
     /**

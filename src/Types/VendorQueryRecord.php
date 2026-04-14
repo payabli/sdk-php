@@ -276,6 +276,48 @@ class VendorQueryRecord extends JsonSerializableType
     public ?string $zip;
 
     /**
+     * @var ?string $paymentPortalUrl URL for the vendor's online payment portal, if known. Populated by the vendor enrichment pipeline.
+     */
+    #[JsonProperty('PaymentPortalUrl')]
+    public ?string $paymentPortalUrl;
+
+    /**
+     * @var ?string $cardAccepted Whether the vendor accepts card payments. Values are `yes`, `no`, or `unable to determine`. Populated by the vendor enrichment pipeline.
+     */
+    #[JsonProperty('CardAccepted')]
+    public ?string $cardAccepted;
+
+    /**
+     * @var ?string $achAccepted Whether the vendor accepts ACH payments. Values are `yes`, `no`, or `unable to determine`. Populated by the vendor enrichment pipeline.
+     */
+    #[JsonProperty('AchAccepted')]
+    public ?string $achAccepted;
+
+    /**
+     * @var ?string $enrichmentStatus Current enrichment state of the vendor. Values are `not_enriched`, `partially_enriched`, `fully_enriched`, or `fallback_applied`.
+     */
+    #[JsonProperty('EnrichmentStatus')]
+    public ?string $enrichmentStatus;
+
+    /**
+     * @var ?string $enrichedBy Which enrichment method resolved the vendor's payment acceptance info. Values are `invoice_scan`, `web_search`, `vendor_network`, or `manual`.
+     */
+    #[JsonProperty('EnrichedBy')]
+    public ?string $enrichedBy;
+
+    /**
+     * @var ?DateTime $enrichedAt When the vendor was last enriched (UTC).
+     */
+    #[JsonProperty('EnrichedAt'), Date(Date::TYPE_DATETIME)]
+    public ?DateTime $enrichedAt;
+
+    /**
+     * @var ?string $enrichmentId Identifier for the enrichment request that last updated this vendor.
+     */
+    #[JsonProperty('EnrichmentId')]
+    public ?string $enrichmentId;
+
+    /**
      * @param array{
      *   additionalData?: ?array<string, ?array<string, mixed>>,
      *   address1?: ?string,
@@ -321,6 +363,13 @@ class VendorQueryRecord extends JsonSerializableType
      *   vendorNumber?: ?string,
      *   vendorStatus?: ?int,
      *   zip?: ?string,
+     *   paymentPortalUrl?: ?string,
+     *   cardAccepted?: ?string,
+     *   achAccepted?: ?string,
+     *   enrichmentStatus?: ?string,
+     *   enrichedBy?: ?string,
+     *   enrichedAt?: ?DateTime,
+     *   enrichmentId?: ?string,
      * } $values
      */
     public function __construct(
@@ -370,6 +419,13 @@ class VendorQueryRecord extends JsonSerializableType
         $this->vendorNumber = $values['vendorNumber'] ?? null;
         $this->vendorStatus = $values['vendorStatus'] ?? null;
         $this->zip = $values['zip'] ?? null;
+        $this->paymentPortalUrl = $values['paymentPortalUrl'] ?? null;
+        $this->cardAccepted = $values['cardAccepted'] ?? null;
+        $this->achAccepted = $values['achAccepted'] ?? null;
+        $this->enrichmentStatus = $values['enrichmentStatus'] ?? null;
+        $this->enrichedBy = $values['enrichedBy'] ?? null;
+        $this->enrichedAt = $values['enrichedAt'] ?? null;
+        $this->enrichmentId = $values['enrichmentId'] ?? null;
     }
 
     /**

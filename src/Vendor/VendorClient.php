@@ -14,6 +14,8 @@ use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Payabli\Types\VendorQueryRecord;
+use Payabli\Vendor\Types\VendorEnrichRequest;
+use Payabli\Vendor\Types\VendorEnrichResponse;
 
 class VendorClient
 {
@@ -200,7 +202,7 @@ class VendorClient
     }
 
     /**
-     * Retrieves a vendor's details.
+     * Retrieves a vendor's details, including enrichment status and payment acceptance info when available.
      *
      * @param int $idVendor Vendor ID.
      * @param ?array{
@@ -234,6 +236,56 @@ class VendorClient
                     return null;
                 }
                 return VendorQueryRecord::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Triggers AI-powered vendor enrichment for an existing vendor. Runs one or more enrichment stages (invoice scan, web search) based on the `scope` parameter. Can automatically apply extracted payment acceptance info and vendor contact information to the vendor record, or return raw results for manual review. Contact Payabli to enable this feature.
+     *
+     * @param string $entry Entrypoint identifier.
+     * @param VendorEnrichRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?VendorEnrichResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function enrichVendor(string $entry, VendorEnrichRequest $request, ?array $options = null): ?VendorEnrichResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "Vendor/enrich/{$entry}",
+                    method: HttpMethod::POST,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return VendorEnrichResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

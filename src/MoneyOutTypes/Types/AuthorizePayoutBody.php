@@ -75,6 +75,12 @@ class AuthorizePayoutBody extends JsonSerializableType
     public ?int $subscriptionId;
 
     /**
+     * @var ?bool $autoCapture
+     */
+    #[JsonProperty('autoCapture')]
+    public ?bool $autoCapture;
+
+    /**
      * @param array{
      *   entryPoint: string,
      *   paymentMethod: AuthorizePaymentMethod,
@@ -87,6 +93,7 @@ class AuthorizePayoutBody extends JsonSerializableType
      *   accountId?: ?string,
      *   subdomain?: ?string,
      *   subscriptionId?: ?int,
+     *   autoCapture?: ?bool,
      * } $values
      */
     public function __construct(
@@ -103,6 +110,7 @@ class AuthorizePayoutBody extends JsonSerializableType
         $this->accountId = $values['accountId'] ?? null;
         $this->subdomain = $values['subdomain'] ?? null;
         $this->subscriptionId = $values['subscriptionId'] ?? null;
+        $this->autoCapture = $values['autoCapture'] ?? null;
     }
 
     /**
