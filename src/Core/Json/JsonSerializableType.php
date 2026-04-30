@@ -145,6 +145,10 @@ abstract class JsonSerializableType implements \JsonSerializable
             $dateTypeAttr = $property->getAttributes(Date::class)[0] ?? null;
             if ($dateTypeAttr) {
                 $dateType = $dateTypeAttr->newInstance()->type;
+                if ($value === null) {
+                    $args[$property->getName()] = null;
+                    continue;
+                }
                 if (!is_string($value)) {
                     throw new JsonException("Unexpected non-string type for date.");
                 }
