@@ -213,10 +213,10 @@ class V2TransactionDetails extends JsonSerializableType
     public int $entrypageId;
 
     /**
-     * @var string $externalPaypointId
+     * @var ?string $externalPaypointId
      */
     #[JsonProperty('externalPaypointID')]
-    public string $externalPaypointId;
+    public ?string $externalPaypointId;
 
     /**
      * @var bool $isValidatedAch Indicates if ACH account was validated in real-time.
@@ -364,7 +364,6 @@ class V2TransactionDetails extends JsonSerializableType
      *   retrievalId: int,
      *   invoiceData: TransactionDetailInvoiceData,
      *   entrypageId: int,
-     *   externalPaypointId: string,
      *   isValidatedAch: bool,
      *   transactionTime: string,
      *   customer: TransactionDetailCustomer,
@@ -380,6 +379,7 @@ class V2TransactionDetails extends JsonSerializableType
      *   isSameDayAch: bool,
      *   orderId?: ?string,
      *   transAdditionalData?: mixed,
+     *   externalPaypointId?: ?string,
      *   splitFundingInstructions?: ?array<SplitFundingContent>,
      *   pendingFeeAmount?: ?float,
      *   riskFlagged?: ?bool,
@@ -423,7 +423,7 @@ class V2TransactionDetails extends JsonSerializableType
         $this->transAdditionalData = $values['transAdditionalData'] ?? null;
         $this->invoiceData = $values['invoiceData'];
         $this->entrypageId = $values['entrypageId'];
-        $this->externalPaypointId = $values['externalPaypointId'];
+        $this->externalPaypointId = $values['externalPaypointId'] ?? null;
         $this->isValidatedAch = $values['isValidatedAch'];
         $this->transactionTime = $values['transactionTime'];
         $this->customer = $values['customer'];
