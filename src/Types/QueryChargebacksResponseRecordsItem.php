@@ -154,7 +154,16 @@ class QueryChargebacksResponseRecordsItem extends JsonSerializableType
     public ?int $scheduleReference;
 
     /**
-     * @var ?int $status Status of the transaction.
+     * Status of the chargeback or ACH return.
+     *
+     * - 0: Open (chargebacks only)
+     * - 1: Pending (chargebacks only)
+     * - 2: ClosedWon (chargebacks only)
+     * - 3: ClosedLost (chargebacks only)
+     * - 4: ACH return (any Nacha return code except R29)
+     * - 5: AchDispute (R29 only — debit block)
+     *
+     * @var ?int $status
      */
     #[JsonProperty('Status')]
     public ?int $status;

@@ -16,6 +16,12 @@ class VCardRecord extends JsonSerializableType
     public ?bool $vcardSent;
 
     /**
+     * @var ?int $cardType
+     */
+    #[JsonProperty('cardType')]
+    public ?int $cardType;
+
+    /**
      * @var ?string $cardToken
      */
     #[JsonProperty('cardToken')]
@@ -174,6 +180,7 @@ class VCardRecord extends JsonSerializableType
     /**
      * @param array{
      *   vcardSent?: ?bool,
+     *   cardType?: ?int,
      *   cardToken?: ?string,
      *   cardNumber?: ?string,
      *   cvc?: ?string,
@@ -206,6 +213,7 @@ class VCardRecord extends JsonSerializableType
         array $values = [],
     ) {
         $this->vcardSent = $values['vcardSent'] ?? null;
+        $this->cardType = $values['cardType'] ?? null;
         $this->cardToken = $values['cardToken'] ?? null;
         $this->cardNumber = $values['cardNumber'] ?? null;
         $this->cvc = $values['cvc'] ?? null;

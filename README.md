@@ -55,7 +55,7 @@ Instantiate and use the client with the following:
 namespace Example;
 
 use Payabli\PayabliClient;
-use Payabli\MoneyIn\Requests\RequestPayment;
+use Payabli\MoneyIn\Requests\RequestPaymentV2;
 use Payabli\MoneyIn\Types\TransRequestBody;
 use Payabli\Types\PayorDataRequest;
 use Payabli\Types\PaymentDetail;
@@ -64,8 +64,8 @@ use Payabli\Types\PayMethodCredit;
 $client = new PayabliClient(
     apiKey: '<value>',
 );
-$client->moneyIn->getpaid(
-    new RequestPayment([
+$client->moneyIn->getpaidv2(
+    new RequestPaymentV2([
         'body' => new TransRequestBody([
             'customerData' => new PayorDataRequest([
                 'customerId' => 4440,
@@ -124,7 +124,7 @@ use Payabli\Exceptions\PayabliApiException;
 use Payabli\Exceptions\PayabliException;
 
 try {
-    $response = $client->moneyIn->getpaid(...);
+    $response = $client->moneyIn->getpaidv2(...);
 } catch (PayabliApiException $e) {
     echo 'API Exception occurred: ' . $e->getMessage() . "\n";
     echo 'Status Code: ' . $e->getCode() . "\n";
@@ -178,7 +178,7 @@ A request is deemed retryable when any of the following HTTP status codes is ret
 Use the `maxRetries` request option to configure this behavior.
 
 ```php
-$response = $client->moneyIn->getpaid(
+$response = $client->moneyIn->getpaidv2(
     ...,
     options: [
         'maxRetries' => 0 // Override maxRetries at the request level
@@ -191,7 +191,7 @@ $response = $client->moneyIn->getpaid(
 The SDK defaults to a 30 second timeout. Use the `timeout` option to configure this behavior.
 
 ```php
-$response = $client->moneyIn->getpaid(
+$response = $client->moneyIn->getpaidv2(
     ...,
     options: [
         'timeout' => 3.0 // Override timeout at the request level

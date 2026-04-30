@@ -14,6 +14,7 @@ use Payabli\HostedPaymentPages\HostedPaymentPagesClient;
 use Payabli\Import\ImportClient;
 use Payabli\Invoice\InvoiceClient;
 use Payabli\LineItem\LineItemClient;
+use Payabli\Management\ManagementClient;
 use Payabli\MoneyIn\MoneyInClient;
 use Payabli\MoneyOut\MoneyOutClient;
 use Payabli\Notification\NotificationClient;
@@ -96,6 +97,11 @@ class PayabliClient
      * @var LineItemClient $lineItem
      */
     public LineItemClient $lineItem;
+
+    /**
+     * @var ManagementClient $management
+     */
+    public ManagementClient $management;
 
     /**
      * @var MoneyInClient $moneyIn
@@ -220,8 +226,8 @@ class PayabliClient
         $defaultHeaders = [
             'X-Fern-Language' => 'PHP',
             'X-Fern-SDK-Name' => 'Payabli',
-            'X-Fern-SDK-Version' => '0.0.420',
-            'User-Agent' => 'payabli/payabli/0.0.420',
+            'X-Fern-SDK-Version' => '0.0.421',
+            'User-Agent' => 'payabli/payabli/0.0.421',
         ];
         if ($apiKey != null) {
             $defaultHeaders['requestToken'] = $apiKey;
@@ -250,6 +256,7 @@ class PayabliClient
         $this->import = new ImportClient($this->client, $this->options);
         $this->invoice = new InvoiceClient($this->client, $this->options);
         $this->lineItem = new LineItemClient($this->client, $this->options);
+        $this->management = new ManagementClient($this->client, $this->options);
         $this->moneyIn = new MoneyInClient($this->client, $this->options);
         $this->moneyOut = new MoneyOutClient($this->client, $this->options);
         $this->notification = new NotificationClient($this->client, $this->options);

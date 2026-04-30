@@ -38,12 +38,19 @@ class TemplateElement extends JsonSerializableType
     public ?bool $visible;
 
     /**
+     * @var ?bool $required
+     */
+    #[JsonProperty('required')]
+    public ?bool $required;
+
+    /**
      * @param array{
      *   posCol?: ?int,
      *   posRow?: ?int,
      *   readOnly?: ?bool,
      *   value?: ?string,
      *   visible?: ?bool,
+     *   required?: ?bool,
      * } $values
      */
     public function __construct(
@@ -54,6 +61,7 @@ class TemplateElement extends JsonSerializableType
         $this->readOnly = $values['readOnly'] ?? null;
         $this->value = $values['value'] ?? null;
         $this->visible = $values['visible'] ?? null;
+        $this->required = $values['required'] ?? null;
     }
 
     /**

@@ -33,7 +33,10 @@ class BinData extends JsonSerializableType
     public ?string $binCardBrand;
 
     /**
-     * @var ?string $binCardType The type of card: Credit or Debit.
+     * The type of card: `Credit` or `Debit`. Case can vary between
+     * processors, so compare this value case-insensitively.
+     *
+     * @var ?string $binCardType
      */
     #[JsonProperty('binCardType')]
     public ?string $binCardType;

@@ -27,6 +27,9 @@ use Payabli\Query\Requests\ListChargebacksOrgRequest;
 use Payabli\Query\Requests\ListCustomersRequest;
 use Payabli\Types\QueryCustomerResponse;
 use Payabli\Query\Requests\ListCustomersOrgRequest;
+use Payabli\Query\Requests\ListDevicesRequest;
+use Payabli\QueryTypes\Types\QueryDeviceResponse;
+use Payabli\Query\Requests\ListDevicesOrgRequest;
 use Payabli\Query\Requests\ListNotificationReportsRequest;
 use Payabli\Types\QueryResponseNotificationReports;
 use Payabli\Query\Requests\ListNotificationReportsOrgRequest;
@@ -755,6 +758,138 @@ class QueryClient
                     return null;
                 }
                 return QueryCustomerResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Returns a list of cloud devices for a single paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
+     *
+     * @param string $entry
+     * @param ListDevicesRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?QueryDeviceResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function listDevices(string $entry, ListDevicesRequest $request = new ListDevicesRequest(), ?array $options = null): ?QueryDeviceResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
+        if ($request->fromRecord != null) {
+            $query['fromRecord'] = $request->fromRecord;
+        }
+        if ($request->limitRecord != null) {
+            $query['limitRecord'] = $request->limitRecord;
+        }
+        if ($request->parameters != null) {
+            $query['parameters'] = $request->parameters;
+        }
+        if ($request->sortBy != null) {
+            $query['sortBy'] = $request->sortBy;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "Query/devices/{$entry}",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return QueryDeviceResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Returns a list of cloud devices for a single organization. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
+     *
+     * @param int $orgId The numeric identifier for organization, assigned by Payabli.
+     * @param ListDevicesOrgRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?QueryDeviceResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function listDevicesOrg(int $orgId, ListDevicesOrgRequest $request = new ListDevicesOrgRequest(), ?array $options = null): ?QueryDeviceResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->exportFormat != null) {
+            $query['exportFormat'] = $request->exportFormat;
+        }
+        if ($request->fromRecord != null) {
+            $query['fromRecord'] = $request->fromRecord;
+        }
+        if ($request->limitRecord != null) {
+            $query['limitRecord'] = $request->limitRecord;
+        }
+        if ($request->parameters != null) {
+            $query['parameters'] = $request->parameters;
+        }
+        if ($request->sortBy != null) {
+            $query['sortBy'] = $request->sortBy;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "Query/devices/org/{$orgId}",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return QueryDeviceResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

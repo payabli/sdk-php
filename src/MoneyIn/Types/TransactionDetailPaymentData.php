@@ -60,10 +60,10 @@ class TransactionDetailPaymentData extends JsonSerializableType
     public ?string $sequence;
 
     /**
-     * @var string $orderDescription
+     * @var ?string $orderDescription
      */
     #[JsonProperty('orderDescription')]
-    public string $orderDescription;
+    public ?string $orderDescription;
 
     /**
      * @var ?string $accountId
@@ -94,13 +94,13 @@ class TransactionDetailPaymentData extends JsonSerializableType
      *   maskedAccount: string,
      *   accountType: string,
      *   holderName: string,
-     *   orderDescription: string,
      *   paymentDetails: TransactionDetailPaymentDetails,
      *   accountExp?: ?string,
      *   storedId?: ?string,
      *   initiator?: ?string,
      *   storedMethodUsageType?: ?string,
      *   sequence?: ?string,
+     *   orderDescription?: ?string,
      *   accountId?: ?string,
      *   signatureData?: ?string,
      *   binData?: ?BinData,
@@ -117,7 +117,7 @@ class TransactionDetailPaymentData extends JsonSerializableType
         $this->initiator = $values['initiator'] ?? null;
         $this->storedMethodUsageType = $values['storedMethodUsageType'] ?? null;
         $this->sequence = $values['sequence'] ?? null;
-        $this->orderDescription = $values['orderDescription'];
+        $this->orderDescription = $values['orderDescription'] ?? null;
         $this->accountId = $values['accountId'] ?? null;
         $this->signatureData = $values['signatureData'] ?? null;
         $this->binData = $values['binData'] ?? null;

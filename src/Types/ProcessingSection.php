@@ -98,6 +98,36 @@ class ProcessingSection extends JsonSerializableType
     public ?TemplateElement $whenRefunded;
 
     /**
+     * @var ?TemplateElement $combinedBatches
+     */
+    #[JsonProperty('CombinedBatches')]
+    public ?TemplateElement $combinedBatches;
+
+    /**
+     * @var ?TemplateElement $payoutAverageMonthlyVolume
+     */
+    #[JsonProperty('payoutAverageMonthlyVolume')]
+    public ?TemplateElement $payoutAverageMonthlyVolume;
+
+    /**
+     * @var ?TemplateElement $payoutHighTicketAmount
+     */
+    #[JsonProperty('payoutHighTicketAmount')]
+    public ?TemplateElement $payoutHighTicketAmount;
+
+    /**
+     * @var ?TemplateElement $payoutAverageTicketAmount
+     */
+    #[JsonProperty('payoutAverageTicketAmount')]
+    public ?TemplateElement $payoutAverageTicketAmount;
+
+    /**
+     * @var ?TemplateElement $payoutCreditLimit
+     */
+    #[JsonProperty('payoutCreditLimit')]
+    public ?TemplateElement $payoutCreditLimit;
+
+    /**
      * @param array{
      *   avgmonthly?: ?TemplateElement,
      *   binperson?: ?TemplateElement,
@@ -114,6 +144,11 @@ class ProcessingSection extends JsonSerializableType
      *   whenDelivered?: ?TemplateElement,
      *   whenProvided?: ?TemplateElement,
      *   whenRefunded?: ?TemplateElement,
+     *   combinedBatches?: ?TemplateElement,
+     *   payoutAverageMonthlyVolume?: ?TemplateElement,
+     *   payoutHighTicketAmount?: ?TemplateElement,
+     *   payoutAverageTicketAmount?: ?TemplateElement,
+     *   payoutCreditLimit?: ?TemplateElement,
      * } $values
      */
     public function __construct(
@@ -134,6 +169,11 @@ class ProcessingSection extends JsonSerializableType
         $this->whenDelivered = $values['whenDelivered'] ?? null;
         $this->whenProvided = $values['whenProvided'] ?? null;
         $this->whenRefunded = $values['whenRefunded'] ?? null;
+        $this->combinedBatches = $values['combinedBatches'] ?? null;
+        $this->payoutAverageMonthlyVolume = $values['payoutAverageMonthlyVolume'] ?? null;
+        $this->payoutHighTicketAmount = $values['payoutHighTicketAmount'] ?? null;
+        $this->payoutAverageTicketAmount = $values['payoutAverageTicketAmount'] ?? null;
+        $this->payoutCreditLimit = $values['payoutCreditLimit'] ?? null;
     }
 
     /**
