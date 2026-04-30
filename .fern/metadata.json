@@ -5,6 +5,6 @@
   "generatorConfig": {
     "enable-wire-tests": false
   },
-  "originGitCommit": "0f665390a3f1683396943781707e30c613db2f3d",
-  "sdkVersion": "0.0.422"
+  "originGitCommit": "db75759c28bffa1f7ef7cbb42d1e3baeaf644f0b",
+  "sdkVersion": "0.0.423"
 }
