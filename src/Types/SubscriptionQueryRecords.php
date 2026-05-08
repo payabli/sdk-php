@@ -61,7 +61,7 @@ class SubscriptionQueryRecords extends JsonSerializableType
     /**
      * @var ?BillData $invoiceData
      */
-    #[JsonProperty('InvoiceData')]
+    #[JsonProperty('invoiceData')]
     public ?BillData $invoiceData;
 
     /**

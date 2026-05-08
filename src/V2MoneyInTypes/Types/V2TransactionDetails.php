@@ -309,10 +309,10 @@ class V2TransactionDetails extends JsonSerializableType
     public string $achSecCode;
 
     /**
-     * @var value-of<AchHolderType> $achHolderType
+     * @var ?value-of<AchHolderType> $achHolderType
      */
     #[JsonProperty('achHolderType')]
-    public string $achHolderType;
+    public ?string $achHolderType;
 
     /**
      * @var string $ipAddress
@@ -374,7 +374,6 @@ class V2TransactionDetails extends JsonSerializableType
      *   riskAction: string,
      *   deviceId: string,
      *   achSecCode: string,
-     *   achHolderType: value-of<AchHolderType>,
      *   ipAddress: string,
      *   isSameDayAch: bool,
      *   orderId?: ?string,
@@ -385,6 +384,7 @@ class V2TransactionDetails extends JsonSerializableType
      *   riskFlagged?: ?bool,
      *   riskFlaggedOn?: ?DateTime,
      *   riskActionCode?: ?int,
+     *   achHolderType?: ?value-of<AchHolderType>,
      *   walletType?: ?string,
      * } $values
      */
@@ -439,7 +439,7 @@ class V2TransactionDetails extends JsonSerializableType
         $this->riskActionCode = $values['riskActionCode'] ?? null;
         $this->deviceId = $values['deviceId'];
         $this->achSecCode = $values['achSecCode'];
-        $this->achHolderType = $values['achHolderType'];
+        $this->achHolderType = $values['achHolderType'] ?? null;
         $this->ipAddress = $values['ipAddress'];
         $this->isSameDayAch = $values['isSameDayAch'];
         $this->walletType = $values['walletType'] ?? null;
