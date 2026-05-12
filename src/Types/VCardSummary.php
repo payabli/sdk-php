@@ -26,16 +26,22 @@ class VCardSummary extends JsonSerializableType
     public float $totalAmount;
 
     /**
+     * @var ?float $totalNetAmount Total net amount for the records.
+     */
+    #[JsonProperty('totalNetAmount')]
+    public ?float $totalNetAmount;
+
+    /**
      * @var int $totalactive Total number of active vCards.
      */
     #[JsonProperty('totalactive')]
     public int $totalactive;
 
     /**
-     * @var float $totalamounteactive Total amount of active vCards.
+     * @var float $totalamountactive Total amount of active vCards.
      */
-    #[JsonProperty('totalamounteactive')]
-    public float $totalamounteactive;
+    #[JsonProperty('totalamountactive')]
+    public float $totalamountactive;
 
     /**
      * @var float $totalbalanceactive Total balance of active vCards.
@@ -44,10 +50,10 @@ class VCardSummary extends JsonSerializableType
     public float $totalbalanceactive;
 
     /**
-     * @var ?string $pageIdentifier
+     * @var ?string $pageidentifier
      */
-    #[JsonProperty('pageIdentifier')]
-    public ?string $pageIdentifier;
+    #[JsonProperty('pageidentifier')]
+    public ?string $pageidentifier;
 
     /**
      * @var ?int $pageSize
@@ -61,9 +67,10 @@ class VCardSummary extends JsonSerializableType
      *   totalRecords: int,
      *   totalAmount: float,
      *   totalactive: int,
-     *   totalamounteactive: float,
+     *   totalamountactive: float,
      *   totalbalanceactive: float,
-     *   pageIdentifier?: ?string,
+     *   totalNetAmount?: ?float,
+     *   pageidentifier?: ?string,
      *   pageSize?: ?int,
      * } $values
      */
@@ -73,10 +80,11 @@ class VCardSummary extends JsonSerializableType
         $this->totalPages = $values['totalPages'];
         $this->totalRecords = $values['totalRecords'];
         $this->totalAmount = $values['totalAmount'];
+        $this->totalNetAmount = $values['totalNetAmount'] ?? null;
         $this->totalactive = $values['totalactive'];
-        $this->totalamounteactive = $values['totalamounteactive'];
+        $this->totalamountactive = $values['totalamountactive'];
         $this->totalbalanceactive = $values['totalbalanceactive'];
-        $this->pageIdentifier = $values['pageIdentifier'] ?? null;
+        $this->pageidentifier = $values['pageidentifier'] ?? null;
         $this->pageSize = $values['pageSize'] ?? null;
     }
 

@@ -155,6 +155,20 @@ class SubscriptionQueryRecords extends JsonSerializableType
     public ?DateTime $startDate;
 
     /**
+     * The full stored payment method record linked to the subscription
+     * and charged on each billing cycle. Returned as `null` for legacy
+     * subscriptions that don't have a linked stored method.
+     *
+     * The shape is the same across payment vehicles (card, ACH, check).
+     * Only the populated fields differ. For example, `ABA` is populated
+     * for ACH, while `ExpDate` and `binData` are populated for card.
+     *
+     * @var ?VendorResponseStoredMethod $storedMethod
+     */
+    #[JsonProperty('StoredMethod')]
+    public ?VendorResponseStoredMethod $storedMethod;
+
+    /**
      * @var ?array<GeneralEvents> $subEvents Events associated with the subscription.
      */
     #[JsonProperty('SubEvents'), ArrayType([GeneralEvents::class])]
@@ -214,6 +228,7 @@ class SubscriptionQueryRecords extends JsonSerializableType
      *   planId?: ?int,
      *   source?: ?string,
      *   startDate?: ?DateTime,
+     *   storedMethod?: ?VendorResponseStoredMethod,
      *   subEvents?: ?array<GeneralEvents>,
      *   subStatus?: ?int,
      *   totalAmount?: ?float,
@@ -248,6 +263,7 @@ class SubscriptionQueryRecords extends JsonSerializableType
         $this->planId = $values['planId'] ?? null;
         $this->source = $values['source'] ?? null;
         $this->startDate = $values['startDate'] ?? null;
+        $this->storedMethod = $values['storedMethod'] ?? null;
         $this->subEvents = $values['subEvents'] ?? null;
         $this->subStatus = $values['subStatus'] ?? null;
         $this->totalAmount = $values['totalAmount'] ?? null;

@@ -3,15 +3,9 @@
 namespace Payabli\Query\Requests;
 
 use Payabli\Core\Json\JsonSerializableType;
-use Payabli\Types\ExportFormat;
 
-class ListVcardsOrgRequest extends JsonSerializableType
+class ListVcardsTransactionsOrgRequest extends JsonSerializableType
 {
-    /**
-     * @var ?value-of<ExportFormat> $exportFormat
-     */
-    public ?string $exportFormat;
-
     /**
      * @var ?int $fromRecord The number of records to skip before starting to collect the result set.
      */
@@ -24,6 +18,7 @@ class ListVcardsOrgRequest extends JsonSerializableType
 
     /**
      * Collection of field names, conditions, and values used to filter the query.
+     *
      * <Info>
      *   **You must remove `parameters=` from the request before you send it, otherwise Payabli will ignore the filters.**
      *
@@ -31,21 +26,27 @@ class ListVcardsOrgRequest extends JsonSerializableType
      *
      *   For example:
      *
-     *   --url https://api-sandbox.payabli.com/api/Query/transactions/org/236?parameters=totalAmount(gt)=1000&limitRecord=20
+     *   --url https://api-sandbox.payabli.com/api/Query/vcardsTransactions/org/236?parameters=transactionAmount(gt)=100&limitRecord=20
      *
      *   should become:
      *
-     *   --url https://api-sandbox.payabli.com/api/Query/transactions/org/236?totalAmount(gt)=1000&limitRecord=20
+     *   --url https://api-sandbox.payabli.com/api/Query/vcardsTransactions/org/236?transactionAmount(gt)=100&limitRecord=20
      * </Info>
+     *
      * List of field names accepted:
      *
-     *   - `status` (eq, ne, ct, nct, sw, ew)
-     *   - `createdAt` (gt, ge, lt, le, eq, ne)
+     *   - `identifier` (eq, ne, ct, nct)
+     *   - `transactionType` (eq, ne, ct, nct)
+     *   - `transactionStatus` (eq, ne, ct, nct, in, nin)
+     *   - `transactionAmount` (eq, ne, gt, ge, lt, le, ct, nct)
+     *   - `transactionCreatedOn` (eq, ne, gt, ge, lt, le)
      *   - `cardToken` (ct, nct, eq, ne)
      *   - `lastFour` (ct, nct, eq, ne)
      *   - `expirationDate` (ct, nct, eq, ne)
-     *   - `payoutId` (eq, ne, gt, ge, lt, le)
-     *   - `vendorId` (eq, ne, gt, ge, lt, le)
+     *   - `mcc` (ct, nct, eq, ne)
+     *   - `payoutId` (gt, lt, eq, ne)
+     *   - `customerId` (gt, lt, eq, ne)
+     *   - `vendorId` (gt, lt, eq, ne)
      *   - `miscData1` (ct, nct, eq, ne)
      *   - `miscData2` (ct, nct, eq, ne)
      *   - `currentUses` (gt, ge, lt, le, eq, ne)
@@ -53,10 +54,9 @@ class ListVcardsOrgRequest extends JsonSerializableType
      *   - `balance` (gt, ge, lt, le, eq, ne)
      *   - `paypointLegal` (ne, eq, ct, nct)
      *   - `paypointDba` (ne, eq, ct, nct)
-     *   - `orgName` (eq, ne, ct, nct, sw, ew)
-     *   - `externalPaypointId` (ct, nct, eq, ne)
-     *   - `paypointId` (eq, ne, gt, ge, lt, le)
-     *   - `cardType` (eq, ne, gt, ge, lt, le)
+     *   - `orgName` (ne, eq, ct, nct, in, nin)
+     *   - `externalPaypointID` (ct, nct, eq, ne)
+     *   - `paypointId` (gt, lt, eq, ne)
      *
      * List of comparison accepted - enclosed between parentheses:
      *
@@ -68,8 +68,6 @@ class ListVcardsOrgRequest extends JsonSerializableType
      *   - ne => not equal
      *   - ct => contains
      *   - nct => not contains
-     *   - sw => starts with
-     *   - ew => ends with
      *   - in => inside array separated by "|"
      *   - nin => not inside array separated by "|"
      *
@@ -84,7 +82,6 @@ class ListVcardsOrgRequest extends JsonSerializableType
 
     /**
      * @param array{
-     *   exportFormat?: ?value-of<ExportFormat>,
      *   fromRecord?: ?int,
      *   limitRecord?: ?int,
      *   parameters?: ?array<string, ?string>,
@@ -94,7 +91,6 @@ class ListVcardsOrgRequest extends JsonSerializableType
     public function __construct(
         array $values = [],
     ) {
-        $this->exportFormat = $values['exportFormat'] ?? null;
         $this->fromRecord = $values['fromRecord'] ?? null;
         $this->limitRecord = $values['limitRecord'] ?? null;
         $this->parameters = $values['parameters'] ?? null;

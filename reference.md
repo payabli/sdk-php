@@ -20017,6 +20017,7 @@ See [Filters and Conditions Reference](/developers/developer-guides/pay-ops-repo
 - `orgName` (ne, eq, ct, nct)
 - `externalPaypointId` (ct, nct, ne, eq)
 - `subId` (eq, ne)
+- `idPmethod` (eq, ne, ct, nct, in, nin). Filters by the subscription's linked stored method identifier (the value returned in `StoredMethod.IdPmethod`). Case-insensitive. Subscriptions without a linked stored method are excluded from matches. Example: `idPmethod(eq,6edcbb56-9c0e-4003-b3d1-99abf149ba0e)`.
 - `orderDescription` (ct, nct)
 - `cycles` (eq, ne, gt, ge, lt, le)
 - `leftcycles` (eq, ne, gt, ge, lt, le)
@@ -20195,6 +20196,7 @@ See [Filters and Conditions Reference](/developers/developer-guides/pay-ops-repo
 - `orgName` (ne, eq, ct, nct)
 - `externalPaypointId` (ct, nct, ne, eq)
 - `subId` (eq, ne)
+- `idPmethod` (eq, ne, ct, nct, in, nin). Filters by the subscription's linked stored method identifier (the value returned in `StoredMethod.IdPmethod`). Case-insensitive. Subscriptions without a linked stored method are excluded from matches. Example: `idPmethod(eq,6edcbb56-9c0e-4003-b3d1-99abf149ba0e)`.
 - `orderDescription` (ct, nct)
 - `cycles` (eq, ne, gt, ge, lt, le)
 - `leftcycles` (eq, ne, gt, ge, lt, le)
@@ -20680,6 +20682,7 @@ See [Filters and Conditions Reference](/developers/developer-guides/pay-ops-repo
 - `scheduleId` (ne, eq)
 - `returnId` (ne, eq)
 - `refundId` (ne, eq)
+- `rejectId` (ne, eq)
 - `idTrans` (ne, eq)
 - `orgId` (ne, eq)
 - `paypointId` (ne, eq)
@@ -20879,6 +20882,7 @@ See [Filters and Conditions Reference](/developers/developer-guides/pay-ops-repo
 - `scheduleId` (ne, eq)
 - `returnId` (ne, eq)
 - `refundId` (ne, eq)
+- `rejectId` (ne, eq)
 - `idTrans` (ne, eq)
 - `orgId` (ne, eq)
 - `paypointId` (ne, eq)
@@ -22120,6 +22124,7 @@ List of field names accepted:
 - `ein` (ct, nct, eq, ne)
 - `phone` (ct, nct, eq, ne)
 - `email` (ct, nct, eq, ne)
+- `remitEmail` (ct, nct, eq, ne)
 - `address` (ct, nct, eq, ne)
 - `city` (ct, nct, eq, ne)
 - `state` (ct, nct, eq, ne)
@@ -22276,6 +22281,7 @@ List of field names accepted:
 - `ein` (ct, nct, eq, ne)
 - `phone` (ct, nct, eq, ne)
 - `email` (ct, nct, eq, ne)
+- `remitEmail` (ct, nct, eq, ne)
 - `address` (ct, nct, eq, ne)
 - `city` (ct, nct, eq, ne)
 - `state` (ct, nct, eq, ne)
@@ -22423,36 +22429,332 @@ Collection of field names, conditions, and values used to filter the query.
 </Info>
 List of field names accepted:  
 
-  - `status` (in, nin, eq, ne)  
-  - `createdAt` (gt, ge, lt, le, eq, ne)  
-  - `cardToken` (ct, nct, eq, ne)  
-  - `lastFour` (ct, nct, eq, ne)  
-  - `expirationDate` (ct, nct, eq, ne)  
-  - `payoutId` (ct, nct, eq, ne, in, nin)  
-  - `vendorId` (ct, nct, eq, ne, in, nin)  
-  - `miscData1` (ct, nct, eq, ne)  
-  - `miscData2` (ct, nct, eq, ne)  
-  - `currentUses` (gt, ge, lt, le, eq, ne)  
-  - `amount` (gt, ge, lt, le, eq, ne)  
-  - `balance` (gt, ge, lt, le, eq, ne)  
-  - `paypointLegal` (ne, eq, ct, nct)  
-  - `paypointDba` (ne, eq, ct, nct)  
-  - `orgName` (ne, eq, ct, nct)  
-  - `externalPaypointId` (ct, nct, eq, ne)  
-  - `paypointId` (in, nin, eq, ne)  
-  - `cardType` (eq)  
+  - `status` (eq, ne, ct, nct, sw, ew)
+  - `createdAt` (gt, ge, lt, le, eq, ne)
+  - `cardToken` (ct, nct, eq, ne)
+  - `lastFour` (ct, nct, eq, ne)
+  - `expirationDate` (ct, nct, eq, ne)
+  - `payoutId` (eq, ne, gt, ge, lt, le)
+  - `vendorId` (eq, ne, gt, ge, lt, le)
+  - `miscData1` (ct, nct, eq, ne)
+  - `miscData2` (ct, nct, eq, ne)
+  - `currentUses` (gt, ge, lt, le, eq, ne)
+  - `amount` (gt, ge, lt, le, eq, ne)
+  - `balance` (gt, ge, lt, le, eq, ne)
+  - `paypointLegal` (ne, eq, ct, nct)
+  - `paypointDba` (ne, eq, ct, nct)
+  - `orgName` (eq, ne, ct, nct, sw, ew)
+  - `externalPaypointId` (ct, nct, eq, ne)
+  - `paypointId` (eq, ne, gt, ge, lt, le)
+  - `cardType` (eq, ne, gt, ge, lt, le)
 
 List of comparison accepted - enclosed between parentheses:  
 
-  - eq or empty => equal  
-  - gt => greater than  
-  - ge => greater or equal  
-  - lt => less than  
-  - le => less or equal  
-  - ne => not equal  
-  - ct => contains  
-  - nct => not contains  
-  - in => inside array separated by "|"  
+  - eq or empty => equal
+  - gt => greater than
+  - ge => greater or equal
+  - lt => less than
+  - le => less or equal
+  - ne => not equal
+  - ct => contains
+  - nct => not contains
+  - sw => starts with
+  - ew => ends with
+  - in => inside array separated by "|"
+  - nin => not inside array separated by "|"
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$sortBy:** `?string` — The field name to use for sorting results. Use `desc(field_name)` to sort descending by `field_name`, and use `asc(field_name)` to sort ascending by `field_name`.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;query-&gt;listVcardsTransactions($entry, $request) -> ?VCardTransactionQueryResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a list of virtual card transactions for an entrypoint. Use filters to limit results.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->query->listVcardsTransactions(
+    '8cfec329267',
+    new ListVcardsTransactionsRequest([
+        'fromRecord' => 0,
+        'limitRecord' => 20,
+        'sortBy' => 'desc(CreatedOn)',
+    ]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$entry:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$fromRecord:** `?int` — The number of records to skip before starting to collect the result set.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$limitRecord:** `?int` — Max number of records to return for the query. Use `0` or negative value to return all records.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$parameters:** `?array` 
+
+Collection of field names, conditions, and values used to filter the query.
+
+<Info>
+  **You must remove `parameters=` from the request before you send it, otherwise Payabli will ignore the filters.**
+
+  Because of a technical limitation, you can't make a request that includes filters from the API console on this page. The response won't be filtered. Instead, copy the request, remove `parameters=` and run the request in a different client.
+
+  For example:
+
+  --url https://api-sandbox.payabli.com/api/Query/vcardsTransactions/8cfec329267?parameters=transactionAmount(gt)=100&limitRecord=20
+
+  should become:
+
+  --url https://api-sandbox.payabli.com/api/Query/vcardsTransactions/8cfec329267?transactionAmount(gt)=100&limitRecord=20
+</Info>
+
+List of field names accepted:
+
+  - `identifier` (eq, ne, ct, nct)
+  - `transactionType` (eq, ne, ct, nct)
+  - `transactionStatus` (eq, ne, ct, nct, in, nin)
+  - `transactionAmount` (eq, ne, gt, ge, lt, le, ct, nct)
+  - `transactionCreatedOn` (eq, ne, gt, ge, lt, le)
+  - `cardToken` (ct, nct, eq, ne)
+  - `lastFour` (ct, nct, eq, ne)
+  - `expirationDate` (ct, nct, eq, ne)
+  - `mcc` (ct, nct, eq, ne)
+  - `payoutId` (gt, lt, eq, ne)
+  - `customerId` (gt, lt, eq, ne)
+  - `vendorId` (gt, lt, eq, ne)
+  - `miscData1` (ct, nct, eq, ne)
+  - `miscData2` (ct, nct, eq, ne)
+  - `currentUses` (gt, ge, lt, le, eq, ne)
+  - `amount` (gt, ge, lt, le, eq, ne)
+  - `balance` (gt, ge, lt, le, eq, ne)
+  - `paypointLegal` (ne, eq, ct, nct)
+  - `paypointDba` (ne, eq, ct, nct)
+  - `orgName` (ne, eq, ct, nct, in, nin)
+  - `externalPaypointID` (ct, nct, eq, ne)
+  - `paypointId` (gt, lt, eq, ne)
+
+List of comparison accepted - enclosed between parentheses:
+
+  - eq or empty => equal
+  - gt => greater than
+  - ge => greater or equal
+  - lt => less than
+  - le => less or equal
+  - ne => not equal
+  - ct => contains
+  - nct => not contains
+  - in => inside array separated by "|"
+  - nin => not inside array separated by "|"
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$sortBy:** `?string` — The field name to use for sorting results. Use `desc(field_name)` to sort descending by `field_name`, and use `asc(field_name)` to sort ascending by `field_name`.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>$client-&gt;query-&gt;listVcardsTransactionsOrg($orgId, $request) -> ?VCardTransactionQueryResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a list of virtual card transactions for an organization. Use filters to limit results.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->query->listVcardsTransactionsOrg(
+    123,
+    new ListVcardsTransactionsOrgRequest([
+        'fromRecord' => 0,
+        'limitRecord' => 20,
+        'sortBy' => 'desc(CreatedOn)',
+    ]),
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$orgId:** `int` — The numeric identifier for organization, assigned by Payabli.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$fromRecord:** `?int` — The number of records to skip before starting to collect the result set.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$limitRecord:** `?int` — Max number of records to return for the query. Use `0` or negative value to return all records.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**$parameters:** `?array` 
+
+Collection of field names, conditions, and values used to filter the query.
+
+<Info>
+  **You must remove `parameters=` from the request before you send it, otherwise Payabli will ignore the filters.**
+
+  Because of a technical limitation, you can't make a request that includes filters from the API console on this page. The response won't be filtered. Instead, copy the request, remove `parameters=` and run the request in a different client.
+
+  For example:
+
+  --url https://api-sandbox.payabli.com/api/Query/vcardsTransactions/org/236?parameters=transactionAmount(gt)=100&limitRecord=20
+
+  should become:
+
+  --url https://api-sandbox.payabli.com/api/Query/vcardsTransactions/org/236?transactionAmount(gt)=100&limitRecord=20
+</Info>
+
+List of field names accepted:
+
+  - `identifier` (eq, ne, ct, nct)
+  - `transactionType` (eq, ne, ct, nct)
+  - `transactionStatus` (eq, ne, ct, nct, in, nin)
+  - `transactionAmount` (eq, ne, gt, ge, lt, le, ct, nct)
+  - `transactionCreatedOn` (eq, ne, gt, ge, lt, le)
+  - `cardToken` (ct, nct, eq, ne)
+  - `lastFour` (ct, nct, eq, ne)
+  - `expirationDate` (ct, nct, eq, ne)
+  - `mcc` (ct, nct, eq, ne)
+  - `payoutId` (gt, lt, eq, ne)
+  - `customerId` (gt, lt, eq, ne)
+  - `vendorId` (gt, lt, eq, ne)
+  - `miscData1` (ct, nct, eq, ne)
+  - `miscData2` (ct, nct, eq, ne)
+  - `currentUses` (gt, ge, lt, le, eq, ne)
+  - `amount` (gt, ge, lt, le, eq, ne)
+  - `balance` (gt, ge, lt, le, eq, ne)
+  - `paypointLegal` (ne, eq, ct, nct)
+  - `paypointDba` (ne, eq, ct, nct)
+  - `orgName` (ne, eq, ct, nct, in, nin)
+  - `externalPaypointID` (ct, nct, eq, ne)
+  - `paypointId` (gt, lt, eq, ne)
+
+List of comparison accepted - enclosed between parentheses:
+
+  - eq or empty => equal
+  - gt => greater than
+  - ge => greater or equal
+  - lt => less than
+  - le => less or equal
+  - ne => not equal
+  - ct => contains
+  - nct => not contains
+  - in => inside array separated by "|"
   - nin => not inside array separated by "|"
     
 </dd>
@@ -22572,36 +22874,38 @@ Collection of field names, conditions, and values used to filter the query.
 </Info>
 List of field names accepted:  
 
-  - `status` (in, nin, eq, ne)  
-  - `createdAt` (gt, ge, lt, le, eq, ne)  
-  - `cardToken` (ct, nct, eq, ne)  
-  - `lastFour` (ct, nct, eq, ne)  
-  - `expirationDate` (ct, nct, eq, ne)  
-  - `payoutId` (ct, nct, eq, ne, in, nin)  
-  - `vendorId` (ct, nct, eq, ne, in, nin)  
-  - `miscData1` (ct, nct, eq, ne)  
-  - `miscData2` (ct, nct, eq, ne)  
-  - `currentUses` (gt, ge, lt, le, eq, ne)  
-  - `amount` (gt, ge, lt, le, eq, ne)  
-  - `balance` (gt, ge, lt, le, eq, ne)  
-  - `paypointLegal` (ne, eq, ct, nct)  
-  - `paypointDba` (ne, eq, ct, nct)  
-  - `orgName` (ne, eq, ct, nct)  
-  - `externalPaypointId` (ct, nct, eq, ne)  
-  - `paypointId` (in, nin, eq, ne)  
-  - `cardType` (eq)  
+  - `status` (eq, ne, ct, nct, sw, ew)
+  - `createdAt` (gt, ge, lt, le, eq, ne)
+  - `cardToken` (ct, nct, eq, ne)
+  - `lastFour` (ct, nct, eq, ne)
+  - `expirationDate` (ct, nct, eq, ne)
+  - `payoutId` (eq, ne, gt, ge, lt, le)
+  - `vendorId` (eq, ne, gt, ge, lt, le)
+  - `miscData1` (ct, nct, eq, ne)
+  - `miscData2` (ct, nct, eq, ne)
+  - `currentUses` (gt, ge, lt, le, eq, ne)
+  - `amount` (gt, ge, lt, le, eq, ne)
+  - `balance` (gt, ge, lt, le, eq, ne)
+  - `paypointLegal` (ne, eq, ct, nct)
+  - `paypointDba` (ne, eq, ct, nct)
+  - `orgName` (eq, ne, ct, nct, sw, ew)
+  - `externalPaypointId` (ct, nct, eq, ne)
+  - `paypointId` (eq, ne, gt, ge, lt, le)
+  - `cardType` (eq, ne, gt, ge, lt, le)
 
 List of comparison accepted - enclosed between parentheses:  
 
-  - eq or empty => equal  
-  - gt => greater than  
-  - ge => greater or equal  
-  - lt => less than  
-  - le => less or equal  
-  - ne => not equal  
-  - ct => contains  
-  - nct => not contains  
-  - in => inside array separated by "|"  
+  - eq or empty => equal
+  - gt => greater than
+  - ge => greater or equal
+  - lt => less than
+  - le => less or equal
+  - ne => not equal
+  - ct => contains
+  - nct => not contains
+  - sw => starts with
+  - ew => ends with
+  - in => inside array separated by "|"
   - nin => not inside array separated by "|"
     
 </dd>

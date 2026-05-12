@@ -80,6 +80,7 @@ class ListSubscriptionsRequest extends JsonSerializableType
      * - `orgName` (ne, eq, ct, nct)
      * - `externalPaypointId` (ct, nct, ne, eq)
      * - `subId` (eq, ne)
+     * - `idPmethod` (eq, ne, ct, nct, in, nin). Filters by the subscription's linked stored method identifier (the value returned in `StoredMethod.IdPmethod`). Case-insensitive. Subscriptions without a linked stored method are excluded from matches. Example: `idPmethod(eq,6edcbb56-9c0e-4003-b3d1-99abf149ba0e)`.
      * - `orderDescription` (ct, nct)
      * - `cycles` (eq, ne, gt, ge, lt, le)
      * - `leftcycles` (eq, ne, gt, ge, lt, le)

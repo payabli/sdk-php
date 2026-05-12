@@ -122,6 +122,12 @@ class TransferDetailRecord extends JsonSerializableType
     public ?float $splitFundingAmount;
 
     /**
+     * @var ?float $cardRejectedAmount Total amount rejected by card networks or issuing banks after authorization or settling in this transaction
+     */
+    #[JsonProperty('cardRejectedAmount')]
+    public ?float $cardRejectedAmount;
+
+    /**
      * @var ?array<BillingFeeDetail> $billingFeesDetails
      */
     #[JsonProperty('billingFeesDetails'), ArrayType([BillingFeeDetail::class])]
@@ -462,6 +468,7 @@ class TransferDetailRecord extends JsonSerializableType
      *   adjustmentsAmount?: ?float,
      *   netTransferAmount?: ?float,
      *   splitFundingAmount?: ?float,
+     *   cardRejectedAmount?: ?float,
      *   billingFeesDetails?: ?array<BillingFeeDetail>,
      *   parentOrgName?: ?string,
      *   paypointDbaname?: ?string,
@@ -537,6 +544,7 @@ class TransferDetailRecord extends JsonSerializableType
         $this->adjustmentsAmount = $values['adjustmentsAmount'] ?? null;
         $this->netTransferAmount = $values['netTransferAmount'] ?? null;
         $this->splitFundingAmount = $values['splitFundingAmount'] ?? null;
+        $this->cardRejectedAmount = $values['cardRejectedAmount'] ?? null;
         $this->billingFeesDetails = $values['billingFeesDetails'] ?? null;
         $this->parentOrgName = $values['parentOrgName'] ?? null;
         $this->paypointDbaname = $values['paypointDbaname'] ?? null;

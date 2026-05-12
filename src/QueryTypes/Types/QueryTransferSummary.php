@@ -95,6 +95,12 @@ class QueryTransferSummary extends JsonSerializableType
     public ?float $heldAmount;
 
     /**
+     * @var ?float $cardRejectedAmount Total amount rejected by card networks or issuing banks after authorization or settling. This value is the sum of all rejected amounts for transactions in the transfer.
+     */
+    #[JsonProperty('cardRejectedAmount')]
+    public ?float $cardRejectedAmount;
+
+    /**
      * @var ?int $totalRecords Number of records in the response.
      */
     #[JsonProperty('totalRecords')]
@@ -146,6 +152,7 @@ class QueryTransferSummary extends JsonSerializableType
      *   transferAmount?: ?float,
      *   refunds?: ?float,
      *   heldAmount?: ?float,
+     *   cardRejectedAmount?: ?float,
      *   totalRecords?: ?int,
      *   totalAmount?: ?float,
      *   totalNetAmount?: ?float,
@@ -171,6 +178,7 @@ class QueryTransferSummary extends JsonSerializableType
         $this->transferAmount = $values['transferAmount'] ?? null;
         $this->refunds = $values['refunds'] ?? null;
         $this->heldAmount = $values['heldAmount'] ?? null;
+        $this->cardRejectedAmount = $values['cardRejectedAmount'] ?? null;
         $this->totalRecords = $values['totalRecords'] ?? null;
         $this->totalAmount = $values['totalAmount'] ?? null;
         $this->totalNetAmount = $values['totalNetAmount'] ?? null;

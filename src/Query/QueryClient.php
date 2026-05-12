@@ -72,6 +72,9 @@ use Payabli\Types\QueryResponseVendors;
 use Payabli\Query\Requests\ListVendorsOrgRequest;
 use Payabli\Query\Requests\ListVcardsRequest;
 use Payabli\Types\VCardQueryResponse;
+use Payabli\Query\Requests\ListVcardsTransactionsRequest;
+use Payabli\QueryTypes\Types\VCardTransactionQueryResponse;
+use Payabli\Query\Requests\ListVcardsTransactionsOrgRequest;
 use Payabli\Query\Requests\ListVcardsOrgRequest;
 
 class QueryClient
@@ -2666,6 +2669,132 @@ class QueryClient
                     return null;
                 }
                 return VCardQueryResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Retrieve a list of virtual card transactions for an entrypoint. Use filters to limit results.
+     *
+     * @param string $entry
+     * @param ListVcardsTransactionsRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?VCardTransactionQueryResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function listVcardsTransactions(string $entry, ListVcardsTransactionsRequest $request = new ListVcardsTransactionsRequest(), ?array $options = null): ?VCardTransactionQueryResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->fromRecord != null) {
+            $query['fromRecord'] = $request->fromRecord;
+        }
+        if ($request->limitRecord != null) {
+            $query['limitRecord'] = $request->limitRecord;
+        }
+        if ($request->parameters != null) {
+            $query['parameters'] = $request->parameters;
+        }
+        if ($request->sortBy != null) {
+            $query['sortBy'] = $request->sortBy;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "Query/vcardsTransactions/{$entry}",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return VCardTransactionQueryResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Retrieve a list of virtual card transactions for an organization. Use filters to limit results.
+     *
+     * @param int $orgId The numeric identifier for organization, assigned by Payabli.
+     * @param ListVcardsTransactionsOrgRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?VCardTransactionQueryResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function listVcardsTransactionsOrg(int $orgId, ListVcardsTransactionsOrgRequest $request = new ListVcardsTransactionsOrgRequest(), ?array $options = null): ?VCardTransactionQueryResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->fromRecord != null) {
+            $query['fromRecord'] = $request->fromRecord;
+        }
+        if ($request->limitRecord != null) {
+            $query['limitRecord'] = $request->limitRecord;
+        }
+        if ($request->parameters != null) {
+            $query['parameters'] = $request->parameters;
+        }
+        if ($request->sortBy != null) {
+            $query['sortBy'] = $request->sortBy;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "Query/vcardsTransactions/org/{$orgId}",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return VCardTransactionQueryResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

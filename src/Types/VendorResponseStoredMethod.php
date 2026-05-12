@@ -73,10 +73,10 @@ class VendorResponseStoredMethod extends JsonSerializableType
     public ?string $bin;
 
     /**
-     * @var ?string $binData
+     * @var ?BinData $binData
      */
     #[JsonProperty('binData')]
-    public ?string $binData;
+    public ?BinData $binData;
 
     /**
      * @var ?string $aba
@@ -120,7 +120,7 @@ class VendorResponseStoredMethod extends JsonSerializableType
      *   achHolderType?: ?string,
      *   isValidatedAch?: ?bool,
      *   bin?: ?string,
-     *   binData?: ?string,
+     *   binData?: ?BinData,
      *   aba?: ?string,
      *   postalCode?: ?string,
      *   methodType?: ?string,

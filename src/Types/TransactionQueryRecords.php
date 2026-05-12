@@ -215,6 +215,12 @@ class TransactionQueryRecords extends JsonSerializableType
     public ?array $splitFundingInstructions;
 
     /**
+     * @var int $splitCount
+     */
+    #[JsonProperty('splitCount')]
+    public int $splitCount;
+
+    /**
      * @var ?float $totalAmount Transaction total amount (including service fee or sub-charge)
      */
     #[JsonProperty('TotalAmount')]
@@ -246,6 +252,7 @@ class TransactionQueryRecords extends JsonSerializableType
 
     /**
      * @param array{
+     *   splitCount: int,
      *   achHolderType?: ?value-of<AchHolderType>,
      *   achSecCode?: ?string,
      *   batchAmount?: ?float,
@@ -288,7 +295,7 @@ class TransactionQueryRecords extends JsonSerializableType
      * } $values
      */
     public function __construct(
-        array $values = [],
+        array $values,
     ) {
         $this->achHolderType = $values['achHolderType'] ?? null;
         $this->achSecCode = $values['achSecCode'] ?? null;
@@ -324,6 +331,7 @@ class TransactionQueryRecords extends JsonSerializableType
         $this->settlementStatus = $values['settlementStatus'] ?? null;
         $this->source = $values['source'] ?? null;
         $this->splitFundingInstructions = $values['splitFundingInstructions'] ?? null;
+        $this->splitCount = $values['splitCount'];
         $this->totalAmount = $values['totalAmount'] ?? null;
         $this->transactionEvents = $values['transactionEvents'] ?? null;
         $this->transactionTime = $values['transactionTime'] ?? null;

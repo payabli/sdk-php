@@ -1,10 +1,15 @@
 {
   "cliVersion": "5.7.9",
   "generatorName": "fernapi/fern-php-sdk",
-  "generatorVersion": "2.3.1",
+  "generatorVersion": "2.9.0",
   "generatorConfig": {
-    "enable-wire-tests": false
+    "enable-wire-tests": false,
+    "packageName": "payabli/payabli"
   },
-  "originGitCommit": "72fdff3484316d01ba20c78f02c52cde8b292f54",
-  "sdkVersion": "0.0.424"
+  "originGitCommit": "919e0fd55b82258508b2a0e599e53efa19469522",
+  "originGitCommitIsDirty": true,
+  "invokedBy": "ci",
+  "requestedVersion": "0.0.425",
+  "ciProvider": "github",
+  "sdkVersion": "0.0.425"
 }
