@@ -212,7 +212,7 @@ class StatBasicExtendedQueryRecord extends JsonSerializableType
     public float $inCashVolume;
 
     /**
-     * @var float $inWalletVolume Inbound wallet transactions.
+     * @var float $inWalletVolume Inbound wallet transactions volume.
      */
     #[JsonProperty('inWalletVolume')]
     public float $inWalletVolume;

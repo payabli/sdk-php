@@ -6,10 +6,10 @@
     "enable-wire-tests": false,
     "packageName": "payabli/payabli"
   },
-  "originGitCommit": "7082e1f2f215e55d567b769dcf0f9732ab232c4d",
+  "originGitCommit": "59a35aa03f5ab140800723e4add1a7933b8cf351",
   "originGitCommitIsDirty": true,
-  "invokedBy": "ci",
-  "requestedVersion": "0.0.427",
-  "ciProvider": "github",
-  "sdkVersion": "0.0.427"
+  "invokedBy": "manual",
+  "requestedVersion": null,
+  "ciProvider": null,
+  "sdkVersion": "0.0.428"
 }

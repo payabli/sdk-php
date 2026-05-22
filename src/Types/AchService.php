@@ -56,7 +56,7 @@ class AchService extends JsonSerializableType
     public ?AchPassThroughSection $achPassThrough;
 
     /**
-     * @var ?TemplateElement $batchCutoffTime Controls how to present the `batchCutoffTime` field on the application. If this field isn't sent, batch cut off time defaults to 5 ET.
+     * @var ?TemplateElement $batchCutoffTime Controls how to present the `batchCutoffTime` field on the application. If this field isn't sent, batch cutoff time defaults to 5 ET.
      */
     #[JsonProperty('batchCutoffTime')]
     public ?TemplateElement $batchCutoffTime;

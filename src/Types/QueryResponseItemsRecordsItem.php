@@ -32,7 +32,7 @@ class QueryResponseItemsRecordsItem extends JsonSerializableType
     public ?string $paypointEntryname;
 
     /**
-     * @var ?string $paypointLegalname the Paypoint's legal name.
+     * @var ?string $paypointLegalname The paypoint's legal name.
      */
     #[JsonProperty('PaypointLegalname')]
     public ?string $paypointLegalname;

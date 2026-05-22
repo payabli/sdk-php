@@ -15,7 +15,7 @@ class NotificationRequest extends JsonSerializableType
     public string $notificationUrl;
 
     /**
-     * @var ?array<WebHeaderParameter> $webHeaderParameters A dictionary of key-value pairs to be inserted in the header when the notification request is submitted
+     * @var ?array<WebHeaderParameter> $webHeaderParameters List of key-value header parameters to include in the notification request
      */
     #[JsonProperty('webHeaderParameters'), ArrayType([WebHeaderParameter::class])]
     public ?array $webHeaderParameters;

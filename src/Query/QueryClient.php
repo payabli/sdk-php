@@ -14,7 +14,6 @@ use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Payabli\Query\Requests\ListBatchDetailsOrgRequest;
-use Payabli\Types\QueryResponseSettlements;
 use Payabli\Query\Requests\ListBatchesRequest;
 use Payabli\QueryTypes\Types\QueryBatchesResponse;
 use Payabli\Query\Requests\ListBatchesOrgRequest;
@@ -44,6 +43,7 @@ use Payabli\Query\Requests\ListPayoutOrgRequest;
 use Payabli\Query\Requests\ListPaypointsRequest;
 use Payabli\Types\QueryEntrypointResponse;
 use Payabli\Query\Requests\ListSettlementsRequest;
+use Payabli\Types\QueryResponseSettlements;
 use Payabli\Query\Requests\ListSettlementsOrgRequest;
 use Payabli\Query\Requests\ListSubscriptionsRequest;
 use Payabli\Types\QuerySubscriptionResponse;
@@ -193,11 +193,11 @@ class QueryClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?QueryResponseSettlements
+     * @return ?QueryBatchesDetailResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function listBatchDetailsOrg(int $orgId, ListBatchDetailsOrgRequest $request = new ListBatchDetailsOrgRequest(), ?array $options = null): ?QueryResponseSettlements
+    public function listBatchDetailsOrg(int $orgId, ListBatchDetailsOrgRequest $request = new ListBatchDetailsOrgRequest(), ?array $options = null): ?QueryBatchesDetailResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -232,7 +232,7 @@ class QueryClient
                 if (empty($json)) {
                     return null;
                 }
-                return QueryResponseSettlements::fromJson($json);
+                return QueryBatchesDetailResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

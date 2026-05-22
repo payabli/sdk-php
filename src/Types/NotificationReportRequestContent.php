@@ -27,7 +27,7 @@ class NotificationReportRequestContent extends JsonSerializableType
     public ?array $internalData;
 
     /**
-     * @var ?value-of<NotificationReportRequestContentReportName> $reportName The kind report to generate.
+     * @var ?value-of<NotificationReportRequestContentReportName> $reportName The kind of report to generate.
      */
     #[JsonProperty('reportName')]
     public ?string $reportName;

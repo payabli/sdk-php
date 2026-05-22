@@ -20,7 +20,7 @@ class GooglePayPaypointRegistrationData extends JsonSerializableType
     public ?bool $isEnabled;
 
     /**
-     * @var ?string $walletType The wallet type. In this context it will always be `googlePay`.
+     * @var ?string $walletType The wallet type. In this context it will always be `googlepay`.
      */
     #[JsonProperty('walletType')]
     public ?string $walletType;

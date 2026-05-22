@@ -213,7 +213,7 @@ class UserClient
     /**
      * This endpoint requires an application API token.
      *
-     * @param string $provider Auth provider. This fields is optional and defaults to null for the built-in provider.
+     * @param string $provider Auth provider. Pass `null` to use the built-in provider.
      * @param UserAuthRequest $request
      * @param ?array{
      *   baseUrl?: string,

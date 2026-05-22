@@ -171,22 +171,9 @@ $client->bill->deleteAttachedFromBill(
 
 **$filename:** `string` 
 
-The filename in Payabli. Filename is `zipName` in response to a
-request to `/api/Invoice/{idInvoice}`. Here, the filename is
-`0_Bill.pdf`. 
-
-```json
-  "DocumentsRef": {
-    "zipfile": "inva_269.zip",
-    "filelist": [
-      {
-        "originalName": "Bill.pdf",
-        "zipName": "0_Bill.pdf",
-        "descriptor": null
-      }
-    ]
-  }
-  ```
+The filename in Payabli. Get this from the `zipName` field
+in the `DocumentsRef.filelist` array returned by
+`/api/Bill/{idBill}`. Example: `0_Bill.pdf`.
     
 </dd>
 </dl>
@@ -194,7 +181,7 @@ request to `/api/Invoice/{idInvoice}`. Here, the filename is
 <dl>
 <dd>
 
-**$returnObject:** `?bool` — When `true`, the request returns the file content as a Base64-encoded string.
+**$returnObject:** `?bool` — When `true`, the response includes the full bill object.
     
 </dd>
 </dl>
@@ -388,17 +375,9 @@ $client->bill->getAttachedFromBill(
 
 **$filename:** `string` 
 
-The filename in Payabli. Filename is `zipName` in response to a request to `/api/Invoice/{idInvoice}`. Here, the filename is `0_Bill.pdf``. 
-"DocumentsRef": {
-  "zipfile": "inva_269.zip",
-  "filelist": [
-    {
-      "originalName": "Bill.pdf",
-      "zipName": "0_Bill.pdf",
-      "descriptor": null
-    }
-  ]
-}
+The filename in Payabli. Get this from the `zipName` field
+in the `DocumentsRef.filelist` array returned by
+`/api/Bill/{idBill}`. Example: `0_Bill.pdf`.
     
 </dd>
 </dl>
@@ -794,7 +773,8 @@ Modify the list of users the bill is sent to for approval.
 $client->bill->modifyApprovalBill(
     285,
     [
-        'string',
+        'approver1@example.com',
+        'approver2@example.com',
     ],
 );
 ```
@@ -2197,7 +2177,7 @@ $client->chargeBacks->getChargeback(
 <dl>
 <dd>
 
-**$id:** `int` — ID of the chargeback or return record. This is returned as `chargebackId` in the [RecievedChargeback](/developers/developer-guides/webhook-payloads#receivedChargeback) and [ReceivedAchReturn](/developers/developer-guides/webhook-payloads#receivedachreturn) webhook notifications.
+**$id:** `int` — ID of the chargeback or return record. This is returned as `chargebackID` in the [ReceivedChargeBack](/guides/pay-ops-webhooks-payloads#receivedchargeback) and [ReceivedAchReturn](/guides/pay-ops-webhooks-payloads#receivedachreturn) webhook notifications.
     
 </dd>
 </dl>
@@ -8111,7 +8091,7 @@ $client->hostedPaymentPages->loadPage(
 <dl>
 <dd>
 
-**$subdomain:** `string` — Payment page identifier. The subdomain value is the last part of the payment page URL. For example, in`https://paypages-sandbox.payabli.com/513823dc10/pay-your-fees-1`, the subdomain is `pay-your-fees-1`.
+**$subdomain:** `string` — Payment page identifier. The subdomain value is the last part of the payment page URL. For example, in `https://paypages-sandbox.payabli.com/513823dc10/pay-your-fees-1`, the subdomain is `pay-your-fees-1`.
     
 </dd>
 </dl>
@@ -8255,7 +8235,7 @@ $client->hostedPaymentPages->savePage(
 <dl>
 <dd>
 
-**$subdomain:** `string` — Payment page identifier. The subdomain value is the last part of the payment page URL. For example, in`https://paypages-sandbox.payabli.com/513823dc10/pay-your-fees-1`, the subdomain is `pay-your-fees-1`.
+**$subdomain:** `string` — Payment page identifier. The subdomain value is the last part of the payment page URL. For example, in `https://paypages-sandbox.payabli.com/513823dc10/pay-your-fees-1`, the subdomain is `pay-your-fees-1`.
     
 </dd>
 </dl>
@@ -8589,7 +8569,7 @@ $client->invoice->addInvoice(
 <dl>
 <dd>
 
-Deletes an invoice that's attached to a file.
+Deletes a file attached to an invoice.
 </dd>
 </dl>
 </dd>
@@ -8632,17 +8612,9 @@ $client->invoice->deleteAttachedFromInvoice(
 
 **$filename:** `string` 
 
-The filename in Payabli. Filename is `zipName` in response to a request to `/api/Invoice/{idInvoice}`. Here, the filename is `0_Bill.pdf``. 
-"DocumentsRef": {
-  "zipfile": "inva_269.zip",
-  "filelist": [
-    {
-      "originalName": "Bill.pdf",
-      "zipName": "0_Bill.pdf",
-      "descriptor": null
-    }
-  ]
-}
+The filename in Payabli. Get this from the `zipName` field
+in the `DocumentsRef.filelist` array returned by
+`/api/Invoice/{idInvoice}`. Example: `0_Bill.pdf`.
     
 </dd>
 </dl>
@@ -8855,19 +8827,9 @@ $client->invoice->getAttachedFileFromInvoice(
 
 **$filename:** `string` 
 
-The filename in Payabli. Filename is `zipName` in the response to a request to `/api/Invoice/{idInvoice}`. Here, the filename is `0_Bill.pdf``. 
-```
-  "DocumentsRef": {
-    "zipfile": "inva_269.zip",
-    "filelist": [
-      {
-        "originalName": "Bill.pdf",
-        "zipName": "0_Bill.pdf",
-        "descriptor": null
-      }
-    ]
-  }
-  ```
+The filename in Payabli. Get this from the `zipName` field
+in the `DocumentsRef.filelist` array returned by
+`/api/Invoice/{idInvoice}`. Example: `0_Bill.pdf`.
     
 </dd>
 </dl>
@@ -12443,7 +12405,7 @@ $client->moneyOut->reissueOut(
 <dl>
 <dd>
 
-Create a new notification or autogenerated report. 
+Create a new notification or auto-generated report. 
 </dd>
 </dl>
 </dd>
@@ -12509,7 +12471,7 @@ $client->notification->addNotification(
 <dl>
 <dd>
 
-Deletes a single notification or autogenerated report.
+Deletes a single notification or auto-generated report.
 </dd>
 </dl>
 </dd>
@@ -12565,7 +12527,7 @@ $client->notification->deleteNotification(
 <dl>
 <dd>
 
-Retrieves a single notification or autogenerated report's details.
+Retrieves a single notification or auto-generated report's details.
 </dd>
 </dl>
 </dd>
@@ -12621,7 +12583,7 @@ $client->notification->getNotification(
 <dl>
 <dd>
 
-Update a notification or autogenerated report. 
+Update a notification or auto-generated report. 
 </dd>
 </dl>
 </dd>
@@ -13737,7 +13699,7 @@ $client->organization->getBasicOrganization(
 <dl>
 <dd>
 
-Gets an organizations basic details by org ID.
+Gets an organization's basic details by org ID.
 </dd>
 </dl>
 </dd>
@@ -15608,7 +15570,7 @@ $client->payoutSubscription->createPayoutSubscription(
                 ]),
             ],
             'scheduleDetails' => new PayoutScheduleDetail([
-                'startDate' => '09/01/2025',
+                'startDate' => '09/01/2027',
                 'endDate' => '09/01/2026',
                 'frequency' => Frequency::Monthly->value,
             ]),
@@ -16018,7 +15980,7 @@ $client->paypoint->getEntryConfig(
 <dl>
 <dd>
 
-Gets the details for single payment page for a paypoint. 
+Gets the details for a single payment page for a paypoint. 
 </dd>
 </dl>
 </dd>
@@ -16059,7 +16021,7 @@ $client->paypoint->getPage(
 <dl>
 <dd>
 
-**$subdomain:** `string` — Payment page identifier. The subdomain value is the last portion of the payment page URL. For example, in`https://paypages-sandbox.payabli.com/513823dc10/pay-your-fees-1`, the subdomain is `pay-your-fees-1`.
+**$subdomain:** `string` — Payment page identifier. The subdomain value is the last portion of the payment page URL. For example, in `https://paypages-sandbox.payabli.com/513823dc10/pay-your-fees-1`, the subdomain is `pay-your-fees-1`.
     
 </dd>
 </dl>
@@ -16124,7 +16086,7 @@ $client->paypoint->removePage(
 <dl>
 <dd>
 
-**$subdomain:** `string` — Payment page identifier. The subdomain value is the last portion of the payment page URL. For example, in`https://paypages-sandbox.payabli.com/513823dc10/pay-your-fees-1`, the subdomain is `pay-your-fees-1`.
+**$subdomain:** `string` — Payment page identifier. The subdomain value is the last portion of the payment page URL. For example, in `https://paypages-sandbox.payabli.com/513823dc10/pay-your-fees-1`, the subdomain is `pay-your-fees-1`.
     
 </dd>
 </dl>
@@ -16213,7 +16175,7 @@ $client->paypoint->saveLogo(
 <dl>
 <dd>
 
-Retrieves an paypoint's basic settings like custom fields, identifiers, and invoicing settings.
+Retrieves a paypoint's basic settings like custom fields, identifiers, and invoicing settings.
 </dd>
 </dl>
 </dd>
@@ -16505,7 +16467,7 @@ Example: `settledAmount(gt)=20` returns all records with a `settledAmount` great
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;query-&gt;listBatchDetailsOrg($orgId, $request) -> ?QueryResponseSettlements</code></summary>
+<details><summary><code>$client-&gt;query-&gt;listBatchDetailsOrg($orgId, $request) -> ?QueryBatchesDetailResponse</code></summary>
 <dl>
 <dd>
 
@@ -22957,11 +22919,11 @@ Retrieves the basic statistics for an organization or a paypoint, for a given ti
 $client->statistic->basicStats(
     1000000,
     'm',
-    1,
-    'ytd',
+    2,
+    'custom',
     new BasicStatsRequest([
-        'endDate' => '2025-11-01',
-        'startDate' => '2025-11-30',
+        'startDate' => '2025-11-01',
+        'endDate' => '2025-11-30',
     ]),
 );
 ```
@@ -23217,7 +23179,7 @@ Retrieves the subscription statistics for a given interval for a paypoint or org
 $client->statistic->subStats(
     1000000,
     '30',
-    1,
+    2,
     new SubStatsRequest([]),
 );
 ```
@@ -23727,7 +23689,7 @@ $client->templates->deleteTemplate(
 <dl>
 <dd>
 
-**$templateId:** `float` — The boarding template ID. Can be found at the end of the boarding template URL in PartnerHub. Example: `https://partner-sandbox.payabli.com/myorganization/boarding/edittemplate/80`. Here, the template ID is `80`.
+**$templateId:** `float` — The boarding template ID. You can find this at the end of the boarding template URL in PartnerHub. Example: `https://partner-sandbox.payabli.com/myorganization/boarding/edittemplate/80`. Here, the template ID is `80`.
     
 </dd>
 </dl>
@@ -23784,7 +23746,7 @@ $client->templates->getlinkTemplate(
 <dl>
 <dd>
 
-**$templateId:** `float` — The boarding template ID. Can be found at the end of the boarding template URL in PartnerHub. Example: `https://partner-sandbox.payabli.com/myorganization/boarding/edittemplate/80`. Here, the template ID is `80`.
+**$templateId:** `float` — The boarding template ID. You can find this at the end of the boarding template URL in PartnerHub. Example: `https://partner-sandbox.payabli.com/myorganization/boarding/edittemplate/80`. Here, the template ID is `80`.
     
 </dd>
 </dl>
@@ -23792,7 +23754,7 @@ $client->templates->getlinkTemplate(
 <dl>
 <dd>
 
-**$ignoreEmpty:** `bool` — Ignore read-only and empty fields Default is `false`. If `ignoreEmpty` = `false` and any field is empty, then the request returns a failure response. If `ignoreEmpty` = `true`, the request returns the boarding link name regardless of whether fields are empty.
+**$ignoreEmpty:** `bool` — Ignore read-only and empty fields. Default is `false`. If `ignoreEmpty` = `false` and any field is empty, then the request returns a failure response. If `ignoreEmpty` = `true`, the request returns the boarding link name regardless of whether fields are empty.
     
 </dd>
 </dl>
@@ -23848,7 +23810,7 @@ $client->templates->getTemplate(
 <dl>
 <dd>
 
-**$templateId:** `float` — The boarding template ID. Can be found at the end of the boarding template URL in PartnerHub. Example: `https://partner-sandbox.payabli.com/myorganization/boarding/edittemplate/80`. Here, the template ID is `80`.
+**$templateId:** `float` — The boarding template ID. You can find this at the end of the boarding template URL in PartnerHub. Example: `https://partner-sandbox.payabli.com/myorganization/boarding/edittemplate/80`. Here, the template ID is `80`.
     
 </dd>
 </dl>
@@ -24558,7 +24520,7 @@ $client->user->authUser(
 <dl>
 <dd>
 
-**$provider:** `string` — Auth provider. This fields is optional and defaults to null for the built-in provider.
+**$provider:** `string` — Auth provider. Pass `null` to use the built-in provider.
     
 </dd>
 </dl>

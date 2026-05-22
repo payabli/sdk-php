@@ -256,7 +256,7 @@ class OrganizationClient
     }
 
     /**
-     * Gets an organizations basic details by org ID.
+     * Gets an organization's basic details by org ID.
      *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ?array{

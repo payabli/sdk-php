@@ -28,7 +28,7 @@ class AddMethodResponseResponseData extends JsonSerializableType
     /**
      * Internal unique ID of customer owner of the stored method.
      *
-     * Returns `0` if the method wasn't assigned to an existing customer or no customer was created."
+     * Returns `0` if the method wasn't assigned to an existing customer or no customer was created.
      *
      * @var ?int $customerId
      */

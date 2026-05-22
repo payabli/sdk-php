@@ -6,7 +6,7 @@ use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
 
 /**
- * Information about the standard notification configuration (email, sms, web).
+ * Information about the standard notification configuration (email, SMS, web).
  */
 class NotificationStandardRequest extends JsonSerializableType
 {
@@ -23,7 +23,7 @@ class NotificationStandardRequest extends JsonSerializableType
     public string $frequency;
 
     /**
-     * @var value-of<NotificationStandardRequestMethod> $method Get near-instant notifications via email, SMS, or webhooks for important events like new payment disputes, merchant activations, fraud alerts, approved transactions, settlement history, vendor payouts, and more. Use webhooks with notifications to get real-time updates and automate operations based on key those key events. See [Notifications](/developers/developer-guides/notifications-and-webhooks-overview#notifications) for more.
+     * @var value-of<NotificationStandardRequestMethod> $method Get near-instant notifications via email, SMS, or webhooks for important events like new payment disputes, merchant activations, fraud alerts, approved transactions, settlement history, vendor payouts, and more. Use webhooks with notifications to get real-time updates and automate operations based on those key events. See [Notifications](/developers/developer-guides/notifications-and-webhooks-overview#notifications) for more.
      */
     #[JsonProperty('method')]
     public string $method;

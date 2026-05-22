@@ -123,22 +123,9 @@ class BillClient
      * Delete a file attached to a bill.
      *
      * @param int $idBill Payabli ID for the bill. Get this ID by querying `/api/Query/bills/` for the entrypoint or the organization.
-     * The filename in Payabli. Filename is `zipName` in response to a
-     * request to `/api/Invoice/{idInvoice}`. Here, the filename is
-     * `0_Bill.pdf`.
-     *
-     * ```json
-     *   "DocumentsRef": {
-     *     "zipfile": "inva_269.zip",
-     *     "filelist": [
-     *       {
-     *         "originalName": "Bill.pdf",
-     *         "zipName": "0_Bill.pdf",
-     *         "descriptor": null
-     *       }
-     *     ]
-     *   }
-     *   ```
+     * The filename in Payabli. Get this from the `zipName` field
+     * in the `DocumentsRef.filelist` array returned by
+     * `/api/Bill/{idBill}`. Example: `0_Bill.pdf`.
      *
      * @param string $filename
      * @param DeleteAttachedFromBillRequest $request
@@ -293,17 +280,9 @@ class BillClient
      * Retrieves a file attached to a bill, either as a binary file or as a Base64-encoded string.
      *
      * @param int $idBill Payabli ID for the bill. Get this ID by querying `/api/Query/bills/` for the entrypoint or the organization.
-     * The filename in Payabli. Filename is `zipName` in response to a request to `/api/Invoice/{idInvoice}`. Here, the filename is `0_Bill.pdf``.
-     * "DocumentsRef": {
-     *   "zipfile": "inva_269.zip",
-     *   "filelist": [
-     *     {
-     *       "originalName": "Bill.pdf",
-     *       "zipName": "0_Bill.pdf",
-     *       "descriptor": null
-     *     }
-     *   ]
-     * }
+     * The filename in Payabli. Get this from the `zipName` field
+     * in the `DocumentsRef.filelist` array returned by
+     * `/api/Bill/{idBill}`. Example: `0_Bill.pdf`.
      *
      * @param string $filename
      * @param GetAttachedFromBillRequest $request

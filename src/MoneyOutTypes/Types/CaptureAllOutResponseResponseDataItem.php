@@ -27,7 +27,7 @@ class CaptureAllOutResponseResponseDataItem extends JsonSerializableType
 
     /**
      * Text describing the result.
-     * If `ResultCode`` = 1, returns 'Authorized'.
+     * If `ResultCode` = 1, returns 'Authorized'.
      * If `ResultCode` = 2 or 3, this contains the cause of the decline.
      *
      * @var ?string $resultText

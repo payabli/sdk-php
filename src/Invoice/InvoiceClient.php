@@ -122,20 +122,12 @@ class InvoiceClient
     }
 
     /**
-     * Deletes an invoice that's attached to a file.
+     * Deletes a file attached to an invoice.
      *
      * @param int $idInvoice Invoice ID
-     * The filename in Payabli. Filename is `zipName` in response to a request to `/api/Invoice/{idInvoice}`. Here, the filename is `0_Bill.pdf``.
-     * "DocumentsRef": {
-     *   "zipfile": "inva_269.zip",
-     *   "filelist": [
-     *     {
-     *       "originalName": "Bill.pdf",
-     *       "zipName": "0_Bill.pdf",
-     *       "descriptor": null
-     *     }
-     *   ]
-     * }
+     * The filename in Payabli. Get this from the `zipName` field
+     * in the `DocumentsRef.filelist` array returned by
+     * `/api/Invoice/{idInvoice}`. Example: `0_Bill.pdf`.
      *
      * @param string $filename
      * @param ?array{
@@ -289,19 +281,9 @@ class InvoiceClient
      * Retrieves a file attached to an invoice.
      *
      * @param int $idInvoice Invoice ID
-     * The filename in Payabli. Filename is `zipName` in the response to a request to `/api/Invoice/{idInvoice}`. Here, the filename is `0_Bill.pdf``.
-     * ```
-     *   "DocumentsRef": {
-     *     "zipfile": "inva_269.zip",
-     *     "filelist": [
-     *       {
-     *         "originalName": "Bill.pdf",
-     *         "zipName": "0_Bill.pdf",
-     *         "descriptor": null
-     *       }
-     *     ]
-     *   }
-     *   ```
+     * The filename in Payabli. Get this from the `zipName` field
+     * in the `DocumentsRef.filelist` array returned by
+     * `/api/Invoice/{idInvoice}`. Example: `0_Bill.pdf`.
      *
      * @param string $filename
      * @param GetAttachedFileFromInvoiceRequest $request

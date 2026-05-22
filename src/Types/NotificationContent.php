@@ -30,7 +30,7 @@ class NotificationContent extends JsonSerializableType
     public ?array $internalData;
 
     /**
-     * @var ?value-of<NotificationContentReportName> $reportName The kind report to generate. For [automated reports](/developers/developer-guides/notifications-and-webhooks-overview#automated-reports) only.
+     * @var ?value-of<NotificationContentReportName> $reportName The kind of report to generate. For [automated reports](/developers/developer-guides/notifications-and-webhooks-overview#automated-reports) only.
      */
     #[JsonProperty('reportName')]
     public ?string $reportName;
