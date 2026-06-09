@@ -31,7 +31,7 @@ class CascadeJobDetails extends JsonSerializableType
     public ?string $jobId;
 
     /**
-     * @var ?string $jobStatus
+     * @var ?value-of<JobStatus> $jobStatus
      */
     #[JsonProperty('jobStatus')]
     public ?string $jobStatus;
@@ -47,7 +47,7 @@ class CascadeJobDetails extends JsonSerializableType
      *   createdAt?: ?DateTime,
      *   jobErrorMessage?: ?string,
      *   jobId?: ?string,
-     *   jobStatus?: ?string,
+     *   jobStatus?: ?value-of<JobStatus>,
      *   updatedAt?: ?DateTime,
      * } $values
      */

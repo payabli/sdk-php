@@ -17,7 +17,6 @@ class ListTemplatesRequest extends JsonSerializableType
     public ?int $limitRecord;
 
     /**
-     *
      * Collection of field names, conditions, and values used to filter the query.
      *
      * <Info>

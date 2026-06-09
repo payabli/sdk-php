@@ -28,8 +28,8 @@ use Payabli\Boarding\Requests\ListApplicationsRequest;
 use Payabli\Types\QueryBoardingAppsListResponse;
 use Payabli\Boarding\Requests\ListBoardingLinksRequest;
 use Payabli\Types\QueryBoardingLinksResponse;
-use Payabli\Boarding\Types\CreateApplicationFromPaypointRequest;
-use Payabli\Boarding\Types\CreateApplicationFromPaypointResponse;
+use Payabli\Boarding\Requests\CreateApplicationFromPaypointRequest;
+use Payabli\Types\CreateApplicationFromPaypointResponse;
 
 class BoardingClient
 {
@@ -98,6 +98,56 @@ class BoardingClient
                     path: "Boarding/app",
                     method: HttpMethod::POST,
                     body: JsonSerializer::serializeUnion($request, new Union(ApplicationDataPayIn::class, ApplicationDataManaged::class, ApplicationDataOdp::class, ApplicationData::class)),
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return PayabliApiResponse00Responsedatanonobject::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Updates a boarding application by ID. This endpoint requires an application API token.
+     *
+     * @param int $appId Boarding application ID.
+     * @param ApplicationData $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?PayabliApiResponse00Responsedatanonobject
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function updateApplication(int $appId, ApplicationData $request, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "Boarding/app/{$appId}",
+                    method: HttpMethod::PUT,
+                    body: $request,
                 ),
                 $options,
             );
@@ -582,56 +632,6 @@ class BoardingClient
                     return null;
                 }
                 return QueryBoardingLinksResponse::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Updates a boarding application by ID. This endpoint requires an application API token.
-     *
-     * @param int $appId Boarding application ID.
-     * @param ApplicationData $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?PayabliApiResponse00Responsedatanonobject
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function updateApplication(int $appId, ApplicationData $request, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
-    {
-        $options = array_merge($this->options, $options ?? []);
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "Boarding/app/{$appId}",
-                    method: HttpMethod::PUT,
-                    body: $request,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return PayabliApiResponse00Responsedatanonobject::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

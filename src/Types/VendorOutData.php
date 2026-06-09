@@ -5,14 +5,13 @@ namespace Payabli\Types;
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
 use Payabli\Core\Types\ArrayType;
-use Payabli\Core\Types\Union;
 
 class VendorOutData extends JsonSerializableType
 {
     /**
-     * @var ?array<string, ?array<string, mixed>> $additionalData
+     * @var ?array<string, array<string, mixed>> $additionalData
      */
-    #[JsonProperty('additionalData'), ArrayType(['string' => new Union(['string' => 'mixed'], 'null')])]
+    #[JsonProperty('additionalData'), ArrayType(['string' => ['string' => 'mixed']])]
     public ?array $additionalData;
 
     /**
@@ -198,7 +197,7 @@ class VendorOutData extends JsonSerializableType
      *   phone: string,
      *   state: string,
      *   zip: string,
-     *   additionalData?: ?array<string, ?array<string, mixed>>,
+     *   additionalData?: ?array<string, array<string, mixed>>,
      *   address1?: ?string,
      *   address2?: ?string,
      *   billingData?: ?BillingData,

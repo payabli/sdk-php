@@ -4,8 +4,8 @@ namespace Payabli\MoneyOut;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
-use Payabli\MoneyOut\Requests\MoneyOutTypesRequestOutAuthorize;
-use Payabli\MoneyOutTypes\Types\AuthCapturePayoutResponse;
+use Payabli\MoneyOut\Requests\RequestOutAuthorize;
+use Payabli\Types\AuthCapturePayoutResponse;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -13,20 +13,20 @@ use Payabli\Environments;
 use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
-use Payabli\MoneyOutTypes\Types\CaptureAllOutResponse;
+use Payabli\Types\CaptureAllOutResponse;
 use Payabli\Core\Json\JsonSerializer;
 use Payabli\Types\PayabliApiResponse0000;
 use Payabli\MoneyOut\Requests\CaptureAllOutRequest;
 use Payabli\MoneyOut\Requests\CaptureOutRequest;
 use Payabli\Types\BillDetailResponse;
-use Payabli\MoneyOutTypes\Types\VCardGetResponse;
+use Payabli\Types\VCardGetResponse;
 use Payabli\MoneyOut\Requests\SendVCardLinkRequest;
-use Payabli\MoneyOutTypes\Types\OperationResult;
+use Payabli\Types\OperationResult;
 use Payabli\Core\Json\JsonDecoder;
-use Payabli\MoneyOutTypes\Types\AllowedCheckPaymentStatus;
+use Payabli\Types\AllowedCheckPaymentStatus;
 use Payabli\Types\PayabliApiResponse00Responsedatanonobject;
 use Payabli\MoneyOut\Requests\ReissueOutRequest;
-use Payabli\MoneyOutTypes\Types\ReissuePayoutResponse;
+use Payabli\Types\ReissuePayoutResponse;
 
 class MoneyOutClient
 {
@@ -71,7 +71,7 @@ class MoneyOutClient
      *
      * When `autoCapture` is `true`, Payabli captures the transaction asynchronously after authorization. The response confirms only that the transaction was authorized; it doesn't confirm that capture succeeded. To confirm capture, listen for the [`payout_transaction_approvedcaptured`](/developers/webhooks/payout-transaction-approved-captured) webhook event.
      *
-     * @param MoneyOutTypesRequestOutAuthorize $request
+     * @param RequestOutAuthorize $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -84,7 +84,7 @@ class MoneyOutClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function authorizeOut(MoneyOutTypesRequestOutAuthorize $request, ?array $options = null): ?AuthCapturePayoutResponse
+    public function authorizeOut(RequestOutAuthorize $request, ?array $options = null): ?AuthCapturePayoutResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -109,7 +109,7 @@ class MoneyOutClient
                     method: HttpMethod::POST,
                     headers: $headers,
                     query: $query,
-                    body: $request->body,
+                    body: $request,
                 ),
                 $options,
             );
@@ -689,7 +689,7 @@ class MoneyOutClient
                     method: HttpMethod::POST,
                     headers: $headers,
                     query: $query,
-                    body: $request->body,
+                    body: $request,
                 ),
                 $options,
             );

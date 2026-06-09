@@ -13,9 +13,9 @@ use Payabli\Environments;
 use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
-use Payabli\Types\PayabliApiResponse00Responsedatanonobject;
 use Payabli\Types\CustomerQueryRecords;
 use Payabli\Types\CustomerData;
+use Payabli\Types\PayabliApiResponse00Responsedatanonobject;
 
 class CustomerClient
 {
@@ -57,7 +57,7 @@ class CustomerClient
      * Creates a customer in an entrypoint. An identifier is required to create customer records. Change your identifier settings in Settings > Custom Fields in PartnerHub.
      * If you don't include an identifier, the record is rejected.
      *
-     * @param string $entry
+     * @param string $entry The entrypoint identifier.
      * @param AddCustomerRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -104,54 +104,6 @@ class CustomerClient
                     return null;
                 }
                 return PayabliApiResponseCustomerQuery::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Delete a customer record.
-     *
-     * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in PartnerHub.
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?PayabliApiResponse00Responsedatanonobject
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function deleteCustomer(int $customerId, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
-    {
-        $options = array_merge($this->options, $options ?? []);
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "Customer/{$customerId}",
-                    method: HttpMethod::DELETE,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return PayabliApiResponse00Responsedatanonobject::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -214,10 +166,10 @@ class CustomerClient
     }
 
     /**
-     * Links a customer to a transaction by ID.
+     * Update a customer record. Include only the fields you want to change.
      *
      * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in PartnerHub.
-     * @param string $transId ReferenceId for the transaction (PaymentId).
+     * @param CustomerData $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -230,15 +182,64 @@ class CustomerClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function linkCustomerTransaction(int $customerId, string $transId, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
+    public function updateCustomer(int $customerId, CustomerData $request, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
     {
         $options = array_merge($this->options, $options ?? []);
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "Customer/link/{$customerId}/{$transId}",
-                    method: HttpMethod::GET,
+                    path: "Customer/{$customerId}",
+                    method: HttpMethod::PUT,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return PayabliApiResponse00Responsedatanonobject::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Delete a customer record.
+     *
+     * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in PartnerHub.
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?PayabliApiResponse00Responsedatanonobject
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function deleteCustomer(int $customerId, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "Customer/{$customerId}",
+                    method: HttpMethod::DELETE,
                 ),
                 $options,
             );
@@ -311,10 +312,10 @@ class CustomerClient
     }
 
     /**
-     * Update a customer record. Include only the fields you want to change.
+     * Links a customer to a transaction by ID.
      *
      * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in PartnerHub.
-     * @param CustomerData $request
+     * @param string $transId ReferenceId for the transaction (PaymentId).
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -327,16 +328,15 @@ class CustomerClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function updateCustomer(int $customerId, CustomerData $request, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
+    public function linkCustomerTransaction(int $customerId, string $transId, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
     {
         $options = array_merge($this->options, $options ?? []);
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "Customer/{$customerId}",
-                    method: HttpMethod::PUT,
-                    body: $request,
+                    path: "Customer/link/{$customerId}/{$transId}",
+                    method: HttpMethod::GET,
                 ),
                 $options,
             );

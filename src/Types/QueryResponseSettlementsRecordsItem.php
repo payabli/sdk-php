@@ -77,11 +77,8 @@ class QueryResponseSettlementsRecordsItem extends JsonSerializableType
     public ?BillData $invoiceData;
 
     /**
-     *
      * Describes whether the transaction is being held or not.
-     *
      * 1 - Transaction is held
-     *
      * 0 - Transaction isn't being held
      *
      * @var ?int $isHold

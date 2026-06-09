@@ -5,7 +5,7 @@ namespace Payabli\MoneyIn;
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\MoneyIn\Requests\RequestPaymentAuthorize;
-use Payabli\MoneyIn\Types\AuthResponse;
+use Payabli\Types\AuthResponse;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -13,25 +13,25 @@ use Payabli\Environments;
 use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
-use Payabli\MoneyIn\Types\CaptureResponse;
-use Payabli\MoneyIn\Types\CaptureRequest;
+use Payabli\Types\CaptureResponse;
+use Payabli\Types\CaptureRequest;
 use Payabli\MoneyIn\Requests\RequestCredit;
 use Payabli\Types\PayabliApiResponse0;
 use Payabli\Types\TransactionQueryRecordsCustomer;
 use Payabli\MoneyIn\Requests\RequestPayment;
-use Payabli\MoneyIn\Types\PayabliApiResponseGetPaid;
-use Payabli\MoneyIn\Types\ReverseResponse;
-use Payabli\MoneyIn\Types\RefundResponse;
+use Payabli\Types\PayabliApiResponseGetPaid;
+use Payabli\Types\ReverseResponse;
+use Payabli\Types\RefundResponse;
 use Payabli\MoneyIn\Requests\RequestRefund;
-use Payabli\MoneyIn\Types\RefundWithInstructionsResponse;
+use Payabli\Types\RefundWithInstructionsResponse;
 use Payabli\Types\PayabliApiResponse;
 use Payabli\MoneyIn\Requests\SendReceipt2TransRequest;
-use Payabli\MoneyIn\Types\ReceiptResponse;
+use Payabli\Types\ReceiptResponse;
 use Payabli\MoneyIn\Requests\RequestPaymentValidate;
-use Payabli\MoneyIn\Types\ValidateResponse;
-use Payabli\MoneyIn\Types\VoidResponse;
+use Payabli\Types\ValidateResponse;
+use Payabli\Types\VoidResponse;
 use Payabli\MoneyIn\Requests\RequestPaymentV2;
-use Payabli\V2MoneyInTypes\Types\V2TransactionResponseWrapper;
+use Payabli\Types\V2TransactionResponseWrapper;
 use Payabli\MoneyIn\Requests\RequestPaymentAuthorizeV2;
 
 class MoneyInClient
@@ -428,7 +428,6 @@ class MoneyInClient
      * A reversal either refunds or voids a transaction independent of the transaction's settlement status. Send a reversal request for a transaction, and Payabli automatically determines whether it's a refund or void. You don't need to know whether the transaction is settled or not. This endpoint only works on transactions made with the v1 API. For v2 transactions, check the transaction's settlement status and call v2 void or v2 refund based on the result.
      *
      * @param string $transId ReferenceId for the transaction (PaymentId).
-     *
      * Amount to reverse from original transaction, minus any service fees charged on the original transaction.
      *
      * The amount provided can't be greater than the original total amount of the transaction, minus service fees. For example, if a transaction was $90 plus a $10 service fee, you can reverse up to $90.
@@ -488,7 +487,6 @@ class MoneyInClient
      *   </Tip>
      *
      * @param string $transId ReferenceId for the transaction (PaymentId).
-     *
      * Amount to refund from original transaction, minus any service fees charged on the original transaction.
      *
      * The amount provided can't be greater than the original total amount of the transaction, minus service fees. For example, if a transaction was \$90 plus a \$10 service fee, you can refund up to \$90.

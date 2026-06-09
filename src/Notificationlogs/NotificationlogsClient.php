@@ -5,7 +5,7 @@ namespace Payabli\Notificationlogs;
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\Notificationlogs\Requests\SearchNotificationLogsRequest;
-use Payabli\Notificationlogs\Types\NotificationLog;
+use Payabli\Types\NotificationLog;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -14,7 +14,7 @@ use Payabli\Core\Client\HttpMethod;
 use Payabli\Core\Json\JsonDecoder;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
-use Payabli\Notificationlogs\Types\NotificationLogDetail;
+use Payabli\Types\NotificationLogDetail;
 use Payabli\Core\Json\JsonSerializer;
 
 class NotificationlogsClient
@@ -87,10 +87,10 @@ class NotificationlogsClient
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "/v2/notificationlogs",
+                    path: "v2/notificationlogs",
                     method: HttpMethod::POST,
                     query: $query,
-                    body: $request->body,
+                    body: $request,
                 ),
                 $options,
             );
@@ -138,7 +138,7 @@ class NotificationlogsClient
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "/v2/notificationlogs/{$uuid}",
+                    path: "v2/notificationlogs/{$uuid}",
                     method: HttpMethod::GET,
                 ),
                 $options,
@@ -188,7 +188,7 @@ class NotificationlogsClient
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "/v2/notificationlogs/{$uuid}/retry",
+                    path: "v2/notificationlogs/{$uuid}/retry",
                     method: HttpMethod::GET,
                 ),
                 $options,
@@ -238,7 +238,7 @@ class NotificationlogsClient
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "/v2/notificationlogs/retry",
+                    path: "v2/notificationlogs/retry",
                     method: HttpMethod::POST,
                     body: JsonSerializer::serializeArray($request, ['string']),
                 ),

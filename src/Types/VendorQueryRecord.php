@@ -5,16 +5,15 @@ namespace Payabli\Types;
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
 use Payabli\Core\Types\ArrayType;
-use Payabli\Core\Types\Union;
 use DateTime;
 use Payabli\Core\Types\Date;
 
 class VendorQueryRecord extends JsonSerializableType
 {
     /**
-     * @var ?array<string, ?array<string, mixed>> $additionalData
+     * @var ?array<string, array<string, mixed>> $additionalData
      */
-    #[JsonProperty('additionalData'), ArrayType(['string' => new Union(['string' => 'mixed'], 'null')])]
+    #[JsonProperty('additionalData'), ArrayType(['string' => ['string' => 'mixed']])]
     public ?array $additionalData;
 
     /**
@@ -319,7 +318,7 @@ class VendorQueryRecord extends JsonSerializableType
 
     /**
      * @param array{
-     *   additionalData?: ?array<string, ?array<string, mixed>>,
+     *   additionalData?: ?array<string, array<string, mixed>>,
      *   address1?: ?string,
      *   address2?: ?string,
      *   billingData?: ?BillingDataResponse,

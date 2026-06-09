@@ -7,7 +7,6 @@ use Payabli\Core\Json\JsonProperty;
 use Payabli\Core\Types\ArrayType;
 use DateTime;
 use Payabli\Core\Types\Date;
-use Payabli\Core\Types\Union;
 
 class AssociatedVendor extends JsonSerializableType
 {
@@ -246,9 +245,9 @@ class AssociatedVendor extends JsonSerializableType
     public ?int $internalReferenceId;
 
     /**
-     * @var ?array<string, ?array<string, mixed>> $additionalData
+     * @var ?array<string, array<string, mixed>> $additionalData
      */
-    #[JsonProperty('additionalData'), ArrayType(['string' => new Union(['string' => 'mixed'], 'null')])]
+    #[JsonProperty('additionalData'), ArrayType(['string' => ['string' => 'mixed']])]
     public ?array $additionalData;
 
     /**
@@ -298,7 +297,7 @@ class AssociatedVendor extends JsonSerializableType
      *   customField2?: ?string,
      *   customerVendorAccount?: ?string,
      *   internalReferenceId?: ?int,
-     *   additionalData?: ?array<string, ?array<string, mixed>>,
+     *   additionalData?: ?array<string, array<string, mixed>>,
      *   externalPaypointId?: ?string,
      * } $values
      */

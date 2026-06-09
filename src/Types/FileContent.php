@@ -11,7 +11,10 @@ use Payabli\Core\Json\JsonProperty;
 class FileContent extends JsonSerializableType
 {
     /**
-     * @var ?string $fContent Content of file, Base64-encoded. Ignored if furl is specified. Max upload size is 30 MB.
+     * Content of file, Base64-encoded. Ignored if `furl` is specified. Max
+     * upload size is 30 MB.
+     *
+     * @var ?string $fContent
      */
     #[JsonProperty('fContent')]
     public ?string $fContent;
@@ -23,13 +26,13 @@ class FileContent extends JsonSerializableType
     public ?string $filename;
 
     /**
-     * @var ?value-of<FileContentFtype> $ftype The MIME type of the file (if content is provided)
+     * @var ?value-of<FileContentFtype> $ftype
      */
     #[JsonProperty('ftype')]
     public ?string $ftype;
 
     /**
-     * @var ?string $furl Optional URL provided to show or download the file remotely
+     * @var ?string $furl Optional URL provided to show or download the file remotely.
      */
     #[JsonProperty('furl')]
     public ?string $furl;

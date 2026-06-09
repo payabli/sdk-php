@@ -3,12 +3,14 @@
 namespace Payabli\Notificationlogs\Requests;
 
 use Payabli\Core\Json\JsonSerializableType;
-use Payabli\Notificationlogs\Types\NotificationLogSearchRequest;
+use DateTime;
+use Payabli\Core\Json\JsonProperty;
+use Payabli\Core\Types\Date;
 
 class SearchNotificationLogsRequest extends JsonSerializableType
 {
     /**
-     * @var ?int $pageSize
+     * @var ?int $pageSize Number of records on each response page.
      */
     public ?int $pageSize;
 
@@ -18,15 +20,51 @@ class SearchNotificationLogsRequest extends JsonSerializableType
     public ?int $page;
 
     /**
-     * @var NotificationLogSearchRequest $body
+     * @var DateTime $startDate The start date for the search.
      */
-    public NotificationLogSearchRequest $body;
+    #[JsonProperty('startDate'), Date(Date::TYPE_DATETIME)]
+    public DateTime $startDate;
+
+    /**
+     * @var DateTime $endDate The end date for the search.
+     */
+    #[JsonProperty('endDate'), Date(Date::TYPE_DATETIME)]
+    public DateTime $endDate;
+
+    /**
+     * @var ?string $notificationEvent The type of notification event to filter by.
+     */
+    #[JsonProperty('notificationEvent')]
+    public ?string $notificationEvent;
+
+    /**
+     * @var ?bool $succeeded Indicates whether the notification was successful.
+     */
+    #[JsonProperty('succeeded')]
+    public ?bool $succeeded;
+
+    /**
+     * @var ?int $orgId The ID of the organization to filter by.
+     */
+    #[JsonProperty('orgId')]
+    public ?int $orgId;
+
+    /**
+     * @var ?int $paypointId The ID of the paypoint to filter by.
+     */
+    #[JsonProperty('paypointId')]
+    public ?int $paypointId;
 
     /**
      * @param array{
-     *   body: NotificationLogSearchRequest,
+     *   startDate: DateTime,
+     *   endDate: DateTime,
      *   pageSize?: ?int,
      *   page?: ?int,
+     *   notificationEvent?: ?string,
+     *   succeeded?: ?bool,
+     *   orgId?: ?int,
+     *   paypointId?: ?int,
      * } $values
      */
     public function __construct(
@@ -34,6 +72,11 @@ class SearchNotificationLogsRequest extends JsonSerializableType
     ) {
         $this->pageSize = $values['pageSize'] ?? null;
         $this->page = $values['page'] ?? null;
-        $this->body = $values['body'];
+        $this->startDate = $values['startDate'];
+        $this->endDate = $values['endDate'];
+        $this->notificationEvent = $values['notificationEvent'] ?? null;
+        $this->succeeded = $values['succeeded'] ?? null;
+        $this->orgId = $values['orgId'] ?? null;
+        $this->paypointId = $values['paypointId'] ?? null;
     }
 }

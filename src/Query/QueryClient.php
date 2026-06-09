@@ -5,7 +5,7 @@ namespace Payabli\Query;
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\Query\Requests\ListBatchDetailsRequest;
-use Payabli\QueryTypes\Types\QueryBatchesDetailResponse;
+use Payabli\Types\QueryBatchesDetailResponse;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -15,7 +15,7 @@ use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Payabli\Query\Requests\ListBatchDetailsOrgRequest;
 use Payabli\Query\Requests\ListBatchesRequest;
-use Payabli\QueryTypes\Types\QueryBatchesResponse;
+use Payabli\Types\QueryBatchesResponse;
 use Payabli\Query\Requests\ListBatchesOrgRequest;
 use Payabli\Query\Requests\ListBatchesOutRequest;
 use Payabli\Types\QueryBatchesOutResponse;
@@ -27,7 +27,7 @@ use Payabli\Query\Requests\ListCustomersRequest;
 use Payabli\Types\QueryCustomerResponse;
 use Payabli\Query\Requests\ListCustomersOrgRequest;
 use Payabli\Query\Requests\ListDevicesRequest;
-use Payabli\QueryTypes\Types\QueryDeviceResponse;
+use Payabli\Types\QueryDeviceResponse;
 use Payabli\Query\Requests\ListDevicesOrgRequest;
 use Payabli\Query\Requests\ListNotificationReportsRequest;
 use Payabli\Types\QueryResponseNotificationReports;
@@ -36,7 +36,7 @@ use Payabli\Query\Requests\ListNotificationsRequest;
 use Payabli\Types\QueryResponseNotifications;
 use Payabli\Query\Requests\ListNotificationsOrgRequest;
 use Payabli\Query\Requests\ListOrganizationsRequest;
-use Payabli\QueryTypes\Types\ListOrganizationsResponse;
+use Payabli\Types\ListOrganizationsResponse;
 use Payabli\Query\Requests\ListPayoutRequest;
 use Payabli\Types\QueryPayoutTransaction;
 use Payabli\Query\Requests\ListPayoutOrgRequest;
@@ -49,21 +49,21 @@ use Payabli\Query\Requests\ListSubscriptionsRequest;
 use Payabli\Types\QuerySubscriptionResponse;
 use Payabli\Query\Requests\ListSubscriptionsOrgRequest;
 use Payabli\Query\Requests\ListPayoutSubscriptionsRequest;
-use Payabli\PayoutSubscription\Types\QueryPayoutSubscriptionResponse;
+use Payabli\Types\QueryPayoutSubscriptionResponse;
 use Payabli\Query\Requests\ListPayoutSubscriptionsOrgRequest;
 use Payabli\Query\Requests\ListTransactionsRequest;
 use Payabli\Types\QueryResponseTransactions;
 use Payabli\Query\Requests\ListTransactionsOrgRequest;
 use Payabli\Query\Requests\ListTransfersPaypointRequest;
-use Payabli\QueryTypes\Types\QueryTransferDetailResponse;
+use Payabli\Types\QueryTransferDetailResponse;
 use Payabli\Query\Requests\ListTransfersRequest;
 use Payabli\Types\TransferQueryResponse;
 use Payabli\Query\Requests\ListTransfersRequestOrg;
 use Payabli\Query\Requests\ListTransfersOutOrgRequest;
-use Payabli\QueryTypes\Types\TransferOutQueryResponse;
+use Payabli\Types\TransferOutQueryResponse;
 use Payabli\Query\Requests\ListTransfersOutPaypointRequest;
 use Payabli\Query\Requests\ListTransferDetailsOutRequest;
-use Payabli\QueryTypes\Types\TransferOutDetailQueryResponse;
+use Payabli\Types\TransferOutDetailQueryResponse;
 use Payabli\Query\Requests\ListUsersOrgRequest;
 use Payabli\Types\QueryUserResponse;
 use Payabli\Query\Requests\ListUsersPaypointRequest;
@@ -73,7 +73,7 @@ use Payabli\Query\Requests\ListVendorsOrgRequest;
 use Payabli\Query\Requests\ListVcardsRequest;
 use Payabli\Types\VCardQueryResponse;
 use Payabli\Query\Requests\ListVcardsTransactionsRequest;
-use Payabli\QueryTypes\Types\VCardTransactionQueryResponse;
+use Payabli\Types\VCardTransactionQueryResponse;
 use Payabli\Query\Requests\ListVcardsTransactionsOrgRequest;
 use Payabli\Query\Requests\ListVcardsOrgRequest;
 
@@ -117,7 +117,7 @@ class QueryClient
      * Retrieve a list of batches and their details, including settled and
      * unsettled transactions for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
-     * @param string $entry
+     * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListBatchDetailsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -249,7 +249,7 @@ class QueryClient
     /**
      * Retrieve a list of batches for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
-     * @param string $entry
+     * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListBatchesRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -381,7 +381,7 @@ class QueryClient
     /**
      * Retrieve a list of MoneyOut batches for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
-     * @param string $entry
+     * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListBatchesOutRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -513,7 +513,7 @@ class QueryClient
     /**
      * Retrieves a list of chargebacks and returned transactions for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
-     * @param string $entry
+     * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListChargebacksRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -645,7 +645,7 @@ class QueryClient
     /**
      * Retrieves a list of customers for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
-     * @param string $entry
+     * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListCustomersRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -777,7 +777,7 @@ class QueryClient
     /**
      * Returns a list of cloud devices for a single paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
-     * @param string $entry
+     * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListDevicesRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -909,7 +909,7 @@ class QueryClient
     /**
      * Returns a list of all reports generated in the last 60 days for a single entrypoint. Use filters to limit results.
      *
-     * @param string $entry
+     * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListNotificationReportsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -1035,7 +1035,7 @@ class QueryClient
     /**
      * Returns a list of notifications for an entrypoint. Use filters to limit results.
      *
-     * @param string $entry
+     * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListNotificationsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -1227,7 +1227,7 @@ class QueryClient
     /**
      * Retrieves a list of money out transactions (payouts) for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
-     * @param string $entry
+     * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListPayoutRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -1425,7 +1425,7 @@ class QueryClient
     /**
      * Retrieve a list of settled transactions for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
-     * @param string $entry
+     * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListSettlementsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -1557,7 +1557,7 @@ class QueryClient
     /**
      * Returns a list of subscriptions for a single paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
-     * @param string $entry
+     * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListSubscriptionsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -1689,7 +1689,7 @@ class QueryClient
     /**
      * Returns a list of payout subscriptions for a single paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response. See [Manage payout subscriptions](/guides/pay-out-developer-payout-subscriptions-manage) for more information.
      *
-     * @param string $entry
+     * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListPayoutSubscriptionsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -1820,14 +1820,17 @@ class QueryClient
 
     /**
      * Retrieve a list of transactions for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
+     *
      * By default, this endpoint returns only transactions from the last 60 days. To query transactions outside of this period, include `transactionDate` filters.
-     * For example, this request parameters filter for transactions between April 01, 2024 and April 09, 2024.
-     * ``` curl -X GET https://sandbox.payabli.com/api/Query/transactions/org/1?limitRecord=20&fromRecord=0&transactionDate(ge)=2024-04-01T00:00:00&transactionDate(le)=2024-04-09T23:59:59\
+     *
+     * These request parameters filter for transactions between April 1, 2024 and April 9, 2024.
+     *
+     * ```bash
+     * curl -X GET https://api-sandbox.payabli.com/api/Query/transactions/8cfec329267?limitRecord=20&fromRecord=0&transactionDate(ge)=2024-04-01T00:00:00&transactionDate(le)=2024-04-09T23:59:59 \
      *   -H 'requestToken: <API TOKEN>'
+     * ```
      *
-     *   ```
-     *
-     * @param string $entry
+     * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListTransactionsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -1891,20 +1894,16 @@ class QueryClient
     }
 
     /**
-     *
-     * Retrieve a list of transactions for an organization. Use filters to
-     * limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
-     *
+     * Retrieve a list of transactions for an organization. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
      * By default, this endpoint returns only transactions from the last 60 days. To query transactions outside of this period, include `transactionDate` filters.
      *
-     * For example, this request parameters filter for transactions between April 01, 2024 and April 09, 2024.
+     * These request parameters filter for transactions between April 1, 2024 and April 9, 2024.
      *
-     * ```
-     * curl -X GET "https://sandbox.payabli.com/api/Query/transactions/org/1?limitRecord=20&fromRecord=0&transactionDate(ge)=2024-04-01T00:00:00&transactionDate(le)=2024-04-09T23:59:59"\
+     * ```bash
+     * curl -X GET "https://api-sandbox.payabli.com/api/Query/transactions/org/1?limitRecord=20&fromRecord=0&transactionDate(ge)=2024-04-01T00:00:00&transactionDate(le)=2024-04-09T23:59:59" \
      *   -H 'requestToken: <API TOKEN>'
-     *
-     *   ```
+     * ```
      *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListTransactionsOrgRequest $request
@@ -1972,7 +1971,7 @@ class QueryClient
     /**
      * Retrieve a list of transfer details records for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
-     * @param string $entry
+     * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param int $transferId The numeric identifier for the transfer, assigned by Payabli.
      * @param ListTransfersPaypointRequest $request
      * @param ?array{
@@ -2039,7 +2038,7 @@ class QueryClient
     /**
      * Retrieve a list of transfers for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
-     * @param string $entry
+     * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListTransfersRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -2105,7 +2104,7 @@ class QueryClient
     /**
      * Retrieve a list of transfers for an org. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
-     * @param int $orgId
+     * @param int $orgId Organization ID. Unique identifier assigned to an org by Payabli.
      * @param ListTransfersRequestOrg $request
      * @param ?array{
      *   baseUrl?: string,
@@ -2234,7 +2233,7 @@ class QueryClient
     /**
      * Retrieve a list of outbound transfers for a paypoint. Use filters to limit results.
      *
-     * @param string $entry
+     * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListTransfersOutPaypointRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -2297,7 +2296,7 @@ class QueryClient
     /**
      * Retrieve details for a specific outbound transfer. Use filters to limit results.
      *
-     * @param string $entry
+     * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param int $transferId The numeric identifier for the transfer, assigned by Payabli.
      * @param ListTransferDetailsOutRequest $request
      * @param ?array{
@@ -2619,7 +2618,7 @@ class QueryClient
     /**
      * Retrieve a list of vcards (virtual credit cards) issued for an entrypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
-     * @param string $entry
+     * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListVcardsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -2685,7 +2684,7 @@ class QueryClient
     /**
      * Retrieve a list of virtual card transactions for an entrypoint. Use filters to limit results.
      *
-     * @param string $entry
+     * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListVcardsTransactionsRequest $request
      * @param ?array{
      *   baseUrl?: string,

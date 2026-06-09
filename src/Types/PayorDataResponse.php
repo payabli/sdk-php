@@ -5,7 +5,6 @@ namespace Payabli\Types;
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
 use Payabli\Core\Types\ArrayType;
-use Payabli\Core\Types\Union;
 
 /**
  * Customer information.
@@ -97,9 +96,9 @@ class PayorDataResponse extends JsonSerializableType
     public ?string $firstName;
 
     /**
-     * @var ?array<?string> $identifiers
+     * @var ?array<string> $identifiers
      */
-    #[JsonProperty('Identifiers'), ArrayType([new Union('string', 'null')])]
+    #[JsonProperty('Identifiers'), ArrayType(['string'])]
     public ?array $identifiers;
 
     /**
@@ -160,7 +159,7 @@ class PayorDataResponse extends JsonSerializableType
      *   customerNumber?: ?string,
      *   customerStatus?: ?int,
      *   firstName?: ?string,
-     *   identifiers?: ?array<?string>,
+     *   identifiers?: ?array<string>,
      *   lastName?: ?string,
      *   shippingAddress1?: ?string,
      *   shippingAddress2?: ?string,

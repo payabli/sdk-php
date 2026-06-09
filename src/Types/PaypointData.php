@@ -11,55 +11,55 @@ class PaypointData extends JsonSerializableType
     /**
      * @var ?string $address1
      */
-    #[JsonProperty('address1')]
+    #[JsonProperty('Address1')]
     public ?string $address1;
 
     /**
      * @var ?string $address2
      */
-    #[JsonProperty('address2')]
+    #[JsonProperty('Address2')]
     public ?string $address2;
 
     /**
      * @var ?array<Bank> $bankData
      */
-    #[JsonProperty('bankData'), ArrayType([Bank::class])]
+    #[JsonProperty('BankData'), ArrayType([Bank::class])]
     public ?array $bankData;
 
     /**
      * @var ?int $boardingId
      */
-    #[JsonProperty('boardingId')]
+    #[JsonProperty('BoardingId')]
     public ?int $boardingId;
 
     /**
      * @var ?string $city
      */
-    #[JsonProperty('city')]
+    #[JsonProperty('City')]
     public ?string $city;
 
     /**
      * @var ?array<Contacts> $contacts
      */
-    #[JsonProperty('contacts'), ArrayType([Contacts::class])]
+    #[JsonProperty('Contacts'), ArrayType([Contacts::class])]
     public ?array $contacts;
 
     /**
      * @var ?string $country
      */
-    #[JsonProperty('country')]
+    #[JsonProperty('Country')]
     public ?string $country;
 
     /**
      * @var ?array<PayabliCredentialsPascal> $credentials
      */
-    #[JsonProperty('credentials'), ArrayType([PayabliCredentialsPascal::class])]
+    #[JsonProperty('Credentials'), ArrayType([PayabliCredentialsPascal::class])]
     public ?array $credentials;
 
     /**
      * @var ?string $dbaName
      */
-    #[JsonProperty('dbaName')]
+    #[JsonProperty('DbaName')]
     public ?string $dbaName;
 
     /**
@@ -71,49 +71,49 @@ class PaypointData extends JsonSerializableType
     /**
      * @var ?string $fax Fax number
      */
-    #[JsonProperty('fax')]
+    #[JsonProperty('Fax')]
     public ?string $fax;
 
     /**
      * @var ?int $idPaypoint
      */
-    #[JsonProperty('idPaypoint')]
+    #[JsonProperty('IdPaypoint')]
     public ?int $idPaypoint;
 
     /**
      * @var ?string $legalName
      */
-    #[JsonProperty('legalName')]
+    #[JsonProperty('LegalName')]
     public ?string $legalName;
 
     /**
      * @var ?OrgData $parentOrg
      */
-    #[JsonProperty('parentOrg')]
+    #[JsonProperty('ParentOrg')]
     public ?OrgData $parentOrg;
 
     /**
      * @var ?int $paypointStatus
      */
-    #[JsonProperty('paypointStatus')]
+    #[JsonProperty('PaypointStatus')]
     public ?int $paypointStatus;
 
     /**
      * @var ?string $phone
      */
-    #[JsonProperty('phone')]
+    #[JsonProperty('Phone')]
     public ?string $phone;
 
     /**
      * @var ?Services $serviceData
      */
-    #[JsonProperty('serviceData')]
+    #[JsonProperty('ServiceData')]
     public ?Services $serviceData;
 
     /**
      * @var ?string $state
      */
-    #[JsonProperty('state')]
+    #[JsonProperty('State')]
     public ?string $state;
 
     /**
@@ -125,25 +125,25 @@ class PaypointData extends JsonSerializableType
     /**
      * @var ?int $timeZone
      */
-    #[JsonProperty('timeZone')]
+    #[JsonProperty('TimeZone')]
     public ?int $timeZone;
 
     /**
      * @var ?string $websiteAddress
      */
-    #[JsonProperty('websiteAddress')]
+    #[JsonProperty('WebsiteAddress')]
     public ?string $websiteAddress;
 
     /**
      * @var ?string $zip
      */
-    #[JsonProperty('zip')]
+    #[JsonProperty('Zip')]
     public ?string $zip;
 
     /**
      * @var ?StatementEmailConfig $statementEmail Configuration for billing statement email recipients and sender address. `null` if not configured.
      */
-    #[JsonProperty('statementEmail')]
+    #[JsonProperty('StatementEmail')]
     public ?StatementEmailConfig $statementEmail;
 
     /**

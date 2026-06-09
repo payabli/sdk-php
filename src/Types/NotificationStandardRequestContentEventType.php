@@ -75,6 +75,7 @@ enum NotificationStandardRequestContentEventType: string
     case TransferError = "TransferError";
     case SendReceipt = "SendReceipt";
     case RecoveredTransaction = "RecoveredTransaction";
+    case CardUpdaterComplete = "CardUpdaterComplete";
     case CreatedApplication = "CreatedApplication";
     case ApprovedApplication = "ApprovedApplication";
     case FailedBoardingApplication = "FailedBoardingApplication";

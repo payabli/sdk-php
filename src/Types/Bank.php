@@ -12,6 +12,18 @@ use Payabli\Core\Types\ArrayType;
 class Bank extends JsonSerializableType
 {
     /**
+     * @var ?bool $default
+     */
+    #[JsonProperty('default')]
+    public ?bool $default;
+
+    /**
+     * @var ?string $country
+     */
+    #[JsonProperty('country')]
+    public ?string $country;
+
+    /**
      * @var ?int $id The Payabli-assigned internal identifier for the bank account.
      */
     #[JsonProperty('id')]
@@ -91,6 +103,8 @@ class Bank extends JsonSerializableType
 
     /**
      * @param array{
+     *   default?: ?bool,
+     *   country?: ?string,
      *   id?: ?int,
      *   accountId?: ?string,
      *   nickname?: ?string,
@@ -109,6 +123,8 @@ class Bank extends JsonSerializableType
     public function __construct(
         array $values = [],
     ) {
+        $this->default = $values['default'] ?? null;
+        $this->country = $values['country'] ?? null;
         $this->id = $values['id'] ?? null;
         $this->accountId = $values['accountId'] ?? null;
         $this->nickname = $values['nickname'] ?? null;

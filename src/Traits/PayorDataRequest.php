@@ -4,12 +4,11 @@ namespace Payabli\Traits;
 
 use Payabli\Core\Json\JsonProperty;
 use Payabli\Core\Types\ArrayType;
-use Payabli\Core\Types\Union;
 
 /**
  * Customer information. May be required, depending on the paypoint's settings. Required for subscriptions.
  *
- * @property ?array<string, ?array<string, mixed>> $additionalData
+ * @property ?array<string, array<string, mixed>> $additionalData
  * @property ?string $billingAddress1
  * @property ?string $billingAddress2
  * @property ?string $billingCity
@@ -22,7 +21,7 @@ use Payabli\Core\Types\Union;
  * @property ?int $customerId
  * @property ?string $customerNumber
  * @property ?string $firstName
- * @property ?array<?string> $identifierFields
+ * @property ?array<string> $identifierFields
  * @property ?string $lastName
  * @property ?string $shippingAddress1
  * @property ?string $shippingAddress2
@@ -34,9 +33,9 @@ use Payabli\Core\Types\Union;
 trait PayorDataRequest
 {
     /**
-     * @var ?array<string, ?array<string, mixed>> $additionalData
+     * @var ?array<string, array<string, mixed>> $additionalData
      */
-    #[JsonProperty('additionalData'), ArrayType(['string' => new Union(['string' => 'mixed'], 'null')])]
+    #[JsonProperty('additionalData'), ArrayType(['string' => ['string' => 'mixed']])]
     public ?array $additionalData;
 
     /**
@@ -112,9 +111,9 @@ trait PayorDataRequest
     public ?string $firstName;
 
     /**
-     * @var ?array<?string> $identifierFields
+     * @var ?array<string> $identifierFields
      */
-    #[JsonProperty('identifierFields'), ArrayType([new Union('string', 'null')])]
+    #[JsonProperty('identifierFields'), ArrayType(['string'])]
     public ?array $identifierFields;
 
     /**

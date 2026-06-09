@@ -14,7 +14,7 @@ class PayMethodCloud extends JsonSerializableType
     public ?string $device;
 
     /**
-     * @var 'cloud' $method Method to use for the transaction. For cloud device transactions, the method is `cloud`.
+     * @var value-of<PayMethodCloudMethod> $method Method to use for the transaction. For cloud device transactions, the method is `cloud`.
      */
     #[JsonProperty('method')]
     public string $method;
@@ -27,7 +27,7 @@ class PayMethodCloud extends JsonSerializableType
 
     /**
      * @param array{
-     *   method: 'cloud',
+     *   method: value-of<PayMethodCloudMethod>,
      *   device?: ?string,
      *   saveIfSuccess?: ?bool,
      * } $values

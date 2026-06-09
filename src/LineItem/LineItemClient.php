@@ -13,11 +13,11 @@ use Payabli\Environments;
 use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
-use Payabli\LineItem\Types\DeleteItemResponse;
 use Payabli\Types\LineItemQueryRecord;
+use Payabli\Types\LineItem;
+use Payabli\Types\DeleteItemResponse;
 use Payabli\LineItem\Requests\ListLineItemsRequest;
 use Payabli\Types\QueryResponseItems;
-use Payabli\Types\LineItem;
 
 class LineItemClient
 {
@@ -111,54 +111,6 @@ class LineItemClient
     }
 
     /**
-     * Deletes an item.
-     *
-     * @param int $lineItemId ID for the line item (also known as a product, service, or item).
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?DeleteItemResponse
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function deleteItem(int $lineItemId, ?array $options = null): ?DeleteItemResponse
-    {
-        $options = array_merge($this->options, $options ?? []);
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "LineItem/{$lineItemId}",
-                    method: HttpMethod::DELETE,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return DeleteItemResponse::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
      * Gets an item by ID.
      *
      * @param int $lineItemId ID for the line item (also known as a product, service, or item).
@@ -193,6 +145,104 @@ class LineItemClient
                     return null;
                 }
                 return LineItemQueryRecord::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Updates an item.
+     *
+     * @param int $lineItemId ID for the line item (also known as a product, service, or item).
+     * @param LineItem $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?PayabliApiResponse6
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function updateItem(int $lineItemId, LineItem $request, ?array $options = null): ?PayabliApiResponse6
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "LineItem/{$lineItemId}",
+                    method: HttpMethod::PUT,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return PayabliApiResponse6::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Deletes an item.
+     *
+     * @param int $lineItemId ID for the line item (also known as a product, service, or item).
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?DeleteItemResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function deleteItem(int $lineItemId, ?array $options = null): ?DeleteItemResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "LineItem/{$lineItemId}",
+                    method: HttpMethod::DELETE,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return DeleteItemResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -256,56 +306,6 @@ class LineItemClient
                     return null;
                 }
                 return QueryResponseItems::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Updates an item.
-     *
-     * @param int $lineItemId ID for the line item (also known as a product, service, or item).
-     * @param LineItem $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?PayabliApiResponse6
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function updateItem(int $lineItemId, LineItem $request, ?array $options = null): ?PayabliApiResponse6
-    {
-        $options = array_merge($this->options, $options ?? []);
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "LineItem/{$lineItemId}",
-                    method: HttpMethod::PUT,
-                    body: $request,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return PayabliApiResponse6::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

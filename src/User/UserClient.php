@@ -5,7 +5,7 @@ namespace Payabli\User;
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\Types\UserData;
-use Payabli\User\Types\AddUserResponse;
+use Payabli\Types\AddUserResponse;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -13,21 +13,21 @@ use Payabli\Environments;
 use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
-use Payabli\Types\PayabliApiResponseUserMfa;
-use Payabli\User\Requests\UserAuthResetRequest;
-use Payabli\User\Types\AuthResetUserResponse;
-use Payabli\User\Requests\UserAuthRequest;
-use Payabli\Types\PayabliApiResponseMfaBasic;
-use Payabli\User\Requests\UserAuthPswResetRequest;
-use Payabli\User\Types\ChangePswUserResponse;
-use Payabli\User\Types\DeleteUserResponse;
-use Payabli\Types\MfaData;
-use Payabli\User\Types\EditMfaUserResponse;
-use Payabli\Types\PayabliApiResponse;
 use Payabli\User\Requests\GetUserRequest;
 use Payabli\Types\UserQueryRecord;
-use Payabli\User\Types\LogoutUserResponse;
+use Payabli\Types\PayabliApiResponse;
+use Payabli\Types\DeleteUserResponse;
+use Payabli\User\Requests\UserAuthRequest;
+use Payabli\Types\PayabliApiResponseMfaBasic;
+use Payabli\Types\PayabliApiResponseUserMfa;
+use Payabli\User\Requests\UserAuthResetRequest;
+use Payabli\Types\AuthResetUserResponse;
+use Payabli\User\Requests\UserAuthPswResetRequest;
+use Payabli\Types\ChangePswUserResponse;
+use Payabli\Types\LogoutUserResponse;
 use Payabli\User\Requests\MfaValidationData;
+use Payabli\Types\MfaData;
+use Payabli\Types\EditMfaUserResponse;
 
 class UserClient
 {
@@ -101,6 +101,211 @@ class UserClient
                     return null;
                 }
                 return AddUserResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Use this endpoint to retrieve information about a specific user within an organization.
+     *
+     * @param int $userId The Payabli-generated `userId` value.
+     * @param GetUserRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?UserQueryRecord
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function getUser(int $userId, GetUserRequest $request = new GetUserRequest(), ?array $options = null): ?UserQueryRecord
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->entry != null) {
+            $query['entry'] = $request->entry;
+        }
+        if ($request->level != null) {
+            $query['level'] = $request->level;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "User/{$userId}",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return UserQueryRecord::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Use this endpoint to modify the details of a specific user within an organization.
+     *
+     * @param int $userId User Identifier
+     * @param UserData $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?PayabliApiResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function editUser(int $userId, UserData $request, ?array $options = null): ?PayabliApiResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "User/{$userId}",
+                    method: HttpMethod::PUT,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return PayabliApiResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Use this endpoint to delete a specific user within an organization.
+     *
+     * @param int $userId The Payabli-generated `userId` value.
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?DeleteUserResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function deleteUser(int $userId, ?array $options = null): ?DeleteUserResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "User/{$userId}",
+                    method: HttpMethod::DELETE,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return DeleteUserResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * This endpoint requires an application API token.
+     *
+     * @param string $provider Auth provider. Pass `null` to use the built-in provider.
+     * @param UserAuthRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?PayabliApiResponseMfaBasic
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function authUser(string $provider, UserAuthRequest $request = new UserAuthRequest(), ?array $options = null): ?PayabliApiResponseMfaBasic
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "User/auth/{$provider}",
+                    method: HttpMethod::POST,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return PayabliApiResponseMfaBasic::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -211,56 +416,6 @@ class UserClient
     }
 
     /**
-     * This endpoint requires an application API token.
-     *
-     * @param string $provider Auth provider. Pass `null` to use the built-in provider.
-     * @param UserAuthRequest $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?PayabliApiResponseMfaBasic
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function authUser(string $provider, UserAuthRequest $request = new UserAuthRequest(), ?array $options = null): ?PayabliApiResponseMfaBasic
-    {
-        $options = array_merge($this->options, $options ?? []);
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "User/auth/{$provider}",
-                    method: HttpMethod::POST,
-                    body: $request,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return PayabliApiResponseMfaBasic::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
      * Use this endpoint to change the password for a user within an organization.
      *
      * @param UserAuthPswResetRequest $request
@@ -310,9 +465,8 @@ class UserClient
     }
 
     /**
-     * Use this endpoint to delete a specific user within an organization.
+     * Use this endpoint to log a user out from the system.
      *
-     * @param int $userId The Payabli-generated `userId` value.
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -321,19 +475,19 @@ class UserClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?DeleteUserResponse
+     * @return ?LogoutUserResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function deleteUser(int $userId, ?array $options = null): ?DeleteUserResponse
+    public function logoutUser(?array $options = null): ?LogoutUserResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "User/{$userId}",
-                    method: HttpMethod::DELETE,
+                    path: "User/authlogout",
+                    method: HttpMethod::GET,
                 ),
                 $options,
             );
@@ -343,7 +497,56 @@ class UserClient
                 if (empty($json)) {
                     return null;
                 }
-                return DeleteUserResponse::fromJson($json);
+                return LogoutUserResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Use this endpoint to validate the multi-factor authentication (MFA) code for a user within an organization.
+     *
+     * @param MfaValidationData $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?PayabliApiResponseUserMfa
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function validateMfaUser(MfaValidationData $request = new MfaValidationData(), ?array $options = null): ?PayabliApiResponseUserMfa
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "User/mfa",
+                    method: HttpMethod::POST,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return PayabliApiResponseUserMfa::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -408,160 +611,6 @@ class UserClient
     }
 
     /**
-     * Use this endpoint to modify the details of a specific user within an organization.
-     *
-     * @param int $userId User Identifier
-     * @param UserData $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?PayabliApiResponse
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function editUser(int $userId, UserData $request, ?array $options = null): ?PayabliApiResponse
-    {
-        $options = array_merge($this->options, $options ?? []);
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "User/{$userId}",
-                    method: HttpMethod::PUT,
-                    body: $request,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return PayabliApiResponse::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Use this endpoint to retrieve information about a specific user within an organization.
-     *
-     * @param int $userId The Payabli-generated `userId` value.
-     * @param GetUserRequest $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?UserQueryRecord
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function getUser(int $userId, GetUserRequest $request = new GetUserRequest(), ?array $options = null): ?UserQueryRecord
-    {
-        $options = array_merge($this->options, $options ?? []);
-        $query = [];
-        if ($request->entry != null) {
-            $query['entry'] = $request->entry;
-        }
-        if ($request->level != null) {
-            $query['level'] = $request->level;
-        }
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "User/{$userId}",
-                    method: HttpMethod::GET,
-                    query: $query,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return UserQueryRecord::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Use this endpoint to log a user out from the system.
-     *
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?LogoutUserResponse
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function logoutUser(?array $options = null): ?LogoutUserResponse
-    {
-        $options = array_merge($this->options, $options ?? []);
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "User/authlogout",
-                    method: HttpMethod::GET,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return LogoutUserResponse::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
      * Resends the MFA code to the user via the selected MFA mode (email or SMS).
      *
      * @param string $usrname
@@ -598,55 +647,6 @@ class UserClient
                     return null;
                 }
                 return PayabliApiResponseMfaBasic::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Use this endpoint to validate the multi-factor authentication (MFA) code for a user within an organization.
-     *
-     * @param MfaValidationData $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?PayabliApiResponseUserMfa
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function validateMfaUser(MfaValidationData $request = new MfaValidationData(), ?array $options = null): ?PayabliApiResponseUserMfa
-    {
-        $options = array_merge($this->options, $options ?? []);
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "User/mfa",
-                    method: HttpMethod::POST,
-                    body: $request,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return PayabliApiResponseUserMfa::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

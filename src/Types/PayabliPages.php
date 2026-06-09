@@ -5,34 +5,33 @@ namespace Payabli\Types;
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
 use Payabli\Core\Types\ArrayType;
-use Payabli\Core\Types\Union;
 use DateTime;
 use Payabli\Core\Types\Date;
 
 class PayabliPages extends JsonSerializableType
 {
     /**
-     * @var ?array<string, ?array<string, mixed>> $additionalData
+     * @var ?array<string, array<string, mixed>> $additionalData
      */
-    #[JsonProperty('AdditionalData'), ArrayType(['string' => new Union(['string' => 'mixed'], 'null')])]
+    #[JsonProperty('AdditionalData'), ArrayType(['string' => ['string' => 'mixed']])]
     public ?array $additionalData;
 
     /**
      * @var ?array<PayabliCredentials> $credentials Array of credential objects with active services for the page
      */
-    #[JsonProperty('credentials'), ArrayType([PayabliCredentials::class])]
+    #[JsonProperty('Credentials'), ArrayType([PayabliCredentials::class])]
     public ?array $credentials;
 
     /**
      * @var ?DateTime $lastAccess Timestamp of last access to page structure
      */
-    #[JsonProperty('lastAccess'), Date(Date::TYPE_DATETIME)]
+    #[JsonProperty('LastAccess'), Date(Date::TYPE_DATETIME)]
     public ?DateTime $lastAccess;
 
     /**
      * @var ?PageContent $pageContent Sections of page
      */
-    #[JsonProperty('pageContent')]
+    #[JsonProperty('PageContent')]
     public ?PageContent $pageContent;
 
     /**
@@ -44,7 +43,7 @@ class PayabliPages extends JsonSerializableType
     /**
      * @var ?PageSetting $pageSettings Settings of page
      */
-    #[JsonProperty('pageSettings')]
+    #[JsonProperty('PageSettings')]
     public ?PageSetting $pageSettings;
 
     /**
@@ -56,13 +55,13 @@ class PayabliPages extends JsonSerializableType
     /**
      * @var ?ReceiptContent $receiptContent Sections of payment receipt
      */
-    #[JsonProperty('receiptContent')]
+    #[JsonProperty('ReceiptContent')]
     public ?ReceiptContent $receiptContent;
 
     /**
      * @var ?string $subdomain Page identifier. Must be unique in platform.
      */
-    #[JsonProperty('subdomain')]
+    #[JsonProperty('Subdomain')]
     public ?string $subdomain;
 
     /**
@@ -79,7 +78,7 @@ class PayabliPages extends JsonSerializableType
 
     /**
      * @param array{
-     *   additionalData?: ?array<string, ?array<string, mixed>>,
+     *   additionalData?: ?array<string, array<string, mixed>>,
      *   credentials?: ?array<PayabliCredentials>,
      *   lastAccess?: ?DateTime,
      *   pageContent?: ?PageContent,

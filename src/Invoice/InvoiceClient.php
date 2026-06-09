@@ -5,7 +5,7 @@ namespace Payabli\Invoice;
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\Invoice\Requests\AddInvoiceRequest;
-use Payabli\Invoice\Types\InvoiceResponseWithoutData;
+use Payabli\Types\InvoiceResponseWithoutData;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -13,16 +13,16 @@ use Payabli\Environments;
 use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
-use Payabli\Invoice\Requests\EditInvoiceRequest;
 use Payabli\Invoice\Requests\GetAttachedFileFromInvoiceRequest;
 use Payabli\Types\FileContent;
-use Payabli\Invoice\Types\GetInvoiceRecord;
-use Payabli\Invoice\Types\InvoiceNumberResponse;
+use Payabli\Types\GetInvoiceRecord;
+use Payabli\Invoice\Requests\EditInvoiceRequest;
+use Payabli\Types\InvoiceNumberResponse;
 use Payabli\Invoice\Requests\ListInvoicesRequest;
-use Payabli\Invoice\Types\QueryInvoiceResponse;
+use Payabli\Types\QueryInvoiceResponse;
 use Payabli\Invoice\Requests\ListInvoicesOrgRequest;
 use Payabli\Invoice\Requests\SendInvoiceRequest;
-use Payabli\Invoice\Types\SendInvoiceResponse;
+use Payabli\Types\SendInvoiceResponse;
 use Payabli\Core\Json\JsonDecoder;
 
 class InvoiceClient
@@ -122,6 +122,65 @@ class InvoiceClient
     }
 
     /**
+     * Retrieves a file attached to an invoice.
+     *
+     * @param int $idInvoice Invoice ID
+     * The filename in Payabli. Get this from the `zipName` field
+     * in the `DocumentsRef.filelist` array returned by
+     * `/api/Invoice/{idInvoice}`. Example: `0_Bill.pdf`.
+     *
+     * @param string $filename
+     * @param GetAttachedFileFromInvoiceRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?FileContent
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function getAttachedFileFromInvoice(int $idInvoice, string $filename, GetAttachedFileFromInvoiceRequest $request = new GetAttachedFileFromInvoiceRequest(), ?array $options = null): ?FileContent
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->returnObject != null) {
+            $query['returnObject'] = $request->returnObject;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "Invoice/attachedFileFromInvoice/{$idInvoice}/{$filename}",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return FileContent::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
      * Deletes a file attached to an invoice.
      *
      * @param int $idInvoice Invoice ID
@@ -175,7 +234,7 @@ class InvoiceClient
     }
 
     /**
-     * Deletes a single invoice from an entrypoint.
+     * Retrieves a single invoice by ID.
      *
      * @param int $idInvoice Invoice ID
      * @param ?array{
@@ -186,11 +245,11 @@ class InvoiceClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?InvoiceResponseWithoutData
+     * @return ?GetInvoiceRecord
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function deleteInvoice(int $idInvoice, ?array $options = null): ?InvoiceResponseWithoutData
+    public function getInvoice(int $idInvoice, ?array $options = null): ?GetInvoiceRecord
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -198,7 +257,7 @@ class InvoiceClient
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
                     path: "Invoice/{$idInvoice}",
-                    method: HttpMethod::DELETE,
+                    method: HttpMethod::GET,
                 ),
                 $options,
             );
@@ -208,7 +267,7 @@ class InvoiceClient
                 if (empty($json)) {
                     return null;
                 }
-                return InvoiceResponseWithoutData::fromJson($json);
+                return GetInvoiceRecord::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -278,66 +337,7 @@ class InvoiceClient
     }
 
     /**
-     * Retrieves a file attached to an invoice.
-     *
-     * @param int $idInvoice Invoice ID
-     * The filename in Payabli. Get this from the `zipName` field
-     * in the `DocumentsRef.filelist` array returned by
-     * `/api/Invoice/{idInvoice}`. Example: `0_Bill.pdf`.
-     *
-     * @param string $filename
-     * @param GetAttachedFileFromInvoiceRequest $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?FileContent
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function getAttachedFileFromInvoice(int $idInvoice, string $filename, GetAttachedFileFromInvoiceRequest $request = new GetAttachedFileFromInvoiceRequest(), ?array $options = null): ?FileContent
-    {
-        $options = array_merge($this->options, $options ?? []);
-        $query = [];
-        if ($request->returnObject != null) {
-            $query['returnObject'] = $request->returnObject;
-        }
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "Invoice/attachedFileFromInvoice/{$idInvoice}/{$filename}",
-                    method: HttpMethod::GET,
-                    query: $query,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return FileContent::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Retrieves a single invoice by ID.
+     * Deletes a single invoice from an entrypoint.
      *
      * @param int $idInvoice Invoice ID
      * @param ?array{
@@ -348,11 +348,11 @@ class InvoiceClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?GetInvoiceRecord
+     * @return ?InvoiceResponseWithoutData
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getInvoice(int $idInvoice, ?array $options = null): ?GetInvoiceRecord
+    public function deleteInvoice(int $idInvoice, ?array $options = null): ?InvoiceResponseWithoutData
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -360,7 +360,7 @@ class InvoiceClient
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
                     path: "Invoice/{$idInvoice}",
-                    method: HttpMethod::GET,
+                    method: HttpMethod::DELETE,
                 ),
                 $options,
             );
@@ -370,7 +370,7 @@ class InvoiceClient
                 if (empty($json)) {
                     return null;
                 }
-                return GetInvoiceRecord::fromJson($json);
+                return InvoiceResponseWithoutData::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

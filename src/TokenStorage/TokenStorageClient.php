@@ -5,7 +5,7 @@ namespace Payabli\TokenStorage;
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\TokenStorage\Requests\AddMethodRequest;
-use Payabli\TokenStorage\Types\AddMethodResponse;
+use Payabli\Types\AddMethodResponse;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -14,9 +14,9 @@ use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Payabli\TokenStorage\Requests\GetMethodRequest;
-use Payabli\TokenStorage\Types\GetMethodResponse;
-use Payabli\Types\PayabliApiResponsePaymethodDelete;
+use Payabli\Types\GetMethodResponse;
 use Payabli\TokenStorage\Requests\UpdateMethodRequest;
+use Payabli\Types\PayabliApiResponsePaymethodDelete;
 
 class TokenStorageClient
 {
@@ -180,54 +180,6 @@ class TokenStorageClient
     }
 
     /**
-     * Deletes a saved payment method.
-     *
-     * @param string $methodId The saved payment method ID.
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?PayabliApiResponsePaymethodDelete
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function removeMethod(string $methodId, ?array $options = null): ?PayabliApiResponsePaymethodDelete
-    {
-        $options = array_merge($this->options, $options ?? []);
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "TokenStorage/{$methodId}",
-                    method: HttpMethod::DELETE,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return PayabliApiResponsePaymethodDelete::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
      * Updates a saved payment method.
      *
      * @param string $methodId The saved payment method ID.
@@ -259,6 +211,54 @@ class TokenStorageClient
                     method: HttpMethod::PUT,
                     query: $query,
                     body: $request->body,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return PayabliApiResponsePaymethodDelete::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Deletes a saved payment method.
+     *
+     * @param string $methodId The saved payment method ID.
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?PayabliApiResponsePaymethodDelete
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function removeMethod(string $methodId, ?array $options = null): ?PayabliApiResponsePaymethodDelete
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "TokenStorage/{$methodId}",
+                    method: HttpMethod::DELETE,
                 ),
                 $options,
             );

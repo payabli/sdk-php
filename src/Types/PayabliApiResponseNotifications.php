@@ -9,9 +9,7 @@ use Payabli\Core\Types\Union;
 class PayabliApiResponseNotifications extends JsonSerializableType
 {
     /**
-     *
      * If `isSuccess` = true, `responseData` contains the notification identifier.
-     *
      * If `isSuccess` = false, `responseData` contains the reason for the error.
      *
      * @var ?bool $isSuccess

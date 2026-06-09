@@ -5,7 +5,7 @@ namespace Payabli\PaymentLink;
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\PaymentLink\Requests\PayLinkDataInvoice;
-use Payabli\PaymentLink\Types\PayabliApiResponsePaymentLinks;
+use Payabli\Types\PayabliApiResponsePaymentLinks;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -14,14 +14,14 @@ use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Payabli\PaymentLink\Requests\PayLinkDataBill;
-use Payabli\PaymentLink\Types\GetPayLinkFromIdResponse;
+use Payabli\Types\GetPayLinkFromIdResponse;
 use Payabli\Types\PushPayLinkRequest;
 use Payabli\PaymentLink\Requests\RefreshPayLinkFromIdRequest;
 use Payabli\PaymentLink\Requests\SendPayLinkFromIdRequest;
 use Payabli\PaymentLink\Requests\PayLinkUpdateData;
 use Payabli\PaymentLink\Requests\PayLinkDataOut;
-use Payabli\PaymentLink\Types\PatchOutPaymentLinkRequest;
-use Payabli\PaymentLink\Types\PaymentPageRequestBodyOut;
+use Payabli\PaymentLink\Requests\PatchOutPaymentLinkRequest;
+use Payabli\Types\PaymentPageRequestBodyOut;
 
 class PaymentLinkClient
 {
@@ -76,7 +76,7 @@ class PaymentLinkClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function addPayLinkFromInvoice(int $idInvoice, PayLinkDataInvoice $request, ?array $options = null): ?PayabliApiResponsePaymentLinks
+    public function addPayLinkFromInvoice(int $idInvoice, PayLinkDataInvoice $request = new PayLinkDataInvoice(), ?array $options = null): ?PayabliApiResponsePaymentLinks
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -98,7 +98,7 @@ class PaymentLinkClient
                     method: HttpMethod::POST,
                     headers: $headers,
                     query: $query,
-                    body: $request->body,
+                    body: $request,
                 ),
                 $options,
             );
@@ -569,7 +569,7 @@ class PaymentLinkClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function patchOutPaymentLink(string $paylinkId, PatchOutPaymentLinkRequest $request, ?array $options = null): ?PayabliApiResponsePaymentLinks
+    public function patchOutPaymentLink(string $paylinkId, PatchOutPaymentLinkRequest $request = new PatchOutPaymentLinkRequest(), ?array $options = null): ?PayabliApiResponsePaymentLinks
     {
         $options = array_merge($this->options, $options ?? []);
         try {

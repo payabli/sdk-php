@@ -48,7 +48,6 @@ class NotificationStandardRequest extends JsonSerializableType
 
     /**
      * Specify the notification target.
-     *
      * - For method=email the expected value is a list of email addresses separated by semicolon.
      * - For method=sms the expected value is a list of phone numbers separated by semicolon.
      * - For method=web the expected value is a valid and complete URL. Webhooks support only standard HTTP ports: 80, 443, 8080, or 4443.

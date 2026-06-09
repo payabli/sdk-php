@@ -3,9 +3,9 @@
 namespace Payabli\PaymentMethodDomain\Requests;
 
 use Payabli\Core\Json\JsonSerializableType;
-use Payabli\PaymentMethodDomain\Types\AddPaymentMethodDomainRequestApplePay;
+use Payabli\Types\AddPaymentMethodDomainRequestApplePay;
 use Payabli\Core\Json\JsonProperty;
-use Payabli\PaymentMethodDomain\Types\AddPaymentMethodDomainRequestGooglePay;
+use Payabli\Types\AddPaymentMethodDomainRequestGooglePay;
 
 class AddPaymentMethodDomainRequest extends JsonSerializableType
 {

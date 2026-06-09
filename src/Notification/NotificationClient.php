@@ -108,54 +108,6 @@ class NotificationClient
     }
 
     /**
-     * Deletes a single notification or auto-generated report.
-     *
-     * @param string $nId Notification ID.
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?PayabliApiResponseNotifications
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function deleteNotification(string $nId, ?array $options = null): ?PayabliApiResponseNotifications
-    {
-        $options = array_merge($this->options, $options ?? []);
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "Notification/{$nId}",
-                    method: HttpMethod::DELETE,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return PayabliApiResponseNotifications::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
      * Retrieves a single notification or auto-generated report's details.
      *
      * @param string $nId Notification ID.
@@ -233,6 +185,54 @@ class NotificationClient
                     path: "Notification/{$nId}",
                     method: HttpMethod::PUT,
                     body: JsonSerializer::serializeUnion($request, new Union(NotificationStandardRequest::class, NotificationReportRequest::class)),
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return PayabliApiResponseNotifications::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Deletes a single notification or auto-generated report.
+     *
+     * @param string $nId Notification ID.
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?PayabliApiResponseNotifications
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function deleteNotification(string $nId, ?array $options = null): ?PayabliApiResponseNotifications
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "Notification/{$nId}",
+                    method: HttpMethod::DELETE,
                 ),
                 $options,
             );

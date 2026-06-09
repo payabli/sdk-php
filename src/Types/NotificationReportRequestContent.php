@@ -9,7 +9,7 @@ use Payabli\Core\Types\ArrayType;
 class NotificationReportRequestContent extends JsonSerializableType
 {
     /**
-     * @var ?'Report' $eventType The notification's event name.
+     * @var ?value-of<NotificationReportRequestContentEventType> $eventType The notification's event name.
      */
     #[JsonProperty('eventType')]
     public ?string $eventType;
@@ -52,7 +52,7 @@ class NotificationReportRequestContent extends JsonSerializableType
 
     /**
      * @param array{
-     *   eventType?: ?'Report',
+     *   eventType?: ?value-of<NotificationReportRequestContentEventType>,
      *   fileFormat?: ?value-of<NotificationReportRequestContentFileFormat>,
      *   internalData?: ?array<KeyValueDuo>,
      *   reportName?: ?value-of<NotificationReportRequestContentReportName>,

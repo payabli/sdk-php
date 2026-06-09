@@ -5,7 +5,7 @@ namespace Payabli\GhostCard;
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\GhostCard\Requests\CreateGhostCardRequestBody;
-use Payabli\GhostCard\Types\CreateGhostCardResponse;
+use Payabli\Types\CreateGhostCardResponse;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -59,7 +59,7 @@ class GhostCardClient
      *
      * Only one ghost card can exist per vendor per paypoint. To issue a new card to the same vendor, cancel the existing card first.
      *
-     * @param string $entry
+     * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param CreateGhostCardRequestBody $request
      * @param ?array{
      *   baseUrl?: string,
@@ -109,7 +109,7 @@ class GhostCardClient
     /**
      * Updates the status of a virtual card (including ghost cards) under a paypoint.
      *
-     * @param string $entry
+     * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param UpdateCardRequestBody $request
      * @param ?array{
      *   baseUrl?: string,

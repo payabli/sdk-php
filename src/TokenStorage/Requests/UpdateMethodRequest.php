@@ -3,12 +3,12 @@
 namespace Payabli\TokenStorage\Requests;
 
 use Payabli\Core\Json\JsonSerializableType;
-use Payabli\TokenStorage\Types\RequestTokenStorage;
+use Payabli\Types\RequestTokenStorage;
 
 class UpdateMethodRequest extends JsonSerializableType
 {
     /**
-     * @var ?bool $achValidation
+     * @var ?bool $achValidation When `true`, enables real-time validation of ACH account and routing numbers. This is an add-on feature, contact Payabli for more information.
      */
     public ?bool $achValidation;
 

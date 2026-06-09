@@ -8,7 +8,7 @@ use Payabli\Types\ExportFormat;
 class ListSubscriptionsOrgRequest extends JsonSerializableType
 {
     /**
-     * @var ?value-of<ExportFormat> $exportFormat
+     * @var ?value-of<ExportFormat> $exportFormat Export format for file downloads. When specified, returns data as a file instead of JSON.
      */
     public ?string $exportFormat;
 
@@ -23,7 +23,6 @@ class ListSubscriptionsOrgRequest extends JsonSerializableType
     public ?int $limitRecord;
 
     /**
-     *
      * Collection of field names, conditions, and values used to filter the query.
      * <Info>
      *   **You must remove `parameters=` from the request before you send it, otherwise Payabli will ignore the filters.**
@@ -52,6 +51,7 @@ class ListSubscriptionsOrgRequest extends JsonSerializableType
      * - `feeAmount` (gt, ge, lt, le, eq, ne)
      * - `status` (in, nin, eq, ne)
      * - `untilcancelled` (eq, ne)
+     * - `subscriptionType` (eq, ne, in, nin). Filters by subscription type. Accepts `Regular` or `BalanceDriven`. Case-insensitive. Example: `subscriptionType(in)=Regular|BalanceDriven`.
      * - `payaccountLastfour` (nct, ct)
      * - `payaccountType` (ne, eq, in, nin)
      * - `payaccountCurrency` (ne, eq, in, nin)

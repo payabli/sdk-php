@@ -5,7 +5,7 @@ namespace Payabli\Management;
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\Management\Requests\VerifyAccountDetailsRequest;
-use Payabli\Management\Types\VerifyAccountDetailsResponse;
+use Payabli\Types\VerifyAccountDetailsResponse;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;

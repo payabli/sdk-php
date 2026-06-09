@@ -14,8 +14,8 @@ use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Payabli\Types\VendorQueryRecord;
-use Payabli\Vendor\Types\VendorEnrichRequest;
-use Payabli\Vendor\Types\VendorEnrichResponse;
+use Payabli\Vendor\Requests\VendorEnrichRequest;
+use Payabli\Types\VendorEnrichResponse;
 
 class VendorClient
 {
@@ -104,7 +104,7 @@ class VendorClient
     }
 
     /**
-     * Delete a vendor.
+     * Retrieves a vendor's details, including enrichment status and payment acceptance info when available.
      *
      * @param int $idVendor Vendor ID.
      * @param ?array{
@@ -115,11 +115,11 @@ class VendorClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?PayabliApiResponseVendors
+     * @return ?VendorQueryRecord
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function deleteVendor(int $idVendor, ?array $options = null): ?PayabliApiResponseVendors
+    public function getVendor(int $idVendor, ?array $options = null): ?VendorQueryRecord
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -127,7 +127,7 @@ class VendorClient
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
                     path: "Vendor/{$idVendor}",
-                    method: HttpMethod::DELETE,
+                    method: HttpMethod::GET,
                 ),
                 $options,
             );
@@ -137,7 +137,7 @@ class VendorClient
                 if (empty($json)) {
                     return null;
                 }
-                return PayabliApiResponseVendors::fromJson($json);
+                return VendorQueryRecord::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -202,7 +202,7 @@ class VendorClient
     }
 
     /**
-     * Retrieves a vendor's details, including enrichment status and payment acceptance info when available.
+     * Delete a vendor.
      *
      * @param int $idVendor Vendor ID.
      * @param ?array{
@@ -213,11 +213,11 @@ class VendorClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?VendorQueryRecord
+     * @return ?PayabliApiResponseVendors
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getVendor(int $idVendor, ?array $options = null): ?VendorQueryRecord
+    public function deleteVendor(int $idVendor, ?array $options = null): ?PayabliApiResponseVendors
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -225,7 +225,7 @@ class VendorClient
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
                     path: "Vendor/{$idVendor}",
-                    method: HttpMethod::GET,
+                    method: HttpMethod::DELETE,
                 ),
                 $options,
             );
@@ -235,7 +235,7 @@ class VendorClient
                 if (empty($json)) {
                     return null;
                 }
-                return VendorQueryRecord::fromJson($json);
+                return PayabliApiResponseVendors::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

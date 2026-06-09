@@ -8,14 +8,14 @@ use Payabli\Core\Json\JsonProperty;
 class Cash extends JsonSerializableType
 {
     /**
-     * @var 'cash' $method Method to use for the transaction. For cash transactions, use `cash`.
+     * @var value-of<CashMethod> $method Method to use for the transaction. For cash transactions, use `cash`.
      */
     #[JsonProperty('method')]
     public string $method;
 
     /**
      * @param array{
-     *   method: 'cash',
+     *   method: value-of<CashMethod>,
      * } $values
      */
     public function __construct(

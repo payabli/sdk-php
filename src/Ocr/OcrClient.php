@@ -4,8 +4,8 @@ namespace Payabli\Ocr;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
-use Payabli\Ocr\Types\FileContentImageOnly;
-use Payabli\Ocr\Types\PayabliApiResponseOcr;
+use Payabli\Types\FileContentImageOnly;
+use Payabli\Types\PayabliApiResponseOcr;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -53,7 +53,7 @@ class OcrClient
     /**
      * Use this endpoint to upload an image file for OCR processing. The accepted file formats include PDF, JPG, JPEG, PNG, and GIF. Specify the desired type of result (either 'bill' or 'invoice') in the path parameter `typeResult`. The response will contain the OCR processing results, including extracted data such as bill number, vendor information, bill items, and more.
      *
-     * @param string $typeResult
+     * @param string $typeResult The type of object to create in Payabli. Accepted values are `bill` and `invoice`.
      * @param FileContentImageOnly $request
      * @param ?array{
      *   baseUrl?: string,
@@ -74,7 +74,7 @@ class OcrClient
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "/Import/ocrDocumentForm/{$typeResult}",
+                    path: "Import/ocrDocumentForm/{$typeResult}",
                     method: HttpMethod::POST,
                     body: $request,
                 ),
@@ -103,7 +103,7 @@ class OcrClient
     /**
      * Use this endpoint to submit a Base64-encoded image file for OCR processing. The accepted file formats include PDF, JPG, JPEG, PNG, and GIF. Specify the desired type of result (either 'bill' or 'invoice') in the path parameter `typeResult`. The response will contain the OCR processing results, including extracted data such as bill number, vendor information, bill items, and more.
      *
-     * @param string $typeResult
+     * @param string $typeResult The type of object to create in Payabli. Accepted values are `bill` and `invoice`.
      * @param FileContentImageOnly $request
      * @param ?array{
      *   baseUrl?: string,
@@ -124,7 +124,7 @@ class OcrClient
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "/Import/ocrDocumentJson/{$typeResult}",
+                    path: "Import/ocrDocumentJson/{$typeResult}",
                     method: HttpMethod::POST,
                     body: $request,
                 ),

@@ -53,7 +53,7 @@ class BillPayOutData extends JsonSerializableType
     public ?string $discount;
 
     /**
-     * @var ?string $terms Description of payment terms.
+     * @var ?value-of<Terms> $terms Description of payment terms.
      */
     #[JsonProperty('Terms')]
     public ?string $terms;
@@ -91,7 +91,7 @@ class BillPayOutData extends JsonSerializableType
      *   invoiceNumber?: ?string,
      *   netAmount?: ?string,
      *   discount?: ?string,
-     *   terms?: ?string,
+     *   terms?: ?value-of<Terms>,
      *   accountingField1?: ?string,
      *   accountingField2?: ?string,
      *   additionalData?: ?string,

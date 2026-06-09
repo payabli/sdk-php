@@ -5,7 +5,7 @@ namespace Payabli\Statistic;
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\Statistic\Requests\BasicStatsRequest;
-use Payabli\Statistic\Types\StatBasicExtendedQueryRecord;
+use Payabli\Types\StatBasicExtendedQueryRecord;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -15,11 +15,11 @@ use Payabli\Core\Json\JsonDecoder;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Payabli\Statistic\Requests\CustomerBasicStatsRequest;
-use Payabli\Statistic\Types\SubscriptionStatsQueryRecord;
+use Payabli\Types\SubscriptionStatsQueryRecord;
 use Payabli\Statistic\Requests\SubStatsRequest;
-use Payabli\Statistic\Types\StatBasicQueryRecord;
+use Payabli\Types\StatBasicQueryRecord;
 use Payabli\Statistic\Requests\VendorBasicStatsRequest;
-use Payabli\Statistic\Types\StatisticsVendorQueryRecord;
+use Payabli\Types\StatisticsVendorQueryRecord;
 
 class StatisticClient
 {
@@ -74,7 +74,6 @@ class StatisticClient
      * - `lastm` - Last Month
      * - `lastw` - Last Week
      * - `yesterday` - Last Day
-     *
      *
      * @param string $mode
      * Frequency to group series. Allowed values:
