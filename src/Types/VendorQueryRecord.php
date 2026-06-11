@@ -41,10 +41,10 @@ class VendorQueryRecord extends JsonSerializableType
     public ?string $city;
 
     /**
-     * @var ?ContactsResponse $contacts
+     * @var ?array<ContactsResponse> $contacts Array of objects describing the vendor's contacts.
      */
-    #[JsonProperty('Contacts')]
-    public ?ContactsResponse $contacts;
+    #[JsonProperty('Contacts'), ArrayType([ContactsResponse::class])]
+    public ?array $contacts;
 
     /**
      * @var ?string $country
@@ -323,7 +323,7 @@ class VendorQueryRecord extends JsonSerializableType
      *   address2?: ?string,
      *   billingData?: ?BillingDataResponse,
      *   city?: ?string,
-     *   contacts?: ?ContactsResponse,
+     *   contacts?: ?array<ContactsResponse>,
      *   country?: ?string,
      *   createdDate?: ?DateTime,
      *   customerVendorAccount?: ?string,

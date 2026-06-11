@@ -227,8 +227,8 @@ class PayabliClient
             'requestToken' => $apiKey,
             'X-Fern-Language' => 'PHP',
             'X-Fern-SDK-Name' => 'Payabli',
-            'X-Fern-SDK-Version' => '1.0.0',
-            'User-Agent' => 'payabli/payabli/1.0.0',
+            'X-Fern-SDK-Version' => '1.0.1',
+            'User-Agent' => 'payabli/payabli/1.0.1',
         ];
 
         $this->options = $options ?? [];

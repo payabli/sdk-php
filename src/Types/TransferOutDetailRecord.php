@@ -330,7 +330,7 @@ class TransferOutDetailRecord extends JsonSerializableType
     public ?string $settlementStatus;
 
     /**
-     * @var ?string $settlementStatusName Name of the settlement status.
+     * @var ?string $settlementStatusName
      */
     #[JsonProperty('SettlementStatusName')]
     public ?string $settlementStatusName;

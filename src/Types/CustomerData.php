@@ -56,7 +56,7 @@ class CustomerData extends JsonSerializableType
     public ?string $lastname;
 
     /**
-     * @var ?string $phone Customer phone number
+     * @var ?string $phone Customer phone number. Payabli normalizes this value when it's stored. For example, `(555) 555-0100` is stored as `+15555550100`.
      */
     #[JsonProperty('phone')]
     public ?string $phone;
