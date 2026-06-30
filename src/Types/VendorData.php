@@ -15,9 +15,9 @@ class VendorData extends JsonSerializableType
     public ?string $vendorNumber;
 
     /**
-     * @var ?array<string, array<string, mixed>> $additionalData
+     * @var ?array<string, string> $additionalData
      */
-    #[JsonProperty('AdditionalData'), ArrayType(['string' => ['string' => 'mixed']])]
+    #[JsonProperty('AdditionalData'), ArrayType(['string' => 'string'])]
     public ?array $additionalData;
 
     /**
@@ -222,7 +222,7 @@ class VendorData extends JsonSerializableType
     /**
      * @param array{
      *   vendorNumber?: ?string,
-     *   additionalData?: ?array<string, array<string, mixed>>,
+     *   additionalData?: ?array<string, string>,
      *   address1?: ?string,
      *   address2?: ?string,
      *   billingData?: ?BillingData,

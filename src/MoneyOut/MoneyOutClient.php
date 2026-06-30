@@ -20,6 +20,8 @@ use Payabli\MoneyOut\Requests\CaptureAllOutRequest;
 use Payabli\MoneyOut\Requests\CaptureOutRequest;
 use Payabli\Types\BillDetailResponse;
 use Payabli\Types\VCardGetResponse;
+use Payabli\MoneyOut\Requests\RenewVCardRequest;
+use Payabli\Types\RenewVCardResponse;
 use Payabli\MoneyOut\Requests\SendVCardLinkRequest;
 use Payabli\Types\OperationResult;
 use Payabli\Core\Json\JsonDecoder;
@@ -70,6 +72,8 @@ class MoneyOutClient
      * If you don't pass `autoCapture` with a value of `true`, authorized transactions aren't flagged for settlement until captured. Use the `referenceId` returned in the response to capture the transaction.
      *
      * When `autoCapture` is `true`, Payabli captures the transaction asynchronously after authorization. The response confirms only that the transaction was authorized; it doesn't confirm that capture succeeded. To confirm capture, listen for the [`payout_transaction_approvedcaptured`](/developers/webhooks/payout-transaction-approved-captured) webhook event.
+     *
+     * If a velocity fraud alert is triggered, the endpoint returns a `202` response with `responseCode` `9051`, and the authorization is held for risk review rather than rejected. If a risk policy blocks the transaction, the endpoint returns a `422` response with `responseCode` `9005`, a terminal rejection.
      *
      * @param RequestOutAuthorize $request
      * @param ?array{
@@ -333,7 +337,9 @@ class MoneyOutClient
     }
 
     /**
-     * Captures a single authorized payout transaction by ID. If the transaction was authorized with `autoCapture` set to `true`,  you don't need to call this endpoint to capture the transaction for processing.
+     * Captures a single authorized payout transaction by ID. If the transaction was authorized with `autoCapture` set to `true`, you don't need to call this endpoint to capture the transaction for processing.
+     *
+     * If a velocity fraud alert is triggered, the endpoint returns a `202` response with `responseCode` `9051`, and the capture is held for risk review rather than rejected. If a risk policy blocks the transaction, the endpoint returns a `422` response with `responseCode` `9005`, a terminal rejection.
      *
      * @param string $referenceId The ID for the payout transaction.
      * @param CaptureOutRequest $request
@@ -469,6 +475,60 @@ class MoneyOutClient
                     return null;
                 }
                 return VCardGetResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Renews an expired or expiring virtual card by extending its expiration date to a future month.
+     *
+     * The card must be a virtual card that hasn't been fully used. The new expiration date must be in `MM-YYYY` or `MM/YYYY` format and no more than 2 years and 363 days in the future. The card expires on the last day of the month you specify.
+     *
+     * On success, `referenceId` holds the renewed card's token (the card processor may issue a new token). The response reuses the standard payout result object, so the payment-transaction fields it carries don't apply to renewal and always return `null`.
+     *
+     * @param string $cardToken ID for the virtual card to renew.
+     * @param RenewVCardRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?RenewVCardResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function renewVCard(string $cardToken, RenewVCardRequest $request, ?array $options = null): ?RenewVCardResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "MoneyOutCard/vcard/{$cardToken}/renew",
+                    method: HttpMethod::PUT,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return RenewVCardResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

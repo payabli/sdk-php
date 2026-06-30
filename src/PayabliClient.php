@@ -30,6 +30,7 @@ use Payabli\User\UserClient;
 use Payabli\Vendor\VendorClient;
 use Payabli\GhostCard\GhostCardClient;
 use Payabli\MoneyOut\MoneyOutClient;
+use Payabli\Funding\FundingClient;
 use Payabli\Wallet\WalletClient;
 use Payabli\PayoutSubscription\PayoutSubscriptionClient;
 use Payabli\ChargeBacks\ChargeBacksClient;
@@ -179,6 +180,11 @@ class PayabliClient
     public MoneyOutClient $moneyOut;
 
     /**
+     * @var FundingClient $funding
+     */
+    public FundingClient $funding;
+
+    /**
      * @var WalletClient $wallet
      */
     public WalletClient $wallet;
@@ -227,8 +233,8 @@ class PayabliClient
             'requestToken' => $apiKey,
             'X-Fern-Language' => 'PHP',
             'X-Fern-SDK-Name' => 'Payabli',
-            'X-Fern-SDK-Version' => '1.0.1',
-            'User-Agent' => 'payabli/payabli/1.0.1',
+            'X-Fern-SDK-Version' => '1.0.2',
+            'User-Agent' => 'payabli/payabli/1.0.2',
         ];
 
         $this->options = $options ?? [];
@@ -270,6 +276,7 @@ class PayabliClient
         $this->vendor = new VendorClient($this->client, $this->options);
         $this->ghostCard = new GhostCardClient($this->client, $this->options);
         $this->moneyOut = new MoneyOutClient($this->client, $this->options);
+        $this->funding = new FundingClient($this->client, $this->options);
         $this->wallet = new WalletClient($this->client, $this->options);
         $this->payoutSubscription = new PayoutSubscriptionClient($this->client, $this->options);
         $this->chargeBacks = new ChargeBacksClient($this->client, $this->options);

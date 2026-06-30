@@ -218,6 +218,18 @@ class TransferOutRecord extends JsonSerializableType
     public ?array $messages;
 
     /**
+     * @var ?string $type The transfer type. One of `debit`, `credit`, or `billing`.
+     */
+    #[JsonProperty('type')]
+    public ?string $type;
+
+    /**
+     * @var ?string $method The payment method for the transfer, such as `ach`, `vcard`, or `check`.
+     */
+    #[JsonProperty('method')]
+    public ?string $method;
+
+    /**
      * @param array{
      *   transferId?: ?int,
      *   paypointId?: ?int,
@@ -253,6 +265,8 @@ class TransferOutRecord extends JsonSerializableType
      *   splitAmount?: ?float,
      *   eventsData?: ?array<TransferOutEventData>,
      *   messages?: ?array<TransferOutMessage>,
+     *   type?: ?string,
+     *   method?: ?string,
      * } $values
      */
     public function __construct(
@@ -292,6 +306,8 @@ class TransferOutRecord extends JsonSerializableType
         $this->splitAmount = $values['splitAmount'] ?? null;
         $this->eventsData = $values['eventsData'] ?? null;
         $this->messages = $values['messages'] ?? null;
+        $this->type = $values['type'] ?? null;
+        $this->method = $values['method'] ?? null;
     }
 
     /**

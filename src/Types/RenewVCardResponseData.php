@@ -5,16 +5,16 @@ namespace Payabli\Types;
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
 
-class AuthCapturePayoutResponseData extends JsonSerializableType
+class RenewVCardResponseData extends JsonSerializableType
 {
     /**
-     * @var ?string $authCode
+     * @var ?string $authCode Not used for virtual card renewal; always returns `null`.
      */
     #[JsonProperty('authCode')]
     public ?string $authCode;
 
     /**
-     * @var string $referenceId
+     * @var string $referenceId Reference identifier for the renewed virtual card returned by the card processor.
      */
     #[JsonProperty('referenceId')]
     public string $referenceId;
@@ -32,31 +32,31 @@ class AuthCapturePayoutResponseData extends JsonSerializableType
     public string $resultText;
 
     /**
-     * @var ?string $avsResponseText
+     * @var ?string $avsResponseText Not used for virtual card renewal; always returns `null`.
      */
     #[JsonProperty('avsResponseText')]
     public ?string $avsResponseText;
 
     /**
-     * @var ?string $cvvResponseText
+     * @var ?string $cvvResponseText Not used for virtual card renewal; always returns `null`.
      */
     #[JsonProperty('cvvResponseText')]
     public ?string $cvvResponseText;
 
     /**
-     * @var int $customerId Payabli-generated unique ID of the vendor on the payout. Returns the same value as `vendorId`, or `0` when no vendor is associated.
+     * @var ?int $customerId Not used for virtual card renewal; always returns `null`.
      */
     #[JsonProperty('customerId')]
-    public int $customerId;
+    public ?int $customerId;
 
     /**
-     * @var int $vendorId Payabli-generated unique ID of the vendor on the payout. Returns the same value as `customerId`, or `0` when no vendor is associated.
+     * @var ?int $vendorId Not used for virtual card renewal; always returns `null`.
      */
     #[JsonProperty('vendorId')]
-    public int $vendorId;
+    public ?int $vendorId;
 
     /**
-     * @var ?string $methodReferenceId
+     * @var ?string $methodReferenceId Not used for virtual card renewal; always returns `null`.
      */
     #[JsonProperty('methodReferenceId')]
     public ?string $methodReferenceId;
@@ -66,11 +66,11 @@ class AuthCapturePayoutResponseData extends JsonSerializableType
      *   referenceId: string,
      *   resultCode: int,
      *   resultText: string,
-     *   customerId: int,
-     *   vendorId: int,
      *   authCode?: ?string,
      *   avsResponseText?: ?string,
      *   cvvResponseText?: ?string,
+     *   customerId?: ?int,
+     *   vendorId?: ?int,
      *   methodReferenceId?: ?string,
      * } $values
      */
@@ -83,8 +83,8 @@ class AuthCapturePayoutResponseData extends JsonSerializableType
         $this->resultText = $values['resultText'];
         $this->avsResponseText = $values['avsResponseText'] ?? null;
         $this->cvvResponseText = $values['cvvResponseText'] ?? null;
-        $this->customerId = $values['customerId'];
-        $this->vendorId = $values['vendorId'];
+        $this->customerId = $values['customerId'] ?? null;
+        $this->vendorId = $values['vendorId'] ?? null;
         $this->methodReferenceId = $values['methodReferenceId'] ?? null;
     }
 

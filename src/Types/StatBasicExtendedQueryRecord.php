@@ -68,6 +68,30 @@ class StatBasicExtendedQueryRecord extends JsonSerializableType
     public int $outPendingMethodTransactions;
 
     /**
+     * @var int $outRtpTransactions Outbound (payout) RTP transactions count.
+     */
+    #[JsonProperty('outRTPTransactions')]
+    public int $outRtpTransactions;
+
+    /**
+     * @var float $outRtpVolume Outbound (payout) RTP transactions volume.
+     */
+    #[JsonProperty('outRTPVolume')]
+    public float $outRtpVolume;
+
+    /**
+     * @var int $outWireTransactions Outbound (payout) wire transactions count.
+     */
+    #[JsonProperty('outWireTransactions')]
+    public int $outWireTransactions;
+
+    /**
+     * @var float $outWireVolume Outbound (payout) wire transactions volume.
+     */
+    #[JsonProperty('outWireVolume')]
+    public float $outWireVolume;
+
+    /**
      * @var float $outTransactionsVolume Outbound (payout) volume.
      */
     #[JsonProperty('outTransactionsVolume')]
@@ -241,6 +265,10 @@ class StatBasicExtendedQueryRecord extends JsonSerializableType
      *   outAchTransactions: int,
      *   outCheckTransactions: int,
      *   outPendingMethodTransactions: int,
+     *   outRtpTransactions: int,
+     *   outRtpVolume: float,
+     *   outWireTransactions: int,
+     *   outWireVolume: float,
      *   outTransactionsVolume: float,
      *   outSubscriptionsPaidVolume: float,
      *   outCardVolume: float,
@@ -283,6 +311,10 @@ class StatBasicExtendedQueryRecord extends JsonSerializableType
         $this->outAchTransactions = $values['outAchTransactions'];
         $this->outCheckTransactions = $values['outCheckTransactions'];
         $this->outPendingMethodTransactions = $values['outPendingMethodTransactions'];
+        $this->outRtpTransactions = $values['outRtpTransactions'];
+        $this->outRtpVolume = $values['outRtpVolume'];
+        $this->outWireTransactions = $values['outWireTransactions'];
+        $this->outWireVolume = $values['outWireVolume'];
         $this->outTransactionsVolume = $values['outTransactionsVolume'];
         $this->outSubscriptionsPaidVolume = $values['outSubscriptionsPaidVolume'];
         $this->outCardVolume = $values['outCardVolume'];

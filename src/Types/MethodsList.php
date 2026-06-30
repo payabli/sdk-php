@@ -50,6 +50,24 @@ class MethodsList extends JsonSerializableType
     public ?bool $visa;
 
     /**
+     * @var ?bool $diners When `true`, Diners Club is accepted.
+     */
+    #[JsonProperty('diners')]
+    public ?bool $diners;
+
+    /**
+     * @var ?bool $jcb When `true`, JCB is accepted.
+     */
+    #[JsonProperty('jcb')]
+    public ?bool $jcb;
+
+    /**
+     * @var ?bool $rdc When `true`, Remote Deposit Capture (RDC) is accepted.
+     */
+    #[JsonProperty('rdc')]
+    public ?bool $rdc;
+
+    /**
      * @param array{
      *   amex?: ?bool,
      *   applePay?: ?bool,
@@ -58,6 +76,9 @@ class MethodsList extends JsonSerializableType
      *   eCheck?: ?bool,
      *   mastercard?: ?bool,
      *   visa?: ?bool,
+     *   diners?: ?bool,
+     *   jcb?: ?bool,
+     *   rdc?: ?bool,
      * } $values
      */
     public function __construct(
@@ -70,6 +91,9 @@ class MethodsList extends JsonSerializableType
         $this->eCheck = $values['eCheck'] ?? null;
         $this->mastercard = $values['mastercard'] ?? null;
         $this->visa = $values['visa'] ?? null;
+        $this->diners = $values['diners'] ?? null;
+        $this->jcb = $values['jcb'] ?? null;
+        $this->rdc = $values['rdc'] ?? null;
     }
 
     /**

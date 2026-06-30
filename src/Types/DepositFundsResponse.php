@@ -4,11 +4,12 @@ namespace Payabli\Types;
 
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
+use Payabli\Core\Types\ArrayType;
 
 /**
- * The response for canceling a single payout transaction.
+ * Response for a deposit funds request.
  */
-class PayabliApiResponse0000 extends JsonSerializableType
+class DepositFundsResponse extends JsonSerializableType
 {
     /**
      * @var ?bool $isSuccess
@@ -23,30 +24,23 @@ class PayabliApiResponse0000 extends JsonSerializableType
     public string $responseText;
 
     /**
-     * @var ?string $pageIdentifier
+     * @var ?array<string, mixed> $responseData The object containing the response data.
+     */
+    #[JsonProperty('responseData'), ArrayType(['string' => 'mixed'])]
+    public ?array $responseData;
+
+    /**
+     * @var ?string $pageIdentifier Auxiliary validation used internally by payment pages and components.
      */
     #[JsonProperty('pageIdentifier')]
     public ?string $pageIdentifier;
 
     /**
-     * @var ?int $responseCode
-     */
-    #[JsonProperty('responseCode')]
-    public ?int $responseCode;
-
-    /**
-     * @var ?CancelPayoutResponseData $responseData
-     */
-    #[JsonProperty('responseData')]
-    public ?CancelPayoutResponseData $responseData;
-
-    /**
      * @param array{
      *   responseText: string,
      *   isSuccess?: ?bool,
+     *   responseData?: ?array<string, mixed>,
      *   pageIdentifier?: ?string,
-     *   responseCode?: ?int,
-     *   responseData?: ?CancelPayoutResponseData,
      * } $values
      */
     public function __construct(
@@ -54,9 +48,8 @@ class PayabliApiResponse0000 extends JsonSerializableType
     ) {
         $this->isSuccess = $values['isSuccess'] ?? null;
         $this->responseText = $values['responseText'];
-        $this->pageIdentifier = $values['pageIdentifier'] ?? null;
-        $this->responseCode = $values['responseCode'] ?? null;
         $this->responseData = $values['responseData'] ?? null;
+        $this->pageIdentifier = $values['pageIdentifier'] ?? null;
     }
 
     /**
