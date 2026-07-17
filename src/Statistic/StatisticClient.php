@@ -176,7 +176,7 @@ class StatisticClient
      * For example, `w` groups the results by week.
      *
      * @param string $freq
-     * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in PartnerHub.
+     * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in the Payabli Portal.
      * @param CustomerBasicStatsRequest $request
      * @param ?array{
      *   baseUrl?: string,

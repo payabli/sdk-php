@@ -44,6 +44,12 @@ class TokenizeCard extends JsonSerializableType
     public ?string $cardzip;
 
     /**
+     * @var ?string $device
+     */
+    #[JsonProperty('device')]
+    public ?string $device;
+
+    /**
      * @param array{
      *   method: string,
      *   cardexp: string,
@@ -51,6 +57,7 @@ class TokenizeCard extends JsonSerializableType
      *   cardnumber: string,
      *   cardcvv?: ?string,
      *   cardzip?: ?string,
+     *   device?: ?string,
      * } $values
      */
     public function __construct(
@@ -62,6 +69,7 @@ class TokenizeCard extends JsonSerializableType
         $this->cardHolder = $values['cardHolder'];
         $this->cardnumber = $values['cardnumber'];
         $this->cardzip = $values['cardzip'] ?? null;
+        $this->device = $values['device'] ?? null;
     }
 
     /**

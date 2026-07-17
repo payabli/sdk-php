@@ -50,12 +50,6 @@ class TokenizeAch extends JsonSerializableType
     public string $achRouting;
 
     /**
-     * @var ?string $device
-     */
-    #[JsonProperty('device')]
-    public ?string $device;
-
-    /**
      * @param array{
      *   method: string,
      *   achAccount: string,
@@ -64,7 +58,6 @@ class TokenizeAch extends JsonSerializableType
      *   achRouting: string,
      *   achCode?: ?string,
      *   achHolderType?: ?value-of<AchHolderType>,
-     *   device?: ?string,
      * } $values
      */
     public function __construct(
@@ -77,7 +70,6 @@ class TokenizeAch extends JsonSerializableType
         $this->achHolder = $values['achHolder'];
         $this->achHolderType = $values['achHolderType'] ?? null;
         $this->achRouting = $values['achRouting'];
-        $this->device = $values['device'] ?? null;
     }
 
     /**

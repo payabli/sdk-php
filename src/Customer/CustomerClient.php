@@ -54,7 +54,7 @@ class CustomerClient
     }
 
     /**
-     * Creates a customer in an entrypoint. An identifier is required to create customer records. Change your identifier settings in Settings > Custom Fields in PartnerHub.
+     * Creates a customer in an entrypoint. An identifier is required to create customer records. Change your identifier settings in Settings > Custom Fields in the Payabli Portal.
      * If you don't include an identifier, the record is rejected.
      *
      * @param string $entry The entrypoint identifier.
@@ -120,7 +120,7 @@ class CustomerClient
     /**
      * Retrieves a customer's record and details.
      *
-     * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in PartnerHub.
+     * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in the Payabli Portal.
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -168,7 +168,7 @@ class CustomerClient
     /**
      * Update a customer record. Include only the fields you want to change.
      *
-     * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in PartnerHub.
+     * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in the Payabli Portal.
      * @param CustomerData $request
      * @param ?array{
      *   baseUrl?: string,
@@ -218,7 +218,7 @@ class CustomerClient
     /**
      * Delete a customer record.
      *
-     * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in PartnerHub.
+     * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in the Payabli Portal.
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -266,7 +266,7 @@ class CustomerClient
     /**
      * Sends the consent opt-in email to the customer email address in the customer record.
      *
-     * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in PartnerHub.
+     * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in the Payabli Portal.
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -314,7 +314,7 @@ class CustomerClient
     /**
      * Links a customer to a transaction by ID.
      *
-     * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in PartnerHub.
+     * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in the Payabli Portal.
      * @param string $transId ReferenceId for the transaction (PaymentId).
      * @param ?array{
      *   baseUrl?: string,

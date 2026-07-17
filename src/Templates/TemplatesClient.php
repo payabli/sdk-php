@@ -56,7 +56,7 @@ class TemplatesClient
     /**
      * Deletes a template by ID.
      *
-     * @param float $templateId The boarding template ID. You can find this at the end of the boarding template URL in PartnerHub. Example: `https://partner-sandbox.payabli.com/myorganization/boarding/edittemplate/80`. Here, the template ID is `80`.
+     * @param float $templateId The boarding template ID. You can find this at the end of the boarding template URL in the Payabli Portal. Example: `https://partner-sandbox.payabli.com/myorganization/boarding/edittemplate/80`. Here, the template ID is `80`.
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -104,7 +104,7 @@ class TemplatesClient
     /**
      * Generates a boarding link from a boarding template.
      *
-     * @param float $templateId The boarding template ID. You can find this at the end of the boarding template URL in PartnerHub. Example: `https://partner-sandbox.payabli.com/myorganization/boarding/edittemplate/80`. Here, the template ID is `80`.
+     * @param float $templateId The boarding template ID. You can find this at the end of the boarding template URL in the Payabli Portal. Example: `https://partner-sandbox.payabli.com/myorganization/boarding/edittemplate/80`. Here, the template ID is `80`.
      * @param bool $ignoreEmpty Ignore read-only and empty fields. Default is `false`. If `ignoreEmpty` = `false` and any field is empty, then the request returns a failure response. If `ignoreEmpty` = `true`, the request returns the boarding link name regardless of whether fields are empty.
      * @param ?array{
      *   baseUrl?: string,
@@ -125,7 +125,7 @@ class TemplatesClient
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "Templates/getlink/{$templateId}/{$ignoreEmpty}",
+                    path: "Templates/getlink/{$templateId}/" . ($ignoreEmpty ? 'true' : 'false'),
                     method: HttpMethod::GET,
                 ),
                 $options,
@@ -153,7 +153,7 @@ class TemplatesClient
     /**
      * Retrieves a boarding template's details by ID.
      *
-     * @param float $templateId The boarding template ID. You can find this at the end of the boarding template URL in PartnerHub. Example: `https://partner-sandbox.payabli.com/myorganization/boarding/edittemplate/80`. Here, the template ID is `80`.
+     * @param float $templateId The boarding template ID. You can find this at the end of the boarding template URL in the Payabli Portal. Example: `https://partner-sandbox.payabli.com/myorganization/boarding/edittemplate/80`. Here, the template ID is `80`.
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,

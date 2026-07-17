@@ -72,6 +72,7 @@ class ListTransactionsRequest extends JsonSerializableType
      * - `payaccountLastfour` (nct, ct)
      * - `payaccountType` (ne, eq, in, nin)
      * - `payaccountCurrency` (ne, eq, in, nin)
+     * - `binCardType` (eq, ne, in, nin). Filters by card type for card transactions. Accepts `CREDIT`, `DEBIT`, or `PREPAID`. Case-insensitive.
      * - `customerFirstname` (ct, nct, eq, ne)
      * - `customerLastname` (ct, nct, eq, ne)
      * - `customerName` (ct, nct)

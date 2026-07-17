@@ -368,7 +368,7 @@ class BoardingClient
     /**
      * Get details for a boarding link using the boarding template ID. This endpoint requires an application API token.
      *
-     * @param float $templateId The boarding template ID. You can find this at the end of the boarding template URL in PartnerHub. Example: `https://partner-sandbox.payabli.com/myorganization/boarding/edittemplate/80`. Here, the template ID is `80`.
+     * @param float $templateId The boarding template ID. You can find this at the end of the boarding template URL in the Payabli Portal. Example: `https://partner-sandbox.payabli.com/myorganization/boarding/edittemplate/80`. Here, the template ID is `80`.
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,

@@ -6,6 +6,7 @@ use Payabli\Bill\BillClient;
 use Payabli\Customer\CustomerClient;
 use Payabli\CheckCapture\CheckCaptureClient;
 use Payabli\MoneyIn\MoneyInClient;
+use Payabli\Token\TokenClient;
 use Payabli\Subscription\SubscriptionClient;
 use Payabli\Invoice\InvoiceClient;
 use Payabli\PaymentLink\PaymentLinkClient;
@@ -36,6 +37,7 @@ use Payabli\PayoutSubscription\PayoutSubscriptionClient;
 use Payabli\ChargeBacks\ChargeBacksClient;
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\OAuthTokenProvider;
 
 class PayabliClient
 {
@@ -58,6 +60,11 @@ class PayabliClient
      * @var MoneyInClient $moneyIn
      */
     public MoneyInClient $moneyIn;
+
+    /**
+     * @var TokenClient $token
+     */
+    public TokenClient $token;
 
     /**
      * @var SubscriptionClient $subscription
@@ -216,7 +223,14 @@ class PayabliClient
     private RawClient $client;
 
     /**
-     * @param string $apiKey The apiKey to use for authentication.
+     * @var OAuthTokenProvider $oauthTokenProvider
+     */
+    private OAuthTokenProvider $oauthTokenProvider;
+
+    /**
+     * @param ?string $clientId The client ID for OAuth authentication.
+     * @param ?string $clientSecret The client secret for OAuth authentication.
+     * @param ?string $apiKey The apiKey to use for authentication.
      * @param ?array{
      *   baseUrl?: string,
      *   client?: ClientInterface,
@@ -226,23 +240,40 @@ class PayabliClient
      * } $options
      */
     public function __construct(
-        string $apiKey,
+        ?string $clientId = null,
+        ?string $clientSecret = null,
+        ?string $apiKey = null,
         ?array $options = null,
     ) {
+        $clientId ??= getenv('OAUTH_CLIENT_ID') ?: null;
+        $clientSecret ??= getenv('OAUTH_CLIENT_SECRET') ?: null;
         $defaultHeaders = [
-            'requestToken' => $apiKey,
             'X-Fern-Language' => 'PHP',
             'X-Fern-SDK-Name' => 'Payabli',
-            'X-Fern-SDK-Version' => '1.0.2',
-            'User-Agent' => 'payabli/payabli/1.0.2',
+            'X-Fern-SDK-Version' => '1.0.3',
+            'User-Agent' => 'payabli/payabli/1.0.3',
         ];
+        if ($apiKey != null) {
+            $defaultHeaders['requestToken'] = $apiKey;
+        }
 
         $this->options = $options ?? [];
 
+        if ($clientId !== null && $clientSecret !== null) {
+            $authRawClient = new RawClient(['headers' => []]);
+            $authClient = new TokenClient($authRawClient);
+            $this->oauthTokenProvider = new OAuthTokenProvider($clientId, $clientSecret, $authClient);
+
+        }
         $this->options['headers'] = array_merge(
             $defaultHeaders,
             $this->options['headers'] ?? [],
         );
+
+        if ($clientId !== null && $clientSecret !== null) {
+            $this->options['getAuthHeaders'] = fn () =>
+                ['Authorization' => "Bearer " . $this->oauthTokenProvider->getToken()];
+        }
 
         $this->client = new RawClient(
             options: $this->options,
@@ -252,6 +283,7 @@ class PayabliClient
         $this->customer = new CustomerClient($this->client, $this->options);
         $this->checkCapture = new CheckCaptureClient($this->client, $this->options);
         $this->moneyIn = new MoneyInClient($this->client, $this->options);
+        $this->token = new TokenClient($this->client, $this->options);
         $this->subscription = new SubscriptionClient($this->client, $this->options);
         $this->invoice = new InvoiceClient($this->client, $this->options);
         $this->paymentLink = new PaymentLinkClient($this->client, $this->options);

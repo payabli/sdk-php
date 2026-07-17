@@ -8,22 +8,16 @@ use Payabli\Core\Json\JsonProperty;
 class ContactsResponse extends JsonSerializableType
 {
     /**
-     * @var ?string $contactEmail Contact email address.
-     */
-    #[JsonProperty('ContactEmail')]
-    public ?string $contactEmail;
-
-    /**
      * @var ?string $contactName Contact name.
      */
     #[JsonProperty('ContactName')]
     public ?string $contactName;
 
     /**
-     * @var ?string $contactPhone Contact phone number.
+     * @var ?string $contactEmail Contact email address.
      */
-    #[JsonProperty('ContactPhone')]
-    public ?string $contactPhone;
+    #[JsonProperty('ContactEmail')]
+    public ?string $contactEmail;
 
     /**
      * @var ?string $contactTitle Contact title.
@@ -32,20 +26,26 @@ class ContactsResponse extends JsonSerializableType
     public ?string $contactTitle;
 
     /**
+     * @var ?string $contactPhone Contact phone number.
+     */
+    #[JsonProperty('ContactPhone')]
+    public ?string $contactPhone;
+
+    /**
      * @param array{
-     *   contactEmail?: ?string,
      *   contactName?: ?string,
-     *   contactPhone?: ?string,
+     *   contactEmail?: ?string,
      *   contactTitle?: ?string,
+     *   contactPhone?: ?string,
      * } $values
      */
     public function __construct(
         array $values = [],
     ) {
-        $this->contactEmail = $values['contactEmail'] ?? null;
         $this->contactName = $values['contactName'] ?? null;
-        $this->contactPhone = $values['contactPhone'] ?? null;
+        $this->contactEmail = $values['contactEmail'] ?? null;
         $this->contactTitle = $values['contactTitle'] ?? null;
+        $this->contactPhone = $values['contactPhone'] ?? null;
     }
 
     /**

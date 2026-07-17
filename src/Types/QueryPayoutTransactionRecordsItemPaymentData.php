@@ -8,16 +8,10 @@ use Payabli\Core\Json\JsonProperty;
 class QueryPayoutTransactionRecordsItemPaymentData extends JsonSerializableType
 {
     /**
-     * @var ?string $accountExp
+     * @var ?string $maskedAccount
      */
-    #[JsonProperty('AccountExp')]
-    public ?string $accountExp;
-
-    /**
-     * @var ?string $accountId
-     */
-    #[JsonProperty('accountId')]
-    public ?string $accountId;
+    #[JsonProperty('MaskedAccount')]
+    public ?string $maskedAccount;
 
     /**
      * @var ?string $accountType
@@ -26,22 +20,52 @@ class QueryPayoutTransactionRecordsItemPaymentData extends JsonSerializableType
     public ?string $accountType;
 
     /**
+     * @var ?string $accountExp
+     */
+    #[JsonProperty('AccountExp')]
+    public ?string $accountExp;
+
+    /**
      * @var ?string $accountZip
      */
     #[JsonProperty('AccountZip')]
     public ?string $accountZip;
 
     /**
-     * @var ?string $bankAccount
+     * @var ?string $holderName Card or bank account holder name.
      */
-    #[JsonProperty('bankAccount')]
-    public ?string $bankAccount;
+    #[JsonProperty('HolderName')]
+    public ?string $holderName;
 
     /**
-     * @var ?BinData $binData
+     * @var ?string $storedId Identifier of stored payment method used in transaction.
      */
-    #[JsonProperty('binData')]
-    public ?BinData $binData;
+    #[JsonProperty('StoredId')]
+    public ?string $storedId;
+
+    /**
+     * @var ?string $initiator
+     */
+    #[JsonProperty('Initiator')]
+    public ?string $initiator;
+
+    /**
+     * @var ?string $storedMethodUsageType
+     */
+    #[JsonProperty('StoredMethodUsageType')]
+    public ?string $storedMethodUsageType;
+
+    /**
+     * @var ?string $sequence
+     */
+    #[JsonProperty('Sequence')]
+    public ?string $sequence;
+
+    /**
+     * @var ?string $orderDescription
+     */
+    #[JsonProperty('orderDescription')]
+    public ?string $orderDescription;
 
     /**
      * @var ?string $cloudSignatureData
@@ -56,36 +80,6 @@ class QueryPayoutTransactionRecordsItemPaymentData extends JsonSerializableType
     public ?string $cloudSignatureFormat;
 
     /**
-     * @var ?PayoutGatewayConnector $gatewayConnector
-     */
-    #[JsonProperty('gatewayConnector')]
-    public ?PayoutGatewayConnector $gatewayConnector;
-
-    /**
-     * @var ?string $holderName Card or bank account holder name.
-     */
-    #[JsonProperty('HolderName')]
-    public ?string $holderName;
-
-    /**
-     * @var ?string $initiator
-     */
-    #[JsonProperty('Initiator')]
-    public ?string $initiator;
-
-    /**
-     * @var ?string $maskedAccount
-     */
-    #[JsonProperty('MaskedAccount')]
-    public ?string $maskedAccount;
-
-    /**
-     * @var ?string $orderDescription
-     */
-    #[JsonProperty('orderDescription')]
-    public ?string $orderDescription;
-
-    /**
      * @var ?PaymentDetail $paymentDetails
      */
     #[JsonProperty('paymentDetails')]
@@ -98,66 +92,72 @@ class QueryPayoutTransactionRecordsItemPaymentData extends JsonSerializableType
     public ?string $payorData;
 
     /**
-     * @var ?string $sequence
+     * @var ?string $accountId
      */
-    #[JsonProperty('Sequence')]
-    public ?string $sequence;
+    #[JsonProperty('accountId')]
+    public ?string $accountId;
 
     /**
-     * @var ?string $storedId Identifier of stored payment method used in transaction.
+     * @var ?string $bankAccount
      */
-    #[JsonProperty('StoredId')]
-    public ?string $storedId;
+    #[JsonProperty('bankAccount')]
+    public ?string $bankAccount;
 
     /**
-     * @var ?string $storedMethodUsageType
+     * @var ?PayoutGatewayConnector $gatewayConnector
      */
-    #[JsonProperty('StoredMethodUsageType')]
-    public ?string $storedMethodUsageType;
+    #[JsonProperty('gatewayConnector')]
+    public ?PayoutGatewayConnector $gatewayConnector;
+
+    /**
+     * @var ?BinData $binData
+     */
+    #[JsonProperty('binData')]
+    public ?BinData $binData;
 
     /**
      * @param array{
-     *   accountExp?: ?string,
-     *   accountId?: ?string,
+     *   maskedAccount?: ?string,
      *   accountType?: ?string,
+     *   accountExp?: ?string,
      *   accountZip?: ?string,
-     *   bankAccount?: ?string,
-     *   binData?: ?BinData,
+     *   holderName?: ?string,
+     *   storedId?: ?string,
+     *   initiator?: ?string,
+     *   storedMethodUsageType?: ?string,
+     *   sequence?: ?string,
+     *   orderDescription?: ?string,
      *   cloudSignatureData?: ?string,
      *   cloudSignatureFormat?: ?string,
-     *   gatewayConnector?: ?PayoutGatewayConnector,
-     *   holderName?: ?string,
-     *   initiator?: ?string,
-     *   maskedAccount?: ?string,
-     *   orderDescription?: ?string,
      *   paymentDetails?: ?PaymentDetail,
      *   payorData?: ?string,
-     *   sequence?: ?string,
-     *   storedId?: ?string,
-     *   storedMethodUsageType?: ?string,
+     *   accountId?: ?string,
+     *   bankAccount?: ?string,
+     *   gatewayConnector?: ?PayoutGatewayConnector,
+     *   binData?: ?BinData,
      * } $values
      */
     public function __construct(
         array $values = [],
     ) {
-        $this->accountExp = $values['accountExp'] ?? null;
-        $this->accountId = $values['accountId'] ?? null;
+        $this->maskedAccount = $values['maskedAccount'] ?? null;
         $this->accountType = $values['accountType'] ?? null;
+        $this->accountExp = $values['accountExp'] ?? null;
         $this->accountZip = $values['accountZip'] ?? null;
-        $this->bankAccount = $values['bankAccount'] ?? null;
-        $this->binData = $values['binData'] ?? null;
+        $this->holderName = $values['holderName'] ?? null;
+        $this->storedId = $values['storedId'] ?? null;
+        $this->initiator = $values['initiator'] ?? null;
+        $this->storedMethodUsageType = $values['storedMethodUsageType'] ?? null;
+        $this->sequence = $values['sequence'] ?? null;
+        $this->orderDescription = $values['orderDescription'] ?? null;
         $this->cloudSignatureData = $values['cloudSignatureData'] ?? null;
         $this->cloudSignatureFormat = $values['cloudSignatureFormat'] ?? null;
-        $this->gatewayConnector = $values['gatewayConnector'] ?? null;
-        $this->holderName = $values['holderName'] ?? null;
-        $this->initiator = $values['initiator'] ?? null;
-        $this->maskedAccount = $values['maskedAccount'] ?? null;
-        $this->orderDescription = $values['orderDescription'] ?? null;
         $this->paymentDetails = $values['paymentDetails'] ?? null;
         $this->payorData = $values['payorData'] ?? null;
-        $this->sequence = $values['sequence'] ?? null;
-        $this->storedId = $values['storedId'] ?? null;
-        $this->storedMethodUsageType = $values['storedMethodUsageType'] ?? null;
+        $this->accountId = $values['accountId'] ?? null;
+        $this->bankAccount = $values['bankAccount'] ?? null;
+        $this->gatewayConnector = $values['gatewayConnector'] ?? null;
+        $this->binData = $values['binData'] ?? null;
     }
 
     /**
