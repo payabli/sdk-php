@@ -5,14 +5,13 @@ namespace Payabli\Types;
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
 use Payabli\Core\Types\ArrayType;
-use Payabli\Core\Types\Union;
 
 class LineItem extends JsonSerializableType
 {
     /**
-     * @var ?array<?string> $itemCategories Array of tags classifying item or product.
+     * @var ?array<string> $itemCategories Array of tags classifying item or product.
      */
-    #[JsonProperty('itemCategories'), ArrayType([new Union('string', 'null')])]
+    #[JsonProperty('itemCategories'), ArrayType(['string'])]
     public ?array $itemCategories;
 
     /**
@@ -67,7 +66,7 @@ class LineItem extends JsonSerializableType
      * @param array{
      *   itemCost: float,
      *   itemQty: int,
-     *   itemCategories?: ?array<?string>,
+     *   itemCategories?: ?array<string>,
      *   itemCommodityCode?: ?string,
      *   itemDescription?: ?string,
      *   itemMode?: ?int,

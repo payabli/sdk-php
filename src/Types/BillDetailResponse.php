@@ -144,9 +144,7 @@ class BillDetailResponse extends JsonSerializableType
 
     /**
      * Internal status of transaction.
-     *
-     * Payout statuses, also known as money out transaction statuses, appear in PartnerHub and PayHub, and the API, and describe where a payout transaction is in its lifecycle.
-     *
+     * Payout statuses, also known as money out transaction statuses, appear in the Payabli Portal and the API and describe where a payout transaction is in its lifecycle.
      * | Status | Key | Description | Events |
      * |--------|-----|-------------|---------|
      * | **Authorized** | 11 | A payout is authorized. These are queued payouts, and nothing happens with them until they're captured. | Authorized |
@@ -193,10 +191,10 @@ class BillDetailResponse extends JsonSerializableType
     public ?string $entryName;
 
     /**
-     * @var ?string $batchId Identifier for the batch in which this transaction was processed. Used to track and reconcile batch-level operations.
+     * @var ?float $batchId Identifier for the batch in which this transaction was processed. Used to track and reconcile batch-level operations.
      */
     #[JsonProperty('BatchId')]
-    public ?string $batchId;
+    public ?float $batchId;
 
     /**
      * @var ?bool $hasVcardTransactions
@@ -217,10 +215,16 @@ class BillDetailResponse extends JsonSerializableType
     public ?int $scheduleId;
 
     /**
-     * @var ?int $settlementStatus
+     * @var ?string $settlementStatus
      */
     #[JsonProperty('SettlementStatus')]
-    public ?int $settlementStatus;
+    public ?string $settlementStatus;
+
+    /**
+     * @var ?string $settlementStatusName
+     */
+    #[JsonProperty('SettlementStatusName')]
+    public ?string $settlementStatusName;
 
     /**
      * @var ?bool $riskFlagged
@@ -259,6 +263,12 @@ class BillDetailResponse extends JsonSerializableType
     public ?int $riskActionCode;
 
     /**
+     * @var ?string $entityId
+     */
+    #[JsonProperty('EntityId')]
+    public ?string $entityId;
+
+    /**
      * @param array{
      *   bills?: ?array<BillDetailsResponse>,
      *   checkData?: ?FileContent,
@@ -288,17 +298,19 @@ class BillDetailResponse extends JsonSerializableType
      *   vendor?: ?VendorQueryRecord,
      *   externalPaypointId?: ?string,
      *   entryName?: ?string,
-     *   batchId?: ?string,
+     *   batchId?: ?float,
      *   hasVcardTransactions?: ?bool,
      *   isSameDayAch?: ?bool,
      *   scheduleId?: ?int,
-     *   settlementStatus?: ?int,
+     *   settlementStatus?: ?string,
+     *   settlementStatusName?: ?string,
      *   riskFlagged?: ?bool,
      *   riskFlaggedOn?: ?DateTime,
      *   riskStatus?: ?string,
      *   riskReason?: ?string,
      *   riskAction?: ?string,
      *   riskActionCode?: ?int,
+     *   entityId?: ?string,
      * } $values
      */
     public function __construct(
@@ -337,12 +349,14 @@ class BillDetailResponse extends JsonSerializableType
         $this->isSameDayAch = $values['isSameDayAch'] ?? null;
         $this->scheduleId = $values['scheduleId'] ?? null;
         $this->settlementStatus = $values['settlementStatus'] ?? null;
+        $this->settlementStatusName = $values['settlementStatusName'] ?? null;
         $this->riskFlagged = $values['riskFlagged'] ?? null;
         $this->riskFlaggedOn = $values['riskFlaggedOn'] ?? null;
         $this->riskStatus = $values['riskStatus'] ?? null;
         $this->riskReason = $values['riskReason'] ?? null;
         $this->riskAction = $values['riskAction'] ?? null;
         $this->riskActionCode = $values['riskActionCode'] ?? null;
+        $this->entityId = $values['entityId'] ?? null;
     }
 
     /**

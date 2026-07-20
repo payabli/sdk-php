@@ -11,6 +11,12 @@ use Payabli\Core\Types\Date;
 class QueryTransactionEvents extends JsonSerializableType
 {
     /**
+     * @var ?string $transEvent Event descriptor. See [TransEvent Reference](/guides/pay-in-transevents-reference) for more details.
+     */
+    #[JsonProperty('TransEvent')]
+    public ?string $transEvent;
+
+    /**
      * @var (
      *    array<string, mixed>
      *   |string
@@ -26,27 +32,21 @@ class QueryTransactionEvents extends JsonSerializableType
     public ?DateTime $eventTime;
 
     /**
-     * @var ?string $transEvent Event descriptor. See [TransEvent Reference](/guides/pay-in-transevents-reference) for more details.
-     */
-    #[JsonProperty('TransEvent')]
-    public ?string $transEvent;
-
-    /**
      * @param array{
+     *   transEvent?: ?string,
      *   eventData?: (
      *    array<string, mixed>
      *   |string
      * )|null,
      *   eventTime?: ?DateTime,
-     *   transEvent?: ?string,
      * } $values
      */
     public function __construct(
         array $values = [],
     ) {
+        $this->transEvent = $values['transEvent'] ?? null;
         $this->eventData = $values['eventData'] ?? null;
         $this->eventTime = $values['eventTime'] ?? null;
-        $this->transEvent = $values['transEvent'] ?? null;
     }
 
     /**

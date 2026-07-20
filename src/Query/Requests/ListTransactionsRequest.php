@@ -8,7 +8,7 @@ use Payabli\Types\ExportFormat;
 class ListTransactionsRequest extends JsonSerializableType
 {
     /**
-     * @var ?value-of<ExportFormat> $exportFormat
+     * @var ?value-of<ExportFormat> $exportFormat Export format for file downloads. When specified, returns data as a file instead of JSON.
      */
     public ?string $exportFormat;
 
@@ -23,7 +23,6 @@ class ListTransactionsRequest extends JsonSerializableType
     public ?int $limitRecord;
 
     /**
-     *
      * Collection of field names, conditions, and values used to filter the query.
      * <Info>
      *   **You must remove `parameters=` from the request before you send it, otherwise Payabli will ignore the filters.**
@@ -49,6 +48,7 @@ class ListTransactionsRequest extends JsonSerializableType
      * - `scheduleId` (ne, eq)
      * - `returnId` (ne, eq)
      * - `refundId` (ne, eq)
+     * - `rejectId` (ne, eq)
      * - `idTrans` (ne, eq)
      * - `orgId` (ne, eq)
      * - `paypointId` (ne, eq)
@@ -72,6 +72,7 @@ class ListTransactionsRequest extends JsonSerializableType
      * - `payaccountLastfour` (nct, ct)
      * - `payaccountType` (ne, eq, in, nin)
      * - `payaccountCurrency` (ne, eq, in, nin)
+     * - `binCardType` (eq, ne, in, nin). Filters by card type for card transactions. Accepts `CREDIT`, `DEBIT`, or `PREPAID`. Case-insensitive.
      * - `customerFirstname` (ct, nct, eq, ne)
      * - `customerLastname` (ct, nct, eq, ne)
      * - `customerName` (ct, nct)

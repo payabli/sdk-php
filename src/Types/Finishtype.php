@@ -8,13 +8,13 @@ use Payabli\Core\Json\JsonProperty;
 class Finishtype extends JsonSerializableType
 {
     /**
-     * @var ?bool $calendar Flag to enable 'calendar' option
+     * @var ?bool $calendar Flag to enable the 'calendar' option.
      */
     #[JsonProperty('calendar')]
     public ?bool $calendar;
 
     /**
-     * @var ?bool $untilCancelled Flag to enable 'untilCancelled' option
+     * @var ?bool $untilCancelled Flag to enable the 'untilCancelled' option.
      */
     #[JsonProperty('untilCancelled')]
     public ?bool $untilCancelled;

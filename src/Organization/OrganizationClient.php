@@ -5,7 +5,7 @@ namespace Payabli\Organization;
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\Organization\Requests\AddOrganizationRequest;
-use Payabli\Organization\Types\AddOrganizationResponse;
+use Payabli\Types\AddOrganizationResponse;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -13,9 +13,9 @@ use Payabli\Environments;
 use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
-use Payabli\Organization\Types\DeleteOrganizationResponse;
 use Payabli\Organization\Requests\OrganizationData;
-use Payabli\Organization\Types\EditOrganizationResponse;
+use Payabli\Types\EditOrganizationResponse;
+use Payabli\Types\DeleteOrganizationResponse;
 use Payabli\Types\OrganizationQueryRecord;
 use Payabli\Types\SettingsQueryRecord;
 
@@ -110,54 +110,6 @@ class OrganizationClient
     }
 
     /**
-     * Delete an organization by ID.
-     *
-     * @param int $orgId The numeric identifier for organization, assigned by Payabli.
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?DeleteOrganizationResponse
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function deleteOrganization(int $orgId, ?array $options = null): ?DeleteOrganizationResponse
-    {
-        $options = array_merge($this->options, $options ?? []);
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "Organization/{$orgId}",
-                    method: HttpMethod::DELETE,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return DeleteOrganizationResponse::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
      * Updates an organization's details by ID.
      *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
@@ -194,6 +146,54 @@ class OrganizationClient
                     return null;
                 }
                 return EditOrganizationResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Delete an organization by ID.
+     *
+     * @param int $orgId The numeric identifier for organization, assigned by Payabli.
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?DeleteOrganizationResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function deleteOrganization(int $orgId, ?array $options = null): ?DeleteOrganizationResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "Organization/{$orgId}",
+                    method: HttpMethod::DELETE,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return DeleteOrganizationResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -256,7 +256,7 @@ class OrganizationClient
     }
 
     /**
-     * Gets an organizations basic details by org ID.
+     * Gets an organization's basic details by org ID.
      *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ?array{

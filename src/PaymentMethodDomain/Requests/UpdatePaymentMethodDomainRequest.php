@@ -3,7 +3,7 @@
 namespace Payabli\PaymentMethodDomain\Requests;
 
 use Payabli\Core\Json\JsonSerializableType;
-use Payabli\PaymentMethodDomain\Types\UpdatePaymentMethodDomainRequestWallet;
+use Payabli\Types\UpdatePaymentMethodDomainRequestWallet;
 use Payabli\Core\Json\JsonProperty;
 
 class UpdatePaymentMethodDomainRequest extends JsonSerializableType

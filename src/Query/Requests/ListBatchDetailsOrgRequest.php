@@ -8,7 +8,7 @@ use Payabli\Types\ExportFormat;
 class ListBatchDetailsOrgRequest extends JsonSerializableType
 {
     /**
-     * @var ?value-of<ExportFormat> $exportFormat
+     * @var ?value-of<ExportFormat> $exportFormat Export format for file downloads. When specified, returns data as a file instead of JSON.
      */
     public ?string $exportFormat;
 
@@ -23,7 +23,6 @@ class ListBatchDetailsOrgRequest extends JsonSerializableType
     public ?int $limitRecord;
 
     /**
-     *
      * Collection of field names, conditions, and values used to filter the query.
      * <Info>
      *   **You must remove `parameters=` from the request before you send it, otherwise Payabli will ignore the filters.**

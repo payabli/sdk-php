@@ -5,6 +5,9 @@ namespace Payabli\Traits;
 use Payabli\Core\Json\JsonProperty;
 
 /**
+ * Minimal response wrapper used by approval-style endpoints that don't carry
+ * the standard response envelope.
+ *
  * @property ?bool $isSuccess
  * @property string $responseText
  */

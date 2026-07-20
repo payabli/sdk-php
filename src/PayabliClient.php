@@ -3,38 +3,41 @@
 namespace Payabli;
 
 use Payabli\Bill\BillClient;
-use Payabli\Boarding\BoardingClient;
-use Payabli\ChargeBacks\ChargeBacksClient;
-use Payabli\CheckCapture\CheckCaptureClient;
-use Payabli\Cloud\CloudClient;
 use Payabli\Customer\CustomerClient;
-use Payabli\Export\ExportClient;
-use Payabli\GhostCard\GhostCardClient;
-use Payabli\HostedPaymentPages\HostedPaymentPagesClient;
-use Payabli\Import\ImportClient;
-use Payabli\Invoice\InvoiceClient;
-use Payabli\LineItem\LineItemClient;
-use Payabli\Management\ManagementClient;
+use Payabli\CheckCapture\CheckCaptureClient;
 use Payabli\MoneyIn\MoneyInClient;
-use Payabli\MoneyOut\MoneyOutClient;
-use Payabli\Notification\NotificationClient;
-use Payabli\Notificationlogs\NotificationlogsClient;
-use Payabli\Ocr\OcrClient;
-use Payabli\Organization\OrganizationClient;
-use Payabli\PaymentLink\PaymentLinkClient;
-use Payabli\PaymentMethodDomain\PaymentMethodDomainClient;
-use Payabli\PayoutSubscription\PayoutSubscriptionClient;
-use Payabli\Paypoint\PaypointClient;
-use Payabli\Query\QueryClient;
-use Payabli\Statistic\StatisticClient;
+use Payabli\Token\TokenClient;
 use Payabli\Subscription\SubscriptionClient;
-use Payabli\Templates\TemplatesClient;
+use Payabli\Invoice\InvoiceClient;
+use Payabli\PaymentLink\PaymentLinkClient;
 use Payabli\TokenStorage\TokenStorageClient;
+use Payabli\Paypoint\PaypointClient;
+use Payabli\HostedPaymentPages\HostedPaymentPagesClient;
+use Payabli\PaymentMethodDomain\PaymentMethodDomainClient;
+use Payabli\Import\ImportClient;
+use Payabli\Query\QueryClient;
+use Payabli\Ocr\OcrClient;
+use Payabli\Notificationlogs\NotificationlogsClient;
+use Payabli\Cloud\CloudClient;
+use Payabli\LineItem\LineItemClient;
+use Payabli\Boarding\BoardingClient;
+use Payabli\Templates\TemplatesClient;
+use Payabli\Export\ExportClient;
+use Payabli\Organization\OrganizationClient;
+use Payabli\Management\ManagementClient;
+use Payabli\Statistic\StatisticClient;
+use Payabli\Notification\NotificationClient;
 use Payabli\User\UserClient;
 use Payabli\Vendor\VendorClient;
+use Payabli\GhostCard\GhostCardClient;
+use Payabli\MoneyOut\MoneyOutClient;
+use Payabli\Funding\FundingClient;
 use Payabli\Wallet\WalletClient;
+use Payabli\PayoutSubscription\PayoutSubscriptionClient;
+use Payabli\ChargeBacks\ChargeBacksClient;
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\OAuthTokenProvider;
 
 class PayabliClient
 {
@@ -44,14 +47,9 @@ class PayabliClient
     public BillClient $bill;
 
     /**
-     * @var BoardingClient $boarding
+     * @var CustomerClient $customer
      */
-    public BoardingClient $boarding;
-
-    /**
-     * @var ChargeBacksClient $chargeBacks
-     */
-    public ChargeBacksClient $chargeBacks;
+    public CustomerClient $customer;
 
     /**
      * @var CheckCaptureClient $checkCapture
@@ -59,109 +57,14 @@ class PayabliClient
     public CheckCaptureClient $checkCapture;
 
     /**
-     * @var CloudClient $cloud
-     */
-    public CloudClient $cloud;
-
-    /**
-     * @var CustomerClient $customer
-     */
-    public CustomerClient $customer;
-
-    /**
-     * @var ExportClient $export
-     */
-    public ExportClient $export;
-
-    /**
-     * @var GhostCardClient $ghostCard
-     */
-    public GhostCardClient $ghostCard;
-
-    /**
-     * @var HostedPaymentPagesClient $hostedPaymentPages
-     */
-    public HostedPaymentPagesClient $hostedPaymentPages;
-
-    /**
-     * @var ImportClient $import
-     */
-    public ImportClient $import;
-
-    /**
-     * @var InvoiceClient $invoice
-     */
-    public InvoiceClient $invoice;
-
-    /**
-     * @var LineItemClient $lineItem
-     */
-    public LineItemClient $lineItem;
-
-    /**
-     * @var ManagementClient $management
-     */
-    public ManagementClient $management;
-
-    /**
      * @var MoneyInClient $moneyIn
      */
     public MoneyInClient $moneyIn;
 
     /**
-     * @var MoneyOutClient $moneyOut
+     * @var TokenClient $token
      */
-    public MoneyOutClient $moneyOut;
-
-    /**
-     * @var NotificationClient $notification
-     */
-    public NotificationClient $notification;
-
-    /**
-     * @var NotificationlogsClient $notificationlogs
-     */
-    public NotificationlogsClient $notificationlogs;
-
-    /**
-     * @var OcrClient $ocr
-     */
-    public OcrClient $ocr;
-
-    /**
-     * @var OrganizationClient $organization
-     */
-    public OrganizationClient $organization;
-
-    /**
-     * @var PaymentLinkClient $paymentLink
-     */
-    public PaymentLinkClient $paymentLink;
-
-    /**
-     * @var PaymentMethodDomainClient $paymentMethodDomain
-     */
-    public PaymentMethodDomainClient $paymentMethodDomain;
-
-    /**
-     * @var PayoutSubscriptionClient $payoutSubscription
-     */
-    public PayoutSubscriptionClient $payoutSubscription;
-
-    /**
-     * @var PaypointClient $paypoint
-     */
-    public PaypointClient $paypoint;
-
-    /**
-     * @var QueryClient $query
-     */
-    public QueryClient $query;
-
-    /**
-     * @var StatisticClient $statistic
-     */
-    public StatisticClient $statistic;
+    public TokenClient $token;
 
     /**
      * @var SubscriptionClient $subscription
@@ -169,14 +72,99 @@ class PayabliClient
     public SubscriptionClient $subscription;
 
     /**
-     * @var TemplatesClient $templates
+     * @var InvoiceClient $invoice
      */
-    public TemplatesClient $templates;
+    public InvoiceClient $invoice;
+
+    /**
+     * @var PaymentLinkClient $paymentLink
+     */
+    public PaymentLinkClient $paymentLink;
 
     /**
      * @var TokenStorageClient $tokenStorage
      */
     public TokenStorageClient $tokenStorage;
+
+    /**
+     * @var PaypointClient $paypoint
+     */
+    public PaypointClient $paypoint;
+
+    /**
+     * @var HostedPaymentPagesClient $hostedPaymentPages
+     */
+    public HostedPaymentPagesClient $hostedPaymentPages;
+
+    /**
+     * @var PaymentMethodDomainClient $paymentMethodDomain
+     */
+    public PaymentMethodDomainClient $paymentMethodDomain;
+
+    /**
+     * @var ImportClient $import
+     */
+    public ImportClient $import;
+
+    /**
+     * @var QueryClient $query
+     */
+    public QueryClient $query;
+
+    /**
+     * @var OcrClient $ocr
+     */
+    public OcrClient $ocr;
+
+    /**
+     * @var NotificationlogsClient $notificationlogs
+     */
+    public NotificationlogsClient $notificationlogs;
+
+    /**
+     * @var CloudClient $cloud
+     */
+    public CloudClient $cloud;
+
+    /**
+     * @var LineItemClient $lineItem
+     */
+    public LineItemClient $lineItem;
+
+    /**
+     * @var BoardingClient $boarding
+     */
+    public BoardingClient $boarding;
+
+    /**
+     * @var TemplatesClient $templates
+     */
+    public TemplatesClient $templates;
+
+    /**
+     * @var ExportClient $export
+     */
+    public ExportClient $export;
+
+    /**
+     * @var OrganizationClient $organization
+     */
+    public OrganizationClient $organization;
+
+    /**
+     * @var ManagementClient $management
+     */
+    public ManagementClient $management;
+
+    /**
+     * @var StatisticClient $statistic
+     */
+    public StatisticClient $statistic;
+
+    /**
+     * @var NotificationClient $notification
+     */
+    public NotificationClient $notification;
 
     /**
      * @var UserClient $user
@@ -189,9 +177,34 @@ class PayabliClient
     public VendorClient $vendor;
 
     /**
+     * @var GhostCardClient $ghostCard
+     */
+    public GhostCardClient $ghostCard;
+
+    /**
+     * @var MoneyOutClient $moneyOut
+     */
+    public MoneyOutClient $moneyOut;
+
+    /**
+     * @var FundingClient $funding
+     */
+    public FundingClient $funding;
+
+    /**
      * @var WalletClient $wallet
      */
     public WalletClient $wallet;
+
+    /**
+     * @var PayoutSubscriptionClient $payoutSubscription
+     */
+    public PayoutSubscriptionClient $payoutSubscription;
+
+    /**
+     * @var ChargeBacksClient $chargeBacks
+     */
+    public ChargeBacksClient $chargeBacks;
 
     /**
      * @var array{
@@ -210,6 +223,13 @@ class PayabliClient
     private RawClient $client;
 
     /**
+     * @var OAuthTokenProvider $oauthTokenProvider
+     */
+    private OAuthTokenProvider $oauthTokenProvider;
+
+    /**
+     * @param ?string $clientId The client ID for OAuth authentication.
+     * @param ?string $clientSecret The client secret for OAuth authentication.
      * @param ?string $apiKey The apiKey to use for authentication.
      * @param ?array{
      *   baseUrl?: string,
@@ -220,14 +240,18 @@ class PayabliClient
      * } $options
      */
     public function __construct(
+        ?string $clientId = null,
+        ?string $clientSecret = null,
         ?string $apiKey = null,
         ?array $options = null,
     ) {
+        $clientId ??= getenv('OAUTH_CLIENT_ID') ?: null;
+        $clientSecret ??= getenv('OAUTH_CLIENT_SECRET') ?: null;
         $defaultHeaders = [
             'X-Fern-Language' => 'PHP',
             'X-Fern-SDK-Name' => 'Payabli',
-            'X-Fern-SDK-Version' => '0.0.422',
-            'User-Agent' => 'payabli/payabli/0.0.422',
+            'X-Fern-SDK-Version' => '1.0.4',
+            'User-Agent' => 'payabli/payabli/1.0.4',
         ];
         if ($apiKey != null) {
             $defaultHeaders['requestToken'] = $apiKey;
@@ -235,45 +259,58 @@ class PayabliClient
 
         $this->options = $options ?? [];
 
+        if ($clientId !== null && $clientSecret !== null) {
+            $authRawClient = new RawClient(['headers' => []]);
+            $authClient = new TokenClient($authRawClient);
+            $this->oauthTokenProvider = new OAuthTokenProvider($clientId, $clientSecret, $authClient);
+
+        }
         $this->options['headers'] = array_merge(
             $defaultHeaders,
             $this->options['headers'] ?? [],
         );
+
+        if ($clientId !== null && $clientSecret !== null) {
+            $this->options['getAuthHeaders'] = fn () =>
+                ['Authorization' => "Bearer " . $this->oauthTokenProvider->getToken()];
+        }
 
         $this->client = new RawClient(
             options: $this->options,
         );
 
         $this->bill = new BillClient($this->client, $this->options);
-        $this->boarding = new BoardingClient($this->client, $this->options);
-        $this->chargeBacks = new ChargeBacksClient($this->client, $this->options);
-        $this->checkCapture = new CheckCaptureClient($this->client, $this->options);
-        $this->cloud = new CloudClient($this->client, $this->options);
         $this->customer = new CustomerClient($this->client, $this->options);
-        $this->export = new ExportClient($this->client, $this->options);
-        $this->ghostCard = new GhostCardClient($this->client, $this->options);
-        $this->hostedPaymentPages = new HostedPaymentPagesClient($this->client, $this->options);
-        $this->import = new ImportClient($this->client, $this->options);
-        $this->invoice = new InvoiceClient($this->client, $this->options);
-        $this->lineItem = new LineItemClient($this->client, $this->options);
-        $this->management = new ManagementClient($this->client, $this->options);
+        $this->checkCapture = new CheckCaptureClient($this->client, $this->options);
         $this->moneyIn = new MoneyInClient($this->client, $this->options);
-        $this->moneyOut = new MoneyOutClient($this->client, $this->options);
-        $this->notification = new NotificationClient($this->client, $this->options);
-        $this->notificationlogs = new NotificationlogsClient($this->client, $this->options);
-        $this->ocr = new OcrClient($this->client, $this->options);
-        $this->organization = new OrganizationClient($this->client, $this->options);
-        $this->paymentLink = new PaymentLinkClient($this->client, $this->options);
-        $this->paymentMethodDomain = new PaymentMethodDomainClient($this->client, $this->options);
-        $this->payoutSubscription = new PayoutSubscriptionClient($this->client, $this->options);
-        $this->paypoint = new PaypointClient($this->client, $this->options);
-        $this->query = new QueryClient($this->client, $this->options);
-        $this->statistic = new StatisticClient($this->client, $this->options);
+        $this->token = new TokenClient($this->client, $this->options);
         $this->subscription = new SubscriptionClient($this->client, $this->options);
-        $this->templates = new TemplatesClient($this->client, $this->options);
+        $this->invoice = new InvoiceClient($this->client, $this->options);
+        $this->paymentLink = new PaymentLinkClient($this->client, $this->options);
         $this->tokenStorage = new TokenStorageClient($this->client, $this->options);
+        $this->paypoint = new PaypointClient($this->client, $this->options);
+        $this->hostedPaymentPages = new HostedPaymentPagesClient($this->client, $this->options);
+        $this->paymentMethodDomain = new PaymentMethodDomainClient($this->client, $this->options);
+        $this->import = new ImportClient($this->client, $this->options);
+        $this->query = new QueryClient($this->client, $this->options);
+        $this->ocr = new OcrClient($this->client, $this->options);
+        $this->notificationlogs = new NotificationlogsClient($this->client, $this->options);
+        $this->cloud = new CloudClient($this->client, $this->options);
+        $this->lineItem = new LineItemClient($this->client, $this->options);
+        $this->boarding = new BoardingClient($this->client, $this->options);
+        $this->templates = new TemplatesClient($this->client, $this->options);
+        $this->export = new ExportClient($this->client, $this->options);
+        $this->organization = new OrganizationClient($this->client, $this->options);
+        $this->management = new ManagementClient($this->client, $this->options);
+        $this->statistic = new StatisticClient($this->client, $this->options);
+        $this->notification = new NotificationClient($this->client, $this->options);
         $this->user = new UserClient($this->client, $this->options);
         $this->vendor = new VendorClient($this->client, $this->options);
+        $this->ghostCard = new GhostCardClient($this->client, $this->options);
+        $this->moneyOut = new MoneyOutClient($this->client, $this->options);
+        $this->funding = new FundingClient($this->client, $this->options);
         $this->wallet = new WalletClient($this->client, $this->options);
+        $this->payoutSubscription = new PayoutSubscriptionClient($this->client, $this->options);
+        $this->chargeBacks = new ChargeBacksClient($this->client, $this->options);
     }
 }

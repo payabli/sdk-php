@@ -120,9 +120,9 @@ class ApplicationDataPayIn extends JsonSerializableType
     public ?string $bzip;
 
     /**
-     * @var ?array<ApplicationDataPayInContactsItem> $contacts List of contacts for the business.
+     * @var ?array<Contacts> $contacts List of contacts for the business.
      */
-    #[JsonProperty('contacts'), ArrayType([ApplicationDataPayInContactsItem::class])]
+    #[JsonProperty('contacts'), ArrayType([Contacts::class])]
     public ?array $contacts;
 
     /**
@@ -228,9 +228,9 @@ class ApplicationDataPayIn extends JsonSerializableType
     public ?int $orgId;
 
     /**
-     * @var ?array<ApplicationDataPayInOwnershipItem> $ownership List of Owners with at least a 25% ownership.
+     * @var ?array<Owners> $ownership List of Owners with at least a 25% ownership.
      */
-    #[JsonProperty('ownership'), ArrayType([ApplicationDataPayInOwnershipItem::class])]
+    #[JsonProperty('ownership'), ArrayType([Owners::class])]
     public ?array $ownership;
 
     /**
@@ -380,7 +380,7 @@ class ApplicationDataPayIn extends JsonSerializableType
      *   bsummary?: ?string,
      *   btype?: ?value-of<OwnType>,
      *   bzip?: ?string,
-     *   contacts?: ?array<ApplicationDataPayInContactsItem>,
+     *   contacts?: ?array<Contacts>,
      *   creditLimit?: ?string,
      *   dbaName?: ?string,
      *   ein?: ?string,
@@ -398,7 +398,7 @@ class ApplicationDataPayIn extends JsonSerializableType
      *   mstate?: ?string,
      *   mzip?: ?string,
      *   orgId?: ?int,
-     *   ownership?: ?array<ApplicationDataPayInOwnershipItem>,
+     *   ownership?: ?array<Owners>,
      *   recipientEmail?: ?string,
      *   recipientEmailNotification?: ?bool,
      *   resumable?: ?bool,

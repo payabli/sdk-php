@@ -8,34 +8,16 @@ use Payabli\Core\Json\JsonProperty;
 class QueryPayoutTransactionSummary extends JsonSerializableType
 {
     /**
-     * @var ?string $pageIdentifier
+     * @var ?int $totalPaid
      */
-    #[JsonProperty('pageIdentifier')]
-    public ?string $pageIdentifier;
+    #[JsonProperty('totalPaid')]
+    public ?int $totalPaid;
 
     /**
-     * @var ?int $pageSize
+     * @var ?float $totalPaidAmount
      */
-    #[JsonProperty('pageSize')]
-    public ?int $pageSize;
-
-    /**
-     * @var ?float $totalAmount
-     */
-    #[JsonProperty('totalAmount')]
-    public ?float $totalAmount;
-
-    /**
-     * @var ?int $totalAuthorized
-     */
-    #[JsonProperty('totalAuthorized')]
-    public ?int $totalAuthorized;
-
-    /**
-     * @var ?float $totalAuthorizedAmount
-     */
-    #[JsonProperty('totalAuthorizedAmount')]
-    public ?float $totalAuthorizedAmount;
+    #[JsonProperty('totalPaidAmount')]
+    public ?float $totalPaidAmount;
 
     /**
      * @var ?int $totalCanceled
@@ -62,52 +44,16 @@ class QueryPayoutTransactionSummary extends JsonSerializableType
     public ?float $totalCapturedAmount;
 
     /**
-     * @var ?float $totalNetAmount
+     * @var ?int $totalAuthorized
      */
-    #[JsonProperty('totalNetAmount')]
-    public ?float $totalNetAmount;
+    #[JsonProperty('totalAuthorized')]
+    public ?int $totalAuthorized;
 
     /**
-     * @var ?int $totalOpen
+     * @var ?float $totalAuthorizedAmount
      */
-    #[JsonProperty('totalOpen')]
-    public ?int $totalOpen;
-
-    /**
-     * @var ?float $totalOpenAmount
-     */
-    #[JsonProperty('totalOpenAmount')]
-    public ?float $totalOpenAmount;
-
-    /**
-     * @var ?int $totalPages
-     */
-    #[JsonProperty('totalPages')]
-    public ?int $totalPages;
-
-    /**
-     * @var ?int $totalPaid
-     */
-    #[JsonProperty('totalPaid')]
-    public ?int $totalPaid;
-
-    /**
-     * @var ?float $totalPaidAmount
-     */
-    #[JsonProperty('totalPaidAmount')]
-    public ?float $totalPaidAmount;
-
-    /**
-     * @var ?int $totalOnHold Total number of transactions that are currently on hold.
-     */
-    #[JsonProperty('totalOnHold')]
-    public ?int $totalOnHold;
-
-    /**
-     * @var ?float $totalOnHoldAmount Total amount of transactions that are currently on hold.
-     */
-    #[JsonProperty('totalOnHoldAmount')]
-    public ?float $totalOnHoldAmount;
+    #[JsonProperty('totalAuthorizedAmount')]
+    public ?float $totalAuthorizedAmount;
 
     /**
      * @var ?int $totalProcessing
@@ -122,58 +68,112 @@ class QueryPayoutTransactionSummary extends JsonSerializableType
     public ?float $totalProcessingAmount;
 
     /**
+     * @var ?int $totalOpen
+     */
+    #[JsonProperty('totalOpen')]
+    public ?int $totalOpen;
+
+    /**
+     * @var ?float $totalOpenAmount
+     */
+    #[JsonProperty('totalOpenAmount')]
+    public ?float $totalOpenAmount;
+
+    /**
+     * @var ?int $totalOnHold Total number of transactions that are currently on hold.
+     */
+    #[JsonProperty('totalOnHold')]
+    public ?int $totalOnHold;
+
+    /**
+     * @var ?float $totalOnHoldAmount Total amount of transactions that are currently on hold.
+     */
+    #[JsonProperty('totalOnHoldAmount')]
+    public ?float $totalOnHoldAmount;
+
+    /**
      * @var ?int $totalRecords
      */
     #[JsonProperty('totalRecords')]
     public ?int $totalRecords;
 
     /**
+     * @var ?float $totalAmount
+     */
+    #[JsonProperty('totalAmount')]
+    public ?float $totalAmount;
+
+    /**
+     * @var ?float $totalNetAmount
+     */
+    #[JsonProperty('totalNetAmount')]
+    public ?float $totalNetAmount;
+
+    /**
+     * @var ?int $totalPages
+     */
+    #[JsonProperty('totalPages')]
+    public ?int $totalPages;
+
+    /**
+     * @var ?int $pageSize
+     */
+    #[JsonProperty('pageSize')]
+    public ?int $pageSize;
+
+    /**
+     * @var ?string $pageidentifier
+     */
+    #[JsonProperty('pageidentifier')]
+    public ?string $pageidentifier;
+
+    /**
      * @param array{
-     *   pageIdentifier?: ?string,
-     *   pageSize?: ?int,
-     *   totalAmount?: ?float,
-     *   totalAuthorized?: ?int,
-     *   totalAuthorizedAmount?: ?float,
+     *   totalPaid?: ?int,
+     *   totalPaidAmount?: ?float,
      *   totalCanceled?: ?int,
      *   totalCanceledAmount?: ?float,
      *   totalCaptured?: ?int,
      *   totalCapturedAmount?: ?float,
-     *   totalNetAmount?: ?float,
-     *   totalOpen?: ?int,
-     *   totalOpenAmount?: ?float,
-     *   totalPages?: ?int,
-     *   totalPaid?: ?int,
-     *   totalPaidAmount?: ?float,
-     *   totalOnHold?: ?int,
-     *   totalOnHoldAmount?: ?float,
+     *   totalAuthorized?: ?int,
+     *   totalAuthorizedAmount?: ?float,
      *   totalProcessing?: ?int,
      *   totalProcessingAmount?: ?float,
+     *   totalOpen?: ?int,
+     *   totalOpenAmount?: ?float,
+     *   totalOnHold?: ?int,
+     *   totalOnHoldAmount?: ?float,
      *   totalRecords?: ?int,
+     *   totalAmount?: ?float,
+     *   totalNetAmount?: ?float,
+     *   totalPages?: ?int,
+     *   pageSize?: ?int,
+     *   pageidentifier?: ?string,
      * } $values
      */
     public function __construct(
         array $values = [],
     ) {
-        $this->pageIdentifier = $values['pageIdentifier'] ?? null;
-        $this->pageSize = $values['pageSize'] ?? null;
-        $this->totalAmount = $values['totalAmount'] ?? null;
-        $this->totalAuthorized = $values['totalAuthorized'] ?? null;
-        $this->totalAuthorizedAmount = $values['totalAuthorizedAmount'] ?? null;
+        $this->totalPaid = $values['totalPaid'] ?? null;
+        $this->totalPaidAmount = $values['totalPaidAmount'] ?? null;
         $this->totalCanceled = $values['totalCanceled'] ?? null;
         $this->totalCanceledAmount = $values['totalCanceledAmount'] ?? null;
         $this->totalCaptured = $values['totalCaptured'] ?? null;
         $this->totalCapturedAmount = $values['totalCapturedAmount'] ?? null;
-        $this->totalNetAmount = $values['totalNetAmount'] ?? null;
-        $this->totalOpen = $values['totalOpen'] ?? null;
-        $this->totalOpenAmount = $values['totalOpenAmount'] ?? null;
-        $this->totalPages = $values['totalPages'] ?? null;
-        $this->totalPaid = $values['totalPaid'] ?? null;
-        $this->totalPaidAmount = $values['totalPaidAmount'] ?? null;
-        $this->totalOnHold = $values['totalOnHold'] ?? null;
-        $this->totalOnHoldAmount = $values['totalOnHoldAmount'] ?? null;
+        $this->totalAuthorized = $values['totalAuthorized'] ?? null;
+        $this->totalAuthorizedAmount = $values['totalAuthorizedAmount'] ?? null;
         $this->totalProcessing = $values['totalProcessing'] ?? null;
         $this->totalProcessingAmount = $values['totalProcessingAmount'] ?? null;
+        $this->totalOpen = $values['totalOpen'] ?? null;
+        $this->totalOpenAmount = $values['totalOpenAmount'] ?? null;
+        $this->totalOnHold = $values['totalOnHold'] ?? null;
+        $this->totalOnHoldAmount = $values['totalOnHoldAmount'] ?? null;
         $this->totalRecords = $values['totalRecords'] ?? null;
+        $this->totalAmount = $values['totalAmount'] ?? null;
+        $this->totalNetAmount = $values['totalNetAmount'] ?? null;
+        $this->totalPages = $values['totalPages'] ?? null;
+        $this->pageSize = $values['pageSize'] ?? null;
+        $this->pageidentifier = $values['pageidentifier'] ?? null;
     }
 
     /**

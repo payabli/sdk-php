@@ -4,7 +4,7 @@ namespace Payabli\GhostCard\Requests;
 
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
-use Payabli\GhostCard\Types\CardStatus;
+use Payabli\Types\CardStatus;
 
 class UpdateCardRequestBody extends JsonSerializableType
 {

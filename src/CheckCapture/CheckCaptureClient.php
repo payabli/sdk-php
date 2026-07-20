@@ -5,7 +5,7 @@ namespace Payabli\CheckCapture;
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\CheckCapture\Requests\CheckCaptureRequestBody;
-use Payabli\CheckCapture\Types\CheckCaptureResponse;
+use Payabli\Types\CheckCaptureResponse;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;

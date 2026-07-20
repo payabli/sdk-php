@@ -28,6 +28,8 @@ use Payabli\Boarding\Requests\ListApplicationsRequest;
 use Payabli\Types\QueryBoardingAppsListResponse;
 use Payabli\Boarding\Requests\ListBoardingLinksRequest;
 use Payabli\Types\QueryBoardingLinksResponse;
+use Payabli\Boarding\Requests\CreateApplicationFromPaypointRequest;
+use Payabli\Types\CreateApplicationFromPaypointResponse;
 
 class BoardingClient
 {
@@ -96,6 +98,56 @@ class BoardingClient
                     path: "Boarding/app",
                     method: HttpMethod::POST,
                     body: JsonSerializer::serializeUnion($request, new Union(ApplicationDataPayIn::class, ApplicationDataManaged::class, ApplicationDataOdp::class, ApplicationData::class)),
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return PayabliApiResponse00Responsedatanonobject::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Updates a boarding application by ID. This endpoint requires an application API token.
+     *
+     * @param int $appId Boarding application ID.
+     * @param ApplicationData $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?PayabliApiResponse00Responsedatanonobject
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function updateApplication(int $appId, ApplicationData $request, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "Boarding/app/{$appId}",
+                    method: HttpMethod::PUT,
+                    body: $request,
                 ),
                 $options,
             );
@@ -316,7 +368,7 @@ class BoardingClient
     /**
      * Get details for a boarding link using the boarding template ID. This endpoint requires an application API token.
      *
-     * @param float $templateId The boarding template ID. You can find this at the end of the boarding template URL in PartnerHub. Example: `https://partner-sandbox.payabli.com/myorganization/boarding/edittemplate/80`. Here, the template ID is `80`.
+     * @param float $templateId The boarding template ID. You can find this at the end of the boarding template URL in the Payabli Portal. Example: `https://partner-sandbox.payabli.com/myorganization/boarding/edittemplate/80`. Here, the template ID is `80`.
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -594,10 +646,9 @@ class BoardingClient
     }
 
     /**
-     * Updates a boarding application by ID. This endpoint requires an application API token.
+     * Creates a new boarding application linked to an existing paypoint as part of the multi-product boarding flow. Use this endpoint to add new services to a paypoint without creating a duplicate record. The system copies eligible business, contact, banking, and address data from the paypoint to the new application based on 1:1 field matching. The merchant only needs to provide fields that are specific to the new service. See the [Multi-product boarding](/guides/pay-ops-developer-boarding-multi-product) guide for the full flow.
      *
-     * @param int $appId Boarding application ID.
-     * @param ApplicationData $request
+     * @param CreateApplicationFromPaypointRequest $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -606,19 +657,19 @@ class BoardingClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?PayabliApiResponse00Responsedatanonobject
+     * @return ?CreateApplicationFromPaypointResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function updateApplication(int $appId, ApplicationData $request, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
+    public function addServiceToPaypointFromApp(CreateApplicationFromPaypointRequest $request, ?array $options = null): ?CreateApplicationFromPaypointResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "Boarding/app/{$appId}",
-                    method: HttpMethod::PUT,
+                    path: "Boarding/applications",
+                    method: HttpMethod::POST,
                     body: $request,
                 ),
                 $options,
@@ -629,7 +680,55 @@ class BoardingClient
                 if (empty($json)) {
                     return null;
                 }
-                return PayabliApiResponse00Responsedatanonobject::fromJson($json);
+                return CreateApplicationFromPaypointResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Returns all boarding applications associated with a specific paypoint, including those created through the multi-product boarding flow. Use this endpoint to track underwriting progress across multiple service additions or to build reporting views. See the [Multi-product boarding](/guides/pay-ops-developer-boarding-multi-product) guide for the full flow.
+     *
+     * @param int $paypointId ID of the paypoint to retrieve applications for.
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?QueryBoardingAppsListResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function getApplicationsByPaypointId(int $paypointId, ?array $options = null): ?QueryBoardingAppsListResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "Boarding/applications/{$paypointId}",
+                    method: HttpMethod::GET,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return QueryBoardingAppsListResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

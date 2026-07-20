@@ -5,6 +5,7 @@ namespace Payabli\Types;
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
 use Payabli\Core\Types\ArrayType;
+use Payabli\Core\Types\Union;
 use DateTime;
 use Payabli\Core\Types\Date;
 
@@ -23,9 +24,9 @@ class BillQueryRecord2 extends JsonSerializableType
     public ?string $accountingField2;
 
     /**
-     * @var ?array<string, string> $additionalData Additional data associated with the bill.
+     * @var ?array<string, ?string> $additionalData Additional data associated with the bill.
      */
-    #[JsonProperty('AdditionalData'), ArrayType(['string' => 'string'])]
+    #[JsonProperty('AdditionalData'), ArrayType(['string' => new Union('string', 'null')])]
     public ?array $additionalData;
 
     /**
@@ -209,7 +210,7 @@ class BillQueryRecord2 extends JsonSerializableType
     public ?int $status;
 
     /**
-     * @var ?string $terms The payment terms for invoice. If no terms were defined initially, then response data for this field will default to `N30`.
+     * @var ?value-of<Terms> $terms The payment terms for invoice. If no terms were defined initially, then response data for this field will default to `N30`.
      */
     #[JsonProperty('Terms')]
     public ?string $terms;
@@ -236,7 +237,7 @@ class BillQueryRecord2 extends JsonSerializableType
      * @param array{
      *   accountingField1?: ?string,
      *   accountingField2?: ?string,
-     *   additionalData?: ?array<string, string>,
+     *   additionalData?: ?array<string, ?string>,
      *   batchNumber?: ?string,
      *   billApprovals?: ?array<BillQueryRecord2BillApprovalsItem>,
      *   billDate?: ?DateTime,
@@ -267,7 +268,7 @@ class BillQueryRecord2 extends JsonSerializableType
      *   paypointLegalname?: ?string,
      *   source?: ?string,
      *   status?: ?int,
-     *   terms?: ?string,
+     *   terms?: ?value-of<Terms>,
      *   totalAmount?: ?float,
      *   transaction?: ?TransactionOutQueryRecord,
      *   vendor?: ?VendorOutData,

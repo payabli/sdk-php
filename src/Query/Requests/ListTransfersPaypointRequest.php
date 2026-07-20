@@ -8,7 +8,7 @@ use Payabli\Types\ExportFormat;
 class ListTransfersPaypointRequest extends JsonSerializableType
 {
     /**
-     * @var ?value-of<ExportFormat> $exportFormat
+     * @var ?value-of<ExportFormat> $exportFormat Export format for file downloads. When specified, returns data as a file instead of JSON.
      */
     public ?string $exportFormat;
 
@@ -18,12 +18,11 @@ class ListTransfersPaypointRequest extends JsonSerializableType
     public ?int $fromRecord;
 
     /**
-     * @var ?int $limitRecord
+     * @var ?int $limitRecord Max number of records to return for the query. Use `0` or negative value to return all records. Defaults to 20.
      */
     public ?int $limitRecord;
 
     /**
-     *
      * Collection of field names, conditions, and values used to filter
      * the query.
      *

@@ -23,7 +23,7 @@ class NotificationReportRequest extends JsonSerializableType
     public string $frequency;
 
     /**
-     * @var value-of<NotificationReportRequestMethod> $method Automated reporting lets you gather critical reports without manually filtering and exporting the data. Get automated daily, weekly, and monthly report for daily sales, ACH returns, settlements, and more. You can send these reports via email or via webhook. See [Automated Reports](/developers/developer-guides/notifications-and-webhooks-overview#automated-reports) for more.
+     * @var value-of<NotificationReportRequestMethod> $method Automated reporting lets you gather critical reports without manually filtering and exporting the data. Get automated daily, weekly, and monthly reports for daily sales, ACH returns, settlements, and more. You can send these reports via email or via webhook. See [Automated Reports](/developers/developer-guides/notifications-and-webhooks-overview#automated-reports) for more.
      */
     #[JsonProperty('method')]
     public string $method;
@@ -48,9 +48,7 @@ class NotificationReportRequest extends JsonSerializableType
 
     /**
      * Specify the notification target.
-     *
      * For method=report-email the expected value is a list of email addresses separated by semicolon.
-     *
      * For method=report-web the expected value is a valid and complete URL. Webhooks support only standard HTTP ports: 80, 443, 8080, or 4443.
      *
      * @var string $target

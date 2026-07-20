@@ -6,7 +6,6 @@ use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
 use DateTime;
 use Payabli\Core\Types\Date;
-use Payabli\Core\Types\ArrayType;
 
 class GeneralEvents extends JsonSerializableType
 {
@@ -23,10 +22,10 @@ class GeneralEvents extends JsonSerializableType
     public ?DateTime $eventTime;
 
     /**
-     * @var ?array<string, mixed> $extraData Extra data.
+     * @var ?string $extraData Extra data.
      */
-    #[JsonProperty('extraData'), ArrayType(['string' => 'mixed'])]
-    public ?array $extraData;
+    #[JsonProperty('extraData')]
+    public ?string $extraData;
 
     /**
      * @var ?string $refData Reference data.
@@ -44,7 +43,7 @@ class GeneralEvents extends JsonSerializableType
      * @param array{
      *   description?: ?string,
      *   eventTime?: ?DateTime,
-     *   extraData?: ?array<string, mixed>,
+     *   extraData?: ?string,
      *   refData?: ?string,
      *   source?: ?string,
      * } $values

@@ -5,7 +5,7 @@ namespace Payabli\PayoutSubscription;
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\PayoutSubscription\Requests\RequestPayoutSchedule;
-use Payabli\PayoutSubscription\Types\AddPayoutSubscriptionResponse;
+use Payabli\Types\AddPayoutSubscriptionResponse;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -13,10 +13,10 @@ use Payabli\Environments;
 use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
-use Payabli\PayoutSubscription\Types\GetPayoutSubscriptionResponse;
-use Payabli\PayoutSubscription\Types\UpdatePayoutSubscriptionBody;
-use Payabli\PayoutSubscription\Types\UpdatePayoutSubscriptionResponse;
-use Payabli\PayoutSubscription\Types\DeletePayoutSubscriptionResponse;
+use Payabli\Types\GetPayoutSubscriptionResponse;
+use Payabli\PayoutSubscription\Requests\UpdatePayoutSubscriptionBody;
+use Payabli\Types\UpdatePayoutSubscriptionResponse;
+use Payabli\Types\DeletePayoutSubscriptionResponse;
 
 class PayoutSubscriptionClient
 {
@@ -84,7 +84,7 @@ class PayoutSubscriptionClient
                     path: "PayoutSubscription",
                     method: HttpMethod::POST,
                     headers: $headers,
-                    body: $request->body,
+                    body: $request,
                 ),
                 $options,
             );
@@ -173,7 +173,7 @@ class PayoutSubscriptionClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function updatePayoutSubscription(int $id, UpdatePayoutSubscriptionBody $request, ?array $options = null): ?UpdatePayoutSubscriptionResponse
+    public function updatePayoutSubscription(int $id, UpdatePayoutSubscriptionBody $request = new UpdatePayoutSubscriptionBody(), ?array $options = null): ?UpdatePayoutSubscriptionResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {

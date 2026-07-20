@@ -5,7 +5,6 @@ namespace Payabli\Types;
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
 use Payabli\Core\Types\ArrayType;
-use Payabli\Core\Types\Union;
 
 class VendorData extends JsonSerializableType
 {
@@ -16,9 +15,9 @@ class VendorData extends JsonSerializableType
     public ?string $vendorNumber;
 
     /**
-     * @var ?array<string, ?array<string, mixed>> $additionalData
+     * @var ?array<string, string> $additionalData
      */
-    #[JsonProperty('AdditionalData'), ArrayType(['string' => new Union(['string' => 'mixed'], 'null')])]
+    #[JsonProperty('AdditionalData'), ArrayType(['string' => 'string'])]
     public ?array $additionalData;
 
     /**
@@ -212,7 +211,6 @@ class VendorData extends JsonSerializableType
      * When this feature is enabled and you include an attachment, the invoice is scanned and extracted vendor information is merged into the request.
      * Fields in the request body take precedence over extracted data.
      * If the scan fails, vendor creation proceeds with the original request data.
-     *
      * See the [vendor enrichment guide](/guides/pay-out-vendor-enrichment-overview) for details.
      * Contact Payabli to enable this feature.
      *
@@ -224,7 +222,7 @@ class VendorData extends JsonSerializableType
     /**
      * @param array{
      *   vendorNumber?: ?string,
-     *   additionalData?: ?array<string, ?array<string, mixed>>,
+     *   additionalData?: ?array<string, string>,
      *   address1?: ?string,
      *   address2?: ?string,
      *   billingData?: ?BillingData,

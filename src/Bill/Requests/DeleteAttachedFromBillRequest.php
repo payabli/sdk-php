@@ -7,7 +7,7 @@ use Payabli\Core\Json\JsonSerializableType;
 class DeleteAttachedFromBillRequest extends JsonSerializableType
 {
     /**
-     * @var ?bool $returnObject When `true`, the request returns the file content as a Base64-encoded string.
+     * @var ?bool $returnObject When `true`, the response includes the full bill object.
      */
     public ?bool $returnObject;
 

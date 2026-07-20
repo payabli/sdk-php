@@ -4,9 +4,9 @@ namespace Payabli\Types;
 
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
+use Payabli\Core\Types\ArrayType;
 use DateTime;
 use Payabli\Core\Types\Date;
-use Payabli\Core\Types\ArrayType;
 
 class BillPayOutData extends JsonSerializableType
 {
@@ -17,46 +17,10 @@ class BillPayOutData extends JsonSerializableType
     public ?int $billId;
 
     /**
-     * @var ?string $comments Any comments about bill. **For managed payouts, this field has a limit of 100 characters**.
+     * @var ?string $lotNumber Lot number associated with the bill.
      */
-    #[JsonProperty('comments')]
-    public ?string $comments;
-
-    /**
-     * @var ?DateTime $dueDate Bill due date in format YYYY-MM-DD or MM/DD/YYYY.
-     */
-    #[JsonProperty('dueDate'), Date(Date::TYPE_DATE)]
-    public ?DateTime $dueDate;
-
-    /**
-     * @var ?DateTime $invoiceDate Bill date in format YYYY-MM-DD or MM/DD/YYYY.
-     */
-    #[JsonProperty('invoiceDate'), Date(Date::TYPE_DATE)]
-    public ?DateTime $invoiceDate;
-
-    /**
-     * @var ?string $invoiceNumber Custom number identifying the bill. Must be unique in paypoint. **Required** for new bill and when `billId` isn't provided.
-     */
-    #[JsonProperty('invoiceNumber')]
-    public ?string $invoiceNumber;
-
-    /**
-     * @var ?string $netAmount Net Amount owed in bill. Required when adding a bill.
-     */
-    #[JsonProperty('netAmount')]
-    public ?string $netAmount;
-
-    /**
-     * @var ?string $discount Bill discount amount.
-     */
-    #[JsonProperty('discount')]
-    public ?string $discount;
-
-    /**
-     * @var ?string $terms Description of payment terms.
-     */
-    #[JsonProperty('Terms')]
-    public ?string $terms;
+    #[JsonProperty('LotNumber')]
+    public ?string $lotNumber;
 
     /**
      * @var ?string $accountingField1
@@ -71,6 +35,12 @@ class BillPayOutData extends JsonSerializableType
     public ?string $accountingField2;
 
     /**
+     * @var ?value-of<Terms> $terms Description of payment terms.
+     */
+    #[JsonProperty('Terms')]
+    public ?string $terms;
+
+    /**
      * @var ?string $additionalData
      */
     #[JsonProperty('AdditionalData')]
@@ -83,36 +53,90 @@ class BillPayOutData extends JsonSerializableType
     public ?array $attachments;
 
     /**
+     * @var ?string $invoiceNumber Custom number identifying the bill. Must be unique in paypoint. **Required** for new bill and when `billId` isn't provided.
+     */
+    #[JsonProperty('invoiceNumber')]
+    public ?string $invoiceNumber;
+
+    /**
+     * @var ?string $netAmount Net Amount owed in bill. Required when adding a bill.
+     */
+    #[JsonProperty('netAmount')]
+    public ?string $netAmount;
+
+    /**
+     * @var ?DateTime $invoiceDate Bill date in format YYYY-MM-DD or MM/DD/YYYY.
+     */
+    #[JsonProperty('invoiceDate'), Date(Date::TYPE_DATE)]
+    public ?DateTime $invoiceDate;
+
+    /**
+     * @var ?DateTime $dueDate Bill due date in format YYYY-MM-DD or MM/DD/YYYY.
+     */
+    #[JsonProperty('dueDate'), Date(Date::TYPE_DATE)]
+    public ?DateTime $dueDate;
+
+    /**
+     * @var ?string $comments Any comments about bill. **For managed payouts, this field has a limit of 100 characters**.
+     */
+    #[JsonProperty('comments')]
+    public ?string $comments;
+
+    /**
+     * @var ?string $identifier Custom identifier for the bill.
+     */
+    #[JsonProperty('identifier')]
+    public ?string $identifier;
+
+    /**
+     * @var ?string $discount Bill discount amount.
+     */
+    #[JsonProperty('discount')]
+    public ?string $discount;
+
+    /**
+     * @var ?string $totalAmount Total amount of the bill.
+     */
+    #[JsonProperty('totalAmount')]
+    public ?string $totalAmount;
+
+    /**
      * @param array{
      *   billId?: ?int,
-     *   comments?: ?string,
-     *   dueDate?: ?DateTime,
-     *   invoiceDate?: ?DateTime,
-     *   invoiceNumber?: ?string,
-     *   netAmount?: ?string,
-     *   discount?: ?string,
-     *   terms?: ?string,
+     *   lotNumber?: ?string,
      *   accountingField1?: ?string,
      *   accountingField2?: ?string,
+     *   terms?: ?value-of<Terms>,
      *   additionalData?: ?string,
      *   attachments?: ?array<FileContent>,
+     *   invoiceNumber?: ?string,
+     *   netAmount?: ?string,
+     *   invoiceDate?: ?DateTime,
+     *   dueDate?: ?DateTime,
+     *   comments?: ?string,
+     *   identifier?: ?string,
+     *   discount?: ?string,
+     *   totalAmount?: ?string,
      * } $values
      */
     public function __construct(
         array $values = [],
     ) {
         $this->billId = $values['billId'] ?? null;
-        $this->comments = $values['comments'] ?? null;
-        $this->dueDate = $values['dueDate'] ?? null;
-        $this->invoiceDate = $values['invoiceDate'] ?? null;
-        $this->invoiceNumber = $values['invoiceNumber'] ?? null;
-        $this->netAmount = $values['netAmount'] ?? null;
-        $this->discount = $values['discount'] ?? null;
-        $this->terms = $values['terms'] ?? null;
+        $this->lotNumber = $values['lotNumber'] ?? null;
         $this->accountingField1 = $values['accountingField1'] ?? null;
         $this->accountingField2 = $values['accountingField2'] ?? null;
+        $this->terms = $values['terms'] ?? null;
         $this->additionalData = $values['additionalData'] ?? null;
         $this->attachments = $values['attachments'] ?? null;
+        $this->invoiceNumber = $values['invoiceNumber'] ?? null;
+        $this->netAmount = $values['netAmount'] ?? null;
+        $this->invoiceDate = $values['invoiceDate'] ?? null;
+        $this->dueDate = $values['dueDate'] ?? null;
+        $this->comments = $values['comments'] ?? null;
+        $this->identifier = $values['identifier'] ?? null;
+        $this->discount = $values['discount'] ?? null;
+        $this->totalAmount = $values['totalAmount'] ?? null;
     }
 
     /**

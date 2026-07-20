@@ -20,7 +20,7 @@ class ApplePayPaypointRegistrationData extends JsonSerializableType
     public ?bool $isEnabled;
 
     /**
-     * @var ?string $walletType The wallet type. In this context it will always be `applePay`.
+     * @var ?string $walletType The wallet type. In this context it will always be `applepay`.
      */
     #[JsonProperty('walletType')]
     public ?string $walletType;

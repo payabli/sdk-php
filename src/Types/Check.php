@@ -14,7 +14,7 @@ class Check extends JsonSerializableType
     public string $achHolder;
 
     /**
-     * @var 'check' $method Method to use for the transaction. Use `check` for a paper check transaction. When the method is `check`, then `paymentDetails.checkNumber` is required.
+     * @var value-of<CheckMethod> $method Method to use for the transaction. Use `check` for a paper check transaction. When the method is `check`, then `paymentDetails.checkNumber` is required.
      */
     #[JsonProperty('method')]
     public string $method;
@@ -22,7 +22,7 @@ class Check extends JsonSerializableType
     /**
      * @param array{
      *   achHolder: string,
-     *   method: 'check',
+     *   method: value-of<CheckMethod>,
      * } $values
      */
     public function __construct(

@@ -12,11 +12,11 @@ use Payabli\Environments;
 use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
-use Payabli\Subscription\Requests\RequestSchedule;
-use Payabli\Subscription\Types\AddSubscriptionResponse;
-use Payabli\Subscription\Types\RemoveSubscriptionResponse;
 use Payabli\Subscription\Requests\RequestUpdateSchedule;
-use Payabli\Subscription\Types\UpdateSubscriptionResponse;
+use Payabli\Types\UpdateSubscriptionResponse;
+use Payabli\Types\RemoveSubscriptionResponse;
+use Payabli\Subscription\Requests\RequestSchedule;
+use Payabli\Types\AddSubscriptionResponse;
 
 class SubscriptionClient
 {
@@ -103,9 +103,10 @@ class SubscriptionClient
     }
 
     /**
-     * Creates a subscription or scheduled payment to run at a specified time and frequency.
+     * Updates a subscription's details.
      *
-     * @param RequestSchedule $request
+     * @param int $subId The subscription ID.
+     * @param RequestUpdateSchedule $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -114,30 +115,20 @@ class SubscriptionClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?AddSubscriptionResponse
+     * @return ?UpdateSubscriptionResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function newSubscription(RequestSchedule $request, ?array $options = null): ?AddSubscriptionResponse
+    public function updateSubscription(int $subId, RequestUpdateSchedule $request = new RequestUpdateSchedule(), ?array $options = null): ?UpdateSubscriptionResponse
     {
         $options = array_merge($this->options, $options ?? []);
-        $query = [];
-        if ($request->forceCustomerCreation != null) {
-            $query['forceCustomerCreation'] = $request->forceCustomerCreation;
-        }
-        $headers = [];
-        if ($request->idempotencyKey != null) {
-            $headers['idempotencyKey'] = $request->idempotencyKey;
-        }
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "Subscription/add",
-                    method: HttpMethod::POST,
-                    headers: $headers,
-                    query: $query,
-                    body: $request->body,
+                    path: "Subscription/{$subId}",
+                    method: HttpMethod::PUT,
+                    body: $request,
                 ),
                 $options,
             );
@@ -147,7 +138,7 @@ class SubscriptionClient
                 if (empty($json)) {
                     return null;
                 }
-                return AddSubscriptionResponse::fromJson($json);
+                return UpdateSubscriptionResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -210,10 +201,9 @@ class SubscriptionClient
     }
 
     /**
-     * Updates a subscription's details.
+     * Creates a subscription or scheduled payment to run at a specified time and frequency. You can use stored payment method tokens for card, ACH, and digital wallets by passing them into the `paymentMethod.storedMethodId` field.
      *
-     * @param int $subId The subscription ID.
-     * @param RequestUpdateSchedule $request
+     * @param RequestSchedule $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -222,19 +212,29 @@ class SubscriptionClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?UpdateSubscriptionResponse
+     * @return ?AddSubscriptionResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function updateSubscription(int $subId, RequestUpdateSchedule $request = new RequestUpdateSchedule(), ?array $options = null): ?UpdateSubscriptionResponse
+    public function newSubscription(RequestSchedule $request = new RequestSchedule(), ?array $options = null): ?AddSubscriptionResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->forceCustomerCreation != null) {
+            $query['forceCustomerCreation'] = $request->forceCustomerCreation;
+        }
+        $headers = [];
+        if ($request->idempotencyKey != null) {
+            $headers['idempotencyKey'] = $request->idempotencyKey;
+        }
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "Subscription/{$subId}",
-                    method: HttpMethod::PUT,
+                    path: "Subscription/add",
+                    method: HttpMethod::POST,
+                    headers: $headers,
+                    query: $query,
                     body: $request,
                 ),
                 $options,
@@ -245,7 +245,7 @@ class SubscriptionClient
                 if (empty($json)) {
                     return null;
                 }
-                return UpdateSubscriptionResponse::fromJson($json);
+                return AddSubscriptionResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

@@ -56,13 +56,15 @@ namespace Example;
 
 use Payabli\PayabliClient;
 use Payabli\MoneyIn\Requests\RequestPaymentV2;
-use Payabli\MoneyIn\Types\TransRequestBody;
+use Payabli\Types\TransRequestBody;
 use Payabli\Types\PayorDataRequest;
 use Payabli\Types\PaymentDetail;
 use Payabli\Types\PayMethodCredit;
+use Payabli\Types\PayMethodCreditMethod;
 
 $client = new PayabliClient(
-    apiKey: '<value>',
+    clientId: '<clientId>',
+    clientSecret: '<clientSecret>',
 );
 $client->moneyIn->getpaidv2(
     new RequestPaymentV2([
@@ -70,7 +72,7 @@ $client->moneyIn->getpaidv2(
             'customerData' => new PayorDataRequest([
                 'customerId' => 4440,
             ]),
-            'entryPoint' => 'f743aed24a',
+            'entryPoint' => '8cfec329267',
             'ipaddress' => '255.255.255.255',
             'paymentDetails' => new PaymentDetail([
                 'serviceFee' => 0,
@@ -83,7 +85,7 @@ $client->moneyIn->getpaidv2(
                 'cardnumber' => '4111111111111111',
                 'cardzip' => '12345',
                 'initiator' => 'payor',
-                'method' => 'card',
+                'method' => PayMethodCreditMethod::Card->value,
             ]),
         ]),
     ]),
@@ -173,7 +175,12 @@ A request is deemed retryable when any of the following HTTP status codes is ret
 
 - [408](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/408) (Timeout)
 - [429](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429) (Too Many Requests)
-- [5XX](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500) (Internal Server Errors)
+- [5XX](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#server_error_responses) (Internal Server Error)
+
+The `retryStatusCodes` configuration controls which [5XX](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#server_error_responses) status codes are retried:
+
+- `legacy` (default): Retries `408`, `429`, and all `>= 500`
+- `recommended`: Retries `408`, `429`, `502`, `503`, `504` only (excludes `500 Internal Server Error` to avoid retrying non-idempotent failures)
 
 Use the `maxRetries` request option to configure this behavior.
 

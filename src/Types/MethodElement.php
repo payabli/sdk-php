@@ -38,10 +38,22 @@ class MethodElement extends JsonSerializableType
     public ?int $order;
 
     /**
+     * @var ?string $paymentDescription Description text shown in the payment methods section.
+     */
+    #[JsonProperty('paymentDescription')]
+    public ?string $paymentDescription;
+
+    /**
      * @var ?MethodElementSettings $settings Settings for wallet payment methods.
      */
     #[JsonProperty('settings')]
     public ?MethodElementSettings $settings;
+
+    /**
+     * @var ?bool $showSaveMethod Controls whether the "Save payment details for future use" checkbox appears on the hosted payment page. Set to `false` to hide the checkbox. Defaults to `true`.
+     */
+    #[JsonProperty('showSaveMethod')]
+    public ?bool $showSaveMethod;
 
     /**
      * @param array{
@@ -50,7 +62,9 @@ class MethodElement extends JsonSerializableType
      *   header?: ?string,
      *   methods?: ?MethodsList,
      *   order?: ?int,
+     *   paymentDescription?: ?string,
      *   settings?: ?MethodElementSettings,
+     *   showSaveMethod?: ?bool,
      * } $values
      */
     public function __construct(
@@ -61,7 +75,9 @@ class MethodElement extends JsonSerializableType
         $this->header = $values['header'] ?? null;
         $this->methods = $values['methods'] ?? null;
         $this->order = $values['order'] ?? null;
+        $this->paymentDescription = $values['paymentDescription'] ?? null;
         $this->settings = $values['settings'] ?? null;
+        $this->showSaveMethod = $values['showSaveMethod'] ?? null;
     }
 
     /**

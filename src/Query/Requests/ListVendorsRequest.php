@@ -8,7 +8,7 @@ use Payabli\Types\ExportFormat;
 class ListVendorsRequest extends JsonSerializableType
 {
     /**
-     * @var ?value-of<ExportFormat> $exportFormat
+     * @var ?value-of<ExportFormat> $exportFormat Export format for file downloads. When specified, returns data as a file instead of JSON.
      */
     public ?string $exportFormat;
 
@@ -48,6 +48,7 @@ class ListVendorsRequest extends JsonSerializableType
      * - `ein` (ct, nct, eq, ne)
      * - `phone` (ct, nct, eq, ne)
      * - `email` (ct, nct, eq, ne)
+     * - `remitEmail` (ct, nct, eq, ne)
      * - `address` (ct, nct, eq, ne)
      * - `city` (ct, nct, eq, ne)
      * - `state` (ct, nct, eq, ne)

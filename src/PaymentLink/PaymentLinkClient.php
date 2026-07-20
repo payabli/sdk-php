@@ -5,7 +5,7 @@ namespace Payabli\PaymentLink;
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\PaymentLink\Requests\PayLinkDataInvoice;
-use Payabli\PaymentLink\Types\PayabliApiResponsePaymentLinks;
+use Payabli\Types\PayabliApiResponsePaymentLinks;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -14,14 +14,14 @@ use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Payabli\PaymentLink\Requests\PayLinkDataBill;
-use Payabli\PaymentLink\Types\GetPayLinkFromIdResponse;
+use Payabli\Types\GetPayLinkFromIdResponse;
 use Payabli\Types\PushPayLinkRequest;
 use Payabli\PaymentLink\Requests\RefreshPayLinkFromIdRequest;
 use Payabli\PaymentLink\Requests\SendPayLinkFromIdRequest;
 use Payabli\PaymentLink\Requests\PayLinkUpdateData;
 use Payabli\PaymentLink\Requests\PayLinkDataOut;
-use Payabli\PaymentLink\Types\PatchOutPaymentLinkRequest;
-use Payabli\PaymentLink\Types\PaymentPageRequestBodyOut;
+use Payabli\PaymentLink\Requests\PatchOutPaymentLinkRequest;
+use Payabli\Types\PaymentPageRequestBodyOut;
 
 class PaymentLinkClient
 {
@@ -62,6 +62,8 @@ class PaymentLinkClient
     /**
      * Generates a payment link for an invoice from the invoice ID.
      *
+     * The payment page configuration blocks (`logo`, `page`, `paymentMethods`, `review`, `messageBeforePaying`, `paymentButton`, `notes`, `contactUs`, and `settings`) are optional. When you omit a block, Payabli applies a default rather than hiding it. The block is enabled at a fixed display order, so the generated page stays complete and branded. To hide a section, send the block explicitly with `enabled` set to `false`. An explicit value is always honored and is never replaced by a default. For each block's default, see its description in the request body.
+     *
      * @param int $idInvoice Invoice ID
      * @param PayLinkDataInvoice $request
      * @param ?array{
@@ -98,7 +100,7 @@ class PaymentLinkClient
                     method: HttpMethod::POST,
                     headers: $headers,
                     query: $query,
-                    body: $request->body,
+                    body: $request,
                 ),
                 $options,
             );
@@ -569,7 +571,7 @@ class PaymentLinkClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function patchOutPaymentLink(string $paylinkId, PatchOutPaymentLinkRequest $request, ?array $options = null): ?PayabliApiResponsePaymentLinks
+    public function patchOutPaymentLink(string $paylinkId, PatchOutPaymentLinkRequest $request = new PatchOutPaymentLinkRequest(), ?array $options = null): ?PayabliApiResponsePaymentLinks
     {
         $options = array_merge($this->options, $options ?? []);
         try {

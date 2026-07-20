@@ -1,0 +1,215 @@
+<?php
+
+namespace Payabli\Types;
+
+use Payabli\Core\Json\JsonSerializableType;
+use Payabli\Core\Json\JsonProperty;
+use Payabli\Core\Types\ArrayType;
+use DateTime;
+use Payabli\Core\Types\Date;
+
+/**
+ * Bill payload sent when creating or updating a bill.
+ */
+class BillOutData extends JsonSerializableType
+{
+    /**
+     * @var ?string $accountingField1
+     */
+    #[JsonProperty('accountingField1')]
+    public ?string $accountingField1;
+
+    /**
+     * @var ?string $accountingField2
+     */
+    #[JsonProperty('accountingField2')]
+    public ?string $accountingField2;
+
+    /**
+     * @var ?string $additionalData
+     */
+    #[JsonProperty('additionalData')]
+    public ?string $additionalData;
+
+    /**
+     * An array of bill images. Attachments aren't required, but we strongly
+     * recommend including them. Including a bill image can make payouts
+     * smoother and prevent delays. You can include either the Base64-encoded
+     * file content, or you can include a `furl` to a public file. The maximum
+     * file size for image uploads is 30 MB.
+     *
+     * When vendor enrichment is enabled and the first attachment is a PDF,
+     * the invoice is scanned and extracted vendor contact information and
+     * bill details (invoice number, amount due, due date) are merged into
+     * the request. Fields in the request body take precedence over extracted
+     * data. If the scan fails, bill creation proceeds with the original
+     * request data. See the
+     * [vendor enrichment guide](/guides/pay-out-vendor-enrichment-overview)
+     * for details. Contact Payabli to enable this feature.
+     *
+     * @var ?array<FileContent> $attachments
+     */
+    #[JsonProperty('attachments'), ArrayType([FileContent::class])]
+    public ?array $attachments;
+
+    /**
+     * @var ?DateTime $billDate Date of bill. Accepted formats: YYYY-MM-DD, MM/DD/YYYY.
+     */
+    #[JsonProperty('billDate'), Date(Date::TYPE_DATE)]
+    public ?DateTime $billDate;
+
+    /**
+     * @var ?array<BillItem> $billItems
+     */
+    #[JsonProperty('billItems'), ArrayType([BillItem::class])]
+    public ?array $billItems;
+
+    /**
+     * @var ?string $billNumber Unique identifier for the bill. Required when adding a bill.
+     */
+    #[JsonProperty('billNumber')]
+    public ?string $billNumber;
+
+    /**
+     * @var ?string $comments
+     */
+    #[JsonProperty('comments')]
+    public ?string $comments;
+
+    /**
+     * @var ?float $discount Discount amount applied to the bill.
+     */
+    #[JsonProperty('discount')]
+    public ?float $discount;
+
+    /**
+     * @var ?DateTime $dueDate Due date of bill. Accepted formats: YYYY-MM-DD, MM/DD/YYYY.
+     */
+    #[JsonProperty('dueDate'), Date(Date::TYPE_DATE)]
+    public ?DateTime $dueDate;
+
+    /**
+     * End date for scheduled bills. Applied only in `Mode` = 1. Accepted
+     * formats: YYYY-MM-DD, MM/DD/YYYY.
+     *
+     * @var ?DateTime $endDate
+     */
+    #[JsonProperty('endDate'), Date(Date::TYPE_DATE)]
+    public ?DateTime $endDate;
+
+    /**
+     * @var ?value-of<Frequency> $frequency
+     */
+    #[JsonProperty('frequency')]
+    public ?string $frequency;
+
+    /**
+     * @var ?string $lotNumber Lot number associated with the bill.
+     */
+    #[JsonProperty('lotNumber')]
+    public ?string $lotNumber;
+
+    /**
+     * @var ?int $mode Bill mode: value `0` for one-time bills, `1` for scheduled bills.
+     */
+    #[JsonProperty('mode')]
+    public ?int $mode;
+
+    /**
+     * @var ?float $netAmount Net amount owed in bill. Required when adding a bill.
+     */
+    #[JsonProperty('netAmount')]
+    public ?float $netAmount;
+
+    /**
+     * @var ?BillOutDataScheduledOptions $scheduledOptions
+     */
+    #[JsonProperty('scheduledOptions')]
+    public ?BillOutDataScheduledOptions $scheduledOptions;
+
+    /**
+     * @var ?int $status
+     */
+    #[JsonProperty('status')]
+    public ?int $status;
+
+    /**
+     * @var ?value-of<Terms> $terms
+     */
+    #[JsonProperty('terms')]
+    public ?string $terms;
+
+    /**
+     * @var ?float $totalAmount Total amount of the bill.
+     */
+    #[JsonProperty('totalAmount')]
+    public ?float $totalAmount;
+
+    /**
+     * The vendor associated with the bill. Although you can create a vendor
+     * in a create bill request, Payabli recommends creating a vendor
+     * separately and passing a valid `vendorNumber` here. At minimum, the
+     * `vendorNumber` is required.
+     *
+     * @var ?BillOutDataVendor $vendor
+     */
+    #[JsonProperty('vendor')]
+    public ?BillOutDataVendor $vendor;
+
+    /**
+     * @param array{
+     *   accountingField1?: ?string,
+     *   accountingField2?: ?string,
+     *   additionalData?: ?string,
+     *   attachments?: ?array<FileContent>,
+     *   billDate?: ?DateTime,
+     *   billItems?: ?array<BillItem>,
+     *   billNumber?: ?string,
+     *   comments?: ?string,
+     *   discount?: ?float,
+     *   dueDate?: ?DateTime,
+     *   endDate?: ?DateTime,
+     *   frequency?: ?value-of<Frequency>,
+     *   lotNumber?: ?string,
+     *   mode?: ?int,
+     *   netAmount?: ?float,
+     *   scheduledOptions?: ?BillOutDataScheduledOptions,
+     *   status?: ?int,
+     *   terms?: ?value-of<Terms>,
+     *   totalAmount?: ?float,
+     *   vendor?: ?BillOutDataVendor,
+     * } $values
+     */
+    public function __construct(
+        array $values = [],
+    ) {
+        $this->accountingField1 = $values['accountingField1'] ?? null;
+        $this->accountingField2 = $values['accountingField2'] ?? null;
+        $this->additionalData = $values['additionalData'] ?? null;
+        $this->attachments = $values['attachments'] ?? null;
+        $this->billDate = $values['billDate'] ?? null;
+        $this->billItems = $values['billItems'] ?? null;
+        $this->billNumber = $values['billNumber'] ?? null;
+        $this->comments = $values['comments'] ?? null;
+        $this->discount = $values['discount'] ?? null;
+        $this->dueDate = $values['dueDate'] ?? null;
+        $this->endDate = $values['endDate'] ?? null;
+        $this->frequency = $values['frequency'] ?? null;
+        $this->lotNumber = $values['lotNumber'] ?? null;
+        $this->mode = $values['mode'] ?? null;
+        $this->netAmount = $values['netAmount'] ?? null;
+        $this->scheduledOptions = $values['scheduledOptions'] ?? null;
+        $this->status = $values['status'] ?? null;
+        $this->terms = $values['terms'] ?? null;
+        $this->totalAmount = $values['totalAmount'] ?? null;
+        $this->vendor = $values['vendor'] ?? null;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->toJson();
+    }
+}

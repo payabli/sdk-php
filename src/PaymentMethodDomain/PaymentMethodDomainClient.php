@@ -14,11 +14,11 @@ use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Payabli\Types\PaymentMethodDomainGeneralResponse;
-use Payabli\PaymentMethodDomain\Types\DeletePaymentMethodDomainResponse;
 use Payabli\Types\PaymentMethodDomainApiResponse;
-use Payabli\PaymentMethodDomain\Requests\ListPaymentMethodDomainsRequest;
-use Payabli\PaymentMethodDomain\Types\ListPaymentMethodDomainsResponse;
+use Payabli\Types\DeletePaymentMethodDomainResponse;
 use Payabli\PaymentMethodDomain\Requests\UpdatePaymentMethodDomainRequest;
+use Payabli\PaymentMethodDomain\Requests\ListPaymentMethodDomainsRequest;
+use Payabli\Types\ListPaymentMethodDomainsResponse;
 
 class PaymentMethodDomainClient
 {
@@ -154,6 +154,54 @@ class PaymentMethodDomainClient
     }
 
     /**
+     * Get the details for a payment method domain.
+     *
+     * @param string $domainId The payment method domain's ID in Payabli.
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?PaymentMethodDomainApiResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function getPaymentMethodDomain(string $domainId, ?array $options = null): ?PaymentMethodDomainApiResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "PaymentMethodDomain/{$domainId}",
+                    method: HttpMethod::GET,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return PaymentMethodDomainApiResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
      * Delete a payment method domain. You can't delete an inherited domain, you must delete a domain at the organization level.
      *
      * @param string $domainId The payment method domain's ID in Payabli.
@@ -202,9 +250,10 @@ class PaymentMethodDomainClient
     }
 
     /**
-     * Get the details for a payment method domain.
+     * Update a payment method domain's configuration values.
      *
      * @param string $domainId The payment method domain's ID in Payabli.
+     * @param UpdatePaymentMethodDomainRequest $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -213,11 +262,11 @@ class PaymentMethodDomainClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?PaymentMethodDomainApiResponse
+     * @return ?PaymentMethodDomainGeneralResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getPaymentMethodDomain(string $domainId, ?array $options = null): ?PaymentMethodDomainApiResponse
+    public function updatePaymentMethodDomain(string $domainId, UpdatePaymentMethodDomainRequest $request = new UpdatePaymentMethodDomainRequest(), ?array $options = null): ?PaymentMethodDomainGeneralResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -225,7 +274,8 @@ class PaymentMethodDomainClient
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
                     path: "PaymentMethodDomain/{$domainId}",
-                    method: HttpMethod::GET,
+                    method: HttpMethod::PATCH,
+                    body: $request,
                 ),
                 $options,
             );
@@ -235,7 +285,7 @@ class PaymentMethodDomainClient
                 if (empty($json)) {
                     return null;
                 }
-                return PaymentMethodDomainApiResponse::fromJson($json);
+                return PaymentMethodDomainGeneralResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -298,56 +348,6 @@ class PaymentMethodDomainClient
                     return null;
                 }
                 return ListPaymentMethodDomainsResponse::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Update a payment method domain's configuration values.
-     *
-     * @param string $domainId The payment method domain's ID in Payabli.
-     * @param UpdatePaymentMethodDomainRequest $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?PaymentMethodDomainGeneralResponse
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function updatePaymentMethodDomain(string $domainId, UpdatePaymentMethodDomainRequest $request = new UpdatePaymentMethodDomainRequest(), ?array $options = null): ?PaymentMethodDomainGeneralResponse
-    {
-        $options = array_merge($this->options, $options ?? []);
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "PaymentMethodDomain/{$domainId}",
-                    method: HttpMethod::PATCH,
-                    body: $request,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return PaymentMethodDomainGeneralResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

@@ -5,7 +5,6 @@ namespace Payabli\Types;
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
 use Payabli\Core\Types\ArrayType;
-use Payabli\Core\Types\Union;
 
 class UserData extends JsonSerializableType
 {
@@ -16,9 +15,9 @@ class UserData extends JsonSerializableType
     public ?array $access;
 
     /**
-     * @var ?array<string, ?array<string, mixed>> $additionalData
+     * @var ?array<string, array<string, mixed>> $additionalData
      */
-    #[JsonProperty('additionalData'), ArrayType(['string' => new Union(['string' => 'mixed'], 'null')])]
+    #[JsonProperty('additionalData'), ArrayType(['string' => ['string' => 'mixed']])]
     public ?array $additionalData;
 
     /**
@@ -78,7 +77,7 @@ class UserData extends JsonSerializableType
     /**
      * @param array{
      *   access?: ?array<UsrAccess>,
-     *   additionalData?: ?array<string, ?array<string, mixed>>,
+     *   additionalData?: ?array<string, array<string, mixed>>,
      *   email?: ?string,
      *   language?: ?string,
      *   mfaData?: ?MfaData,

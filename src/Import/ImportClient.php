@@ -107,7 +107,7 @@ class ImportClient
     /**
      * Import a list of customers from a CSV file. See the [Import Guide](/developers/developer-guides/entities-customers#import-customers) for more help and example files.
      *
-     * @param string $entry
+     * @param string $entry The entrypoint identifier.
      * @param ImportCustomerRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -163,7 +163,7 @@ class ImportClient
     /**
      * Import a list of vendors from a CSV file. See the [Import Guide](/developers/developer-guides/entities-vendors#import-vendors) for more help and example files.
      *
-     * @param string $entry
+     * @param string $entry The entrypoint identifier.
      * @param ImportVendorRequest $request
      * @param ?array{
      *   baseUrl?: string,

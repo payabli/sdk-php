@@ -35,10 +35,10 @@ class PayabliApiResponse0000 extends JsonSerializableType
     public ?int $responseCode;
 
     /**
-     * @var ?PayabliApiResponse0ResponseData $responseData
+     * @var ?CancelPayoutResponseData $responseData
      */
     #[JsonProperty('responseData')]
-    public ?PayabliApiResponse0ResponseData $responseData;
+    public ?CancelPayoutResponseData $responseData;
 
     /**
      * @param array{
@@ -46,7 +46,7 @@ class PayabliApiResponse0000 extends JsonSerializableType
      *   isSuccess?: ?bool,
      *   pageIdentifier?: ?string,
      *   responseCode?: ?int,
-     *   responseData?: ?PayabliApiResponse0ResponseData,
+     *   responseData?: ?CancelPayoutResponseData,
      * } $values
      */
     public function __construct(

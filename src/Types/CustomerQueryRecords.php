@@ -7,7 +7,6 @@ use Payabli\Core\Json\JsonProperty;
 use DateTime;
 use Payabli\Core\Types\Date;
 use Payabli\Core\Types\ArrayType;
-use Payabli\Core\Types\Union;
 
 class CustomerQueryRecords extends JsonSerializableType
 {
@@ -163,13 +162,9 @@ class CustomerQueryRecords extends JsonSerializableType
 
     /**
      * Social network linked to customer. Possible values:
-     *
      * - `facebook`
-     *
      * - `google`
-     *
      * - `twitter`
-     *
      * - `microsoft`
      *
      * @var ?string $snProvider
@@ -202,15 +197,15 @@ class CustomerQueryRecords extends JsonSerializableType
     public ?DateTime $created;
 
     /**
-     * @var ?array<string, ?string> $additionalFields List of additional custom fields in format key:value.
+     * @var ?array<string, string> $additionalFields List of additional custom fields in format key:value.
      */
-    #[JsonProperty('AdditionalFields'), ArrayType(['string' => new Union('string', 'null')])]
+    #[JsonProperty('AdditionalFields'), ArrayType(['string' => 'string'])]
     public ?array $additionalFields;
 
     /**
-     * @var ?array<?string> $identifierFields
+     * @var ?array<string> $identifierFields
      */
-    #[JsonProperty('IdentifierFields'), ArrayType([new Union('string', 'null')])]
+    #[JsonProperty('IdentifierFields'), ArrayType(['string'])]
     public ?array $identifierFields;
 
     /**
@@ -280,6 +275,12 @@ class CustomerQueryRecords extends JsonSerializableType
     public ?CustomerQueryRecordsCustomerConsent $customerConsent;
 
     /**
+     * @var ?string $customerPortal
+     */
+    #[JsonProperty('customerPortal')]
+    public ?string $customerPortal;
+
+    /**
      * @param array{
      *   customerId?: ?int,
      *   customerNumber?: ?string,
@@ -311,8 +312,8 @@ class CustomerQueryRecords extends JsonSerializableType
      *   snData?: ?string,
      *   lastUpdated?: ?DateTime,
      *   created?: ?DateTime,
-     *   additionalFields?: ?array<string, ?string>,
-     *   identifierFields?: ?array<?string>,
+     *   additionalFields?: ?array<string, string>,
+     *   identifierFields?: ?array<string>,
      *   subscriptions?: ?array<SubscriptionQueryRecords>,
      *   storedMethods?: ?array<MethodQueryRecords>,
      *   customerSummary?: ?CustomerSummaryRecord,
@@ -324,6 +325,7 @@ class CustomerQueryRecords extends JsonSerializableType
      *   pageidentifier?: ?string,
      *   externalPaypointId?: ?string,
      *   customerConsent?: ?CustomerQueryRecordsCustomerConsent,
+     *   customerPortal?: ?string,
      * } $values
      */
     public function __construct(
@@ -372,6 +374,7 @@ class CustomerQueryRecords extends JsonSerializableType
         $this->pageidentifier = $values['pageidentifier'] ?? null;
         $this->externalPaypointId = $values['externalPaypointId'] ?? null;
         $this->customerConsent = $values['customerConsent'] ?? null;
+        $this->customerPortal = $values['customerPortal'] ?? null;
     }
 
     /**

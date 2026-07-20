@@ -28,7 +28,7 @@ class ApplePayOrganizationUpdateData extends JsonSerializableType
     public ?string $jobId;
 
     /**
-     * @var ?string $jobStatus
+     * @var ?value-of<JobStatus> $jobStatus
      */
     #[JsonProperty('jobStatus')]
     public ?string $jobStatus;
@@ -62,7 +62,7 @@ class ApplePayOrganizationUpdateData extends JsonSerializableType
      *   createdAt?: ?DateTime,
      *   id?: ?string,
      *   jobId?: ?string,
-     *   jobStatus?: ?string,
+     *   jobStatus?: ?value-of<JobStatus>,
      *   organizationId?: ?int,
      *   type?: ?string,
      *   updatedAt?: ?DateTime,

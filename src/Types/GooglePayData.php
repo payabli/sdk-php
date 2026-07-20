@@ -11,13 +11,17 @@ use Payabli\Core\Json\JsonProperty;
 class GooglePayData extends JsonSerializableType
 {
     /**
-     * @var ?GooglePayStatusData $data This object is only returned when the domain verification check fails. If a domain has failed validation, this object contains information about the failure.
+     * This object is only returned when the domain verification check
+     * fails. If a domain has failed validation, this object contains
+     * information about the failure.
+     *
+     * @var ?GooglePayStatusData $data
      */
     #[JsonProperty('data')]
     public ?GooglePayStatusData $data;
 
     /**
-     * @var ?bool $isEnabled When `true`, Google Pay is enabled.
+     * @var ?bool $isEnabled
      */
     #[JsonProperty('isEnabled')]
     public ?bool $isEnabled;
