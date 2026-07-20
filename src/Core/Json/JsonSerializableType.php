@@ -39,12 +39,12 @@ abstract class JsonSerializableType implements \JsonSerializable
     }
 
     /**
-     * Serializes the object to an array.
+     * Serializes the object to a JSON-ready value.
      *
-     * @return mixed[] Array representation of the object.
+     * @return array<string,mixed>|\stdClass
      * @throws JsonException If serialization fails.
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): array|\stdClass
     {
         $result = [];
         $reflectionClass = new \ReflectionClass($this);
@@ -65,21 +65,24 @@ abstract class JsonSerializableType implements \JsonSerializable
             }
 
             // Handle Union annotations
+            $alreadySerialized = false;
             $unionTypeAttr = $property->getAttributes(Union::class)[0] ?? null;
             if ($unionTypeAttr) {
                 $unionType = $unionTypeAttr->newInstance();
                 $value = JsonSerializer::serializeUnion($value, $unionType);
+                $alreadySerialized = true;
             }
 
             // Handle arrays with type annotations
             $arrayTypeAttr = $property->getAttributes(ArrayType::class)[0] ?? null;
-            if ($arrayTypeAttr && is_array($value)) {
+            if (!$alreadySerialized && $arrayTypeAttr && is_array($value)) {
                 $arrayType = $arrayTypeAttr->newInstance()->type;
                 $value = JsonSerializer::serializeArray($value, $arrayType);
+                $alreadySerialized = true;
             }
 
             // Handle object
-            if (is_object($value)) {
+            if (!$alreadySerialized && is_object($value)) {
                 $value = JsonSerializer::serializeObject($value);
             }
 
@@ -87,6 +90,10 @@ abstract class JsonSerializableType implements \JsonSerializable
             if ($value !== null || array_key_exists($property->getName(), $this->__explicitlySetProperties)) {
                 $result[$jsonKey] = $value;
             }
+        }
+        // Empty object models must serialize to {} (not [])
+        if ($result === []) {
+            return new \stdClass();
         }
         return $result;
     }

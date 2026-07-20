@@ -46,6 +46,7 @@ class NullPropertyTest extends TestCase
         );
 
         $serialized = $object->jsonSerialize();
+        $this->assertIsArray($serialized, 'Serialized result should be an array.');
         $this->assertArrayHasKey('non_null_property', $serialized, 'non_null_property should be present in the serialized JSON.');
         $this->assertArrayNotHasKey('null_property', $serialized, 'null_property should be omitted from the serialized JSON.');
         $this->assertEquals('Test String', $serialized['non_null_property'], 'non_null_property should have the correct value.');

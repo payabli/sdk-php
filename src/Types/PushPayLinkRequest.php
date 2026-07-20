@@ -134,16 +134,22 @@ class PushPayLinkRequest extends JsonSerializableType
         $result['channel'] = $this->channel;
 
         $base = parent::jsonSerialize();
-        $result = array_merge($base, $result);
+        if (is_array($base)) {
+            $result = array_merge($base, $result);
+        }
 
         switch ($this->channel) {
             case 'email':
                 $value = $this->asEmail()->jsonSerialize();
-                $result = array_merge($value, $result);
+                if (is_array($value)) {
+                    $result = array_merge($value, $result);
+                }
                 break;
             case 'sms':
                 $value = $this->asSms()->jsonSerialize();
-                $result = array_merge($value, $result);
+                if (is_array($value)) {
+                    $result = array_merge($value, $result);
+                }
                 break;
             case '_unknown':
             default:
@@ -152,9 +158,15 @@ class PushPayLinkRequest extends JsonSerializableType
                 }
                 if ($this->value instanceof JsonSerializableType) {
                     $value = $this->value->jsonSerialize();
-                    $result = array_merge($value, $result);
+                    if (is_array($value)) {
+                        $result = array_merge($value, $result);
+                    }
                 } elseif (is_array($this->value)) {
                     $result = array_merge($this->value, $result);
+                } elseif ($this->value instanceof \stdClass) {
+                    /** @var array<string, mixed> $normalized */
+                    $normalized = (array) $this->value;
+                    $result = array_merge($normalized, $result);
                 }
         }
 
@@ -190,7 +202,9 @@ class PushPayLinkRequest extends JsonSerializableType
             case '_unknown':
             default:
                 $args['channel'] = '_unknown';
-                $args['value'] = $data;
+                /** @var array<string, mixed> $unknown */
+                $unknown = $data;
+                $args['value'] = $unknown;
         }
 
         // @phpstan-ignore-next-line
