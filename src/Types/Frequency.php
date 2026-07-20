@@ -11,4 +11,7 @@ enum Frequency: string
     case Monthly = "monthly";
     case Every3Months = "every3months";
     case Annually = "annually";
+    case FirstOfMonth = "firstofmonth";
+    case FifteenthOfMonth = "fifteenthofmonth";
+    case EndOfMonth = "endofmonth";
 }

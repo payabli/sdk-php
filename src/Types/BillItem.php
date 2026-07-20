@@ -5,14 +5,13 @@ namespace Payabli\Types;
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
 use Payabli\Core\Types\ArrayType;
-use Payabli\Core\Types\Union;
 
 class BillItem extends JsonSerializableType
 {
     /**
-     * @var ?array<?string> $itemCategories Array of tags classifying item or product.
+     * @var ?array<string> $itemCategories Array of tags classifying item or product.
      */
-    #[JsonProperty('itemCategories'), ArrayType([new Union('string', 'null')])]
+    #[JsonProperty('itemCategories'), ArrayType(['string'])]
     public ?array $itemCategories;
 
     /**
@@ -22,10 +21,10 @@ class BillItem extends JsonSerializableType
     public ?string $itemCommodityCode;
 
     /**
-     * @var float $itemCost Item or product price per unit.
+     * @var ?float $itemCost Item or product price per unit.
      */
     #[JsonProperty('itemCost')]
-    public float $itemCost;
+    public ?float $itemCost;
 
     /**
      * @var ?string $itemDescription
@@ -34,7 +33,11 @@ class BillItem extends JsonSerializableType
     public ?string $itemDescription;
 
     /**
-     * @var ?int $itemMode Internal class of item or product: value '0' is only for invoices , '1' for bills and, '2' common for both.
+     * Internal class of item or product: value `0` is only for invoices,
+     * `1` for bills, and `2` is common for both. Required on invoice line
+     * items — invoice creation fails with `Invalid item data` if it's omitted.
+     *
+     * @var ?int $itemMode
      */
     #[JsonProperty('itemMode')]
     public ?int $itemMode;
@@ -70,7 +73,10 @@ class BillItem extends JsonSerializableType
     public ?float $itemTaxRate;
 
     /**
-     * @var ?float $itemTotalAmount Total amount in item or product.
+     * Per-line total for this item (unit cost times quantity). Distinct from
+     * the invoice's overall total, `invoiceAmount`. Required on invoice line items.
+     *
+     * @var ?float $itemTotalAmount
      */
     #[JsonProperty('itemTotalAmount')]
     public ?float $itemTotalAmount;
@@ -83,9 +89,9 @@ class BillItem extends JsonSerializableType
 
     /**
      * @param array{
-     *   itemCost: float,
-     *   itemCategories?: ?array<?string>,
+     *   itemCategories?: ?array<string>,
      *   itemCommodityCode?: ?string,
+     *   itemCost?: ?float,
      *   itemDescription?: ?string,
      *   itemMode?: ?int,
      *   itemProductCode?: ?string,
@@ -98,11 +104,11 @@ class BillItem extends JsonSerializableType
      * } $values
      */
     public function __construct(
-        array $values,
+        array $values = [],
     ) {
         $this->itemCategories = $values['itemCategories'] ?? null;
         $this->itemCommodityCode = $values['itemCommodityCode'] ?? null;
-        $this->itemCost = $values['itemCost'];
+        $this->itemCost = $values['itemCost'] ?? null;
         $this->itemDescription = $values['itemDescription'] ?? null;
         $this->itemMode = $values['itemMode'] ?? null;
         $this->itemProductCode = $values['itemProductCode'] ?? null;

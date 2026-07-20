@@ -73,10 +73,10 @@ class VendorResponseStoredMethod extends JsonSerializableType
     public ?string $bin;
 
     /**
-     * @var ?string $binData
+     * @var ?BinData $binData
      */
     #[JsonProperty('binData')]
-    public ?string $binData;
+    public ?BinData $binData;
 
     /**
      * @var ?string $aba
@@ -97,13 +97,19 @@ class VendorResponseStoredMethod extends JsonSerializableType
     public ?string $methodType;
 
     /**
+     * @var ?string $walletType Digital wallet type if applicable.
+     */
+    #[JsonProperty('WalletType')]
+    public ?string $walletType;
+
+    /**
      * @var ?DateTime $lastUpdated
      */
     #[JsonProperty('LastUpdated'), Date(Date::TYPE_DATETIME)]
     public ?DateTime $lastUpdated;
 
     /**
-     * @var ?DateTime $cardUpdatedOn
+     * @var ?DateTime $cardUpdatedOn Date and time the card was last updated.
      */
     #[JsonProperty('CardUpdatedOn'), Date(Date::TYPE_DATETIME)]
     public ?DateTime $cardUpdatedOn;
@@ -120,10 +126,11 @@ class VendorResponseStoredMethod extends JsonSerializableType
      *   achHolderType?: ?string,
      *   isValidatedAch?: ?bool,
      *   bin?: ?string,
-     *   binData?: ?string,
+     *   binData?: ?BinData,
      *   aba?: ?string,
      *   postalCode?: ?string,
      *   methodType?: ?string,
+     *   walletType?: ?string,
      *   lastUpdated?: ?DateTime,
      *   cardUpdatedOn?: ?DateTime,
      * } $values
@@ -145,6 +152,7 @@ class VendorResponseStoredMethod extends JsonSerializableType
         $this->aba = $values['aba'] ?? null;
         $this->postalCode = $values['postalCode'] ?? null;
         $this->methodType = $values['methodType'] ?? null;
+        $this->walletType = $values['walletType'] ?? null;
         $this->lastUpdated = $values['lastUpdated'] ?? null;
         $this->cardUpdatedOn = $values['cardUpdatedOn'] ?? null;
     }

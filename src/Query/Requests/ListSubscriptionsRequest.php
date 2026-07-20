@@ -8,7 +8,7 @@ use Payabli\Types\ExportFormat;
 class ListSubscriptionsRequest extends JsonSerializableType
 {
     /**
-     * @var ?value-of<ExportFormat> $exportFormat
+     * @var ?value-of<ExportFormat> $exportFormat Export format for file downloads. When specified, returns data as a file instead of JSON.
      */
     public ?string $exportFormat;
 
@@ -23,7 +23,6 @@ class ListSubscriptionsRequest extends JsonSerializableType
     public ?int $limitRecord;
 
     /**
-     *
      * Collection of field names, conditions, and values used to filter the query.
      * <Info>
      *   **You must remove `parameters=` from the request before you send it, otherwise Payabli will ignore the filters.**
@@ -52,6 +51,7 @@ class ListSubscriptionsRequest extends JsonSerializableType
      * - `feeAmount` (gt, ge, lt, le, eq, ne)
      * - `status` (in, nin, eq, ne)
      * - `untilcancelled` (eq, ne)
+     * - `subscriptionType` (eq, ne, in, nin). Filters by subscription type. Accepts `Regular` or `BalanceDriven`. Case-insensitive. Example: `subscriptionType(in)=Regular|BalanceDriven`.
      * - `payaccountLastfour` (nct, ct)
      * - `payaccountType` (ne, eq, in, nin)
      * - `payaccountCurrency` (ne, eq, in, nin)
@@ -80,6 +80,7 @@ class ListSubscriptionsRequest extends JsonSerializableType
      * - `orgName` (ne, eq, ct, nct)
      * - `externalPaypointId` (ct, nct, ne, eq)
      * - `subId` (eq, ne)
+     * - `idPmethod` (eq, ne, ct, nct, in, nin). Filters by the subscription's linked stored method identifier (the value returned in `StoredMethod.IdPmethod`). Case-insensitive. Subscriptions without a linked stored method are excluded from matches. Example: `idPmethod(eq,6edcbb56-9c0e-4003-b3d1-99abf149ba0e)`.
      * - `orderDescription` (ct, nct)
      * - `cycles` (eq, ne, gt, ge, lt, le)
      * - `leftcycles` (eq, ne, gt, ge, lt, le)

@@ -8,13 +8,21 @@ use Payabli\Core\Json\JsonProperty;
 class ScheduleDetail extends JsonSerializableType
 {
     /**
-     * @var ?string $endDate Subscription end date in any of the accepted formats: YYYY-MM-DD, MM/DD/YYYY or the value `untilcancelled` to indicate a scheduled payment with infinite cycle.
+     * Subscription end date in any of the accepted formats: YYYY-MM-DD, MM/DD/YYYY or the value `untilcancelled` to indicate a scheduled payment with infinite cycle.
+     *
+     * Not applicable for `BalanceDriven` subscriptions, which run until cancelled.
+     *
+     * @var ?string $endDate
      */
     #[JsonProperty('endDate')]
     public ?string $endDate;
 
     /**
-     * @var ?value-of<Frequency> $frequency Frequency of the subscription.
+     * Frequency of the subscription.
+     *
+     * `BalanceDriven` subscriptions only accept the monthly cadences `firstofmonth`, `fifteenthofmonth`, and `endofmonth`.
+     *
+     * @var ?value-of<Frequency> $frequency
      */
     #[JsonProperty('frequency')]
     public ?string $frequency;
@@ -26,7 +34,11 @@ class ScheduleDetail extends JsonSerializableType
     public ?int $planId;
 
     /**
-     * @var ?string $startDate Subscription start date in any of the accepted formats: YYYY-MM-DD, MM/DD/YYYY. This must be a future date.
+     * Subscription start date in any of the accepted formats: YYYY-MM-DD, MM/DD/YYYY. This must be a future date.
+     *
+     * Not applicable for `BalanceDriven` subscriptions, where the start date is calculated automatically from `frequency`.
+     *
+     * @var ?string $startDate
      */
     #[JsonProperty('startDate')]
     public ?string $startDate;

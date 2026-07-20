@@ -77,11 +77,8 @@ class QueryResponseSettlementsRecordsItem extends JsonSerializableType
     public ?BillData $invoiceData;
 
     /**
-     *
      * Describes whether the transaction is being held or not.
-     *
      * 1 - Transaction is held
-     *
      * 0 - Transaction isn't being held
      *
      * @var ?int $isHold
@@ -192,6 +189,12 @@ class QueryResponseSettlementsRecordsItem extends JsonSerializableType
     public ?string $source;
 
     /**
+     * @var ?array<SettlementSplitFundingDetail> $splitFundingInstructions Split funding instructions for the settled transaction, each enriched with the batch and transfer that paid out the split. Null when the transaction has no splits.
+     */
+    #[JsonProperty('splitFundingInstructions'), ArrayType([SettlementSplitFundingDetail::class])]
+    public ?array $splitFundingInstructions;
+
+    /**
      * @var ?int $status
      */
     #[JsonProperty('Status')]
@@ -252,6 +255,7 @@ class QueryResponseSettlementsRecordsItem extends JsonSerializableType
      *   settledAmount?: ?float,
      *   settlementDate?: ?DateTime,
      *   source?: ?string,
+     *   splitFundingInstructions?: ?array<SettlementSplitFundingDetail>,
      *   status?: ?int,
      *   transactionEvents?: ?array<QueryTransactionEvents>,
      *   transactionTime?: ?DateTime,
@@ -291,6 +295,7 @@ class QueryResponseSettlementsRecordsItem extends JsonSerializableType
         $this->settledAmount = $values['settledAmount'] ?? null;
         $this->settlementDate = $values['settlementDate'] ?? null;
         $this->source = $values['source'] ?? null;
+        $this->splitFundingInstructions = $values['splitFundingInstructions'] ?? null;
         $this->status = $values['status'] ?? null;
         $this->transactionEvents = $values['transactionEvents'] ?? null;
         $this->transactionTime = $values['transactionTime'] ?? null;

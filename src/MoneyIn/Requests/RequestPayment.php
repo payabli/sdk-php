@@ -3,17 +3,17 @@
 namespace Payabli\MoneyIn\Requests;
 
 use Payabli\Core\Json\JsonSerializableType;
-use Payabli\MoneyIn\Types\TransRequestBody;
+use Payabli\Types\TransRequestBody;
 
 class RequestPayment extends JsonSerializableType
 {
     /**
-     * @var ?bool $achValidation
+     * @var ?bool $achValidation When `true`, enables real-time validation of ACH account and routing numbers. This is an add-on feature, contact Payabli for more information.
      */
     public ?bool $achValidation;
 
     /**
-     * @var ?bool $forceCustomerCreation
+     * @var ?bool $forceCustomerCreation When `true`, the request creates a new customer record, regardless of whether customer identifiers match an existing customer. Defaults to `false`.
      */
     public ?bool $forceCustomerCreation;
 
@@ -23,7 +23,7 @@ class RequestPayment extends JsonSerializableType
     public ?bool $includeDetails;
 
     /**
-     * @var ?string $idempotencyKey
+     * @var ?string $idempotencyKey _Optional but recommended_ A unique ID that you can include to prevent duplicating objects or transactions in the case that a request is sent more than once. This key isn't generated in Payabli, you must generate it yourself. This key persists for 2 minutes. After 2 minutes, you can reuse the key if needed.
      */
     public ?string $idempotencyKey;
 

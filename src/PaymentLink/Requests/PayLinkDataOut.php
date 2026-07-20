@@ -3,12 +3,12 @@
 namespace Payabli\PaymentLink\Requests;
 
 use Payabli\Core\Json\JsonSerializableType;
-use Payabli\PaymentLink\Types\PaymentPageRequestBodyOut;
+use Payabli\Types\PaymentPageRequestBodyOut;
 
 class PayLinkDataOut extends JsonSerializableType
 {
     /**
-     * @var string $entryPoint
+     * @var string $entryPoint The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      */
     public string $entryPoint;
 

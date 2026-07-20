@@ -17,7 +17,7 @@ class PayMethodStoredMethod extends JsonSerializableType
     public ?string $initiator;
 
     /**
-     * @var value-of<PayMethodStoredMethodMethod> $method Method to use for the transaction. Use either `card` or `ach`, depending on what kind of method was tokenized to use a saved payment method for this transaction.
+     * @var value-of<PayMethodStoredMethodMethod> $method Method to use for the transaction. Use `card`, `ach`, or `wallet` depending on what kind of method was tokenized to use a saved payment method for this transaction.
      */
     #[JsonProperty('method')]
     public string $method;

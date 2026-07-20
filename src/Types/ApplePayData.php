@@ -11,13 +11,17 @@ use Payabli\Core\Json\JsonProperty;
 class ApplePayData extends JsonSerializableType
 {
     /**
-     * @var ?ApplePayStatusData $data This object is only returned when the domain verification check fails. If a domain has failed validation, this object contains information about the failure.
+     * This object is only returned when the domain verification check
+     * fails. If a domain has failed validation, this object contains
+     * information about the failure.
+     *
+     * @var ?ApplePayStatusData $data
      */
     #[JsonProperty('data')]
     public ?ApplePayStatusData $data;
 
     /**
-     * @var ?bool $isEnabled When `true`, Apple Pay is enabled.
+     * @var ?bool $isEnabled
      */
     #[JsonProperty('isEnabled')]
     public ?bool $isEnabled;

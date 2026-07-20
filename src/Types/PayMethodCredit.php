@@ -44,7 +44,7 @@ class PayMethodCredit extends JsonSerializableType
     public ?string $initiator;
 
     /**
-     * @var 'card' $method Method to use for the transaction. For transactions with a credit or debit card, or a tokenized card, use `card`.
+     * @var value-of<PayMethodCreditMethod> $method Method to use for the transaction. For transactions with a credit or debit card, or a tokenized card, use `card`.
      */
     #[JsonProperty('method')]
     public string $method;
@@ -59,7 +59,7 @@ class PayMethodCredit extends JsonSerializableType
      * @param array{
      *   cardexp: string,
      *   cardnumber: string,
-     *   method: 'card',
+     *   method: value-of<PayMethodCreditMethod>,
      *   cardcvv?: ?string,
      *   cardHolder?: ?string,
      *   cardzip?: ?string,

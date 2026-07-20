@@ -11,25 +11,25 @@ class CustomerSummaryRecord extends JsonSerializableType
     /**
      * @var ?int $numberofTransactions Number total of transactions or payments
      */
-    #[JsonProperty('numberofTransactions')]
+    #[JsonProperty('NumberofTransactions')]
     public ?int $numberofTransactions;
 
     /**
      * @var ?array<TransactionQueryRecords> $recentTransactions List of more recent 5 transactions belonging to the customer
      */
-    #[JsonProperty('recentTransactions'), ArrayType([TransactionQueryRecords::class])]
+    #[JsonProperty('RecentTransactions'), ArrayType([TransactionQueryRecords::class])]
     public ?array $recentTransactions;
 
     /**
      * @var ?float $totalAmountTransactions Total amount in transactions
      */
-    #[JsonProperty('totalAmountTransactions')]
+    #[JsonProperty('TotalAmountTransactions')]
     public ?float $totalAmountTransactions;
 
     /**
      * @var ?float $totalNetAmountTransactions Total net amount in transactions
      */
-    #[JsonProperty('totalNetAmountTransactions')]
+    #[JsonProperty('TotalNetAmountTransactions')]
     public ?float $totalNetAmountTransactions;
 
     /**

@@ -5,7 +5,6 @@ namespace Payabli\Types;
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
 use Payabli\Core\Types\ArrayType;
-use Payabli\Core\Types\Union;
 use DateTime;
 use Payabli\Core\Types\Date;
 
@@ -57,7 +56,7 @@ class CustomerData extends JsonSerializableType
     public ?string $lastname;
 
     /**
-     * @var ?string $phone Customer phone number
+     * @var ?string $phone Customer phone number. Payabli normalizes this value when it's stored. For example, `(555) 555-0100` is stored as `+15555550100`.
      */
     #[JsonProperty('phone')]
     public ?string $phone;
@@ -153,15 +152,15 @@ class CustomerData extends JsonSerializableType
     public ?int $timeZone;
 
     /**
-     * @var ?array<string, ?string> $additionalFields Additional Custom fields in format "key":"value".
+     * @var ?array<string, string> $additionalFields Additional Custom fields in format "key":"value".
      */
-    #[JsonProperty('additionalFields'), ArrayType(['string' => new Union('string', 'null')])]
+    #[JsonProperty('additionalFields'), ArrayType(['string' => 'string'])]
     public ?array $additionalFields;
 
     /**
-     * @var ?array<?string> $identifierFields
+     * @var ?array<string> $identifierFields
      */
-    #[JsonProperty('identifierFields'), ArrayType([new Union('string', 'null')])]
+    #[JsonProperty('identifierFields'), ArrayType(['string'])]
     public ?array $identifierFields;
 
     /**
@@ -195,8 +194,8 @@ class CustomerData extends JsonSerializableType
      *   shippingCountry?: ?string,
      *   balance?: ?float,
      *   timeZone?: ?int,
-     *   additionalFields?: ?array<string, ?string>,
-     *   identifierFields?: ?array<?string>,
+     *   additionalFields?: ?array<string, string>,
+     *   identifierFields?: ?array<string>,
      *   createdAt?: ?DateTime,
      * } $values
      */

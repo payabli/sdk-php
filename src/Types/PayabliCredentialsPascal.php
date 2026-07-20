@@ -4,6 +4,7 @@ namespace Payabli\Types;
 
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
+use Payabli\Core\Types\ArrayType;
 
 class PayabliCredentialsPascal extends JsonSerializableType
 {
@@ -74,10 +75,10 @@ class PayabliCredentialsPascal extends JsonSerializableType
     public ?bool $acceptSameDayAch;
 
     /**
-     * @var ?string $currency The default currency for the paypoint, either `USD` or `CAD`.
+     * @var ?array<string> $currency The default currency for the paypoint, either `USD` or `CAD`.
      */
-    #[JsonProperty('Currency')]
-    public ?string $currency;
+    #[JsonProperty('Currency'), ArrayType(['string'])]
+    public ?array $currency;
 
     /**
      * @var ?bool $greaterValueAllowed
@@ -110,7 +111,7 @@ class PayabliCredentialsPascal extends JsonSerializableType
      *   accountId?: ?string,
      *   referenceId?: ?int,
      *   acceptSameDayAch?: ?bool,
-     *   currency?: ?string,
+     *   currency?: ?array<string>,
      *   greaterValueAllowed?: ?bool,
      *   absorbDifference?: ?bool,
      *   allowOverride?: ?bool,

@@ -81,9 +81,9 @@ class ApplicationDataManaged extends JsonSerializableType
     public ?string $bzip;
 
     /**
-     * @var ?array<ApplicationDataManagedContactsItem> $contacts List of contacts for the business.
+     * @var ?array<Contacts> $contacts List of contacts for the business.
      */
-    #[JsonProperty('contacts'), ArrayType([ApplicationDataManagedContactsItem::class])]
+    #[JsonProperty('contacts'), ArrayType([Contacts::class])]
     public ?array $contacts;
 
     /**
@@ -171,9 +171,9 @@ class ApplicationDataManaged extends JsonSerializableType
     public ?int $orgId;
 
     /**
-     * @var ?array<ApplicationDataManagedOwnershipItem> $ownership List of Owners with at least a 25% ownership.
+     * @var ?array<Owners> $ownership List of Owners with at least a 25% ownership.
      */
-    #[JsonProperty('ownership'), ArrayType([ApplicationDataManagedOwnershipItem::class])]
+    #[JsonProperty('ownership'), ArrayType([Owners::class])]
     public ?array $ownership;
 
     /**
@@ -269,7 +269,7 @@ class ApplicationDataManaged extends JsonSerializableType
      *   bsummary?: ?string,
      *   btype?: ?value-of<OwnType>,
      *   bzip?: ?string,
-     *   contacts?: ?array<ApplicationDataManagedContactsItem>,
+     *   contacts?: ?array<Contacts>,
      *   dbaname?: ?string,
      *   ein?: ?string,
      *   faxnumber?: ?string,
@@ -284,7 +284,7 @@ class ApplicationDataManaged extends JsonSerializableType
      *   mstate?: ?string,
      *   mzip?: ?string,
      *   orgId?: ?int,
-     *   ownership?: ?array<ApplicationDataManagedOwnershipItem>,
+     *   ownership?: ?array<Owners>,
      *   phonenumber?: ?string,
      *   recipientEmail?: ?string,
      *   recipientEmailNotification?: ?bool,

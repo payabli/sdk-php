@@ -5,125 +5,16 @@ namespace Payabli\Types;
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
 use Payabli\Core\Types\ArrayType;
-use Payabli\Core\Types\Union;
 use DateTime;
 use Payabli\Core\Types\Date;
 
 class VendorQueryRecord extends JsonSerializableType
 {
     /**
-     * @var ?array<string, ?array<string, mixed>> $additionalData
+     * @var ?string $vendorNumber
      */
-    #[JsonProperty('additionalData'), ArrayType(['string' => new Union(['string' => 'mixed'], 'null')])]
-    public ?array $additionalData;
-
-    /**
-     * @var ?string $address1
-     */
-    #[JsonProperty('Address1')]
-    public ?string $address1;
-
-    /**
-     * @var ?string $address2
-     */
-    #[JsonProperty('Address2')]
-    public ?string $address2;
-
-    /**
-     * @var ?BillingDataResponse $billingData
-     */
-    #[JsonProperty('BillingData')]
-    public ?BillingDataResponse $billingData;
-
-    /**
-     * @var ?string $city
-     */
-    #[JsonProperty('City')]
-    public ?string $city;
-
-    /**
-     * @var ?ContactsResponse $contacts
-     */
-    #[JsonProperty('Contacts')]
-    public ?ContactsResponse $contacts;
-
-    /**
-     * @var ?string $country
-     */
-    #[JsonProperty('Country')]
-    public ?string $country;
-
-    /**
-     * @var ?DateTime $createdDate
-     */
-    #[JsonProperty('CreatedDate'), Date(Date::TYPE_DATETIME)]
-    public ?DateTime $createdDate;
-
-    /**
-     * @var ?string $customerVendorAccount
-     */
-    #[JsonProperty('customerVendorAccount')]
-    public ?string $customerVendorAccount;
-
-    /**
-     * @var ?string $customField1
-     */
-    #[JsonProperty('customField1')]
-    public ?string $customField1;
-
-    /**
-     * @var ?string $customField2
-     */
-    #[JsonProperty('customField2')]
-    public ?string $customField2;
-
-    /**
-     * @var ?string $ein
-     */
-    #[JsonProperty('EIN')]
-    public ?string $ein;
-
-    /**
-     * @var ?string $email
-     */
-    #[JsonProperty('Email')]
-    public ?string $email;
-
-    /**
-     * @var ?string $enrollmentStatus
-     */
-    #[JsonProperty('EnrollmentStatus')]
-    public ?string $enrollmentStatus;
-
-    /**
-     * @var ?string $externalPaypointId
-     */
-    #[JsonProperty('externalPaypointID')]
-    public ?string $externalPaypointId;
-
-    /**
-     * @var ?int $internalReferenceId
-     */
-    #[JsonProperty('InternalReferenceId')]
-    public ?int $internalReferenceId;
-
-    /**
-     * @var ?DateTime $lastUpdated
-     */
-    #[JsonProperty('LastUpdated'), Date(Date::TYPE_DATETIME)]
-    public ?DateTime $lastUpdated;
-
-    /**
-     * @var ?string $locationCode
-     */
-    #[JsonProperty('LocationCode')]
-    public ?string $locationCode;
-
-    /**
-     * @var ?string $mcc
-     */
-    #[JsonProperty('Mcc')]
-    public ?string $mcc;
+    #[JsonProperty('VendorNumber')]
+    public ?string $vendorNumber;
 
     /**
      * @var ?string $name1
@@ -138,34 +29,130 @@ class VendorQueryRecord extends JsonSerializableType
     public ?string $name2;
 
     /**
-     * @var ?string $parentOrgName
+     * @var ?string $ein
      */
-    #[JsonProperty('ParentOrgName')]
-    public ?string $parentOrgName;
+    #[JsonProperty('EIN')]
+    public ?string $ein;
 
     /**
-     * @var ?int $parentOrgId
+     * @var ?string $phone
      */
-    #[JsonProperty('ParentOrgId')]
-    public ?int $parentOrgId;
+    #[JsonProperty('Phone')]
+    public ?string $phone;
 
     /**
-     * @var ?string $payeeName1
+     * @var ?string $email
      */
-    #[JsonProperty('payeeName1')]
-    public ?string $payeeName1;
+    #[JsonProperty('Email')]
+    public ?string $email;
 
     /**
-     * @var ?string $payeeName2
+     * @var ?string $remitEmail
      */
-    #[JsonProperty('payeeName2')]
-    public ?string $payeeName2;
+    #[JsonProperty('RemitEmail')]
+    public ?string $remitEmail;
+
+    /**
+     * @var ?string $address1
+     */
+    #[JsonProperty('Address1')]
+    public ?string $address1;
+
+    /**
+     * @var ?string $address2
+     */
+    #[JsonProperty('Address2')]
+    public ?string $address2;
+
+    /**
+     * @var ?string $city
+     */
+    #[JsonProperty('City')]
+    public ?string $city;
+
+    /**
+     * @var ?string $state
+     */
+    #[JsonProperty('State')]
+    public ?string $state;
+
+    /**
+     * @var ?string $zip
+     */
+    #[JsonProperty('Zip')]
+    public ?string $zip;
+
+    /**
+     * @var ?string $country
+     */
+    #[JsonProperty('Country')]
+    public ?string $country;
+
+    /**
+     * @var ?string $mcc
+     */
+    #[JsonProperty('Mcc')]
+    public ?string $mcc;
+
+    /**
+     * @var ?string $locationCode
+     */
+    #[JsonProperty('LocationCode')]
+    public ?string $locationCode;
+
+    /**
+     * @var ?array<ContactsResponse> $contacts Array of objects describing the vendor's contacts.
+     */
+    #[JsonProperty('Contacts'), ArrayType([ContactsResponse::class])]
+    public ?array $contacts;
+
+    /**
+     * @var ?BillingDataResponse $billingData
+     */
+    #[JsonProperty('BillingData')]
+    public ?BillingDataResponse $billingData;
 
     /**
      * @var ?string $paymentMethod
      */
     #[JsonProperty('PaymentMethod')]
     public ?string $paymentMethod;
+
+    /**
+     * @var ?int $vendorStatus
+     */
+    #[JsonProperty('VendorStatus')]
+    public ?int $vendorStatus;
+
+    /**
+     * @var ?int $vendorId
+     */
+    #[JsonProperty('VendorId')]
+    public ?int $vendorId;
+
+    /**
+     * @var ?string $enrollmentStatus
+     */
+    #[JsonProperty('EnrollmentStatus')]
+    public ?string $enrollmentStatus;
+
+    /**
+     * @var ?VendorSummary $summary
+     */
+    #[JsonProperty('Summary')]
+    public ?VendorSummary $summary;
+
+    /**
+     * @var ?string $paypointLegalname
+     */
+    #[JsonProperty('PaypointLegalname')]
+    public ?string $paypointLegalname;
+
+    /**
+     * @var ?int $paypointId The paypoint's ID. This is different from the entryname.
+     */
+    #[JsonProperty('PaypointId')]
+    public ?int $paypointId;
 
     /**
      * @var ?string $paypointDbaname
@@ -180,16 +167,28 @@ class VendorQueryRecord extends JsonSerializableType
     public ?string $paypointEntryname;
 
     /**
-     * @var ?string $paypointLegalname
+     * @var ?string $parentOrgName
      */
-    #[JsonProperty('PaypointLegalname')]
-    public ?string $paypointLegalname;
+    #[JsonProperty('ParentOrgName')]
+    public ?string $parentOrgName;
 
     /**
-     * @var ?string $phone
+     * @var ?int $parentOrgId
      */
-    #[JsonProperty('Phone')]
-    public ?string $phone;
+    #[JsonProperty('ParentOrgId')]
+    public ?int $parentOrgId;
+
+    /**
+     * @var ?DateTime $createdDate
+     */
+    #[JsonProperty('CreatedDate'), Date(Date::TYPE_DATETIME)]
+    public ?DateTime $createdDate;
+
+    /**
+     * @var ?DateTime $lastUpdated
+     */
+    #[JsonProperty('LastUpdated'), Date(Date::TYPE_DATETIME)]
+    public ?DateTime $lastUpdated;
 
     /**
      * @var ?string $remitAddress1
@@ -210,18 +209,6 @@ class VendorQueryRecord extends JsonSerializableType
     public ?string $remitCity;
 
     /**
-     * @var ?string $remitCountry
-     */
-    #[JsonProperty('remitCountry')]
-    public ?string $remitCountry;
-
-    /**
-     * @var ?string $remitEmail
-     */
-    #[JsonProperty('RemitEmail')]
-    public ?string $remitEmail;
-
-    /**
      * @var ?string $remitState
      */
     #[JsonProperty('remitState')]
@@ -234,46 +221,46 @@ class VendorQueryRecord extends JsonSerializableType
     public ?string $remitZip;
 
     /**
-     * @var ?string $state
+     * @var ?string $remitCountry
      */
-    #[JsonProperty('State')]
-    public ?string $state;
+    #[JsonProperty('remitCountry')]
+    public ?string $remitCountry;
 
     /**
-     * @var ?array<VendorResponseStoredMethod> $storedMethods
+     * @var ?string $payeeName1
      */
-    #[JsonProperty('StoredMethods'), ArrayType([VendorResponseStoredMethod::class])]
-    public ?array $storedMethods;
+    #[JsonProperty('payeeName1')]
+    public ?string $payeeName1;
 
     /**
-     * @var ?VendorSummary $summary
+     * @var ?string $payeeName2
      */
-    #[JsonProperty('Summary')]
-    public ?VendorSummary $summary;
+    #[JsonProperty('payeeName2')]
+    public ?string $payeeName2;
 
     /**
-     * @var ?int $vendorId
+     * @var ?string $customField1
      */
-    #[JsonProperty('VendorId')]
-    public ?int $vendorId;
+    #[JsonProperty('customField1')]
+    public ?string $customField1;
 
     /**
-     * @var ?string $vendorNumber
+     * @var ?string $customField2
      */
-    #[JsonProperty('VendorNumber')]
-    public ?string $vendorNumber;
+    #[JsonProperty('customField2')]
+    public ?string $customField2;
 
     /**
-     * @var ?int $vendorStatus
+     * @var ?string $customerVendorAccount
      */
-    #[JsonProperty('VendorStatus')]
-    public ?int $vendorStatus;
+    #[JsonProperty('customerVendorAccount')]
+    public ?string $customerVendorAccount;
 
     /**
-     * @var ?string $zip
+     * @var ?int $internalReferenceId
      */
-    #[JsonProperty('Zip')]
-    public ?string $zip;
+    #[JsonProperty('InternalReferenceId')]
+    public ?int $internalReferenceId;
 
     /**
      * @var ?string $paymentPortalUrl URL for the vendor's online payment portal, if known. Populated by the vendor enrichment pipeline.
@@ -292,6 +279,12 @@ class VendorQueryRecord extends JsonSerializableType
      */
     #[JsonProperty('AchAccepted')]
     public ?string $achAccepted;
+
+    /**
+     * @var ?string $checkAccepted Whether the vendor accepts check payments. Values are `yes`, `no`, or `unable to determine`. Populated by the vendor enrichment pipeline.
+     */
+    #[JsonProperty('CheckAccepted')]
+    public ?string $checkAccepted;
 
     /**
      * @var ?string $enrichmentStatus Current enrichment state of the vendor. Values are `not_enriched`, `partially_enriched`, `fully_enriched`, or `fallback_applied`.
@@ -318,114 +311,136 @@ class VendorQueryRecord extends JsonSerializableType
     public ?string $enrichmentId;
 
     /**
+     * @var ?array<string, array<string, mixed>> $additionalData
+     */
+    #[JsonProperty('additionalData'), ArrayType(['string' => ['string' => 'mixed']])]
+    public ?array $additionalData;
+
+    /**
+     * @var ?string $externalPaypointId
+     */
+    #[JsonProperty('externalPaypointID')]
+    public ?string $externalPaypointId;
+
+    /**
+     * @var ?array<VendorResponseStoredMethod> $storedMethods
+     */
+    #[JsonProperty('StoredMethods'), ArrayType([VendorResponseStoredMethod::class])]
+    public ?array $storedMethods;
+
+    /**
      * @param array{
-     *   additionalData?: ?array<string, ?array<string, mixed>>,
-     *   address1?: ?string,
-     *   address2?: ?string,
-     *   billingData?: ?BillingDataResponse,
-     *   city?: ?string,
-     *   contacts?: ?ContactsResponse,
-     *   country?: ?string,
-     *   createdDate?: ?DateTime,
-     *   customerVendorAccount?: ?string,
-     *   customField1?: ?string,
-     *   customField2?: ?string,
-     *   ein?: ?string,
-     *   email?: ?string,
-     *   enrollmentStatus?: ?string,
-     *   externalPaypointId?: ?string,
-     *   internalReferenceId?: ?int,
-     *   lastUpdated?: ?DateTime,
-     *   locationCode?: ?string,
-     *   mcc?: ?string,
+     *   vendorNumber?: ?string,
      *   name1?: ?string,
      *   name2?: ?string,
-     *   parentOrgName?: ?string,
-     *   parentOrgId?: ?int,
-     *   payeeName1?: ?string,
-     *   payeeName2?: ?string,
+     *   ein?: ?string,
+     *   phone?: ?string,
+     *   email?: ?string,
+     *   remitEmail?: ?string,
+     *   address1?: ?string,
+     *   address2?: ?string,
+     *   city?: ?string,
+     *   state?: ?string,
+     *   zip?: ?string,
+     *   country?: ?string,
+     *   mcc?: ?string,
+     *   locationCode?: ?string,
+     *   contacts?: ?array<ContactsResponse>,
+     *   billingData?: ?BillingDataResponse,
      *   paymentMethod?: ?string,
+     *   vendorStatus?: ?int,
+     *   vendorId?: ?int,
+     *   enrollmentStatus?: ?string,
+     *   summary?: ?VendorSummary,
+     *   paypointLegalname?: ?string,
+     *   paypointId?: ?int,
      *   paypointDbaname?: ?string,
      *   paypointEntryname?: ?string,
-     *   paypointLegalname?: ?string,
-     *   phone?: ?string,
+     *   parentOrgName?: ?string,
+     *   parentOrgId?: ?int,
+     *   createdDate?: ?DateTime,
+     *   lastUpdated?: ?DateTime,
      *   remitAddress1?: ?string,
      *   remitAddress2?: ?string,
      *   remitCity?: ?string,
-     *   remitCountry?: ?string,
-     *   remitEmail?: ?string,
      *   remitState?: ?string,
      *   remitZip?: ?string,
-     *   state?: ?string,
-     *   storedMethods?: ?array<VendorResponseStoredMethod>,
-     *   summary?: ?VendorSummary,
-     *   vendorId?: ?int,
-     *   vendorNumber?: ?string,
-     *   vendorStatus?: ?int,
-     *   zip?: ?string,
+     *   remitCountry?: ?string,
+     *   payeeName1?: ?string,
+     *   payeeName2?: ?string,
+     *   customField1?: ?string,
+     *   customField2?: ?string,
+     *   customerVendorAccount?: ?string,
+     *   internalReferenceId?: ?int,
      *   paymentPortalUrl?: ?string,
      *   cardAccepted?: ?string,
      *   achAccepted?: ?string,
+     *   checkAccepted?: ?string,
      *   enrichmentStatus?: ?string,
      *   enrichedBy?: ?string,
      *   enrichedAt?: ?DateTime,
      *   enrichmentId?: ?string,
+     *   additionalData?: ?array<string, array<string, mixed>>,
+     *   externalPaypointId?: ?string,
+     *   storedMethods?: ?array<VendorResponseStoredMethod>,
      * } $values
      */
     public function __construct(
         array $values = [],
     ) {
-        $this->additionalData = $values['additionalData'] ?? null;
-        $this->address1 = $values['address1'] ?? null;
-        $this->address2 = $values['address2'] ?? null;
-        $this->billingData = $values['billingData'] ?? null;
-        $this->city = $values['city'] ?? null;
-        $this->contacts = $values['contacts'] ?? null;
-        $this->country = $values['country'] ?? null;
-        $this->createdDate = $values['createdDate'] ?? null;
-        $this->customerVendorAccount = $values['customerVendorAccount'] ?? null;
-        $this->customField1 = $values['customField1'] ?? null;
-        $this->customField2 = $values['customField2'] ?? null;
-        $this->ein = $values['ein'] ?? null;
-        $this->email = $values['email'] ?? null;
-        $this->enrollmentStatus = $values['enrollmentStatus'] ?? null;
-        $this->externalPaypointId = $values['externalPaypointId'] ?? null;
-        $this->internalReferenceId = $values['internalReferenceId'] ?? null;
-        $this->lastUpdated = $values['lastUpdated'] ?? null;
-        $this->locationCode = $values['locationCode'] ?? null;
-        $this->mcc = $values['mcc'] ?? null;
+        $this->vendorNumber = $values['vendorNumber'] ?? null;
         $this->name1 = $values['name1'] ?? null;
         $this->name2 = $values['name2'] ?? null;
-        $this->parentOrgName = $values['parentOrgName'] ?? null;
-        $this->parentOrgId = $values['parentOrgId'] ?? null;
-        $this->payeeName1 = $values['payeeName1'] ?? null;
-        $this->payeeName2 = $values['payeeName2'] ?? null;
+        $this->ein = $values['ein'] ?? null;
+        $this->phone = $values['phone'] ?? null;
+        $this->email = $values['email'] ?? null;
+        $this->remitEmail = $values['remitEmail'] ?? null;
+        $this->address1 = $values['address1'] ?? null;
+        $this->address2 = $values['address2'] ?? null;
+        $this->city = $values['city'] ?? null;
+        $this->state = $values['state'] ?? null;
+        $this->zip = $values['zip'] ?? null;
+        $this->country = $values['country'] ?? null;
+        $this->mcc = $values['mcc'] ?? null;
+        $this->locationCode = $values['locationCode'] ?? null;
+        $this->contacts = $values['contacts'] ?? null;
+        $this->billingData = $values['billingData'] ?? null;
         $this->paymentMethod = $values['paymentMethod'] ?? null;
+        $this->vendorStatus = $values['vendorStatus'] ?? null;
+        $this->vendorId = $values['vendorId'] ?? null;
+        $this->enrollmentStatus = $values['enrollmentStatus'] ?? null;
+        $this->summary = $values['summary'] ?? null;
+        $this->paypointLegalname = $values['paypointLegalname'] ?? null;
+        $this->paypointId = $values['paypointId'] ?? null;
         $this->paypointDbaname = $values['paypointDbaname'] ?? null;
         $this->paypointEntryname = $values['paypointEntryname'] ?? null;
-        $this->paypointLegalname = $values['paypointLegalname'] ?? null;
-        $this->phone = $values['phone'] ?? null;
+        $this->parentOrgName = $values['parentOrgName'] ?? null;
+        $this->parentOrgId = $values['parentOrgId'] ?? null;
+        $this->createdDate = $values['createdDate'] ?? null;
+        $this->lastUpdated = $values['lastUpdated'] ?? null;
         $this->remitAddress1 = $values['remitAddress1'] ?? null;
         $this->remitAddress2 = $values['remitAddress2'] ?? null;
         $this->remitCity = $values['remitCity'] ?? null;
-        $this->remitCountry = $values['remitCountry'] ?? null;
-        $this->remitEmail = $values['remitEmail'] ?? null;
         $this->remitState = $values['remitState'] ?? null;
         $this->remitZip = $values['remitZip'] ?? null;
-        $this->state = $values['state'] ?? null;
-        $this->storedMethods = $values['storedMethods'] ?? null;
-        $this->summary = $values['summary'] ?? null;
-        $this->vendorId = $values['vendorId'] ?? null;
-        $this->vendorNumber = $values['vendorNumber'] ?? null;
-        $this->vendorStatus = $values['vendorStatus'] ?? null;
-        $this->zip = $values['zip'] ?? null;
+        $this->remitCountry = $values['remitCountry'] ?? null;
+        $this->payeeName1 = $values['payeeName1'] ?? null;
+        $this->payeeName2 = $values['payeeName2'] ?? null;
+        $this->customField1 = $values['customField1'] ?? null;
+        $this->customField2 = $values['customField2'] ?? null;
+        $this->customerVendorAccount = $values['customerVendorAccount'] ?? null;
+        $this->internalReferenceId = $values['internalReferenceId'] ?? null;
         $this->paymentPortalUrl = $values['paymentPortalUrl'] ?? null;
         $this->cardAccepted = $values['cardAccepted'] ?? null;
         $this->achAccepted = $values['achAccepted'] ?? null;
+        $this->checkAccepted = $values['checkAccepted'] ?? null;
         $this->enrichmentStatus = $values['enrichmentStatus'] ?? null;
         $this->enrichedBy = $values['enrichedBy'] ?? null;
         $this->enrichedAt = $values['enrichedAt'] ?? null;
         $this->enrichmentId = $values['enrichmentId'] ?? null;
+        $this->additionalData = $values['additionalData'] ?? null;
+        $this->externalPaypointId = $values['externalPaypointId'] ?? null;
+        $this->storedMethods = $values['storedMethods'] ?? null;
     }
 
     /**

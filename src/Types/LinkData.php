@@ -21,18 +21,19 @@ class LinkData extends JsonSerializableType
 
     /**
      * The type of validation applied to the field. Available values:
-     * - text
-     * - alpha
-     * - ein
-     * - url
-     * - phone
-     * - alphanumeric
-     * - zipcode
-     * - numbers
-     * - float
-     * - ssn
-     * - email
-     * - routing
+     *
+     * - `text`
+     * - `alpha`
+     * - `ein`
+     * - `url`
+     * - `phone`
+     * - `alphanumeric`
+     * - `zipcode`
+     * - `numbers`
+     * - `float`
+     * - `ssn`
+     * - `email`
+     * - `routing`
      *
      * @var ?string $validator
      */

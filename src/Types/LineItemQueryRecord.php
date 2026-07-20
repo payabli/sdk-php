@@ -7,7 +7,6 @@ use DateTime;
 use Payabli\Core\Json\JsonProperty;
 use Payabli\Core\Types\Date;
 use Payabli\Core\Types\ArrayType;
-use Payabli\Core\Types\Union;
 
 class LineItemQueryRecord extends JsonSerializableType
 {
@@ -24,9 +23,9 @@ class LineItemQueryRecord extends JsonSerializableType
     public ?int $id;
 
     /**
-     * @var ?array<?string> $itemCategories Array of tags classifying item or product.
+     * @var ?array<string> $itemCategories Array of tags classifying item or product.
      */
-    #[JsonProperty('itemCategories'), ArrayType([new Union('string', 'null')])]
+    #[JsonProperty('itemCategories'), ArrayType(['string'])]
     public ?array $itemCategories;
 
     /**
@@ -119,7 +118,7 @@ class LineItemQueryRecord extends JsonSerializableType
      *   itemQty: int,
      *   createdAt?: ?DateTime,
      *   id?: ?int,
-     *   itemCategories?: ?array<?string>,
+     *   itemCategories?: ?array<string>,
      *   itemCommodityCode?: ?string,
      *   itemDescription?: ?string,
      *   itemMode?: ?int,

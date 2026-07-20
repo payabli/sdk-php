@@ -5,7 +5,7 @@ namespace Payabli\ChargeBacks;
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\ChargeBacks\Requests\ResponseChargeBack;
-use Payabli\ChargeBacks\Types\AddResponseResponse;
+use Payabli\Types\AddResponseResponse;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -13,7 +13,8 @@ use Payabli\Environments;
 use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
-use Payabli\ChargeBacks\Types\ChargebackQueryRecords;
+use Payabli\Types\ChargebackQueryRecords;
+use Payabli\Core\Json\JsonDecoder;
 
 class ChargeBacksClient
 {
@@ -109,7 +110,7 @@ class ChargeBacksClient
     /**
      * Retrieves a chargeback record and its details.
      *
-     * @param int $id ID of the chargeback or return record. This is returned as `chargebackId` in the [RecievedChargeback](/developers/developer-guides/webhook-payloads#receivedChargeback) and [ReceivedAchReturn](/developers/developer-guides/webhook-payloads#receivedachreturn) webhook notifications.
+     * @param int $id ID of the chargeback or return record. This is returned as `chargebackID` in the [ReceivedChargeBack](/guides/pay-ops-webhooks-payloads#receivedchargeback) and [ReceivedAchReturn](/guides/pay-ops-webhooks-payloads#receivedachreturn) webhook notifications.
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -167,11 +168,11 @@ class ChargeBacksClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return string
+     * @return ?string
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getChargebackAttachment(int $id, string $fileName, ?array $options = null): string
+    public function getChargebackAttachment(int $id, string $fileName, ?array $options = null): ?string
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -185,8 +186,14 @@ class ChargeBacksClient
             );
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
-                return $response->getBody()->getContents();
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return JsonDecoder::decodeString($json);
             }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
         } catch (ClientExceptionInterface $e) {
             throw new PayabliException(message: $e->getMessage(), previous: $e);
         }

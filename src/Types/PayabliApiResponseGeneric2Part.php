@@ -5,6 +5,10 @@ namespace Payabli\Types;
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
 
+/**
+ * Minimal response wrapper used by approval-style endpoints that don't carry
+ * the standard response envelope.
+ */
 class PayabliApiResponseGeneric2Part extends JsonSerializableType
 {
     /**

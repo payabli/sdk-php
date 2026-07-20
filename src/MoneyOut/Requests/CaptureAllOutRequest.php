@@ -7,12 +7,12 @@ use Payabli\Core\Json\JsonSerializableType;
 class CaptureAllOutRequest extends JsonSerializableType
 {
     /**
-     * @var ?string $idempotencyKey
+     * @var ?string $idempotencyKey _Optional but recommended_ A unique ID that you can include to prevent duplicating objects or transactions in the case that a request is sent more than once. This key isn't generated in Payabli, you must generate it yourself. This key persists for 2 minutes. After 2 minutes, you can reuse the key if needed.
      */
     public ?string $idempotencyKey;
 
     /**
-     * @var array<string> $body Array of identifiers of payout transactions to capture.
+     * @var array<string> $body
      */
     public array $body;
 

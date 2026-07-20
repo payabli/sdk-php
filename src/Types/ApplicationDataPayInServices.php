@@ -8,16 +8,16 @@ use Payabli\Core\Json\JsonProperty;
 class ApplicationDataPayInServices extends JsonSerializableType
 {
     /**
-     * @var ApplicationDataPayInServicesAch $ach
+     * @var AchSetup $ach
      */
     #[JsonProperty('ach')]
-    public ApplicationDataPayInServicesAch $ach;
+    public AchSetup $ach;
 
     /**
-     * @var ApplicationDataPayInServicesCard $card
+     * @var CardSetup $card
      */
     #[JsonProperty('card')]
-    public ApplicationDataPayInServicesCard $card;
+    public CardSetup $card;
 
     /**
      * @var ?OdpSetup $odp
@@ -27,8 +27,8 @@ class ApplicationDataPayInServices extends JsonSerializableType
 
     /**
      * @param array{
-     *   ach: ApplicationDataPayInServicesAch,
-     *   card: ApplicationDataPayInServicesCard,
+     *   ach: AchSetup,
+     *   card: CardSetup,
      *   odp?: ?OdpSetup,
      * } $values
      */

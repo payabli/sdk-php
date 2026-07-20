@@ -3,7 +3,7 @@
 namespace Payabli\Invoice\Requests;
 
 use Payabli\Core\Json\JsonSerializableType;
-use Payabli\Invoice\Types\InvoiceDataRequest;
+use Payabli\Types\InvoiceDataRequest;
 
 class EditInvoiceRequest extends JsonSerializableType
 {

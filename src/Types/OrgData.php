@@ -33,9 +33,7 @@ class OrgData extends JsonSerializableType
 
     /**
      * The paypoint's status.
-     *
      * Active - `1`
-     *
      * Inactive - 0
      *
      * @var ?int $orgStatus

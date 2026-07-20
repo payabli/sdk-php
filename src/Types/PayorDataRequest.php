@@ -5,7 +5,6 @@ namespace Payabli\Types;
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
 use Payabli\Core\Types\ArrayType;
-use Payabli\Core\Types\Union;
 
 /**
  * Customer information. May be required, depending on the paypoint's settings. Required for subscriptions.
@@ -13,9 +12,9 @@ use Payabli\Core\Types\Union;
 class PayorDataRequest extends JsonSerializableType
 {
     /**
-     * @var ?array<string, ?array<string, mixed>> $additionalData
+     * @var ?array<string, array<string, mixed>> $additionalData
      */
-    #[JsonProperty('additionalData'), ArrayType(['string' => new Union(['string' => 'mixed'], 'null')])]
+    #[JsonProperty('additionalData'), ArrayType(['string' => ['string' => 'mixed']])]
     public ?array $additionalData;
 
     /**
@@ -91,9 +90,9 @@ class PayorDataRequest extends JsonSerializableType
     public ?string $firstName;
 
     /**
-     * @var ?array<?string> $identifierFields
+     * @var ?array<string> $identifierFields
      */
-    #[JsonProperty('identifierFields'), ArrayType([new Union('string', 'null')])]
+    #[JsonProperty('identifierFields'), ArrayType(['string'])]
     public ?array $identifierFields;
 
     /**
@@ -140,7 +139,7 @@ class PayorDataRequest extends JsonSerializableType
 
     /**
      * @param array{
-     *   additionalData?: ?array<string, ?array<string, mixed>>,
+     *   additionalData?: ?array<string, array<string, mixed>>,
      *   billingAddress1?: ?string,
      *   billingAddress2?: ?string,
      *   billingCity?: ?string,
@@ -153,7 +152,7 @@ class PayorDataRequest extends JsonSerializableType
      *   customerId?: ?int,
      *   customerNumber?: ?string,
      *   firstName?: ?string,
-     *   identifierFields?: ?array<?string>,
+     *   identifierFields?: ?array<string>,
      *   lastName?: ?string,
      *   shippingAddress1?: ?string,
      *   shippingAddress2?: ?string,

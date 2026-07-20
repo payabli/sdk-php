@@ -50,7 +50,7 @@ class PayMethodAch extends JsonSerializableType
     public ?string $device;
 
     /**
-     * @var 'ach' $method
+     * @var value-of<PayMethodAchMethod> $method
      */
     #[JsonProperty('method')]
     public string $method;
@@ -60,7 +60,7 @@ class PayMethodAch extends JsonSerializableType
      *   achAccount: string,
      *   achHolder: string,
      *   achRouting: string,
-     *   method: 'ach',
+     *   method: value-of<PayMethodAchMethod>,
      *   achAccountType?: ?value-of<Achaccounttype>,
      *   achCode?: ?string,
      *   achHolderType?: ?value-of<AchHolderType>,

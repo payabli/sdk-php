@@ -27,7 +27,7 @@ class PayabliApiResponse6 extends JsonSerializableType
      * @var (
      *    string
      *   |int
-     * )|null $responseData If `isSuccess` = true, this contains the line item identifier. If `isSuccess` = false, this contains the reason of the error.
+     * )|null $responseData If `isSuccess` = true, this contains the line item identifier. If `isSuccess` = false, this contains the reason for the error.
      */
     #[JsonProperty('responseData'), Union('string', 'integer', 'null')]
     public string|int|null $responseData;
