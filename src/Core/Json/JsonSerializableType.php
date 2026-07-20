@@ -39,13 +39,12 @@ abstract class JsonSerializableType implements \JsonSerializable
     }
 
     /**
-     * Serializes the object to an array.
+     * Serializes the object to a JSON-ready value.
      *
-     * @return mixed[] Array representation of the object.
+     * @return array<string,mixed>|\stdClass
      * @throws JsonException If serialization fails.
      */
-    public function jsonSerialize(): array
-    {
+    public function jsonSerialize(): array|\stdClass
         $result = [];
         $reflectionClass = new \ReflectionClass($this);
         foreach ($reflectionClass->getProperties() as $property) {
@@ -87,6 +86,10 @@ abstract class JsonSerializableType implements \JsonSerializable
             if ($value !== null || array_key_exists($property->getName(), $this->__explicitlySetProperties)) {
                 $result[$jsonKey] = $value;
             }
+        }
+        // Empty object models must serialize to {} (not [])
+        if ($result === []) {
+            return new \stdClass();
         }
         return $result;
     }
