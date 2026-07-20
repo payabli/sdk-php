@@ -65,21 +65,24 @@ abstract class JsonSerializableType implements \JsonSerializable
             }
 
             // Handle Union annotations
+            $alreadySerialized = false;
             $unionTypeAttr = $property->getAttributes(Union::class)[0] ?? null;
             if ($unionTypeAttr) {
                 $unionType = $unionTypeAttr->newInstance();
                 $value = JsonSerializer::serializeUnion($value, $unionType);
+                $alreadySerialized = true;
             }
 
             // Handle arrays with type annotations
             $arrayTypeAttr = $property->getAttributes(ArrayType::class)[0] ?? null;
-            if ($arrayTypeAttr && is_array($value)) {
+            if (!$alreadySerialized && $arrayTypeAttr && is_array($value)) {
                 $arrayType = $arrayTypeAttr->newInstance()->type;
                 $value = JsonSerializer::serializeArray($value, $arrayType);
+                $alreadySerialized = true;
             }
 
             // Handle object
-            if (is_object($value)) {
+            if (!$alreadySerialized && is_object($value)) {
                 $value = JsonSerializer::serializeObject($value);
             }
 
