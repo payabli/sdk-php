@@ -311,9 +311,9 @@ class VendorQueryRecord extends JsonSerializableType
     public ?string $enrichmentId;
 
     /**
-     * @var ?array<string, array<string, mixed>> $additionalData
+     * @var ?array<string, string> $additionalData
      */
-    #[JsonProperty('additionalData'), ArrayType(['string' => ['string' => 'mixed']])]
+    #[JsonProperty('additionalData'), ArrayType(['string' => 'string'])]
     public ?array $additionalData;
 
     /**
@@ -380,7 +380,7 @@ class VendorQueryRecord extends JsonSerializableType
      *   enrichedBy?: ?string,
      *   enrichedAt?: ?DateTime,
      *   enrichmentId?: ?string,
-     *   additionalData?: ?array<string, array<string, mixed>>,
+     *   additionalData?: ?array<string, string>,
      *   externalPaypointId?: ?string,
      *   storedMethods?: ?array<VendorResponseStoredMethod>,
      * } $values
