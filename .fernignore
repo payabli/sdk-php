@@ -2,3 +2,5 @@
 LICENSE.md
 CONTRIBUTING.md
 src/Core/Json/JsonSerializableType.php
+src/Types/PushPayLinkRequest.php
+tests/Core/Json/NullPropertyTest.php
