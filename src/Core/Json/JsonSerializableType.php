@@ -45,6 +45,7 @@ abstract class JsonSerializableType implements \JsonSerializable
      * @throws JsonException If serialization fails.
      */
     public function jsonSerialize(): array|\stdClass
+    {
         $result = [];
         $reflectionClass = new \ReflectionClass($this);
         foreach ($reflectionClass->getProperties() as $property) {
