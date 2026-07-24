@@ -4,6 +4,7 @@ namespace Payabli\Query;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
 use Payabli\Query\Requests\ListBatchDetailsRequest;
 use Payabli\Types\QueryBatchesDetailResponse;
 use Payabli\Exceptions\PayabliException;
@@ -96,6 +97,11 @@ class QueryClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
      * @param RawClient $client
      * @param ?array{
      *   baseUrl?: string,
@@ -104,18 +110,33 @@ class QueryClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      * } $options
+     * @param ?RoutingAuthProvider $routingAuthProvider
      */
     public function __construct(
         RawClient $client,
         ?array $options = null,
+        ?RoutingAuthProvider $routingAuthProvider = null,
     ) {
         $this->client = $client;
+        $this->routingAuthProvider = $routingAuthProvider;
         $this->options = $options ?? [];
     }
 
     /**
      * Retrieve a list of batches and their details, including settled and
      * unsettled transactions for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
+     *
+     * Example:
+     * ```php
+     * $client->query->listBatchDetails(
+     *     '8cfec329267',
+     *     new ListBatchDetailsRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
      *
      * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListBatchDetailsRequest $request
@@ -134,6 +155,10 @@ class QueryClient
     public function listBatchDetails(string $entry, ListBatchDetailsRequest $request = new ListBatchDetailsRequest(), ?array $options = null): ?QueryBatchesDetailResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -183,6 +208,18 @@ class QueryClient
     /**
      * Retrieve a list of batches and their details, including settled and unsettled transactions for an organization. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listBatchDetailsOrg(
+     *     123,
+     *     new ListBatchDetailsOrgRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListBatchDetailsOrgRequest $request
      * @param ?array{
@@ -200,6 +237,10 @@ class QueryClient
     public function listBatchDetailsOrg(int $orgId, ListBatchDetailsOrgRequest $request = new ListBatchDetailsOrgRequest(), ?array $options = null): ?QueryBatchesDetailResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -249,6 +290,18 @@ class QueryClient
     /**
      * Retrieve a list of batches for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listBatches(
+     *     '8cfec329267',
+     *     new ListBatchesRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListBatchesRequest $request
      * @param ?array{
@@ -266,6 +319,10 @@ class QueryClient
     public function listBatches(string $entry, ListBatchesRequest $request = new ListBatchesRequest(), ?array $options = null): ?QueryBatchesResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -315,6 +372,18 @@ class QueryClient
     /**
      * Retrieve a list of batches for an org. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listBatchesOrg(
+     *     123,
+     *     new ListBatchesOrgRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListBatchesOrgRequest $request
      * @param ?array{
@@ -332,6 +401,10 @@ class QueryClient
     public function listBatchesOrg(int $orgId, ListBatchesOrgRequest $request = new ListBatchesOrgRequest(), ?array $options = null): ?QueryBatchesResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -381,6 +454,18 @@ class QueryClient
     /**
      * Retrieve a list of MoneyOut batches for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listBatchesOut(
+     *     '8cfec329267',
+     *     new ListBatchesOutRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListBatchesOutRequest $request
      * @param ?array{
@@ -398,6 +483,10 @@ class QueryClient
     public function listBatchesOut(string $entry, ListBatchesOutRequest $request = new ListBatchesOutRequest(), ?array $options = null): ?QueryBatchesOutResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -447,6 +536,18 @@ class QueryClient
     /**
      * Retrieve a list of MoneyOut batches for an org. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listBatchesOutOrg(
+     *     123,
+     *     new ListBatchesOutOrgRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListBatchesOutOrgRequest $request
      * @param ?array{
@@ -464,6 +565,10 @@ class QueryClient
     public function listBatchesOutOrg(int $orgId, ListBatchesOutOrgRequest $request = new ListBatchesOutOrgRequest(), ?array $options = null): ?QueryBatchesOutResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -513,6 +618,18 @@ class QueryClient
     /**
      * Retrieves a list of chargebacks and returned transactions for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listChargebacks(
+     *     '8cfec329267',
+     *     new ListChargebacksRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListChargebacksRequest $request
      * @param ?array{
@@ -530,6 +647,10 @@ class QueryClient
     public function listChargebacks(string $entry, ListChargebacksRequest $request = new ListChargebacksRequest(), ?array $options = null): ?QueryChargebacksResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -579,6 +700,18 @@ class QueryClient
     /**
      * Retrieve a list of chargebacks and returned transactions for an org. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listChargebacksOrg(
+     *     123,
+     *     new ListChargebacksOrgRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListChargebacksOrgRequest $request
      * @param ?array{
@@ -596,6 +729,10 @@ class QueryClient
     public function listChargebacksOrg(int $orgId, ListChargebacksOrgRequest $request = new ListChargebacksOrgRequest(), ?array $options = null): ?QueryChargebacksResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -645,6 +782,18 @@ class QueryClient
     /**
      * Retrieves a list of customers for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listCustomers(
+     *     '8cfec329267',
+     *     new ListCustomersRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListCustomersRequest $request
      * @param ?array{
@@ -662,6 +811,10 @@ class QueryClient
     public function listCustomers(string $entry, ListCustomersRequest $request = new ListCustomersRequest(), ?array $options = null): ?QueryCustomerResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -711,6 +864,18 @@ class QueryClient
     /**
      * Retrieves a list of customers for an org. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listCustomersOrg(
+     *     123,
+     *     new ListCustomersOrgRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListCustomersOrgRequest $request
      * @param ?array{
@@ -728,6 +893,10 @@ class QueryClient
     public function listCustomersOrg(int $orgId, ListCustomersOrgRequest $request = new ListCustomersOrgRequest(), ?array $options = null): ?QueryCustomerResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -777,6 +946,18 @@ class QueryClient
     /**
      * Returns a list of cloud devices for a single paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listDevices(
+     *     '8cfec329267',
+     *     new ListDevicesRequest([
+     *         'fromRecord' => 0,
+     *         'limitRecord' => 20,
+     *         'sortBy' => 'desc(createdAt)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListDevicesRequest $request
      * @param ?array{
@@ -794,6 +975,10 @@ class QueryClient
     public function listDevices(string $entry, ListDevicesRequest $request = new ListDevicesRequest(), ?array $options = null): ?QueryDeviceResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -843,6 +1028,18 @@ class QueryClient
     /**
      * Returns a list of cloud devices for a single organization. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listDevicesOrg(
+     *     123,
+     *     new ListDevicesOrgRequest([
+     *         'fromRecord' => 0,
+     *         'limitRecord' => 20,
+     *         'sortBy' => 'desc(createdAt)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListDevicesOrgRequest $request
      * @param ?array{
@@ -860,6 +1057,10 @@ class QueryClient
     public function listDevicesOrg(int $orgId, ListDevicesOrgRequest $request = new ListDevicesOrgRequest(), ?array $options = null): ?QueryDeviceResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -909,6 +1110,18 @@ class QueryClient
     /**
      * Returns a list of all reports generated in the last 60 days for a single entrypoint. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->query->listNotificationReports(
+     *     '8cfec329267',
+     *     new ListNotificationReportsRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListNotificationReportsRequest $request
      * @param ?array{
@@ -926,6 +1139,10 @@ class QueryClient
     public function listNotificationReports(string $entry, ListNotificationReportsRequest $request = new ListNotificationReportsRequest(), ?array $options = null): ?QueryResponseNotificationReports
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
@@ -972,6 +1189,18 @@ class QueryClient
     /**
      * Returns a list of all reports generated in the last 60 days for an organization. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->query->listNotificationReportsOrg(
+     *     123,
+     *     new ListNotificationReportsOrgRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListNotificationReportsOrgRequest $request
      * @param ?array{
@@ -989,6 +1218,10 @@ class QueryClient
     public function listNotificationReportsOrg(int $orgId, ListNotificationReportsOrgRequest $request = new ListNotificationReportsOrgRequest(), ?array $options = null): ?QueryResponseNotificationReports
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
@@ -1035,6 +1268,18 @@ class QueryClient
     /**
      * Returns a list of notifications for an entrypoint. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->query->listNotifications(
+     *     '8cfec329267',
+     *     new ListNotificationsRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListNotificationsRequest $request
      * @param ?array{
@@ -1052,6 +1297,10 @@ class QueryClient
     public function listNotifications(string $entry, ListNotificationsRequest $request = new ListNotificationsRequest(), ?array $options = null): ?QueryResponseNotifications
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
@@ -1098,6 +1347,18 @@ class QueryClient
     /**
      * Return a list of notifications for an organization. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->query->listNotificationsOrg(
+     *     123,
+     *     new ListNotificationsOrgRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListNotificationsOrgRequest $request
      * @param ?array{
@@ -1115,6 +1376,10 @@ class QueryClient
     public function listNotificationsOrg(int $orgId, ListNotificationsOrgRequest $request = new ListNotificationsOrgRequest(), ?array $options = null): ?QueryResponseNotifications
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
@@ -1161,6 +1426,18 @@ class QueryClient
     /**
      * Retrieves a list of an organization's suborganizations and their full details such as orgId, users, and settings. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listOrganizations(
+     *     123,
+     *     new ListOrganizationsRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListOrganizationsRequest $request
      * @param ?array{
@@ -1178,6 +1455,10 @@ class QueryClient
     public function listOrganizations(int $orgId, ListOrganizationsRequest $request = new ListOrganizationsRequest(), ?array $options = null): ?ListOrganizationsResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -1227,6 +1508,18 @@ class QueryClient
     /**
      * Retrieves a list of money out transactions (payouts) for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listPayout(
+     *     '8cfec329267',
+     *     new ListPayoutRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListPayoutRequest $request
      * @param ?array{
@@ -1244,6 +1537,10 @@ class QueryClient
     public function listPayout(string $entry, ListPayoutRequest $request = new ListPayoutRequest(), ?array $options = null): ?QueryPayoutTransaction
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -1293,6 +1590,18 @@ class QueryClient
     /**
      * Retrieves a list of money out transactions (payouts) for an organization. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listPayoutOrg(
+     *     123,
+     *     new ListPayoutOrgRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListPayoutOrgRequest $request
      * @param ?array{
@@ -1310,6 +1619,10 @@ class QueryClient
     public function listPayoutOrg(int $orgId, ListPayoutOrgRequest $request = new ListPayoutOrgRequest(), ?array $options = null): ?QueryPayoutTransaction
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -1359,6 +1672,18 @@ class QueryClient
     /**
      * Returns a list of paypoints in an organization. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listPaypoints(
+     *     123,
+     *     new ListPaypointsRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListPaypointsRequest $request
      * @param ?array{
@@ -1376,6 +1701,10 @@ class QueryClient
     public function listPaypoints(int $orgId, ListPaypointsRequest $request = new ListPaypointsRequest(), ?array $options = null): ?QueryEntrypointResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -1425,6 +1754,18 @@ class QueryClient
     /**
      * Retrieve a list of settled transactions for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listSettlements(
+     *     '8cfec329267',
+     *     new ListSettlementsRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListSettlementsRequest $request
      * @param ?array{
@@ -1442,6 +1783,10 @@ class QueryClient
     public function listSettlements(string $entry, ListSettlementsRequest $request = new ListSettlementsRequest(), ?array $options = null): ?QueryResponseSettlements
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -1491,6 +1836,18 @@ class QueryClient
     /**
      * Retrieve a list of settled transactions for an organization. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listSettlementsOrg(
+     *     123,
+     *     new ListSettlementsOrgRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListSettlementsOrgRequest $request
      * @param ?array{
@@ -1508,6 +1865,10 @@ class QueryClient
     public function listSettlementsOrg(int $orgId, ListSettlementsOrgRequest $request = new ListSettlementsOrgRequest(), ?array $options = null): ?QueryResponseSettlements
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -1557,6 +1918,18 @@ class QueryClient
     /**
      * Returns a list of subscriptions for a single paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listSubscriptions(
+     *     '8cfec329267',
+     *     new ListSubscriptionsRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListSubscriptionsRequest $request
      * @param ?array{
@@ -1574,6 +1947,10 @@ class QueryClient
     public function listSubscriptions(string $entry, ListSubscriptionsRequest $request = new ListSubscriptionsRequest(), ?array $options = null): ?QuerySubscriptionResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -1623,6 +2000,18 @@ class QueryClient
     /**
      * Returns a list of subscriptions for a single org. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listSubscriptionsOrg(
+     *     123,
+     *     new ListSubscriptionsOrgRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListSubscriptionsOrgRequest $request
      * @param ?array{
@@ -1640,6 +2029,10 @@ class QueryClient
     public function listSubscriptionsOrg(int $orgId, ListSubscriptionsOrgRequest $request = new ListSubscriptionsOrgRequest(), ?array $options = null): ?QuerySubscriptionResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -1689,6 +2082,18 @@ class QueryClient
     /**
      * Returns a list of payout subscriptions for a single paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response. See [Manage payout subscriptions](/guides/pay-out-developer-payout-subscriptions-manage) for more information.
      *
+     * Example:
+     * ```php
+     * $client->query->listPayoutSubscriptions(
+     *     '8cfec329267',
+     *     new ListPayoutSubscriptionsRequest([
+     *         'fromRecord' => 0,
+     *         'limitRecord' => 20,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListPayoutSubscriptionsRequest $request
      * @param ?array{
@@ -1706,6 +2111,10 @@ class QueryClient
     public function listPayoutSubscriptions(string $entry, ListPayoutSubscriptionsRequest $request = new ListPayoutSubscriptionsRequest(), ?array $options = null): ?QueryPayoutSubscriptionResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -1755,6 +2164,18 @@ class QueryClient
     /**
      * Returns a list of payout subscriptions for a single org. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response. See [Manage payout subscriptions](/guides/pay-out-developer-payout-subscriptions-manage) for more information.
      *
+     * Example:
+     * ```php
+     * $client->query->listPayoutSubscriptionsOrg(
+     *     123,
+     *     new ListPayoutSubscriptionsOrgRequest([
+     *         'fromRecord' => 0,
+     *         'limitRecord' => 20,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListPayoutSubscriptionsOrgRequest $request
      * @param ?array{
@@ -1772,6 +2193,10 @@ class QueryClient
     public function listPayoutSubscriptionsOrg(int $orgId, ListPayoutSubscriptionsOrgRequest $request = new ListPayoutSubscriptionsOrgRequest(), ?array $options = null): ?QueryPayoutSubscriptionResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -1830,6 +2255,18 @@ class QueryClient
      *   -H 'requestToken: <API TOKEN>'
      * ```
      *
+     * Example:
+     * ```php
+     * $client->query->listTransactions(
+     *     '8cfec329267',
+     *     new ListTransactionsRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListTransactionsRequest $request
      * @param ?array{
@@ -1847,6 +2284,10 @@ class QueryClient
     public function listTransactions(string $entry, ListTransactionsRequest $request = new ListTransactionsRequest(), ?array $options = null): ?QueryResponseTransactions
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -1905,6 +2346,18 @@ class QueryClient
      *   -H 'requestToken: <API TOKEN>'
      * ```
      *
+     * Example:
+     * ```php
+     * $client->query->listTransactionsOrg(
+     *     123,
+     *     new ListTransactionsOrgRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListTransactionsOrgRequest $request
      * @param ?array{
@@ -1922,6 +2375,10 @@ class QueryClient
     public function listTransactionsOrg(int $orgId, ListTransactionsOrgRequest $request = new ListTransactionsOrgRequest(), ?array $options = null): ?QueryResponseTransactions
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -1971,6 +2428,15 @@ class QueryClient
     /**
      * Retrieve a list of transfer details records for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listTransferDetails(
+     *     '8cfec329267',
+     *     4521,
+     *     new ListTransfersPaypointRequest([]),
+     * );
+     * ```
+     *
      * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param int $transferId The numeric identifier for the transfer, assigned by Payabli.
      * @param ListTransfersPaypointRequest $request
@@ -1989,6 +2455,10 @@ class QueryClient
     public function listTransferDetails(string $entry, int $transferId, ListTransfersPaypointRequest $request = new ListTransfersPaypointRequest(), ?array $options = null): ?QueryTransferDetailResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -2038,6 +2508,17 @@ class QueryClient
     /**
      * Retrieve a list of transfers for a paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listTransfers(
+     *     '8cfec329267',
+     *     new ListTransfersRequest([
+     *         'fromRecord' => 0,
+     *         'limitRecord' => 20,
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListTransfersRequest $request
      * @param ?array{
@@ -2055,6 +2536,10 @@ class QueryClient
     public function listTransfers(string $entry, ListTransfersRequest $request = new ListTransfersRequest(), ?array $options = null): ?TransferQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -2104,6 +2589,17 @@ class QueryClient
     /**
      * Retrieve a list of transfers for an org. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listTransfersOrg(
+     *     123,
+     *     new ListTransfersRequestOrg([
+     *         'fromRecord' => 0,
+     *         'limitRecord' => 20,
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId Organization ID. Unique identifier assigned to an org by Payabli.
      * @param ListTransfersRequestOrg $request
      * @param ?array{
@@ -2121,6 +2617,10 @@ class QueryClient
     public function listTransfersOrg(int $orgId, ListTransfersRequestOrg $request = new ListTransfersRequestOrg(), ?array $options = null): ?TransferQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -2170,6 +2670,17 @@ class QueryClient
     /**
      * Retrieve a list of outbound transfers for an organization. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->query->listTransfersOutOrg(
+     *     123,
+     *     new ListTransfersOutOrgRequest([
+     *         'fromRecord' => 0,
+     *         'limitRecord' => 20,
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListTransfersOutOrgRequest $request
      * @param ?array{
@@ -2187,6 +2698,10 @@ class QueryClient
     public function listTransfersOutOrg(int $orgId, ListTransfersOutOrgRequest $request = new ListTransfersOutOrgRequest(), ?array $options = null): ?TransferOutQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
@@ -2233,6 +2748,17 @@ class QueryClient
     /**
      * Retrieve a list of outbound transfers for a paypoint. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->query->listTransfersOutPaypoint(
+     *     '8cfec329267',
+     *     new ListTransfersOutPaypointRequest([
+     *         'fromRecord' => 0,
+     *         'limitRecord' => 20,
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListTransfersOutPaypointRequest $request
      * @param ?array{
@@ -2250,6 +2776,10 @@ class QueryClient
     public function listTransfersOutPaypoint(string $entry, ListTransfersOutPaypointRequest $request = new ListTransfersOutPaypointRequest(), ?array $options = null): ?TransferOutQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
@@ -2296,6 +2826,18 @@ class QueryClient
     /**
      * Retrieve details for a specific outbound transfer. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->query->listTransferDetailsOut(
+     *     '8cfec329267',
+     *     4521,
+     *     new ListTransferDetailsOutRequest([
+     *         'fromRecord' => 0,
+     *         'limitRecord' => 20,
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param int $transferId The numeric identifier for the transfer, assigned by Payabli.
      * @param ListTransferDetailsOutRequest $request
@@ -2314,6 +2856,10 @@ class QueryClient
     public function listTransferDetailsOut(string $entry, int $transferId, ListTransferDetailsOutRequest $request = new ListTransferDetailsOutRequest(), ?array $options = null): ?TransferOutDetailQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
@@ -2360,6 +2906,18 @@ class QueryClient
     /**
      * Get list of users for an org. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->query->listUsersOrg(
+     *     123,
+     *     new ListUsersOrgRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListUsersOrgRequest $request
      * @param ?array{
@@ -2377,6 +2935,10 @@ class QueryClient
     public function listUsersOrg(int $orgId, ListUsersOrgRequest $request = new ListUsersOrgRequest(), ?array $options = null): ?QueryUserResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
@@ -2423,6 +2985,18 @@ class QueryClient
     /**
      * Get list of users for a paypoint. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->query->listUsersPaypoint(
+     *     '8cfec329267',
+     *     new ListUsersPaypointRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListUsersPaypointRequest $request
      * @param ?array{
@@ -2440,6 +3014,10 @@ class QueryClient
     public function listUsersPaypoint(string $entry, ListUsersPaypointRequest $request = new ListUsersPaypointRequest(), ?array $options = null): ?QueryUserResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
@@ -2486,6 +3064,18 @@ class QueryClient
     /**
      * Retrieve a list of vendors for an entrypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listVendors(
+     *     '8cfec329267',
+     *     new ListVendorsRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListVendorsRequest $request
      * @param ?array{
@@ -2503,6 +3093,10 @@ class QueryClient
     public function listVendors(string $entry, ListVendorsRequest $request = new ListVendorsRequest(), ?array $options = null): ?QueryResponseVendors
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -2552,6 +3146,18 @@ class QueryClient
     /**
      * Retrieve a list of vendors for an organization. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listVendorsOrg(
+     *     123,
+     *     new ListVendorsOrgRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListVendorsOrgRequest $request
      * @param ?array{
@@ -2569,6 +3175,10 @@ class QueryClient
     public function listVendorsOrg(int $orgId, ListVendorsOrgRequest $request = new ListVendorsOrgRequest(), ?array $options = null): ?QueryResponseVendors
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -2618,6 +3228,18 @@ class QueryClient
     /**
      * Retrieve a list of vcards (virtual credit cards) issued for an entrypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listVcards(
+     *     '8cfec329267',
+     *     new ListVcardsRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListVcardsRequest $request
      * @param ?array{
@@ -2635,6 +3257,10 @@ class QueryClient
     public function listVcards(string $entry, ListVcardsRequest $request = new ListVcardsRequest(), ?array $options = null): ?VCardQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -2684,6 +3310,18 @@ class QueryClient
     /**
      * Retrieve a list of virtual card transactions for an entrypoint. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->query->listVcardsTransactions(
+     *     '8cfec329267',
+     *     new ListVcardsTransactionsRequest([
+     *         'fromRecord' => 0,
+     *         'limitRecord' => 20,
+     *         'sortBy' => 'desc(CreatedOn)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The entity's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListVcardsTransactionsRequest $request
      * @param ?array{
@@ -2701,6 +3339,10 @@ class QueryClient
     public function listVcardsTransactions(string $entry, ListVcardsTransactionsRequest $request = new ListVcardsTransactionsRequest(), ?array $options = null): ?VCardTransactionQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
@@ -2747,6 +3389,18 @@ class QueryClient
     /**
      * Retrieve a list of virtual card transactions for an organization. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->query->listVcardsTransactionsOrg(
+     *     123,
+     *     new ListVcardsTransactionsOrgRequest([
+     *         'fromRecord' => 0,
+     *         'limitRecord' => 20,
+     *         'sortBy' => 'desc(CreatedOn)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListVcardsTransactionsOrgRequest $request
      * @param ?array{
@@ -2764,6 +3418,10 @@ class QueryClient
     public function listVcardsTransactionsOrg(int $orgId, ListVcardsTransactionsOrgRequest $request = new ListVcardsTransactionsOrgRequest(), ?array $options = null): ?VCardTransactionQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;
@@ -2810,6 +3468,18 @@ class QueryClient
     /**
      * Retrieve a list of vcards (virtual credit cards) issued for an organization. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->query->listVcardsOrg(
+     *     123,
+     *     new ListVcardsOrgRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListVcardsOrgRequest $request
      * @param ?array{
@@ -2827,6 +3497,10 @@ class QueryClient
     public function listVcardsOrg(int $orgId, ListVcardsOrgRequest $request = new ListVcardsOrgRequest(), ?array $options = null): ?VCardQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;

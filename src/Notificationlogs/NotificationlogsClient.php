@@ -4,6 +4,7 @@ namespace Payabli\Notificationlogs;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
 use Payabli\Notificationlogs\Requests\SearchNotificationLogsRequest;
 use Payabli\Types\NotificationLog;
 use Payabli\Exceptions\PayabliException;
@@ -36,6 +37,11 @@ class NotificationlogsClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
      * @param RawClient $client
      * @param ?array{
      *   baseUrl?: string,
@@ -44,12 +50,15 @@ class NotificationlogsClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      * } $options
+     * @param ?RoutingAuthProvider $routingAuthProvider
      */
     public function __construct(
         RawClient $client,
         ?array $options = null,
+        ?RoutingAuthProvider $routingAuthProvider = null,
     ) {
         $this->client = $client;
+        $this->routingAuthProvider = $routingAuthProvider;
         $this->options = $options ?? [];
     }
 
@@ -59,6 +68,20 @@ class NotificationlogsClient
      *   - Either `orgId` or `paypointId` must be provided
      *
      * This endpoint requires the `notifications_create` OR `notifications_read` permission.
+     *
+     * Example:
+     * ```php
+     * $client->notificationlogs->searchNotificationLogs(
+     *     new SearchNotificationLogsRequest([
+     *         'pageSize' => 20,
+     *         'startDate' => new DateTime('2024-01-01T00:00:00Z'),
+     *         'endDate' => new DateTime('2024-01-31T23:59:59Z'),
+     *         'notificationEvent' => 'ActivatedMerchant',
+     *         'succeeded' => true,
+     *         'orgId' => 123,
+     *     ]),
+     * );
+     * ```
      *
      * @param SearchNotificationLogsRequest $request
      * @param ?array{
@@ -76,6 +99,10 @@ class NotificationlogsClient
     public function searchNotificationLogs(SearchNotificationLogsRequest $request, ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->pageSize != null) {
             $query['PageSize'] = $request->pageSize;
@@ -118,6 +145,13 @@ class NotificationlogsClient
      * Get detailed information for a specific notification log entry.
      * This endpoint requires the `notifications_create` OR `notifications_read` permission.
      *
+     * Example:
+     * ```php
+     * $client->notificationlogs->getNotificationLog(
+     *     '550e8400-e29b-41d4-a716-446655440000',
+     * );
+     * ```
+     *
      * @param string $uuid The notification log entry.
      * @param ?array{
      *   baseUrl?: string,
@@ -134,6 +168,10 @@ class NotificationlogsClient
     public function getNotificationLog(string $uuid, ?array $options = null): ?NotificationLogDetail
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -168,6 +206,13 @@ class NotificationlogsClient
      *
      * **Permissions:** notifications_create
      *
+     * Example:
+     * ```php
+     * $client->notificationlogs->retryNotificationLog(
+     *     '550e8400-e29b-41d4-a716-446655440000',
+     * );
+     * ```
+     *
      * @param string $uuid Unique id
      * @param ?array{
      *   baseUrl?: string,
@@ -184,6 +229,10 @@ class NotificationlogsClient
     public function retryNotificationLog(string $uuid, ?array $options = null): ?NotificationLogDetail
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -219,6 +268,17 @@ class NotificationlogsClient
      *
      * This endpoint requires the `notifications_create` permission.
      *
+     * Example:
+     * ```php
+     * $client->notificationlogs->bulkRetryNotificationLogs(
+     *     [
+     *         '550e8400-e29b-41d4-a716-446655440000',
+     *         '550e8400-e29b-41d4-a716-446655440001',
+     *         '550e8400-e29b-41d4-a716-446655440002',
+     *     ],
+     * );
+     * ```
+     *
      * @param array<string> $request
      * @param ?array{
      *   baseUrl?: string,
@@ -234,6 +294,10 @@ class NotificationlogsClient
     public function bulkRetryNotificationLogs(array $request, ?array $options = null): void
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(

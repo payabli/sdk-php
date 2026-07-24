@@ -4,6 +4,7 @@ namespace Payabli\CheckCapture;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
 use Payabli\CheckCapture\Requests\CheckCaptureRequestBody;
 use Payabli\Types\CheckCaptureResponse;
 use Payabli\Exceptions\PayabliException;
@@ -33,6 +34,11 @@ class CheckCaptureClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
      * @param RawClient $client
      * @param ?array{
      *   baseUrl?: string,
@@ -41,17 +47,32 @@ class CheckCaptureClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      * } $options
+     * @param ?RoutingAuthProvider $routingAuthProvider
      */
     public function __construct(
         RawClient $client,
         ?array $options = null,
+        ?RoutingAuthProvider $routingAuthProvider = null,
     ) {
         $this->client = $client;
+        $this->routingAuthProvider = $routingAuthProvider;
         $this->options = $options ?? [];
     }
 
     /**
      * Captures a check for Remote Deposit Capture (RDC) using the provided check images and details. This endpoint handles the OCR extraction of check data including MICR, routing number, account number, and amount. See the [RDC guide](/developers/developer-guides/pay-in-rdc) for more details.
+     *
+     * Example:
+     * ```php
+     * $client->checkCapture->checkProcessing(
+     *     new CheckCaptureRequestBody([
+     *         'entryPoint' => '8cfec329267',
+     *         'frontImage' => '/9j/4AAQSkZJRgABAQEASABIAAD...',
+     *         'rearImage' => '/9j/4AAQSkZJRgABAQEASABIAAD...',
+     *         'checkAmount' => 12550,
+     *     ]),
+     * );
+     * ```
      *
      * @param CheckCaptureRequestBody $request
      * @param ?array{
@@ -69,6 +90,10 @@ class CheckCaptureClient
     public function checkProcessing(CheckCaptureRequestBody $request, ?array $options = null): ?CheckCaptureResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(

@@ -4,6 +4,7 @@ namespace Payabli\Management;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
 use Payabli\Management\Requests\VerifyAccountDetailsRequest;
 use Payabli\Types\VerifyAccountDetailsResponse;
 use Payabli\Exceptions\PayabliException;
@@ -33,6 +34,11 @@ class ManagementClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
      * @param RawClient $client
      * @param ?array{
      *   baseUrl?: string,
@@ -41,12 +47,15 @@ class ManagementClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      * } $options
+     * @param ?RoutingAuthProvider $routingAuthProvider
      */
     public function __construct(
         RawClient $client,
         ?array $options = null,
+        ?RoutingAuthProvider $routingAuthProvider = null,
     ) {
         $this->client = $client;
+        $this->routingAuthProvider = $routingAuthProvider;
         $this->options = $options ?? [];
     }
 
@@ -56,6 +65,21 @@ class ManagementClient
      * When bank authentication is enabled for the paypoint's organization, the endpoint performs an identity verification check on the account holder. Otherwise, it performs an account existence check. When bank authentication is enabled, the `accountHolderType` and `holderName` fields are required.
      *
      * Requires `inboundpayments_create` or `outboundpayments_create` permission.
+     *
+     * Example:
+     * ```php
+     * $client->management->verifyAccountDetails(
+     *     '8cfec329267',
+     *     new VerifyAccountDetailsRequest([
+     *         'routingNumber' => '122105278',
+     *         'accountNumber' => '0000000016',
+     *         'accountType' => 'Checking',
+     *         'country' => 'US',
+     *         'accountHolderType' => 'personal',
+     *         'holderName' => 'Jane Doe',
+     *     ]),
+     * );
+     * ```
      *
      * @param string $entry The paypoint's entry name identifier.
      * @param VerifyAccountDetailsRequest $request
@@ -74,6 +98,10 @@ class ManagementClient
     public function verifyAccountDetails(string $entry, VerifyAccountDetailsRequest $request, ?array $options = null): ?VerifyAccountDetailsResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(

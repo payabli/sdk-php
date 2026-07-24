@@ -4,6 +4,7 @@ namespace Payabli\Notification;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
 use Payabli\Types\NotificationStandardRequest;
 use Payabli\Types\NotificationReportRequest;
 use Payabli\Types\PayabliApiResponseNotifications;
@@ -38,6 +39,11 @@ class NotificationClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
      * @param RawClient $client
      * @param ?array{
      *   baseUrl?: string,
@@ -46,17 +52,37 @@ class NotificationClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      * } $options
+     * @param ?RoutingAuthProvider $routingAuthProvider
      */
     public function __construct(
         RawClient $client,
         ?array $options = null,
+        ?RoutingAuthProvider $routingAuthProvider = null,
     ) {
         $this->client = $client;
+        $this->routingAuthProvider = $routingAuthProvider;
         $this->options = $options ?? [];
     }
 
     /**
      * Create a new notification or auto-generated report.
+     *
+     * Example:
+     * ```php
+     * $client->notification->addNotification(
+     *     new NotificationStandardRequest([
+     *         'content' => new NotificationStandardRequestContent([
+     *             'eventType' => NotificationStandardRequestContentEventType::CreatedApplication->value,
+     *         ]),
+     *         'frequency' => NotificationStandardRequestFrequency::Untilcancelled->value,
+     *         'method' => NotificationStandardRequestMethod::Web->value,
+     *         'ownerId' => 236,
+     *         'ownerType' => 0,
+     *         'status' => 1,
+     *         'target' => 'https://webhook.site/2871b8f8-edc7-441a-b376-98d8c8e33275',
+     *     ]),
+     * );
+     * ```
      *
      * @param (
      *    NotificationStandardRequest
@@ -77,6 +103,10 @@ class NotificationClient
     public function addNotification(NotificationStandardRequest|NotificationReportRequest $request, ?array $options = null): ?PayabliApiResponseNotifications
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -110,6 +140,13 @@ class NotificationClient
     /**
      * Retrieves a single notification or auto-generated report's details.
      *
+     * Example:
+     * ```php
+     * $client->notification->getNotification(
+     *     '1717',
+     * );
+     * ```
+     *
      * @param string $nId Notification ID.
      * @param ?array{
      *   baseUrl?: string,
@@ -126,6 +163,10 @@ class NotificationClient
     public function getNotification(string $nId, ?array $options = null): ?NotificationQueryRecord
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -158,6 +199,24 @@ class NotificationClient
     /**
      * Update a notification or auto-generated report.
      *
+     * Example:
+     * ```php
+     * $client->notification->updateNotification(
+     *     '1717',
+     *     new NotificationStandardRequest([
+     *         'content' => new NotificationStandardRequestContent([
+     *             'eventType' => NotificationStandardRequestContentEventType::ApprovedPayment->value,
+     *         ]),
+     *         'frequency' => NotificationStandardRequestFrequency::Untilcancelled->value,
+     *         'method' => NotificationStandardRequestMethod::Email->value,
+     *         'ownerId' => 136,
+     *         'ownerType' => 0,
+     *         'status' => 1,
+     *         'target' => 'newemail@email.com',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $nId Notification ID.
      * @param (
      *    NotificationStandardRequest
@@ -178,6 +237,10 @@ class NotificationClient
     public function updateNotification(string $nId, NotificationStandardRequest|NotificationReportRequest $request, ?array $options = null): ?PayabliApiResponseNotifications
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -211,6 +274,13 @@ class NotificationClient
     /**
      * Deletes a single notification or auto-generated report.
      *
+     * Example:
+     * ```php
+     * $client->notification->deleteNotification(
+     *     '1717',
+     * );
+     * ```
+     *
      * @param string $nId Notification ID.
      * @param ?array{
      *   baseUrl?: string,
@@ -227,6 +297,10 @@ class NotificationClient
     public function deleteNotification(string $nId, ?array $options = null): ?PayabliApiResponseNotifications
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -259,6 +333,13 @@ class NotificationClient
     /**
      * Gets a copy of a generated report by ID.
      *
+     * Example:
+     * ```php
+     * $client->notification->getReportFile(
+     *     1000000,
+     * );
+     * ```
+     *
      * @param int $id Report ID
      * @param ?array{
      *   baseUrl?: string,
@@ -275,6 +356,10 @@ class NotificationClient
     public function getReportFile(int $id, ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(

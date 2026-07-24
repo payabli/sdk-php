@@ -4,6 +4,7 @@ namespace Payabli\Wallet;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
 use Payabli\Wallet\Requests\ConfigureOrganizationRequestApplePay;
 use Payabli\Types\ConfigureApplePayOrganizationApiResponse;
 use Payabli\Exceptions\PayabliException;
@@ -38,6 +39,11 @@ class WalletClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
      * @param RawClient $client
      * @param ?array{
      *   baseUrl?: string,
@@ -46,17 +52,31 @@ class WalletClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      * } $options
+     * @param ?RoutingAuthProvider $routingAuthProvider
      */
     public function __construct(
         RawClient $client,
         ?array $options = null,
+        ?RoutingAuthProvider $routingAuthProvider = null,
     ) {
         $this->client = $client;
+        $this->routingAuthProvider = $routingAuthProvider;
         $this->options = $options ?? [];
     }
 
     /**
      * Configure and activate Apple Pay for a Payabli organization
+     *
+     * Example:
+     * ```php
+     * $client->wallet->configureApplePayOrganization(
+     *     new ConfigureOrganizationRequestApplePay([
+     *         'cascade' => true,
+     *         'isEnabled' => true,
+     *         'orgId' => 123,
+     *     ]),
+     * );
+     * ```
      *
      * @param ConfigureOrganizationRequestApplePay $request
      * @param ?array{
@@ -74,6 +94,10 @@ class WalletClient
     public function configureApplePayOrganization(ConfigureOrganizationRequestApplePay $request = new ConfigureOrganizationRequestApplePay(), ?array $options = null): ?ConfigureApplePayOrganizationApiResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -107,6 +131,16 @@ class WalletClient
     /**
      * Configure and activate Apple Pay for a Payabli paypoint
      *
+     * Example:
+     * ```php
+     * $client->wallet->configureApplePayPaypoint(
+     *     new ConfigurePaypointRequestApplePay([
+     *         'entry' => '8cfec329267',
+     *         'isEnabled' => true,
+     *     ]),
+     * );
+     * ```
+     *
      * @param ConfigurePaypointRequestApplePay $request
      * @param ?array{
      *   baseUrl?: string,
@@ -123,6 +157,10 @@ class WalletClient
     public function configureApplePayPaypoint(ConfigurePaypointRequestApplePay $request = new ConfigurePaypointRequestApplePay(), ?array $options = null): ?ConfigureApplePaypointApiResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -156,6 +194,17 @@ class WalletClient
     /**
      * Configure and activate Google Pay for a Payabli organization
      *
+     * Example:
+     * ```php
+     * $client->wallet->configureGooglePayOrganization(
+     *     new ConfigureOrganizationRequestGooglePay([
+     *         'cascade' => true,
+     *         'isEnabled' => true,
+     *         'orgId' => 123,
+     *     ]),
+     * );
+     * ```
+     *
      * @param ConfigureOrganizationRequestGooglePay $request
      * @param ?array{
      *   baseUrl?: string,
@@ -172,6 +221,10 @@ class WalletClient
     public function configureGooglePayOrganization(ConfigureOrganizationRequestGooglePay $request = new ConfigureOrganizationRequestGooglePay(), ?array $options = null): ?ConfigureApplePayOrganizationApiResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -205,6 +258,16 @@ class WalletClient
     /**
      * Configure and activate Google Pay for a Payabli paypoint
      *
+     * Example:
+     * ```php
+     * $client->wallet->configureGooglePayPaypoint(
+     *     new ConfigurePaypointRequestGooglePay([
+     *         'entry' => '8cfec329267',
+     *         'isEnabled' => true,
+     *     ]),
+     * );
+     * ```
+     *
      * @param ConfigurePaypointRequestGooglePay $request
      * @param ?array{
      *   baseUrl?: string,
@@ -221,6 +284,10 @@ class WalletClient
     public function configureGooglePayPaypoint(ConfigurePaypointRequestGooglePay $request = new ConfigurePaypointRequestGooglePay(), ?array $options = null): ?ConfigureGooglePaypointApiResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(

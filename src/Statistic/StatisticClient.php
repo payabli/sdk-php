@@ -4,6 +4,7 @@ namespace Payabli\Statistic;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
 use Payabli\Statistic\Requests\BasicStatsRequest;
 use Payabli\Types\StatBasicExtendedQueryRecord;
 use Payabli\Exceptions\PayabliException;
@@ -40,6 +41,11 @@ class StatisticClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
      * @param RawClient $client
      * @param ?array{
      *   baseUrl?: string,
@@ -48,17 +54,34 @@ class StatisticClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      * } $options
+     * @param ?RoutingAuthProvider $routingAuthProvider
      */
     public function __construct(
         RawClient $client,
         ?array $options = null,
+        ?RoutingAuthProvider $routingAuthProvider = null,
     ) {
         $this->client = $client;
+        $this->routingAuthProvider = $routingAuthProvider;
         $this->options = $options ?? [];
     }
 
     /**
      * Retrieves the basic statistics for an organization or a paypoint, for a given time period, grouped by a particular frequency.
+     *
+     * Example:
+     * ```php
+     * $client->statistic->basicStats(
+     *     'custom',
+     *     'm',
+     *     2,
+     *     1000000,
+     *     new BasicStatsRequest([
+     *         'startDate' => '2025-11-01',
+     *         'endDate' => '2025-11-30',
+     *     ]),
+     * );
+     * ```
      *
      * Mode for the request. Allowed values:
      *
@@ -108,6 +131,10 @@ class StatisticClient
     public function basicStats(string $mode, string $freq, int $level, int $entryId, BasicStatsRequest $request = new BasicStatsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->endDate != null) {
             $query['endDate'] = $request->endDate;
@@ -151,6 +178,16 @@ class StatisticClient
     /**
      * Retrieves the basic statistics for a customer for a specific time period, grouped by a selected frequency.
      *
+     * Example:
+     * ```php
+     * $client->statistic->customerBasicStats(
+     *     'ytd',
+     *     'm',
+     *     4440,
+     *     new CustomerBasicStatsRequest([]),
+     * );
+     * ```
+     *
      * Mode for request. Allowed values:
      *
      * - `ytd` - Year To Date
@@ -193,6 +230,10 @@ class StatisticClient
     public function customerBasicStats(string $mode, string $freq, int $customerId, CustomerBasicStatsRequest $request = new CustomerBasicStatsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->parameters != null) {
             $query['parameters'] = $request->parameters;
@@ -230,6 +271,16 @@ class StatisticClient
     /**
      * Retrieves the subscription statistics for a given interval for a paypoint or organization.
      *
+     * Example:
+     * ```php
+     * $client->statistic->subStats(
+     *     '30',
+     *     2,
+     *     1000000,
+     *     new SubStatsRequest([]),
+     * );
+     * ```
+     *
      * Interval to get the data. Allowed values:
      *
      * - `all` - all intervals
@@ -261,6 +312,10 @@ class StatisticClient
     public function subStats(string $interval, int $level, int $entryId, SubStatsRequest $request = new SubStatsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->parameters != null) {
             $query['parameters'] = $request->parameters;
@@ -297,6 +352,16 @@ class StatisticClient
 
     /**
      * Retrieve the basic statistics about a vendor for a given time period, grouped by frequency.
+     *
+     * Example:
+     * ```php
+     * $client->statistic->vendorBasicStats(
+     *     'ytd',
+     *     'm',
+     *     1,
+     *     new VendorBasicStatsRequest([]),
+     * );
+     * ```
      *
      * Mode for request. Allowed values:
      *
@@ -340,6 +405,10 @@ class StatisticClient
     public function vendorBasicStats(string $mode, string $freq, int $idVendor, VendorBasicStatsRequest $request = new VendorBasicStatsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->parameters != null) {
             $query['parameters'] = $request->parameters;

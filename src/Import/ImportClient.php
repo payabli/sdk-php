@@ -4,6 +4,7 @@ namespace Payabli\Import;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
 use Payabli\Import\Requests\ImportBillsRequest;
 use Payabli\Types\PayabliApiResponseImport;
 use Payabli\Exceptions\PayabliException;
@@ -36,6 +37,11 @@ class ImportClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
      * @param RawClient $client
      * @param ?array{
      *   baseUrl?: string,
@@ -44,17 +50,30 @@ class ImportClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      * } $options
+     * @param ?RoutingAuthProvider $routingAuthProvider
      */
     public function __construct(
         RawClient $client,
         ?array $options = null,
+        ?RoutingAuthProvider $routingAuthProvider = null,
     ) {
         $this->client = $client;
+        $this->routingAuthProvider = $routingAuthProvider;
         $this->options = $options ?? [];
     }
 
     /**
      * Import a list of bills from a CSV file. See the [Import Guide](/developers/developer-guides/bills-add#import-bills) for more help and an example file.
+     *
+     * Example:
+     * ```php
+     * $client->import->importBills(
+     *     '8cfec329267',
+     *     new ImportBillsRequest([
+     *         'file' => File::createFromString("example_file", "example_file"),
+     *     ]),
+     * );
+     * ```
      *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ImportBillsRequest $request
@@ -72,6 +91,10 @@ class ImportClient
     public function importBills(string $entry, ImportBillsRequest $request, ?array $options = null): ?PayabliApiResponseImport
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $body = new MultipartFormData();
         $body->addPart($request->file->toMultipartFormDataPart('file'));
         try {
@@ -107,6 +130,16 @@ class ImportClient
     /**
      * Import a list of customers from a CSV file. See the [Import Guide](/developers/developer-guides/entities-customers#import-customers) for more help and example files.
      *
+     * Example:
+     * ```php
+     * $client->import->importCustomer(
+     *     '8cfec329267',
+     *     new ImportCustomerRequest([
+     *         'file' => File::createFromString("example_file", "example_file"),
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The entrypoint identifier.
      * @param ImportCustomerRequest $request
      * @param ?array{
@@ -123,6 +156,10 @@ class ImportClient
     public function importCustomer(string $entry, ImportCustomerRequest $request, ?array $options = null): ?PayabliApiResponseImport
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->replaceExisting != null) {
             $query['replaceExisting'] = $request->replaceExisting;
@@ -163,6 +200,16 @@ class ImportClient
     /**
      * Import a list of vendors from a CSV file. See the [Import Guide](/developers/developer-guides/entities-vendors#import-vendors) for more help and example files.
      *
+     * Example:
+     * ```php
+     * $client->import->importVendor(
+     *     '8cfec329267',
+     *     new ImportVendorRequest([
+     *         'file' => File::createFromString("example_file", "example_file"),
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The entrypoint identifier.
      * @param ImportVendorRequest $request
      * @param ?array{
@@ -179,6 +226,10 @@ class ImportClient
     public function importVendor(string $entry, ImportVendorRequest $request, ?array $options = null): ?PayabliApiResponseImport
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $body = new MultipartFormData();
         $body->addPart($request->file->toMultipartFormDataPart('file'));
         try {

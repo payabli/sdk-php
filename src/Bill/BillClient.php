@@ -4,6 +4,7 @@ namespace Payabli\Bill;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
 use Payabli\Bill\Requests\AddBillRequest;
 use Payabli\Types\BillResponse;
 use Payabli\Exceptions\PayabliException;
@@ -47,6 +48,11 @@ class BillClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
      * @param RawClient $client
      * @param ?array{
      *   baseUrl?: string,
@@ -55,17 +61,70 @@ class BillClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      * } $options
+     * @param ?RoutingAuthProvider $routingAuthProvider
      */
     public function __construct(
         RawClient $client,
         ?array $options = null,
+        ?RoutingAuthProvider $routingAuthProvider = null,
     ) {
         $this->client = $client;
+        $this->routingAuthProvider = $routingAuthProvider;
         $this->options = $options ?? [];
     }
 
     /**
      * Creates a bill in an entrypoint.
+     *
+     * Example:
+     * ```php
+     * $client->bill->addBill(
+     *     '8cfec329267',
+     *     new AddBillRequest([
+     *         'body' => new BillOutData([
+     *             'accountingField1' => 'MyInternalId',
+     *             'attachments' => [
+     *                 new FileContent([
+     *                     'filename' => 'my-doc.pdf',
+     *                     'ftype' => FileContentFtype::Pdf->value,
+     *                     'furl' => 'https://mysite.com/my-doc.pdf',
+     *                 ]),
+     *             ],
+     *             'billDate' => new DateTime('2024-07-01'),
+     *             'billItems' => [
+     *                 new BillItem([
+     *                     'itemCategories' => [
+     *                         'deposits',
+     *                     ],
+     *                     'itemCommodityCode' => '010',
+     *                     'itemCost' => 5,
+     *                     'itemDescription' => 'Deposit for materials',
+     *                     'itemMode' => 0,
+     *                     'itemProductCode' => 'M-DEPOSIT',
+     *                     'itemProductName' => 'Materials deposit',
+     *                     'itemQty' => 1,
+     *                     'itemTaxAmount' => 7,
+     *                     'itemTaxRate' => 0.075,
+     *                     'itemTotalAmount' => 123,
+     *                     'itemUnitOfMeasure' => 'SqFt',
+     *                 ]),
+     *             ],
+     *             'billNumber' => 'ABC-123',
+     *             'comments' => 'Deposit for materials',
+     *             'dueDate' => new DateTime('2024-07-01'),
+     *             'endDate' => new DateTime('2024-07-01'),
+     *             'frequency' => Frequency::Monthly->value,
+     *             'mode' => 0,
+     *             'netAmount' => 3762.87,
+     *             'status' => 1,
+     *             'terms' => Terms::Net30->value,
+     *             'vendor' => new BillOutDataVendor([
+     *                 'vendorNumber' => 'VEN-123',
+     *             ]),
+     *         ]),
+     *     ]),
+     * );
+     * ```
      *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param AddBillRequest $request
@@ -84,6 +143,10 @@ class BillClient
     public function addBill(string $entry, AddBillRequest $request, ?array $options = null): ?BillResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $headers = [];
         if ($request->idempotencyKey != null) {
             $headers['idempotencyKey'] = $request->idempotencyKey;
@@ -122,6 +185,13 @@ class BillClient
     /**
      * Retrieves a bill by ID from an entrypoint.
      *
+     * Example:
+     * ```php
+     * $client->bill->getBill(
+     *     285,
+     * );
+     * ```
+     *
      * @param int $idBill Payabli ID for the bill. Get this ID by querying `/api/Query/bills/` for the entrypoint or the organization.
      * @param ?array{
      *   baseUrl?: string,
@@ -138,6 +208,10 @@ class BillClient
     public function getBill(int $idBill, ?array $options = null): ?GetBillResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -170,6 +244,17 @@ class BillClient
     /**
      * Updates a bill by ID.
      *
+     * Example:
+     * ```php
+     * $client->bill->editBill(
+     *     285,
+     *     new BillOutData([
+     *         'billDate' => new DateTime('2025-07-01'),
+     *         'netAmount' => 3762.87,
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $idBill Payabli ID for the bill. Get this ID by querying `/api/Query/bills/` for the entrypoint or the organization.
      * @param BillOutData $request
      * @param ?array{
@@ -187,6 +272,10 @@ class BillClient
     public function editBill(int $idBill, BillOutData $request, ?array $options = null): ?EditBillResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -220,6 +309,13 @@ class BillClient
     /**
      * Deletes a bill by ID.
      *
+     * Example:
+     * ```php
+     * $client->bill->deleteBill(
+     *     285,
+     * );
+     * ```
+     *
      * @param int $idBill Payabli ID for the bill. Get this ID by querying `/api/Query/bills/` for the entrypoint or the organization.
      * @param ?array{
      *   baseUrl?: string,
@@ -236,6 +332,10 @@ class BillClient
     public function deleteBill(int $idBill, ?array $options = null): ?BillResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -268,6 +368,17 @@ class BillClient
     /**
      * Retrieves a file attached to a bill, either as a binary file or as a Base64-encoded string.
      *
+     * Example:
+     * ```php
+     * $client->bill->getAttachedFromBill(
+     *     285,
+     *     '0_Bill.pdf',
+     *     new GetAttachedFromBillRequest([
+     *         'returnObject' => true,
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $idBill Payabli ID for the bill. Get this ID by querying `/api/Query/bills/` for the entrypoint or the organization.
      * The filename in Payabli. Get this from the `zipName` field
      * in the `DocumentsRef.filelist` array returned by
@@ -290,6 +401,10 @@ class BillClient
     public function getAttachedFromBill(int $idBill, string $filename, GetAttachedFromBillRequest $request = new GetAttachedFromBillRequest(), ?array $options = null): ?FileContent
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->returnObject != null) {
             $query['returnObject'] = $request->returnObject;
@@ -327,6 +442,15 @@ class BillClient
     /**
      * Delete a file attached to a bill.
      *
+     * Example:
+     * ```php
+     * $client->bill->deleteAttachedFromBill(
+     *     285,
+     *     '0_Bill.pdf',
+     *     new DeleteAttachedFromBillRequest([]),
+     * );
+     * ```
+     *
      * @param int $idBill Payabli ID for the bill. Get this ID by querying `/api/Query/bills/` for the entrypoint or the organization.
      * The filename in Payabli. Get this from the `zipName` field
      * in the `DocumentsRef.filelist` array returned by
@@ -349,6 +473,10 @@ class BillClient
     public function deleteAttachedFromBill(int $idBill, string $filename, DeleteAttachedFromBillRequest $request = new DeleteAttachedFromBillRequest(), ?array $options = null): ?BillResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->returnObject != null) {
             $query['returnObject'] = $request->returnObject;
@@ -386,6 +514,19 @@ class BillClient
     /**
      * Send a bill to a user or list of users to approve.
      *
+     * Example:
+     * ```php
+     * $client->bill->sendToApprovalBill(
+     *     285,
+     *     new SendToApprovalBillRequest([
+     *         'idempotencyKey' => '6B29FC40-CA47-1067-B31D-00DD010662DA',
+     *         'body' => [
+     *             'approver@example.com',
+     *         ],
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $idBill Payabli ID for the bill. Get this ID by querying `/api/Query/bills/` for the entrypoint or the organization.
      * @param SendToApprovalBillRequest $request
      * @param ?array{
@@ -403,6 +544,10 @@ class BillClient
     public function sendToApprovalBill(int $idBill, SendToApprovalBillRequest $request, ?array $options = null): ?BillResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->autocreateUser != null) {
             $query['autocreateUser'] = $request->autocreateUser;
@@ -446,6 +591,17 @@ class BillClient
     /**
      * Modify the list of users the bill is sent to for approval.
      *
+     * Example:
+     * ```php
+     * $client->bill->modifyApprovalBill(
+     *     285,
+     *     [
+     *         'approver1@example.com',
+     *         'approver2@example.com',
+     *     ],
+     * );
+     * ```
+     *
      * @param int $idBill Payabli ID for the bill. Get this ID by querying `/api/Query/bills/` for the entrypoint or the organization.
      * @param array<string> $request
      * @param ?array{
@@ -463,6 +619,10 @@ class BillClient
     public function modifyApprovalBill(int $idBill, array $request, ?array $options = null): ?ModifyApprovalBillResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -496,6 +656,15 @@ class BillClient
     /**
      * Approve or disapprove a bill by ID.
      *
+     * Example:
+     * ```php
+     * $client->bill->setApprovedBill(
+     *     285,
+     *     'true',
+     *     new SetApprovedBillRequest([]),
+     * );
+     * ```
+     *
      * @param int $idBill Payabli ID for the bill. Get this ID by querying `/api/Query/bills/` for the entrypoint or the organization.
      * @param string $approved String representing the approved status. Accepted values: 'true' or 'false'.
      * @param SetApprovedBillRequest $request
@@ -514,6 +683,10 @@ class BillClient
     public function setApprovedBill(int $idBill, string $approved, SetApprovedBillRequest $request = new SetApprovedBillRequest(), ?array $options = null): ?SetApprovedBillResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->email != null) {
             $query['email'] = $request->email;
@@ -551,6 +724,18 @@ class BillClient
     /**
      * Retrieve a list of bills for an entrypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->bill->listBills(
+     *     '8cfec329267',
+     *     new ListBillsRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListBillsRequest $request
      * @param ?array{
@@ -568,6 +753,10 @@ class BillClient
     public function listBills(string $entry, ListBillsRequest $request = new ListBillsRequest(), ?array $options = null): ?BillQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -617,6 +806,18 @@ class BillClient
     /**
      * Retrieve a list of bills for an organization. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->bill->listBillsOrg(
+     *     123,
+     *     new ListBillsOrgRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListBillsOrgRequest $request
      * @param ?array{
@@ -634,6 +835,10 @@ class BillClient
     public function listBillsOrg(int $orgId, ListBillsOrgRequest $request = new ListBillsOrgRequest(), ?array $options = null): ?BillQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;

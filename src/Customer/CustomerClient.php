@@ -4,6 +4,7 @@ namespace Payabli\Customer;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
 use Payabli\Customer\Requests\AddCustomerRequest;
 use Payabli\Types\PayabliApiResponseCustomerQuery;
 use Payabli\Exceptions\PayabliException;
@@ -36,6 +37,11 @@ class CustomerClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
      * @param RawClient $client
      * @param ?array{
      *   baseUrl?: string,
@@ -44,18 +50,45 @@ class CustomerClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      * } $options
+     * @param ?RoutingAuthProvider $routingAuthProvider
      */
     public function __construct(
         RawClient $client,
         ?array $options = null,
+        ?RoutingAuthProvider $routingAuthProvider = null,
     ) {
         $this->client = $client;
+        $this->routingAuthProvider = $routingAuthProvider;
         $this->options = $options ?? [];
     }
 
     /**
      * Creates a customer in an entrypoint. An identifier is required to create customer records. Change your identifier settings in Settings > Custom Fields in the Payabli Portal.
      * If you don't include an identifier, the record is rejected.
+     *
+     * Example:
+     * ```php
+     * $client->customer->addCustomer(
+     *     '8cfec329267',
+     *     new AddCustomerRequest([
+     *         'body' => new CustomerData([
+     *             'customerNumber' => 'C-90010',
+     *             'firstname' => 'Irene',
+     *             'lastname' => 'Canizales',
+     *             'email' => 'irene@canizalesconcrete.com',
+     *             'address1' => "123 Bishop's Trail",
+     *             'city' => 'Mountain City',
+     *             'state' => 'TN',
+     *             'zip' => '37612',
+     *             'country' => 'US',
+     *             'timeZone' => -5,
+     *             'identifierFields' => [
+     *                 'email',
+     *             ],
+     *         ]),
+     *     ]),
+     * );
+     * ```
      *
      * @param string $entry The entrypoint identifier.
      * @param AddCustomerRequest $request
@@ -74,6 +107,10 @@ class CustomerClient
     public function addCustomer(string $entry, AddCustomerRequest $request, ?array $options = null): ?PayabliApiResponseCustomerQuery
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->forceCustomerCreation != null) {
             $query['forceCustomerCreation'] = $request->forceCustomerCreation;
@@ -120,6 +157,13 @@ class CustomerClient
     /**
      * Retrieves a customer's record and details.
      *
+     * Example:
+     * ```php
+     * $client->customer->getCustomer(
+     *     4440,
+     * );
+     * ```
+     *
      * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in the Payabli Portal.
      * @param ?array{
      *   baseUrl?: string,
@@ -136,6 +180,10 @@ class CustomerClient
     public function getCustomer(int $customerId, ?array $options = null): ?CustomerQueryRecords
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -168,6 +216,22 @@ class CustomerClient
     /**
      * Update a customer record. Include only the fields you want to change.
      *
+     * Example:
+     * ```php
+     * $client->customer->updateCustomer(
+     *     4440,
+     *     new CustomerData([
+     *         'firstname' => 'Irene',
+     *         'lastname' => 'Canizales',
+     *         'address1' => "145 Bishop's Trail",
+     *         'city' => 'Mountain City',
+     *         'state' => 'TN',
+     *         'zip' => '37612',
+     *         'country' => 'US',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in the Payabli Portal.
      * @param CustomerData $request
      * @param ?array{
@@ -185,6 +249,10 @@ class CustomerClient
     public function updateCustomer(int $customerId, CustomerData $request, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -218,6 +286,13 @@ class CustomerClient
     /**
      * Delete a customer record.
      *
+     * Example:
+     * ```php
+     * $client->customer->deleteCustomer(
+     *     4440,
+     * );
+     * ```
+     *
      * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in the Payabli Portal.
      * @param ?array{
      *   baseUrl?: string,
@@ -234,6 +309,10 @@ class CustomerClient
     public function deleteCustomer(int $customerId, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -266,6 +345,13 @@ class CustomerClient
     /**
      * Sends the consent opt-in email to the customer email address in the customer record.
      *
+     * Example:
+     * ```php
+     * $client->customer->requestConsent(
+     *     4440,
+     * );
+     * ```
+     *
      * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in the Payabli Portal.
      * @param ?array{
      *   baseUrl?: string,
@@ -282,6 +368,10 @@ class CustomerClient
     public function requestConsent(int $customerId, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -314,6 +404,14 @@ class CustomerClient
     /**
      * Links a customer to a transaction by ID.
      *
+     * Example:
+     * ```php
+     * $client->customer->linkCustomerTransaction(
+     *     4440,
+     *     '45-as456777hhhhhhhhhh77777777-324',
+     * );
+     * ```
+     *
      * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in the Payabli Portal.
      * @param string $transId ReferenceId for the transaction (PaymentId).
      * @param ?array{
@@ -331,6 +429,10 @@ class CustomerClient
     public function linkCustomerTransaction(int $customerId, string $transId, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(

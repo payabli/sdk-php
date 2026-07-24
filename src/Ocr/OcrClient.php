@@ -4,6 +4,7 @@ namespace Payabli\Ocr;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
 use Payabli\Types\FileContentImageOnly;
 use Payabli\Types\PayabliApiResponseOcr;
 use Payabli\Exceptions\PayabliException;
@@ -33,6 +34,11 @@ class OcrClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
      * @param RawClient $client
      * @param ?array{
      *   baseUrl?: string,
@@ -41,17 +47,28 @@ class OcrClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      * } $options
+     * @param ?RoutingAuthProvider $routingAuthProvider
      */
     public function __construct(
         RawClient $client,
         ?array $options = null,
+        ?RoutingAuthProvider $routingAuthProvider = null,
     ) {
         $this->client = $client;
+        $this->routingAuthProvider = $routingAuthProvider;
         $this->options = $options ?? [];
     }
 
     /**
      * Use this endpoint to upload an image file for OCR processing. The accepted file formats include PDF, JPG, JPEG, PNG, and GIF. Specify the desired type of result (either 'bill' or 'invoice') in the path parameter `typeResult`. The response will contain the OCR processing results, including extracted data such as bill number, vendor information, bill items, and more.
+     *
+     * Example:
+     * ```php
+     * $client->ocr->ocrDocumentForm(
+     *     'typeResult',
+     *     new FileContentImageOnly([]),
+     * );
+     * ```
      *
      * @param string $typeResult The type of object to create in Payabli. Accepted values are `bill` and `invoice`.
      * @param FileContentImageOnly $request
@@ -70,6 +87,10 @@ class OcrClient
     public function ocrDocumentForm(string $typeResult, FileContentImageOnly $request, ?array $options = null): ?PayabliApiResponseOcr
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -103,6 +124,14 @@ class OcrClient
     /**
      * Use this endpoint to submit a Base64-encoded image file for OCR processing. The accepted file formats include PDF, JPG, JPEG, PNG, and GIF. Specify the desired type of result (either 'bill' or 'invoice') in the path parameter `typeResult`. The response will contain the OCR processing results, including extracted data such as bill number, vendor information, bill items, and more.
      *
+     * Example:
+     * ```php
+     * $client->ocr->ocrDocumentJson(
+     *     'typeResult',
+     *     new FileContentImageOnly([]),
+     * );
+     * ```
+     *
      * @param string $typeResult The type of object to create in Payabli. Accepted values are `bill` and `invoice`.
      * @param FileContentImageOnly $request
      * @param ?array{
@@ -120,6 +149,10 @@ class OcrClient
     public function ocrDocumentJson(string $typeResult, FileContentImageOnly $request, ?array $options = null): ?PayabliApiResponseOcr
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(

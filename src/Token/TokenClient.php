@@ -4,6 +4,7 @@ namespace Payabli\Token;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
 use Payabli\Token\Requests\CreateServerSideTokenRequest;
 use Payabli\Types\PayabliAccessTokenResponse;
 use Payabli\Exceptions\PayabliException;
@@ -33,6 +34,11 @@ class TokenClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
      * @param RawClient $client
      * @param ?array{
      *   baseUrl?: string,
@@ -41,17 +47,30 @@ class TokenClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      * } $options
+     * @param ?RoutingAuthProvider $routingAuthProvider
      */
     public function __construct(
         RawClient $client,
         ?array $options = null,
+        ?RoutingAuthProvider $routingAuthProvider = null,
     ) {
         $this->client = $client;
+        $this->routingAuthProvider = $routingAuthProvider;
         $this->options = $options ?? [];
     }
 
     /**
      * Exchanges a client ID and client secret for a short-lived Bearer access token using the OAuth2 client-credentials flow. Designed for server-to-server use: the credentials and the returned token stay on your backend. Send the returned `access_token` in the `Authorization` header as `Bearer <access_token>` on subsequent API calls. See the [OAuth authentication guide](/developers/oauth-authentication) for the full flow.
+     *
+     * Example:
+     * ```php
+     * $client->token->createServerSideToken(
+     *     new CreateServerSideTokenRequest([
+     *         'clientId' => 'YOUR_CLIENT_ID',
+     *         'clientSecret' => 'YOUR_CLIENT_SECRET',
+     *     ]),
+     * );
+     * ```
      *
      * @param CreateServerSideTokenRequest $request
      * @param ?array{

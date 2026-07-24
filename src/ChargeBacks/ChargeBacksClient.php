@@ -4,6 +4,7 @@ namespace Payabli\ChargeBacks;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
 use Payabli\ChargeBacks\Requests\ResponseChargeBack;
 use Payabli\Types\AddResponseResponse;
 use Payabli\Exceptions\PayabliException;
@@ -35,6 +36,11 @@ class ChargeBacksClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
      * @param RawClient $client
      * @param ?array{
      *   baseUrl?: string,
@@ -43,17 +49,30 @@ class ChargeBacksClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      * } $options
+     * @param ?RoutingAuthProvider $routingAuthProvider
      */
     public function __construct(
         RawClient $client,
         ?array $options = null,
+        ?RoutingAuthProvider $routingAuthProvider = null,
     ) {
         $this->client = $client;
+        $this->routingAuthProvider = $routingAuthProvider;
         $this->options = $options ?? [];
     }
 
     /**
      * Add a response to a chargeback or ACH return.
+     *
+     * Example:
+     * ```php
+     * $client->chargeBacks->addResponse(
+     *     1000000,
+     *     new ResponseChargeBack([
+     *         'idempotencyKey' => '6B29FC40-CA47-1067-B31D-00DD010662DA',
+     *     ]),
+     * );
+     * ```
      *
      * @param int $id ID of the chargeback or return record.
      * @param ResponseChargeBack $request
@@ -72,6 +91,10 @@ class ChargeBacksClient
     public function addResponse(int $id, ResponseChargeBack $request = new ResponseChargeBack(), ?array $options = null): ?AddResponseResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $headers = [];
         if ($request->idempotencyKey != null) {
             $headers['idempotencyKey'] = $request->idempotencyKey;
@@ -110,6 +133,13 @@ class ChargeBacksClient
     /**
      * Retrieves a chargeback record and its details.
      *
+     * Example:
+     * ```php
+     * $client->chargeBacks->getChargeback(
+     *     1000000,
+     * );
+     * ```
+     *
      * @param int $id ID of the chargeback or return record. This is returned as `chargebackID` in the [ReceivedChargeBack](/guides/pay-ops-webhooks-payloads#receivedchargeback) and [ReceivedAchReturn](/guides/pay-ops-webhooks-payloads#receivedachreturn) webhook notifications.
      * @param ?array{
      *   baseUrl?: string,
@@ -126,6 +156,10 @@ class ChargeBacksClient
     public function getChargeback(int $id, ?array $options = null): ?ChargebackQueryRecords
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -158,6 +192,14 @@ class ChargeBacksClient
     /**
      * Retrieves a chargeback attachment file by its file name.
      *
+     * Example:
+     * ```php
+     * $client->chargeBacks->getChargebackAttachment(
+     *     1000000,
+     *     'fileName',
+     * );
+     * ```
+     *
      * @param int $id The ID of chargeback or return record.
      * @param string $fileName The chargeback attachment's file name.
      * @param ?array{
@@ -175,6 +217,10 @@ class ChargeBacksClient
     public function getChargebackAttachment(int $id, string $fileName, ?array $options = null): ?string
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(

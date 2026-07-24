@@ -4,6 +4,7 @@ namespace Payabli\Templates;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
 use Payabli\Types\PayabliApiResponseTemplateId;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
@@ -36,6 +37,11 @@ class TemplatesClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
      * @param RawClient $client
      * @param ?array{
      *   baseUrl?: string,
@@ -44,17 +50,27 @@ class TemplatesClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      * } $options
+     * @param ?RoutingAuthProvider $routingAuthProvider
      */
     public function __construct(
         RawClient $client,
         ?array $options = null,
+        ?RoutingAuthProvider $routingAuthProvider = null,
     ) {
         $this->client = $client;
+        $this->routingAuthProvider = $routingAuthProvider;
         $this->options = $options ?? [];
     }
 
     /**
      * Deletes a template by ID.
+     *
+     * Example:
+     * ```php
+     * $client->templates->deleteTemplate(
+     *     80,
+     * );
+     * ```
      *
      * @param float $templateId The boarding template ID. You can find this at the end of the boarding template URL in the Payabli Portal. Example: `https://partner-sandbox.payabli.com/myorganization/boarding/edittemplate/80`. Here, the template ID is `80`.
      * @param ?array{
@@ -72,6 +88,10 @@ class TemplatesClient
     public function deleteTemplate(float $templateId, ?array $options = null): ?PayabliApiResponseTemplateId
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -104,6 +124,14 @@ class TemplatesClient
     /**
      * Generates a boarding link from a boarding template.
      *
+     * Example:
+     * ```php
+     * $client->templates->getlinkTemplate(
+     *     80,
+     *     true,
+     * );
+     * ```
+     *
      * @param float $templateId The boarding template ID. You can find this at the end of the boarding template URL in the Payabli Portal. Example: `https://partner-sandbox.payabli.com/myorganization/boarding/edittemplate/80`. Here, the template ID is `80`.
      * @param bool $ignoreEmpty Ignore read-only and empty fields. Default is `false`. If `ignoreEmpty` = `false` and any field is empty, then the request returns a failure response. If `ignoreEmpty` = `true`, the request returns the boarding link name regardless of whether fields are empty.
      * @param ?array{
@@ -121,6 +149,10 @@ class TemplatesClient
     public function getlinkTemplate(float $templateId, bool $ignoreEmpty, ?array $options = null): ?BoardingLinkApiResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -153,6 +185,13 @@ class TemplatesClient
     /**
      * Retrieves a boarding template's details by ID.
      *
+     * Example:
+     * ```php
+     * $client->templates->getTemplate(
+     *     80,
+     * );
+     * ```
+     *
      * @param float $templateId The boarding template ID. You can find this at the end of the boarding template URL in the Payabli Portal. Example: `https://partner-sandbox.payabli.com/myorganization/boarding/edittemplate/80`. Here, the template ID is `80`.
      * @param ?array{
      *   baseUrl?: string,
@@ -169,6 +208,10 @@ class TemplatesClient
     public function getTemplate(float $templateId, ?array $options = null): ?TemplateQueryRecord
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -201,6 +244,18 @@ class TemplatesClient
     /**
      * Retrieves a list of boarding templates for an organization. Use filters to limit results. You can't make a request that includes filters from the API console in the documentation. The response won't be filtered. Instead, copy the request, remove `parameters=` and run the request in a different client.
      *
+     * Example:
+     * ```php
+     * $client->templates->listTemplates(
+     *     123,
+     *     new ListTemplatesRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListTemplatesRequest $request
      * @param ?array{
@@ -218,6 +273,10 @@ class TemplatesClient
     public function listTemplates(int $orgId, ListTemplatesRequest $request = new ListTemplatesRequest(), ?array $options = null): ?TemplateQueryResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->fromRecord != null) {
             $query['fromRecord'] = $request->fromRecord;

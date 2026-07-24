@@ -4,6 +4,7 @@ namespace Payabli\Subscription;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
 use Payabli\Types\SubscriptionQueryRecords;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
@@ -37,6 +38,11 @@ class SubscriptionClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
      * @param RawClient $client
      * @param ?array{
      *   baseUrl?: string,
@@ -45,17 +51,27 @@ class SubscriptionClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      * } $options
+     * @param ?RoutingAuthProvider $routingAuthProvider
      */
     public function __construct(
         RawClient $client,
         ?array $options = null,
+        ?RoutingAuthProvider $routingAuthProvider = null,
     ) {
         $this->client = $client;
+        $this->routingAuthProvider = $routingAuthProvider;
         $this->options = $options ?? [];
     }
 
     /**
      * Retrieves a single subscription's details.
+     *
+     * Example:
+     * ```php
+     * $client->subscription->getSubscription(
+     *     231,
+     * );
+     * ```
      *
      * @param int $subId The subscription ID.
      * @param ?array{
@@ -73,6 +89,10 @@ class SubscriptionClient
     public function getSubscription(int $subId, ?array $options = null): ?SubscriptionQueryRecords
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -105,6 +125,16 @@ class SubscriptionClient
     /**
      * Updates a subscription's details.
      *
+     * Example:
+     * ```php
+     * $client->subscription->updateSubscription(
+     *     231,
+     *     new RequestUpdateSchedule([
+     *         'setPause' => true,
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $subId The subscription ID.
      * @param RequestUpdateSchedule $request
      * @param ?array{
@@ -122,6 +152,10 @@ class SubscriptionClient
     public function updateSubscription(int $subId, RequestUpdateSchedule $request = new RequestUpdateSchedule(), ?array $options = null): ?UpdateSubscriptionResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -155,6 +189,13 @@ class SubscriptionClient
     /**
      * Deletes a subscription, autopay, or recurring payment and prevents future charges.
      *
+     * Example:
+     * ```php
+     * $client->subscription->removeSubscription(
+     *     231,
+     * );
+     * ```
+     *
      * @param int $subId The subscription ID.
      * @param ?array{
      *   baseUrl?: string,
@@ -171,6 +212,10 @@ class SubscriptionClient
     public function removeSubscription(int $subId, ?array $options = null): ?RemoveSubscriptionResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -203,6 +248,37 @@ class SubscriptionClient
     /**
      * Creates a subscription or scheduled payment to run at a specified time and frequency. You can use stored payment method tokens for card, ACH, and digital wallets by passing them into the `paymentMethod.storedMethodId` field.
      *
+     * Example:
+     * ```php
+     * $client->subscription->newSubscription(
+     *     new RequestSchedule([
+     *         'customerData' => new PayorDataRequest([
+     *             'customerId' => 4440,
+     *         ]),
+     *         'entryPoint' => '8cfec329267',
+     *         'paymentDetails' => new PaymentDetail([
+     *             'serviceFee' => 0,
+     *             'totalAmount' => 100,
+     *         ]),
+     *         'paymentMethod' => new PayMethodCredit([
+     *             'cardcvv' => '123',
+     *             'cardexp' => '12/29',
+     *             'cardHolder' => 'John Cassian',
+     *             'cardnumber' => '4111111111111111',
+     *             'cardzip' => '37615',
+     *             'initiator' => 'payor',
+     *             'method' => PayMethodCreditMethod::Card->value,
+     *         ]),
+     *         'scheduleDetails' => new ScheduleDetail([
+     *             'endDate' => '2025-03-20',
+     *             'frequency' => Frequency::Weekly->value,
+     *             'planId' => 1,
+     *             'startDate' => '2024-09-20',
+     *         ]),
+     *     ]),
+     * );
+     * ```
+     *
      * @param RequestSchedule $request
      * @param ?array{
      *   baseUrl?: string,
@@ -219,6 +295,10 @@ class SubscriptionClient
     public function newSubscription(RequestSchedule $request = new RequestSchedule(), ?array $options = null): ?AddSubscriptionResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->forceCustomerCreation != null) {
             $query['forceCustomerCreation'] = $request->forceCustomerCreation;

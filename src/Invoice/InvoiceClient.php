@@ -4,6 +4,7 @@ namespace Payabli\Invoice;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
 use Payabli\Invoice\Requests\AddInvoiceRequest;
 use Payabli\Types\InvoiceResponseWithoutData;
 use Payabli\Exceptions\PayabliException;
@@ -44,6 +45,11 @@ class InvoiceClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
      * @param RawClient $client
      * @param ?array{
      *   baseUrl?: string,
@@ -52,17 +58,63 @@ class InvoiceClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      * } $options
+     * @param ?RoutingAuthProvider $routingAuthProvider
      */
     public function __construct(
         RawClient $client,
         ?array $options = null,
+        ?RoutingAuthProvider $routingAuthProvider = null,
     ) {
         $this->client = $client;
+        $this->routingAuthProvider = $routingAuthProvider;
         $this->options = $options ?? [];
     }
 
     /**
      * Creates an invoice in an entrypoint.
+     *
+     * Example:
+     * ```php
+     * $client->invoice->addInvoice(
+     *     '8cfec329267',
+     *     new AddInvoiceRequest([
+     *         'body' => new InvoiceDataRequest([
+     *             'customerData' => new PayorDataRequest([
+     *                 'customerNumber' => 'C-90010',
+     *                 'firstName' => 'Tamara',
+     *                 'lastName' => 'Bagratoni',
+     *             ]),
+     *             'invoiceData' => new BillData([
+     *                 'discount' => 10,
+     *                 'frequency' => Frequency::OneTime->value,
+     *                 'invoiceAmount' => 1082.37,
+     *                 'invoiceDate' => new DateTime('2025-10-19'),
+     *                 'invoiceNumber' => 'INV-2345',
+     *                 'invoiceStatus' => 1,
+     *                 'invoiceType' => 0,
+     *                 'items' => [
+     *                     new BillItem([
+     *                         'itemCost' => 100,
+     *                         'itemDescription' => 'Consultation for Georgian tours',
+     *                         'itemMode' => 2,
+     *                         'itemProductName' => 'Adventure Consult',
+     *                         'itemQty' => 2,
+     *                         'itemTotalAmount' => 200,
+     *                     ]),
+     *                     new BillItem([
+     *                         'itemCost' => 882.37,
+     *                         'itemDescription' => 'Deposit for trip planning',
+     *                         'itemMode' => 2,
+     *                         'itemProductName' => 'Deposit ',
+     *                         'itemQty' => 1,
+     *                         'itemTotalAmount' => 882.37,
+     *                     ]),
+     *                 ],
+     *             ]),
+     *         ]),
+     *     ]),
+     * );
+     * ```
      *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param AddInvoiceRequest $request
@@ -81,6 +133,10 @@ class InvoiceClient
     public function addInvoice(string $entry, AddInvoiceRequest $request, ?array $options = null): ?InvoiceResponseWithoutData
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->forceCustomerCreation != null) {
             $query['forceCustomerCreation'] = $request->forceCustomerCreation;
@@ -124,6 +180,15 @@ class InvoiceClient
     /**
      * Retrieves a file attached to an invoice.
      *
+     * Example:
+     * ```php
+     * $client->invoice->getAttachedFileFromInvoice(
+     *     1,
+     *     'filename',
+     *     new GetAttachedFileFromInvoiceRequest([]),
+     * );
+     * ```
+     *
      * @param int $idInvoice Invoice ID
      * The filename in Payabli. Get this from the `zipName` field
      * in the `DocumentsRef.filelist` array returned by
@@ -146,6 +211,10 @@ class InvoiceClient
     public function getAttachedFileFromInvoice(int $idInvoice, string $filename, GetAttachedFileFromInvoiceRequest $request = new GetAttachedFileFromInvoiceRequest(), ?array $options = null): ?FileContent
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->returnObject != null) {
             $query['returnObject'] = $request->returnObject;
@@ -183,6 +252,14 @@ class InvoiceClient
     /**
      * Deletes a file attached to an invoice.
      *
+     * Example:
+     * ```php
+     * $client->invoice->deleteAttachedFromInvoice(
+     *     23548884,
+     *     '0_Bill.pdf',
+     * );
+     * ```
+     *
      * @param int $idInvoice Invoice ID
      * The filename in Payabli. Get this from the `zipName` field
      * in the `DocumentsRef.filelist` array returned by
@@ -204,6 +281,10 @@ class InvoiceClient
     public function deleteAttachedFromInvoice(int $idInvoice, string $filename, ?array $options = null): ?InvoiceResponseWithoutData
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -236,6 +317,13 @@ class InvoiceClient
     /**
      * Retrieves a single invoice by ID.
      *
+     * Example:
+     * ```php
+     * $client->invoice->getInvoice(
+     *     23548884,
+     * );
+     * ```
+     *
      * @param int $idInvoice Invoice ID
      * @param ?array{
      *   baseUrl?: string,
@@ -252,6 +340,10 @@ class InvoiceClient
     public function getInvoice(int $idInvoice, ?array $options = null): ?GetInvoiceRecord
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -284,6 +376,30 @@ class InvoiceClient
     /**
      * Updates details for a single invoice in an entrypoint.
      *
+     * Example:
+     * ```php
+     * $client->invoice->editInvoice(
+     *     23548884,
+     *     new EditInvoiceRequest([
+     *         'body' => new InvoiceDataRequest([
+     *             'invoiceData' => new BillData([
+     *                 'invoiceAmount' => 982.37,
+     *                 'invoiceDate' => new DateTime('2025-10-19'),
+     *                 'invoiceNumber' => 'INV-2345',
+     *                 'items' => [
+     *                     new BillItem([
+     *                         'itemCost' => 882.37,
+     *                         'itemDescription' => 'Deposit for trip planning',
+     *                         'itemProductName' => 'Deposit',
+     *                         'itemQty' => 1,
+     *                     ]),
+     *                 ],
+     *             ]),
+     *         ]),
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $idInvoice Invoice ID
      * @param EditInvoiceRequest $request
      * @param ?array{
@@ -301,6 +417,10 @@ class InvoiceClient
     public function editInvoice(int $idInvoice, EditInvoiceRequest $request, ?array $options = null): ?InvoiceResponseWithoutData
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->forceCustomerCreation != null) {
             $query['forceCustomerCreation'] = $request->forceCustomerCreation;
@@ -339,6 +459,13 @@ class InvoiceClient
     /**
      * Deletes a single invoice from an entrypoint.
      *
+     * Example:
+     * ```php
+     * $client->invoice->deleteInvoice(
+     *     23548884,
+     * );
+     * ```
+     *
      * @param int $idInvoice Invoice ID
      * @param ?array{
      *   baseUrl?: string,
@@ -355,6 +482,10 @@ class InvoiceClient
     public function deleteInvoice(int $idInvoice, ?array $options = null): ?InvoiceResponseWithoutData
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -387,6 +518,13 @@ class InvoiceClient
     /**
      * Retrieves the next available invoice number for a paypoint.
      *
+     * Example:
+     * ```php
+     * $client->invoice->getInvoiceNumber(
+     *     '8cfec329267',
+     * );
+     * ```
+     *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ?array{
      *   baseUrl?: string,
@@ -403,6 +541,10 @@ class InvoiceClient
     public function getInvoiceNumber(string $entry, ?array $options = null): ?InvoiceNumberResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -435,6 +577,18 @@ class InvoiceClient
     /**
      * Returns a list of invoices for an entrypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->invoice->listInvoices(
+     *     '8cfec329267',
+     *     new ListInvoicesRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ListInvoicesRequest $request
      * @param ?array{
@@ -452,6 +606,10 @@ class InvoiceClient
     public function listInvoices(string $entry, ListInvoicesRequest $request = new ListInvoicesRequest(), ?array $options = null): ?QueryInvoiceResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -501,6 +659,18 @@ class InvoiceClient
     /**
      * Returns a list of invoices for an org. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
      *
+     * Example:
+     * ```php
+     * $client->invoice->listInvoicesOrg(
+     *     123,
+     *     new ListInvoicesOrgRequest([
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 0,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ListInvoicesOrgRequest $request
      * @param ?array{
@@ -518,6 +688,10 @@ class InvoiceClient
     public function listInvoicesOrg(int $orgId, ListInvoicesOrgRequest $request = new ListInvoicesOrgRequest(), ?array $options = null): ?QueryInvoiceResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->exportFormat != null) {
             $query['exportFormat'] = $request->exportFormat;
@@ -567,6 +741,17 @@ class InvoiceClient
     /**
      * Sends an invoice from an entrypoint via email.
      *
+     * Example:
+     * ```php
+     * $client->invoice->sendInvoice(
+     *     23548884,
+     *     new SendInvoiceRequest([
+     *         'attachfile' => true,
+     *         'mail2' => 'tamara@example.com',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $idInvoice Invoice ID
      * @param SendInvoiceRequest $request
      * @param ?array{
@@ -584,6 +769,10 @@ class InvoiceClient
     public function sendInvoice(int $idInvoice, SendInvoiceRequest $request = new SendInvoiceRequest(), ?array $options = null): ?SendInvoiceResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->attachfile != null) {
             $query['attachfile'] = $request->attachfile;
@@ -624,6 +813,13 @@ class InvoiceClient
     /**
      * Export a single invoice in PDF format.
      *
+     * Example:
+     * ```php
+     * $client->invoice->getInvoicePdf(
+     *     23548884,
+     * );
+     * ```
+     *
      * @param int $idInvoice Invoice ID
      * @param ?array{
      *   baseUrl?: string,
@@ -640,6 +836,10 @@ class InvoiceClient
     public function getInvoicePdf(int $idInvoice, ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(

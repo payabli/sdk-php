@@ -4,6 +4,7 @@ namespace Payabli\Paypoint;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
 use Payabli\Types\GetBasicEntryResponse;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
@@ -42,6 +43,11 @@ class PaypointClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
      * @param RawClient $client
      * @param ?array{
      *   baseUrl?: string,
@@ -50,17 +56,27 @@ class PaypointClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      * } $options
+     * @param ?RoutingAuthProvider $routingAuthProvider
      */
     public function __construct(
         RawClient $client,
         ?array $options = null,
+        ?RoutingAuthProvider $routingAuthProvider = null,
     ) {
         $this->client = $client;
+        $this->routingAuthProvider = $routingAuthProvider;
         $this->options = $options ?? [];
     }
 
     /**
      * Gets the basic details for a paypoint.
+     *
+     * Example:
+     * ```php
+     * $client->paypoint->getBasicEntry(
+     *     '8cfec329267',
+     * );
+     * ```
      *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ?array{
@@ -78,6 +94,10 @@ class PaypointClient
     public function getBasicEntry(string $entry, ?array $options = null): ?GetBasicEntryResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -110,6 +130,13 @@ class PaypointClient
     /**
      * Retrieves the basic details for a paypoint by ID.
      *
+     * Example:
+     * ```php
+     * $client->paypoint->getBasicEntryById(
+     *     '198',
+     * );
+     * ```
+     *
      * @param string $idPaypoint Paypoint ID. You can find this value by querying `/api/Query/paypoints/{orgId}`
      * @param ?array{
      *   baseUrl?: string,
@@ -126,6 +153,10 @@ class PaypointClient
     public function getBasicEntryById(string $idPaypoint, ?array $options = null): ?GetBasicEntryByIdResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -158,6 +189,14 @@ class PaypointClient
     /**
      * Updates a paypoint logo.
      *
+     * Example:
+     * ```php
+     * $client->paypoint->saveLogo(
+     *     '8cfec329267',
+     *     new FileContent([]),
+     * );
+     * ```
+     *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param FileContent $request
      * @param ?array{
@@ -175,6 +214,10 @@ class PaypointClient
     public function saveLogo(string $entry, FileContent $request, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -208,6 +251,25 @@ class PaypointClient
     /**
      * Migrates a paypoint to a new parent organization.
      *
+     * Example:
+     * ```php
+     * $client->paypoint->migrate(
+     *     new PaypointMoveRequest([
+     *         'entryPoint' => '8cfec329267',
+     *         'newParentOrganizationId' => 123,
+     *         'notificationRequest' => new NotificationRequest([
+     *             'notificationUrl' => 'https://webhook-test.yoursie.com',
+     *             'webHeaderParameters' => [
+     *                 new WebHeaderParameter([
+     *                     'key' => 'testheader',
+     *                     'value' => '1234567890',
+     *                 ]),
+     *             ],
+     *         ]),
+     *     ]),
+     * );
+     * ```
+     *
      * @param PaypointMoveRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -224,6 +286,10 @@ class PaypointClient
     public function migrate(PaypointMoveRequest $request, ?array $options = null): ?MigratePaypointResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -257,6 +323,13 @@ class PaypointClient
     /**
      * Retrieves a paypoint's basic settings like custom fields, identifiers, and invoicing settings.
      *
+     * Example:
+     * ```php
+     * $client->paypoint->settingsPage(
+     *     '8cfec329267',
+     * );
+     * ```
+     *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ?array{
      *   baseUrl?: string,
@@ -273,6 +346,10 @@ class PaypointClient
     public function settingsPage(string $entry, ?array $options = null): ?SettingsQueryRecord
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -305,6 +382,14 @@ class PaypointClient
     /**
      * Gets the details for a single paypoint.
      *
+     * Example:
+     * ```php
+     * $client->paypoint->getEntryConfig(
+     *     '8cfec329267',
+     *     new GetEntryConfigRequest([]),
+     * );
+     * ```
+     *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param GetEntryConfigRequest $request
      * @param ?array{
@@ -322,6 +407,10 @@ class PaypointClient
     public function getEntryConfig(string $entry, GetEntryConfigRequest $request = new GetEntryConfigRequest(), ?array $options = null): ?GetEntryConfigResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->entrypages != null) {
             $query['entrypages'] = $request->entrypages;
@@ -359,6 +448,14 @@ class PaypointClient
     /**
      * Gets the details for a single payment page for a paypoint.
      *
+     * Example:
+     * ```php
+     * $client->paypoint->getPage(
+     *     '8cfec329267',
+     *     'pay-your-fees-1',
+     * );
+     * ```
+     *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param string $subdomain Payment page identifier. The subdomain value is the last portion of the payment page URL. For example, in `https://paypages-sandbox.payabli.com/513823dc10/pay-your-fees-1`, the subdomain is `pay-your-fees-1`.
      * @param ?array{
@@ -376,6 +473,10 @@ class PaypointClient
     public function getPage(string $entry, string $subdomain, ?array $options = null): ?PayabliPages
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -408,6 +509,14 @@ class PaypointClient
     /**
      * Deletes a payment page in a paypoint.
      *
+     * Example:
+     * ```php
+     * $client->paypoint->removePage(
+     *     '8cfec329267',
+     *     'pay-your-fees-1',
+     * );
+     * ```
+     *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param string $subdomain Payment page identifier. The subdomain value is the last portion of the payment page URL. For example, in `https://paypages-sandbox.payabli.com/513823dc10/pay-your-fees-1`, the subdomain is `pay-your-fees-1`.
      * @param ?array{
@@ -425,6 +534,10 @@ class PaypointClient
     public function removePage(string $entry, string $subdomain, ?array $options = null): ?PayabliApiResponseGeneric2Part
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(

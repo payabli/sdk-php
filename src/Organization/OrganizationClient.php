@@ -4,6 +4,7 @@ namespace Payabli\Organization;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
 use Payabli\Organization\Requests\AddOrganizationRequest;
 use Payabli\Types\AddOrganizationResponse;
 use Payabli\Exceptions\PayabliException;
@@ -38,6 +39,11 @@ class OrganizationClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
      * @param RawClient $client
      * @param ?array{
      *   baseUrl?: string,
@@ -46,17 +52,67 @@ class OrganizationClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      * } $options
+     * @param ?RoutingAuthProvider $routingAuthProvider
      */
     public function __construct(
         RawClient $client,
         ?array $options = null,
+        ?RoutingAuthProvider $routingAuthProvider = null,
     ) {
         $this->client = $client;
+        $this->routingAuthProvider = $routingAuthProvider;
         $this->options = $options ?? [];
     }
 
     /**
      * Creates an organization under a parent organization. This is also referred to as a suborganization.
+     *
+     * Example:
+     * ```php
+     * $client->organization->addOrganization(
+     *     new AddOrganizationRequest([
+     *         'idempotencyKey' => '6B29FC40-CA47-1067-B31D-00DD010662DA',
+     *         'billingInfo' => new Instrument([
+     *             'achAccount' => '123123123',
+     *             'achRouting' => '123123123',
+     *             'billingAddress' => '123 Walnut Street',
+     *             'billingCity' => 'Johnson City',
+     *             'billingCountry' => 'US',
+     *             'billingState' => 'TN',
+     *             'billingZip' => '37615',
+     *         ]),
+     *         'contacts' => [
+     *             new Contacts([
+     *                 'contactEmail' => 'herman@hermanscoatings.com',
+     *                 'contactName' => 'Herman Martinez',
+     *                 'contactPhone' => '3055550000',
+     *                 'contactTitle' => 'Owner',
+     *             ]),
+     *         ],
+     *         'hasBilling' => true,
+     *         'hasResidual' => true,
+     *         'orgAddress' => '123 Walnut Street',
+     *         'orgCity' => 'Johnson City',
+     *         'orgCountry' => 'US',
+     *         'orgEntryName' => 'pilgrim-planner',
+     *         'orgId' => '123',
+     *         'orgLogo' => new FileContent([
+     *             'fContent' => 'TXkgdGVzdCBmaWxlHJ==...',
+     *             'filename' => 'my-doc.pdf',
+     *             'ftype' => FileContentFtype::Pdf->value,
+     *             'furl' => 'https://mysite.com/my-doc.pdf',
+     *         ]),
+     *         'orgName' => 'Pilgrim Planner',
+     *         'orgParentId' => 236,
+     *         'orgState' => 'TN',
+     *         'orgTimezone' => -5,
+     *         'orgType' => 0,
+     *         'orgWebsite' => 'www.pilgrimageplanner.com',
+     *         'orgZip' => '37615',
+     *         'replyToEmail' => 'email@example.com',
+     *     ]),
+     * );
+     * ```
      *
      * @param AddOrganizationRequest $request
      * @param ?array{
@@ -74,6 +130,10 @@ class OrganizationClient
     public function addOrganization(AddOrganizationRequest $request, ?array $options = null): ?AddOrganizationResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $headers = [];
         if ($request->idempotencyKey != null) {
             $headers['idempotencyKey'] = $request->idempotencyKey;
@@ -112,6 +172,34 @@ class OrganizationClient
     /**
      * Updates an organization's details by ID.
      *
+     * Example:
+     * ```php
+     * $client->organization->editOrganization(
+     *     123,
+     *     new OrganizationData([
+     *         'contacts' => [
+     *             new Contacts([
+     *                 'contactEmail' => 'herman@hermanscoatings.com',
+     *                 'contactName' => 'Herman Martinez',
+     *                 'contactPhone' => '3055550000',
+     *                 'contactTitle' => 'Owner',
+     *             ]),
+     *         ],
+     *         'orgAddress' => '123 Walnut Street',
+     *         'orgCity' => 'Johnson City',
+     *         'orgCountry' => 'US',
+     *         'orgEntryName' => 'pilgrim-planner',
+     *         'organizationDataOrgId' => '123',
+     *         'orgName' => 'Pilgrim Planner',
+     *         'orgState' => 'TN',
+     *         'orgTimezone' => -5,
+     *         'orgType' => 0,
+     *         'orgWebsite' => 'www.pilgrimageplanner.com',
+     *         'orgZip' => '37615',
+     *     ]),
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param OrganizationData $request
      * @param ?array{
@@ -129,6 +217,10 @@ class OrganizationClient
     public function editOrganization(int $orgId, OrganizationData $request = new OrganizationData(), ?array $options = null): ?EditOrganizationResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -162,6 +254,13 @@ class OrganizationClient
     /**
      * Delete an organization by ID.
      *
+     * Example:
+     * ```php
+     * $client->organization->deleteOrganization(
+     *     123,
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ?array{
      *   baseUrl?: string,
@@ -178,6 +277,10 @@ class OrganizationClient
     public function deleteOrganization(int $orgId, ?array $options = null): ?DeleteOrganizationResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -210,6 +313,13 @@ class OrganizationClient
     /**
      * Gets an organization's basic information by entry name (entrypoint identifier).
      *
+     * Example:
+     * ```php
+     * $client->organization->getBasicOrganization(
+     *     '8cfec329267',
+     * );
+     * ```
+     *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ?array{
      *   baseUrl?: string,
@@ -226,6 +336,10 @@ class OrganizationClient
     public function getBasicOrganization(string $entry, ?array $options = null): ?OrganizationQueryRecord
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -258,6 +372,13 @@ class OrganizationClient
     /**
      * Gets an organization's basic details by org ID.
      *
+     * Example:
+     * ```php
+     * $client->organization->getBasicOrganizationById(
+     *     123,
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ?array{
      *   baseUrl?: string,
@@ -274,6 +395,10 @@ class OrganizationClient
     public function getBasicOrganizationById(int $orgId, ?array $options = null): ?OrganizationQueryRecord
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -306,6 +431,13 @@ class OrganizationClient
     /**
      * Retrieves details for an organization by ID.
      *
+     * Example:
+     * ```php
+     * $client->organization->getOrganization(
+     *     123,
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ?array{
      *   baseUrl?: string,
@@ -322,6 +454,10 @@ class OrganizationClient
     public function getOrganization(int $orgId, ?array $options = null): ?OrganizationQueryRecord
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -354,6 +490,13 @@ class OrganizationClient
     /**
      * Retrieves an organization's settings.
      *
+     * Example:
+     * ```php
+     * $client->organization->getSettingsOrganization(
+     *     123,
+     * );
+     * ```
+     *
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ?array{
      *   baseUrl?: string,
@@ -370,6 +513,10 @@ class OrganizationClient
     public function getSettingsOrganization(int $orgId, ?array $options = null): ?SettingsQueryRecord
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(

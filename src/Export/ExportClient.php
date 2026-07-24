@@ -4,6 +4,7 @@ namespace Payabli\Export;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
 use Payabli\Types\ExportFormat1;
 use Payabli\Export\Requests\ExportApplicationsRequest;
 use Payabli\Exceptions\PayabliException;
@@ -62,6 +63,11 @@ class ExportClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
      * @param RawClient $client
      * @param ?array{
      *   baseUrl?: string,
@@ -70,12 +76,15 @@ class ExportClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      * } $options
+     * @param ?RoutingAuthProvider $routingAuthProvider
      */
     public function __construct(
         RawClient $client,
         ?array $options = null,
+        ?RoutingAuthProvider $routingAuthProvider = null,
     ) {
         $this->client = $client;
+        $this->routingAuthProvider = $routingAuthProvider;
         $this->options = $options ?? [];
     }
 
@@ -85,6 +94,19 @@ class ExportClient
      * </Warning>
      *
      * Export a list of boarding applications for an organization. Use filters to limit results.
+     *
+     * Example:
+     * ```php
+     * $client->export->exportApplications(
+     *     ExportFormat1::Csv->value,
+     *     123,
+     *     new ExportApplicationsRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
      *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
@@ -104,6 +126,10 @@ class ExportClient
     public function exportApplications(string $format, int $orgId, ExportApplicationsRequest $request = new ExportApplicationsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -154,6 +180,19 @@ class ExportClient
      *
      * Export batch details for a paypoint. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportBatchDetails(
+     *     ExportFormat1::Csv->value,
+     *     '8cfec329267',
+     *     new ExportBatchDetailsRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportBatchDetailsRequest $request
@@ -172,6 +211,10 @@ class ExportClient
     public function exportBatchDetails(string $format, string $entry, ExportBatchDetailsRequest $request = new ExportBatchDetailsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -222,6 +265,19 @@ class ExportClient
      *
      * Export batch details for an organization. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportBatchDetailsOrg(
+     *     ExportFormat1::Csv->value,
+     *     123,
+     *     new ExportBatchDetailsOrgRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportBatchDetailsOrgRequest $request
@@ -240,6 +296,10 @@ class ExportClient
     public function exportBatchDetailsOrg(string $format, int $orgId, ExportBatchDetailsOrgRequest $request = new ExportBatchDetailsOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -290,6 +350,19 @@ class ExportClient
      *
      * Export a list of batches for an entrypoint. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportBatches(
+     *     ExportFormat1::Csv->value,
+     *     '8cfec329267',
+     *     new ExportBatchesRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportBatchesRequest $request
@@ -308,6 +381,10 @@ class ExportClient
     public function exportBatches(string $format, string $entry, ExportBatchesRequest $request = new ExportBatchesRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -358,6 +435,19 @@ class ExportClient
      *
      * Export a list of batches for an organization. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportBatchesOrg(
+     *     ExportFormat1::Csv->value,
+     *     123,
+     *     new ExportBatchesOrgRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportBatchesOrgRequest $request
@@ -376,6 +466,10 @@ class ExportClient
     public function exportBatchesOrg(string $format, int $orgId, ExportBatchesOrgRequest $request = new ExportBatchesOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -426,6 +520,19 @@ class ExportClient
      *
      * Export a list of money out batches for a paypoint. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportBatchesOut(
+     *     ExportFormat1::Csv->value,
+     *     '8cfec329267',
+     *     new ExportBatchesOutRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportBatchesOutRequest $request
@@ -444,6 +551,10 @@ class ExportClient
     public function exportBatchesOut(string $format, string $entry, ExportBatchesOutRequest $request = new ExportBatchesOutRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -494,6 +605,19 @@ class ExportClient
      *
      * Export a list of money out batches for an organization. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportBatchesOutOrg(
+     *     ExportFormat1::Csv->value,
+     *     123,
+     *     new ExportBatchesOutOrgRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportBatchesOutOrgRequest $request
@@ -512,6 +636,10 @@ class ExportClient
     public function exportBatchesOutOrg(string $format, int $orgId, ExportBatchesOutOrgRequest $request = new ExportBatchesOutOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -562,6 +690,19 @@ class ExportClient
      *
      * Export a list of bills for an entrypoint. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportBills(
+     *     ExportFormat1::Csv->value,
+     *     '8cfec329267',
+     *     new ExportBillsRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportBillsRequest $request
@@ -580,6 +721,10 @@ class ExportClient
     public function exportBills(string $format, string $entry, ExportBillsRequest $request = new ExportBillsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -630,6 +775,19 @@ class ExportClient
      *
      * Export a list of bills for an organization. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportBillsOrg(
+     *     ExportFormat1::Csv->value,
+     *     123,
+     *     new ExportBillsOrgRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportBillsOrgRequest $request
@@ -648,6 +806,10 @@ class ExportClient
     public function exportBillsOrg(string $format, int $orgId, ExportBillsOrgRequest $request = new ExportBillsOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -698,6 +860,19 @@ class ExportClient
      *
      * Export a list of chargebacks and ACH returns for an entrypoint. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportChargebacks(
+     *     ExportFormat1::Csv->value,
+     *     '8cfec329267',
+     *     new ExportChargebacksRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportChargebacksRequest $request
@@ -716,6 +891,10 @@ class ExportClient
     public function exportChargebacks(string $format, string $entry, ExportChargebacksRequest $request = new ExportChargebacksRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -766,6 +945,19 @@ class ExportClient
      *
      * Export a list of chargebacks and ACH returns for an organization. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportChargebacksOrg(
+     *     ExportFormat1::Csv->value,
+     *     123,
+     *     new ExportChargebacksOrgRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportChargebacksOrgRequest $request
@@ -784,6 +976,10 @@ class ExportClient
     public function exportChargebacksOrg(string $format, int $orgId, ExportChargebacksOrgRequest $request = new ExportChargebacksOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -834,6 +1030,19 @@ class ExportClient
      *
      * Export a list of customers for an entrypoint. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportCustomers(
+     *     ExportFormat1::Csv->value,
+     *     '8cfec329267',
+     *     new ExportCustomersRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportCustomersRequest $request
@@ -852,6 +1061,10 @@ class ExportClient
     public function exportCustomers(string $format, string $entry, ExportCustomersRequest $request = new ExportCustomersRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -902,6 +1115,19 @@ class ExportClient
      *
      * Exports a list of customers for an organization. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportCustomersOrg(
+     *     ExportFormat1::Csv->value,
+     *     123,
+     *     new ExportCustomersOrgRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportCustomersOrgRequest $request
@@ -920,6 +1146,10 @@ class ExportClient
     public function exportCustomersOrg(string $format, int $orgId, ExportCustomersOrgRequest $request = new ExportCustomersOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -970,6 +1200,19 @@ class ExportClient
      *
      * Export list of invoices for an entrypoint. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportInvoices(
+     *     ExportFormat1::Csv->value,
+     *     '8cfec329267',
+     *     new ExportInvoicesRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportInvoicesRequest $request
@@ -988,6 +1231,10 @@ class ExportClient
     public function exportInvoices(string $format, string $entry, ExportInvoicesRequest $request = new ExportInvoicesRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -1038,6 +1285,19 @@ class ExportClient
      *
      * Export a list of invoices for an organization. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportInvoicesOrg(
+     *     ExportFormat1::Csv->value,
+     *     123,
+     *     new ExportInvoicesOrgRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportInvoicesOrgRequest $request
@@ -1056,6 +1316,10 @@ class ExportClient
     public function exportInvoicesOrg(string $format, int $orgId, ExportInvoicesOrgRequest $request = new ExportInvoicesOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -1106,6 +1370,19 @@ class ExportClient
      *
      * Export a list of child organizations (suborganizations) for a parent organization.
      *
+     * Example:
+     * ```php
+     * $client->export->exportOrganizations(
+     *     ExportFormat1::Csv->value,
+     *     123,
+     *     new ExportOrganizationsRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportOrganizationsRequest $request
@@ -1124,6 +1401,10 @@ class ExportClient
     public function exportOrganizations(string $format, int $orgId, ExportOrganizationsRequest $request = new ExportOrganizationsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -1174,6 +1455,19 @@ class ExportClient
      *
      * Export a list of payouts and their statuses for an entrypoint. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportPayout(
+     *     ExportFormat1::Csv->value,
+     *     '8cfec329267',
+     *     new ExportPayoutRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportPayoutRequest $request
@@ -1192,6 +1486,10 @@ class ExportClient
     public function exportPayout(string $format, string $entry, ExportPayoutRequest $request = new ExportPayoutRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -1242,6 +1540,19 @@ class ExportClient
      *
      * Export a list of payouts and their details for an organization. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportPayoutOrg(
+     *     ExportFormat1::Csv->value,
+     *     123,
+     *     new ExportPayoutOrgRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportPayoutOrgRequest $request
@@ -1260,6 +1571,10 @@ class ExportClient
     public function exportPayoutOrg(string $format, int $orgId, ExportPayoutOrgRequest $request = new ExportPayoutOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -1310,6 +1625,19 @@ class ExportClient
      *
      * Export a list of paypoints in an organization. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportPaypoints(
+     *     ExportFormat1::Csv->value,
+     *     123,
+     *     new ExportPaypointsRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportPaypointsRequest $request
@@ -1328,6 +1656,10 @@ class ExportClient
     public function exportPaypoints(string $format, int $orgId, ExportPaypointsRequest $request = new ExportPaypointsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -1378,6 +1710,19 @@ class ExportClient
      *
      * Export a list of settled transactions for an entrypoint. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportSettlements(
+     *     ExportFormat1::Csv->value,
+     *     '8cfec329267',
+     *     new ExportSettlementsRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportSettlementsRequest $request
@@ -1396,6 +1741,10 @@ class ExportClient
     public function exportSettlements(string $format, string $entry, ExportSettlementsRequest $request = new ExportSettlementsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -1446,6 +1795,19 @@ class ExportClient
      *
      * Export a list of settled transactions for an organization. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportSettlementsOrg(
+     *     ExportFormat1::Csv->value,
+     *     123,
+     *     new ExportSettlementsOrgRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportSettlementsOrgRequest $request
@@ -1464,6 +1826,10 @@ class ExportClient
     public function exportSettlementsOrg(string $format, int $orgId, ExportSettlementsOrgRequest $request = new ExportSettlementsOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -1514,6 +1880,19 @@ class ExportClient
      *
      * Export a list of subscriptions for an entrypoint. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportSubscriptions(
+     *     ExportFormat1::Csv->value,
+     *     '8cfec329267',
+     *     new ExportSubscriptionsRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportSubscriptionsRequest $request
@@ -1532,6 +1911,10 @@ class ExportClient
     public function exportSubscriptions(string $format, string $entry, ExportSubscriptionsRequest $request = new ExportSubscriptionsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -1582,6 +1965,19 @@ class ExportClient
      *
      * Export a list of subscriptions for an organization. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportSubscriptionsOrg(
+     *     ExportFormat1::Csv->value,
+     *     123,
+     *     new ExportSubscriptionsOrgRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportSubscriptionsOrgRequest $request
@@ -1600,6 +1996,10 @@ class ExportClient
     public function exportSubscriptionsOrg(string $format, int $orgId, ExportSubscriptionsOrgRequest $request = new ExportSubscriptionsOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -1650,6 +2050,19 @@ class ExportClient
      *
      * Export a list of transactions for an entrypoint in a file in XLSX or CSV format. Use filters to limit results. If you don't specify a date range in the request, the last two months of data are returned.
      *
+     * Example:
+     * ```php
+     * $client->export->exportTransactions(
+     *     ExportFormat1::Csv->value,
+     *     '8cfec329267',
+     *     new ExportTransactionsRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportTransactionsRequest $request
@@ -1668,6 +2081,10 @@ class ExportClient
     public function exportTransactions(string $format, string $entry, ExportTransactionsRequest $request = new ExportTransactionsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -1718,6 +2135,19 @@ class ExportClient
      *
      * Export a list of transactions for an org in a file in XLSX or CSV format. Use filters to limit results. If you don't specify a date range in the request, the last two months of data are returned.
      *
+     * Example:
+     * ```php
+     * $client->export->exportTransactionsOrg(
+     *     ExportFormat1::Csv->value,
+     *     123,
+     *     new ExportTransactionsOrgRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportTransactionsOrgRequest $request
@@ -1736,6 +2166,10 @@ class ExportClient
     public function exportTransactionsOrg(string $format, int $orgId, ExportTransactionsOrgRequest $request = new ExportTransactionsOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -1786,6 +2220,21 @@ class ExportClient
      *
      * Export a list of transfer details for an entrypoint. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportTransferDetails(
+     *     ExportFormat1::Csv->value,
+     *     '8cfec329267',
+     *     4521,
+     *     new ExportTransferDetailsRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param int $transferId Transfer identifier.
@@ -1805,6 +2254,10 @@ class ExportClient
     public function exportTransferDetails(string $format, string $entry, int $transferId, ExportTransferDetailsRequest $request = new ExportTransferDetailsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -1858,6 +2311,19 @@ class ExportClient
      *
      * Get a list of transfers for an entrypoint. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportTransfers(
+     *     '8cfec329267',
+     *     new ExportTransfersRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *         'sortBy' => 'desc(field_name)',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportTransfersRequest $request
      * @param ?array{
@@ -1875,6 +2341,10 @@ class ExportClient
     public function exportTransfers(string $entry, ExportTransfersRequest $request = new ExportTransfersRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -1928,6 +2398,19 @@ class ExportClient
      *
      * Export a list of vendors for an entrypoint. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportVendors(
+     *     ExportFormat1::Csv->value,
+     *     '8cfec329267',
+     *     new ExportVendorsRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ExportVendorsRequest $request
@@ -1946,6 +2429,10 @@ class ExportClient
     public function exportVendors(string $format, string $entry, ExportVendorsRequest $request = new ExportVendorsRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;
@@ -1996,6 +2483,19 @@ class ExportClient
      *
      * Export a list of vendors for an organization. Use filters to limit results.
      *
+     * Example:
+     * ```php
+     * $client->export->exportVendorsOrg(
+     *     ExportFormat1::Csv->value,
+     *     123,
+     *     new ExportVendorsOrgRequest([
+     *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
+     *         'fromRecord' => 251,
+     *         'limitRecord' => 1000,
+     *     ]),
+     * );
+     * ```
+     *
      * @param value-of<ExportFormat1> $format Format for the export, either XLSX or CSV.
      * @param int $orgId The numeric identifier for organization, assigned by Payabli.
      * @param ExportVendorsOrgRequest $request
@@ -2014,6 +2514,10 @@ class ExportClient
     public function exportVendorsOrg(string $format, int $orgId, ExportVendorsOrgRequest $request = new ExportVendorsOrgRequest(), ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->columnsExport != null) {
             $query['columnsExport'] = $request->columnsExport;

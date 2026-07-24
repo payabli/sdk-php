@@ -4,6 +4,7 @@ namespace Payabli\Funding;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
 use Payabli\Funding\Requests\DepositFundsRequest;
 use Payabli\Types\DepositFundsResponse;
 use Payabli\Exceptions\PayabliException;
@@ -33,6 +34,11 @@ class FundingClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
      * @param RawClient $client
      * @param ?array{
      *   baseUrl?: string,
@@ -41,17 +47,31 @@ class FundingClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      * } $options
+     * @param ?RoutingAuthProvider $routingAuthProvider
      */
     public function __construct(
         RawClient $client,
         ?array $options = null,
+        ?RoutingAuthProvider $routingAuthProvider = null,
     ) {
         $this->client = $client;
+        $this->routingAuthProvider = $routingAuthProvider;
         $this->options = $options ?? [];
     }
 
     /**
      * Deposits funds into a paypoint's available payout balance. Deposited funds enter a pending state and aren't available for instant payouts until confirmed through FBO reconciliation.
+     *
+     * Example:
+     * ```php
+     * $client->funding->depositFunds(
+     *     new DepositFundsRequest([
+     *         'amount' => 10,
+     *         'entrypoint' => '48acde49',
+     *         'accountId' => '333',
+     *     ]),
+     * );
+     * ```
      *
      * @param DepositFundsRequest $request
      * @param ?array{
@@ -69,6 +89,10 @@ class FundingClient
     public function depositFunds(DepositFundsRequest $request, ?array $options = null): ?DepositFundsResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(

@@ -37,6 +37,8 @@ use Payabli\PayoutSubscription\PayoutSubscriptionClient;
 use Payabli\ChargeBacks\ChargeBacksClient;
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
+use Payabli\Core\OAuthTokenProvider;
 
 class PayabliClient
 {
@@ -222,6 +224,13 @@ class PayabliClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
+     * @param ?string $clientId The client ID for OAuth authentication.
+     * @param ?string $clientSecret The client secret for OAuth authentication.
      * @param ?string $apiKey The apiKey to use for authentication.
      * @param ?array{
      *   baseUrl?: string,
@@ -232,18 +241,19 @@ class PayabliClient
      * } $options
      */
     public function __construct(
+        ?string $clientId = null,
+        ?string $clientSecret = null,
         ?string $apiKey = null,
         ?array $options = null,
     ) {
+        $clientId ??= getenv('OAUTH_CLIENT_ID') ?: null;
+        $clientSecret ??= getenv('OAUTH_CLIENT_SECRET') ?: null;
         $defaultHeaders = [
             'X-Fern-Language' => 'PHP',
             'X-Fern-SDK-Name' => 'Payabli',
-            'X-Fern-SDK-Version' => '1.0.7',
-            'User-Agent' => 'payabli/payabli/1.0.7',
+            'X-Fern-SDK-Version' => '1.0.8',
+            'User-Agent' => 'payabli/payabli/1.0.8',
         ];
-        if ($apiKey != null) {
-            $defaultHeaders['requestToken'] = $apiKey;
-        }
 
         $this->options = $options ?? [];
 
@@ -252,42 +262,54 @@ class PayabliClient
             $this->options['headers'] ?? [],
         );
 
+        $oauthTokenProvider = null;
+        if ($clientId !== null && $clientSecret !== null) {
+            $authRawClient = new RawClient(['baseUrl' => $this->options['baseUrl'] ?? '', 'headers' => []]);
+            $authClient = new TokenClient($authRawClient);
+            $oauthTokenProvider = new OAuthTokenProvider($clientId, $clientSecret, $authClient);
+
+        }
+        $this->routingAuthProvider = new RoutingAuthProvider(
+            $oauthTokenProvider,
+            $apiKey,
+        );
+
         $this->client = new RawClient(
             options: $this->options,
         );
 
-        $this->bill = new BillClient($this->client, $this->options);
-        $this->customer = new CustomerClient($this->client, $this->options);
-        $this->checkCapture = new CheckCaptureClient($this->client, $this->options);
-        $this->moneyIn = new MoneyInClient($this->client, $this->options);
-        $this->token = new TokenClient($this->client, $this->options);
-        $this->subscription = new SubscriptionClient($this->client, $this->options);
-        $this->invoice = new InvoiceClient($this->client, $this->options);
-        $this->paymentLink = new PaymentLinkClient($this->client, $this->options);
-        $this->tokenStorage = new TokenStorageClient($this->client, $this->options);
-        $this->paypoint = new PaypointClient($this->client, $this->options);
-        $this->hostedPaymentPages = new HostedPaymentPagesClient($this->client, $this->options);
-        $this->paymentMethodDomain = new PaymentMethodDomainClient($this->client, $this->options);
-        $this->import = new ImportClient($this->client, $this->options);
-        $this->query = new QueryClient($this->client, $this->options);
-        $this->ocr = new OcrClient($this->client, $this->options);
-        $this->notificationlogs = new NotificationlogsClient($this->client, $this->options);
-        $this->cloud = new CloudClient($this->client, $this->options);
-        $this->lineItem = new LineItemClient($this->client, $this->options);
-        $this->boarding = new BoardingClient($this->client, $this->options);
-        $this->templates = new TemplatesClient($this->client, $this->options);
-        $this->export = new ExportClient($this->client, $this->options);
-        $this->organization = new OrganizationClient($this->client, $this->options);
-        $this->management = new ManagementClient($this->client, $this->options);
-        $this->statistic = new StatisticClient($this->client, $this->options);
-        $this->notification = new NotificationClient($this->client, $this->options);
-        $this->user = new UserClient($this->client, $this->options);
-        $this->vendor = new VendorClient($this->client, $this->options);
-        $this->ghostCard = new GhostCardClient($this->client, $this->options);
-        $this->moneyOut = new MoneyOutClient($this->client, $this->options);
-        $this->funding = new FundingClient($this->client, $this->options);
-        $this->wallet = new WalletClient($this->client, $this->options);
-        $this->payoutSubscription = new PayoutSubscriptionClient($this->client, $this->options);
-        $this->chargeBacks = new ChargeBacksClient($this->client, $this->options);
+        $this->bill = new BillClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->customer = new CustomerClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->checkCapture = new CheckCaptureClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->moneyIn = new MoneyInClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->token = new TokenClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->subscription = new SubscriptionClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->invoice = new InvoiceClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->paymentLink = new PaymentLinkClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->tokenStorage = new TokenStorageClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->paypoint = new PaypointClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->hostedPaymentPages = new HostedPaymentPagesClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->paymentMethodDomain = new PaymentMethodDomainClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->import = new ImportClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->query = new QueryClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->ocr = new OcrClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->notificationlogs = new NotificationlogsClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->cloud = new CloudClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->lineItem = new LineItemClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->boarding = new BoardingClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->templates = new TemplatesClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->export = new ExportClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->organization = new OrganizationClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->management = new ManagementClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->statistic = new StatisticClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->notification = new NotificationClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->user = new UserClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->vendor = new VendorClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->ghostCard = new GhostCardClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->moneyOut = new MoneyOutClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->funding = new FundingClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->wallet = new WalletClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->payoutSubscription = new PayoutSubscriptionClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->chargeBacks = new ChargeBacksClient($this->client, $this->options, $this->routingAuthProvider);
     }
 }

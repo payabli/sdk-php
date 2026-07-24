@@ -4,6 +4,7 @@ namespace Payabli\MoneyIn;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
 use Payabli\MoneyIn\Requests\RequestPaymentAuthorize;
 use Payabli\Types\AuthResponse;
 use Payabli\Exceptions\PayabliException;
@@ -54,6 +55,11 @@ class MoneyInClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
      * @param RawClient $client
      * @param ?array{
      *   baseUrl?: string,
@@ -62,12 +68,15 @@ class MoneyInClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      * } $options
+     * @param ?RoutingAuthProvider $routingAuthProvider
      */
     public function __construct(
         RawClient $client,
         ?array $options = null,
+        ?RoutingAuthProvider $routingAuthProvider = null,
     ) {
         $this->client = $client;
+        $this->routingAuthProvider = $routingAuthProvider;
         $this->options = $options ?? [];
     }
 
@@ -80,6 +89,34 @@ class MoneyInClient
      * Authorize a card transaction. This returns an authorization code and reserves funds for the merchant. Authorized transactions aren't flagged for settlement until [captured](/developers/api-reference/moneyin/capture-an-authorized-transaction).
      *
      * Only card transactions can be authorized. This endpoint can't be used for ACH transactions.
+     *
+     * Example:
+     * ```php
+     * $client->moneyIn->authorize(
+     *     new RequestPaymentAuthorize([
+     *         'body' => new TransRequestBody([
+     *             'customerData' => new PayorDataRequest([
+     *                 'customerId' => 4440,
+     *             ]),
+     *             'entryPoint' => '8cfec329267',
+     *             'ipaddress' => '255.255.255.255',
+     *             'paymentDetails' => new PaymentDetail([
+     *                 'serviceFee' => 0,
+     *                 'totalAmount' => 100,
+     *             ]),
+     *             'paymentMethod' => new PayMethodCredit([
+     *                 'cardcvv' => '999',
+     *                 'cardexp' => '02/27',
+     *                 'cardHolder' => 'John Cassian',
+     *                 'cardnumber' => '4111111111111111',
+     *                 'cardzip' => '12345',
+     *                 'initiator' => 'payor',
+     *                 'method' => PayMethodCreditMethod::Card->value,
+     *             ]),
+     *         ]),
+     *     ]),
+     * );
+     * ```
      *
      * @param RequestPaymentAuthorize $request
      * @param ?array{
@@ -97,6 +134,10 @@ class MoneyInClient
     public function authorize(RequestPaymentAuthorize $request, ?array $options = null): ?AuthResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->forceCustomerCreation != null) {
             $query['forceCustomerCreation'] = $request->forceCustomerCreation;
@@ -145,6 +186,14 @@ class MoneyInClient
      *   Capture an [authorized
      * transaction](/developers/api-reference/moneyin/authorize-a-transaction) to complete the transaction and move funds from the customer to merchant account.
      *
+     * Example:
+     * ```php
+     * $client->moneyIn->capture(
+     *     '10-7d9cd67d-2d5d-4cd7-a1b7-72b8b201ec13',
+     *     0,
+     * );
+     * ```
+     *
      * @param string $transId ReferenceId for the transaction (PaymentId).
      * @param float $amount Amount to be captured. The amount can't be greater the original total amount of the transaction. `0` captures the total amount authorized in the transaction. Partial captures aren't supported.
      * @param ?array{
@@ -162,6 +211,10 @@ class MoneyInClient
     public function capture(string $transId, float $amount, ?array $options = null): ?CaptureResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -200,6 +253,19 @@ class MoneyInClient
      *
      * You can use this endpoint to capture both full and partial amounts of the original authorized transaction. See [Capture an authorized transaction](/developers/developer-guides/pay-in-auth-and-capture) for more information about this endpoint.
      *
+     * Example:
+     * ```php
+     * $client->moneyIn->captureAuth(
+     *     '10-7d9cd67d-2d5d-4cd7-a1b7-72b8b201ec13',
+     *     new CaptureRequest([
+     *         'paymentDetails' => new CapturePaymentDetails([
+     *             'totalAmount' => 105,
+     *             'serviceFee' => 5,
+     *         ]),
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $transId ReferenceId for the transaction (PaymentId).
      * @param CaptureRequest $request
      * @param ?array{
@@ -217,6 +283,10 @@ class MoneyInClient
     public function captureAuth(string $transId, CaptureRequest $request, ?array $options = null): ?CaptureResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -252,6 +322,31 @@ class MoneyInClient
      *
      * This feature must be enabled by Payabli on a per-merchant basis. Contact support for help.
      *
+     * Example:
+     * ```php
+     * $client->moneyIn->credit(
+     *     new RequestCredit([
+     *         'idempotencyKey' => '6B29FC40-CA47-1067-B31D-00DD010662DA',
+     *         'customerData' => new PayorDataRequest([
+     *             'billingAddress1' => '5127 Linkwood ave',
+     *             'customerNumber' => 'C-90010',
+     *         ]),
+     *         'entrypoint' => '8cfec329267',
+     *         'paymentDetails' => new PaymentDetailCredit([
+     *             'serviceFee' => 0,
+     *             'totalAmount' => 1,
+     *         ]),
+     *         'paymentMethod' => new RequestCreditPaymentMethod([
+     *             'achAccount' => '88354454',
+     *             'achAccountType' => Achaccounttype::Checking->value,
+     *             'achHolder' => 'John Smith',
+     *             'achRouting' => '021000021',
+     *             'method' => RequestCreditPaymentMethodMethod::Ach->value,
+     *         ]),
+     *     ]),
+     * );
+     * ```
+     *
      * @param RequestCredit $request
      * @param ?array{
      *   baseUrl?: string,
@@ -268,6 +363,10 @@ class MoneyInClient
     public function credit(RequestCredit $request, ?array $options = null): ?PayabliApiResponse0
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->forceCustomerCreation != null) {
             $query['forceCustomerCreation'] = $request->forceCustomerCreation;
@@ -311,6 +410,13 @@ class MoneyInClient
     /**
      * Retrieve a processed transaction's details.
      *
+     * Example:
+     * ```php
+     * $client->moneyIn->details(
+     *     '45-as456777hhhhhhhhhh77777777-324',
+     * );
+     * ```
+     *
      * @param string $transId ReferenceId for the transaction (PaymentId).
      * @param ?array{
      *   baseUrl?: string,
@@ -327,6 +433,10 @@ class MoneyInClient
     public function details(string $transId, ?array $options = null): ?TransactionQueryRecordsCustomer
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -363,6 +473,34 @@ class MoneyInClient
      *
      * Make a single transaction. This method authorizes and captures a payment in one step.
      *
+     * Example:
+     * ```php
+     * $client->moneyIn->getpaid(
+     *     new RequestPayment([
+     *         'body' => new TransRequestBody([
+     *             'customerData' => new PayorDataRequest([
+     *                 'customerId' => 4440,
+     *             ]),
+     *             'entryPoint' => '8cfec329267',
+     *             'ipaddress' => '255.255.255.255',
+     *             'paymentDetails' => new PaymentDetail([
+     *                 'serviceFee' => 0,
+     *                 'totalAmount' => 100,
+     *             ]),
+     *             'paymentMethod' => new PayMethodCredit([
+     *                 'cardcvv' => '999',
+     *                 'cardexp' => '02/27',
+     *                 'cardHolder' => 'John Cassian',
+     *                 'cardnumber' => '4111111111111111',
+     *                 'cardzip' => '12345',
+     *                 'initiator' => 'payor',
+     *                 'method' => PayMethodCreditMethod::Card->value,
+     *             ]),
+     *         ]),
+     *     ]),
+     * );
+     * ```
+     *
      * @param RequestPayment $request
      * @param ?array{
      *   baseUrl?: string,
@@ -379,6 +517,10 @@ class MoneyInClient
     public function getpaid(RequestPayment $request, ?array $options = null): ?PayabliApiResponseGetPaid
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->achValidation != null) {
             $query['achValidation'] = $request->achValidation;
@@ -435,6 +577,14 @@ class MoneyInClient
      *
      * A reversal either refunds or voids a transaction independent of the transaction's settlement status. Send a reversal request for a transaction, and Payabli automatically determines whether it's a refund or void. You don't need to know whether the transaction is settled or not. This endpoint only works on transactions made with the legacy endpoints. For transactions made with the current endpoints, check the transaction's settlement status and call void or refund based on the result.
      *
+     * Example:
+     * ```php
+     * $client->moneyIn->reverse(
+     *     '10-3ffa27df-b171-44e0-b251-e95fbfc7a723',
+     *     0,
+     * );
+     * ```
+     *
      * @param string $transId ReferenceId for the transaction (PaymentId).
      * Amount to reverse from original transaction, minus any service fees charged on the original transaction.
      *
@@ -458,6 +608,10 @@ class MoneyInClient
     public function reverse(string $transId, float $amount, ?array $options = null): ?ReverseResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -494,6 +648,14 @@ class MoneyInClient
      *
      * Refund a transaction that has settled and send money back to the account holder. If a transaction hasn't been settled, void it instead.
      *
+     * Example:
+     * ```php
+     * $client->moneyIn->refund(
+     *     '10-3ffa27df-b171-44e0-b251-e95fbfc7a723',
+     *     0,
+     * );
+     * ```
+     *
      * @param string $transId ReferenceId for the transaction (PaymentId).
      * Amount to refund from original transaction, minus any service fees charged on the original transaction.
      *
@@ -517,6 +679,10 @@ class MoneyInClient
     public function refund(string $transId, float $amount, ?array $options = null): ?RefundResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -553,6 +719,35 @@ class MoneyInClient
      *
      * Refunds a settled transaction with split instructions.
      *
+     * Example:
+     * ```php
+     * $client->moneyIn->refundWithInstructions(
+     *     '10-3ffa27df-b171-44e0-b251-e95fbfc7a723',
+     *     new RequestRefund([
+     *         'idempotencyKey' => '8A29FC40-CA47-1067-B31D-00DD010662DB',
+     *         'amount' => 100,
+     *         'orderDescription' => 'Materials deposit',
+     *         'refundDetails' => new RefundDetail([
+     *             'splitRefunding' => [
+     *                 new SplitFundingRefundContent([
+     *                     'accountId' => '187-342',
+     *                     'amount' => 60,
+     *                     'description' => 'Refunding undelivered materials',
+     *                     'originationEntryPoint' => '7f1a381696',
+     *                 ]),
+     *                 new SplitFundingRefundContent([
+     *                     'accountId' => '187-343',
+     *                     'amount' => 40,
+     *                     'description' => 'Refunding deposit for undelivered materials',
+     *                     'originationEntryPoint' => '7f1a381696',
+     *                 ]),
+     *             ],
+     *         ]),
+     *         'source' => 'api',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $transId ReferenceId for the transaction (PaymentId).
      * @param RequestRefund $request
      * @param ?array{
@@ -570,6 +765,10 @@ class MoneyInClient
     public function refundWithInstructions(string $transId, RequestRefund $request = new RequestRefund(), ?array $options = null): ?RefundWithInstructionsResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $headers = [];
         if ($request->idempotencyKey != null) {
             $headers['idempotencyKey'] = $request->idempotencyKey;
@@ -608,6 +807,13 @@ class MoneyInClient
     /**
      * Reverse microdeposits that are used to verify customer account ownership and access. The `transId` value is returned in the success response for the original credit transaction made with `api/MoneyIn/makecredit`.
      *
+     * Example:
+     * ```php
+     * $client->moneyIn->reverseCredit(
+     *     '45-as456777hhhhhhhhhh77777777-324',
+     * );
+     * ```
+     *
      * @param string $transId ReferenceId for the transaction (PaymentId).
      * @param ?array{
      *   baseUrl?: string,
@@ -624,6 +830,10 @@ class MoneyInClient
     public function reverseCredit(string $transId, ?array $options = null): ?PayabliApiResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -656,6 +866,16 @@ class MoneyInClient
     /**
      * Send a payment receipt for a transaction.
      *
+     * Example:
+     * ```php
+     * $client->moneyIn->sendReceipt2Trans(
+     *     '45-as456777hhhhhhhhhh77777777-324',
+     *     new SendReceipt2TransRequest([
+     *         'email' => 'example@email.com',
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $transId ReferenceId for the transaction (PaymentId).
      * @param SendReceipt2TransRequest $request
      * @param ?array{
@@ -673,6 +893,10 @@ class MoneyInClient
     public function sendReceipt2Trans(string $transId, SendReceipt2TransRequest $request = new SendReceipt2TransRequest(), ?array $options = null): ?ReceiptResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->email != null) {
             $query['email'] = $request->email;
@@ -710,6 +934,23 @@ class MoneyInClient
     /**
      * Validates a card number without running a transaction or authorizing a charge.
      *
+     * Example:
+     * ```php
+     * $client->moneyIn->validate(
+     *     new RequestPaymentValidate([
+     *         'idempotencyKey' => '6B29FC40-CA47-1067-B31D-00DD010662DA',
+     *         'entryPoint' => '8cfec329267',
+     *         'paymentMethod' => new RequestPaymentValidatePaymentMethod([
+     *             'method' => RequestPaymentValidatePaymentMethodMethod::Card->value,
+     *             'cardnumber' => '4360000001000005',
+     *             'cardexp' => '12/29',
+     *             'cardzip' => '14602-8328',
+     *             'cardHolder' => 'Dianne Becker-Smith',
+     *         ]),
+     *     ]),
+     * );
+     * ```
+     *
      * @param RequestPaymentValidate $request
      * @param ?array{
      *   baseUrl?: string,
@@ -726,6 +967,10 @@ class MoneyInClient
     public function validate(RequestPaymentValidate $request, ?array $options = null): ?ValidateResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $headers = [];
         if ($request->idempotencyKey != null) {
             $headers['idempotencyKey'] = $request->idempotencyKey;
@@ -768,6 +1013,13 @@ class MoneyInClient
      *
      * Cancel a transaction that hasn't been settled yet. Voiding non-captured authorizations prevents future captures. If a transaction has been settled, refund it instead.
      *
+     * Example:
+     * ```php
+     * $client->moneyIn->void(
+     *     '10-3ffa27df-b171-44e0-b251-e95fbfc7a723',
+     * );
+     * ```
+     *
      * @param string $transId ReferenceId for the transaction (PaymentId).
      * @param ?array{
      *   baseUrl?: string,
@@ -784,6 +1036,10 @@ class MoneyInClient
     public function void(string $transId, ?array $options = null): ?VoidResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -816,6 +1072,34 @@ class MoneyInClient
     /**
      * Make a single transaction. This method authorizes and captures a payment in one step. This is the v2 version of the `api/MoneyIn/getpaid` endpoint, and returns the unified response format. See [Pay In unified response codes reference](/guides/pay-in-unified-response-codes-reference) for more information.
      *
+     * Example:
+     * ```php
+     * $client->moneyIn->getpaidv2(
+     *     new RequestPaymentV2([
+     *         'body' => new TransRequestBody([
+     *             'customerData' => new PayorDataRequest([
+     *                 'customerId' => 4440,
+     *             ]),
+     *             'entryPoint' => '8cfec329267',
+     *             'ipaddress' => '255.255.255.255',
+     *             'paymentDetails' => new PaymentDetail([
+     *                 'serviceFee' => 0,
+     *                 'totalAmount' => 100,
+     *             ]),
+     *             'paymentMethod' => new PayMethodCredit([
+     *                 'cardcvv' => '999',
+     *                 'cardexp' => '02/27',
+     *                 'cardHolder' => 'John Cassian',
+     *                 'cardnumber' => '4111111111111111',
+     *                 'cardzip' => '12345',
+     *                 'initiator' => 'payor',
+     *                 'method' => PayMethodCreditMethod::Card->value,
+     *             ]),
+     *         ]),
+     *     ]),
+     * );
+     * ```
+     *
      * @param RequestPaymentV2 $request
      * @param ?array{
      *   baseUrl?: string,
@@ -832,6 +1116,10 @@ class MoneyInClient
     public function getpaidv2(RequestPaymentV2 $request, ?array $options = null): ?V2TransactionResponseWrapper
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->achValidation != null) {
             $query['achValidation'] = $request->achValidation;
@@ -883,6 +1171,34 @@ class MoneyInClient
      *
      * **Note**: Only card transactions can be authorized. This endpoint can't be used for ACH transactions.
      *
+     * Example:
+     * ```php
+     * $client->moneyIn->authorizev2(
+     *     new RequestPaymentAuthorizeV2([
+     *         'body' => new TransRequestBody([
+     *             'customerData' => new PayorDataRequest([
+     *                 'customerId' => 4440,
+     *             ]),
+     *             'entryPoint' => '8cfec329267',
+     *             'ipaddress' => '255.255.255.255',
+     *             'paymentDetails' => new PaymentDetail([
+     *                 'serviceFee' => 0,
+     *                 'totalAmount' => 100,
+     *             ]),
+     *             'paymentMethod' => new PayMethodCredit([
+     *                 'cardcvv' => '999',
+     *                 'cardexp' => '02/27',
+     *                 'cardHolder' => 'John Cassian',
+     *                 'cardnumber' => '4111111111111111',
+     *                 'cardzip' => '12345',
+     *                 'initiator' => 'payor',
+     *                 'method' => PayMethodCreditMethod::Card->value,
+     *             ]),
+     *         ]),
+     *     ]),
+     * );
+     * ```
+     *
      * @param RequestPaymentAuthorizeV2 $request
      * @param ?array{
      *   baseUrl?: string,
@@ -899,6 +1215,10 @@ class MoneyInClient
     public function authorizev2(RequestPaymentAuthorizeV2 $request, ?array $options = null): ?V2TransactionResponseWrapper
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->forceCustomerCreation != null) {
             $query['forceCustomerCreation'] = $request->forceCustomerCreation;
@@ -942,6 +1262,19 @@ class MoneyInClient
     /**
      * Capture an authorized transaction to complete the transaction and move funds from the customer to merchant account. This is the v2 version of the `api/MoneyIn/capture/{transId}` endpoint, and returns the unified response format. See [Pay In unified response codes reference](/guides/pay-in-unified-response-codes-reference) for more information.
      *
+     * Example:
+     * ```php
+     * $client->moneyIn->capturev2(
+     *     '10-7d9cd67d-2d5d-4cd7-a1b7-72b8b201ec13',
+     *     new CaptureRequest([
+     *         'paymentDetails' => new CapturePaymentDetails([
+     *             'totalAmount' => 105,
+     *             'serviceFee' => 5,
+     *         ]),
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $transId ReferenceId for the transaction (PaymentId).
      * @param CaptureRequest $request
      * @param ?array{
@@ -959,6 +1292,10 @@ class MoneyInClient
     public function capturev2(string $transId, CaptureRequest $request, ?array $options = null): ?V2TransactionResponseWrapper
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -998,6 +1335,14 @@ class MoneyInClient
      *   To refund a split-funded transaction, include split instructions in the request body. Omit the body for a standard refund.
      * </Note>
      *
+     * Example:
+     * ```php
+     * $client->moneyIn->refundv2(
+     *     '10-3ffa27df-b171-44e0-b251-e95fbfc7a723',
+     *     new RefundV2Request([]),
+     * );
+     * ```
+     *
      * @param string $transId ReferenceId for the transaction (PaymentId).
      * @param RefundV2Request $request
      * @param ?array{
@@ -1015,6 +1360,10 @@ class MoneyInClient
     public function refundv2(string $transId, RefundV2Request $request, ?array $options = null): ?V2TransactionResponseWrapper
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -1054,6 +1403,15 @@ class MoneyInClient
      *   To refund a split-funded transaction, include split instructions in the request body. Omit the body for a standard refund.
      * </Note>
      *
+     * Example:
+     * ```php
+     * $client->moneyIn->refundv2Amount(
+     *     '10-3ffa27df-b171-44e0-b251-e95fbfc7a723',
+     *     0,
+     *     new RefundV2Request([]),
+     * );
+     * ```
+     *
      * @param string $transId ReferenceId for the transaction (PaymentId).
      * @param float $amount Amount to refund from original transaction, minus any service fees charged on the original transaction. If set to 0, performs a full refund.
      * @param RefundV2Request $request
@@ -1072,6 +1430,10 @@ class MoneyInClient
     public function refundv2Amount(string $transId, float $amount, RefundV2Request $request, ?array $options = null): ?V2TransactionResponseWrapper
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
@@ -1105,6 +1467,13 @@ class MoneyInClient
     /**
      * Cancel a transaction that hasn't been settled yet. Voiding non-captured authorizations prevents future captures. This is the v2 version of the `api/MoneyIn/void/{transId}` endpoint, and returns the unified response format. See [Pay In unified response codes reference](/guides/pay-in-unified-response-codes-reference) for more information.
      *
+     * Example:
+     * ```php
+     * $client->moneyIn->voidv2(
+     *     '10-3ffa27df-b171-44e0-b251-e95fbfc7a723',
+     * );
+     * ```
+     *
      * @param string $transId ReferenceId for the transaction (PaymentId).
      * @param ?array{
      *   baseUrl?: string,
@@ -1121,6 +1490,10 @@ class MoneyInClient
     public function voidv2(string $transId, ?array $options = null): ?V2TransactionResponseWrapper
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(

@@ -4,6 +4,7 @@ namespace Payabli\TokenStorage;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
+use Payabli\Core\RoutingAuthProvider;
 use Payabli\TokenStorage\Requests\AddMethodRequest;
 use Payabli\Types\AddMethodResponse;
 use Payabli\Exceptions\PayabliException;
@@ -37,6 +38,11 @@ class TokenStorageClient
     private RawClient $client;
 
     /**
+     * @var ?RoutingAuthProvider $routingAuthProvider @phpstan-ignore-next-line Property is read in endpoint methods and passed to subclients
+     */
+    private ?RoutingAuthProvider $routingAuthProvider;
+
+    /**
      * @param RawClient $client
      * @param ?array{
      *   baseUrl?: string,
@@ -45,17 +51,46 @@ class TokenStorageClient
      *   timeout?: float,
      *   headers?: array<string, string>,
      * } $options
+     * @param ?RoutingAuthProvider $routingAuthProvider
      */
     public function __construct(
         RawClient $client,
         ?array $options = null,
+        ?RoutingAuthProvider $routingAuthProvider = null,
     ) {
         $this->client = $client;
+        $this->routingAuthProvider = $routingAuthProvider;
         $this->options = $options ?? [];
     }
 
     /**
      * Saves a payment method for reuse. This call exchanges sensitive payment information for a token that can be used to process future transactions. The `ReferenceId` value in the response is the `storedMethodId` to use with transactions.
+     *
+     * Example:
+     * ```php
+     * $client->tokenStorage->addMethod(
+     *     new AddMethodRequest([
+     *         'body' => new RequestTokenStorage([
+     *             'customerData' => new PayorDataRequest([
+     *                 'customerId' => 4440,
+     *             ]),
+     *             'entryPoint' => '8cfec329267',
+     *             'fallbackAuth' => true,
+     *             'fallbackAuthAmount' => 100,
+     *             'methodDescription' => 'Primary Visa card',
+     *             'paymentMethod' => new TokenizeCard([
+     *                 'method' => 'card',
+     *                 'cardcvv' => '123',
+     *                 'cardexp' => '12/29',
+     *                 'cardHolder' => 'John Doe',
+     *                 'cardnumber' => '4111111111111111',
+     *                 'cardzip' => '12345',
+     *             ]),
+     *             'source' => 'api',
+     *         ]),
+     *     ]),
+     * );
+     * ```
      *
      * @param AddMethodRequest $request
      * @param ?array{
@@ -73,6 +108,10 @@ class TokenStorageClient
     public function addMethod(AddMethodRequest $request, ?array $options = null): ?AddMethodResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->achValidation != null) {
             $query['achValidation'] = $request->achValidation;
@@ -125,6 +164,17 @@ class TokenStorageClient
     /**
      * Retrieves details for a saved payment method.
      *
+     * Example:
+     * ```php
+     * $client->tokenStorage->getMethod(
+     *     '32-8877drt00045632-678',
+     *     new GetMethodRequest([
+     *         'cardExpirationFormat' => 1,
+     *         'includeTemporary' => false,
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $methodId The saved payment method ID.
      * @param GetMethodRequest $request
      * @param ?array{
@@ -142,6 +192,10 @@ class TokenStorageClient
     public function getMethod(string $methodId, GetMethodRequest $request = new GetMethodRequest(), ?array $options = null): ?GetMethodResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->cardExpirationFormat != null) {
             $query['cardExpirationFormat'] = $request->cardExpirationFormat;
@@ -182,6 +236,30 @@ class TokenStorageClient
     /**
      * Updates a saved payment method.
      *
+     * Example:
+     * ```php
+     * $client->tokenStorage->updateMethod(
+     *     '32-8877drt00045632-678',
+     *     new UpdateMethodRequest([
+     *         'body' => new RequestTokenStorage([
+     *             'customerData' => new PayorDataRequest([
+     *                 'customerId' => 4440,
+     *             ]),
+     *             'entryPoint' => '8cfec329267',
+     *             'fallbackAuth' => true,
+     *             'paymentMethod' => new TokenizeCard([
+     *                 'method' => 'card',
+     *                 'cardcvv' => '123',
+     *                 'cardexp' => '12/29',
+     *                 'cardHolder' => 'John Doe',
+     *                 'cardnumber' => '4111111111111111',
+     *                 'cardzip' => '12345',
+     *             ]),
+     *         ]),
+     *     ]),
+     * );
+     * ```
+     *
      * @param string $methodId The saved payment method ID.
      * @param UpdateMethodRequest $request
      * @param ?array{
@@ -199,6 +277,10 @@ class TokenStorageClient
     public function updateMethod(string $methodId, UpdateMethodRequest $request, ?array $options = null): ?PayabliApiResponsePaymethodDelete
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         $query = [];
         if ($request->achValidation != null) {
             $query['achValidation'] = $request->achValidation;
@@ -237,6 +319,13 @@ class TokenStorageClient
     /**
      * Deletes a saved payment method.
      *
+     * Example:
+     * ```php
+     * $client->tokenStorage->removeMethod(
+     *     '32-8877drt00045632-678',
+     * );
+     * ```
+     *
      * @param string $methodId The saved payment method ID.
      * @param ?array{
      *   baseUrl?: string,
@@ -253,6 +342,10 @@ class TokenStorageClient
     public function removeMethod(string $methodId, ?array $options = null): ?PayabliApiResponsePaymethodDelete
     {
         $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
