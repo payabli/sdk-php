@@ -285,10 +285,10 @@ class ApplicationDataOdp extends JsonSerializableType
     public ?string $repOffice;
 
     /**
-     * @var ?string $onCreate
+     * @var ?array<string> $onCreate
      */
-    #[JsonProperty('onCreate')]
-    public ?string $onCreate;
+    #[JsonProperty('onCreate'), ArrayType(['string'])]
+    public ?array $onCreate;
 
     /**
      * @param array{
@@ -338,7 +338,7 @@ class ApplicationDataOdp extends JsonSerializableType
      *   repCode?: ?string,
      *   repName?: ?string,
      *   repOffice?: ?string,
-     *   onCreate?: ?string,
+     *   onCreate?: ?array<string>,
      * } $values
      */
     public function __construct(

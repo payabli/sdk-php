@@ -63,8 +63,7 @@ use Payabli\Types\PayMethodCredit;
 use Payabli\Types\PayMethodCreditMethod;
 
 $client = new PayabliClient(
-    clientId: '<clientId>',
-    clientSecret: '<clientSecret>',
+    apiKey: '<value>',
 );
 $client->moneyIn->getpaidv2(
     new RequestPaymentV2([

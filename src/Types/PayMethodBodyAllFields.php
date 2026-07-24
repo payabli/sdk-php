@@ -77,10 +77,10 @@ class PayMethodBodyAllFields extends JsonSerializableType
     public ?string $device;
 
     /**
-     * @var ?string $initator
+     * @var ?string $initiator
      */
-    #[JsonProperty('initator')]
-    public ?string $initator;
+    #[JsonProperty('initiator')]
+    public ?string $initiator;
 
     /**
      * @var ?value-of<Methodall> $method
@@ -119,7 +119,7 @@ class PayMethodBodyAllFields extends JsonSerializableType
      *   cardnumber?: ?string,
      *   cardzip?: ?string,
      *   device?: ?string,
-     *   initator?: ?string,
+     *   initiator?: ?string,
      *   method?: ?value-of<Methodall>,
      *   saveIfSuccess?: ?bool,
      *   storedMethodId?: ?string,
@@ -140,7 +140,7 @@ class PayMethodBodyAllFields extends JsonSerializableType
         $this->cardnumber = $values['cardnumber'] ?? null;
         $this->cardzip = $values['cardzip'] ?? null;
         $this->device = $values['device'] ?? null;
-        $this->initator = $values['initator'] ?? null;
+        $this->initiator = $values['initiator'] ?? null;
         $this->method = $values['method'] ?? null;
         $this->saveIfSuccess = $values['saveIfSuccess'] ?? null;
         $this->storedMethodId = $values['storedMethodId'] ?? null;
