@@ -9,7 +9,7 @@ use Payabli\Core\Types\ArrayType;
 class NotificationContent extends JsonSerializableType
 {
     /**
-     * @var ?value-of<NotificationContentEventType> $eventType The notification's event name.
+     * @var ?string $eventType The notification's event name.
      */
     #[JsonProperty('eventType')]
     public ?string $eventType;
@@ -55,7 +55,7 @@ class NotificationContent extends JsonSerializableType
 
     /**
      * @param array{
-     *   eventType?: ?value-of<NotificationContentEventType>,
+     *   eventType?: ?string,
      *   fileFormat?: ?value-of<NotificationContentFileFormat>,
      *   internalData?: ?array<KeyValueDuo>,
      *   reportName?: ?value-of<NotificationContentReportName>,

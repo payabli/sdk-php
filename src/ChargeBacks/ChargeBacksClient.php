@@ -140,7 +140,7 @@ class ChargeBacksClient
      * );
      * ```
      *
-     * @param int $id ID of the chargeback or return record. This is returned as `chargebackID` in the [ReceivedChargeBack](/guides/pay-ops-webhooks-payloads#receivedchargeback) and [ReceivedAchReturn](/guides/pay-ops-webhooks-payloads#receivedachreturn) webhook notifications.
+     * @param int $id ID of the chargeback or return record. This is returned as `chargebackID` in the [ReceivedChargeBack](/developers/webhooks/payops-chargeback-received) and [ReceivedAchReturn](/developers/webhooks/payops-ach-return-received) webhook notifications.
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,

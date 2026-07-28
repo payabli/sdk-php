@@ -1,12 +1,12 @@
 <?php
 
-namespace Payabli\MoneyOut;
+namespace Payabli\CaseManagement;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\Core\RoutingAuthProvider;
-use Payabli\MoneyOut\Requests\RequestOutAuthorize;
-use Payabli\Types\AuthCapturePayoutResponse;
+use Payabli\CaseManagement\Requests\ValidateBankAccountChangeRequest;
+use Payabli\Types\PreCreationValidationResult;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -14,24 +14,24 @@ use Payabli\Environments;
 use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
-use Payabli\Types\CaptureAllOutResponse;
-use Payabli\Core\Json\JsonSerializer;
-use Payabli\Types\PayabliApiResponse0000;
-use Payabli\MoneyOut\Requests\CaptureAllOutRequest;
-use Payabli\MoneyOut\Requests\CaptureOutRequest;
-use Payabli\Types\BillDetailResponse;
-use Payabli\Types\VCardGetResponse;
-use Payabli\MoneyOut\Requests\RenewVCardRequest;
-use Payabli\Types\RenewVCardResponse;
-use Payabli\MoneyOut\Requests\SendVCardLinkRequest;
-use Payabli\Types\OperationResult;
+use Payabli\CaseManagement\Requests\CreateBankAccountChangeCaseRequest;
+use Payabli\Types\CaseResponse;
+use Payabli\CaseManagement\Requests\ListCasesCaseManagementRequest;
+use Payabli\Types\CaseListResponse;
+use Payabli\CaseManagement\Requests\ListMessagesCaseManagementRequest;
+use Payabli\Types\MessagePage;
+use Payabli\CaseManagement\Requests\PostCaseMessageRequest;
+use Payabli\Types\PostedMessage;
+use Payabli\Types\AvailableTransitionsResponse;
+use Payabli\CaseManagement\Requests\TransitionCaseRequest;
+use Payabli\CaseManagement\Requests\AssignCaseRequest;
+use Payabli\Types\AttachmentResponse;
 use Payabli\Core\Json\JsonDecoder;
-use Payabli\Types\AllowedCheckPaymentStatus;
-use Payabli\Types\PayabliApiResponse00Responsedatanonobject;
-use Payabli\MoneyOut\Requests\ReissueOutRequest;
-use Payabli\Types\ReissuePayoutResponse;
+use Payabli\CaseManagement\Requests\UploadAttachmentCaseManagementRequest;
+use Payabli\Core\Multipart\MultipartFormData;
+use Payabli\Core\Multipart\MultipartApiRequest;
 
-class MoneyOutClient
+class CaseManagementClient
 {
     /**
      * @var array{
@@ -76,43 +76,37 @@ class MoneyOutClient
     }
 
     /**
-     * Authorizes a transaction for payout.
+     * Validates a bank account change for a paypoint without creating a case.
+     * Runs the same checks the create endpoint runs, and returns blocking
+     * conditions and warnings. Blocking conditions prevent creation; warnings
+     * don't.
      *
-     * If you don't pass `autoCapture` with a value of `true`, authorized transactions aren't flagged for settlement until captured. Use the `referenceId` returned in the response to capture the transaction.
-     *
-     * When `autoCapture` is `true`, Payabli captures the transaction asynchronously after authorization. The response confirms only that the transaction was authorized; it doesn't confirm that capture succeeded. To confirm capture, listen for the [`payout_transaction_approvedcaptured`](/developers/webhooks/payout-transaction-approved-captured) webhook event.
-     *
-     * If a velocity fraud alert is triggered, the endpoint returns a `202` response with `responseCode` `9051`, and the authorization is held for risk review rather than rejected. If a risk policy blocks the transaction, the endpoint returns a `422` response with `responseCode` `9005`, a terminal rejection.
-     *
-     * For check payouts, Payabli validates the remit (mailing) address at authorization. If the address fails deliverability validation, the endpoint returns a `422` response and doesn't charge the paypoint. Correct the address and re-authorize. Other payout rails (ACH, RTP, virtual card, wire, and managed payables) aren't affected.
+     * Available to both Platform and Enterprise Partners.
      *
      * Example:
      * ```php
-     * $client->moneyOut->authorizeOut(
-     *     new RequestOutAuthorize([
-     *         'entryPoint' => '8cfec329267',
-     *         'orderDescription' => 'Window Painting',
-     *         'paymentMethod' => new AuthorizePaymentMethod([
-     *             'method' => 'managed',
+     * $client->caseManagement->validateBankAccountChange(
+     *     3040,
+     *     new ValidateBankAccountChangeRequest([
+     *         'routingNumber' => '123456789',
+     *         'accountNumber' => '987654321',
+     *         'accountType' => 'checking',
+     *         'bankAccountHolderType' => 'business',
+     *         'bankAccountFunction' => CaseManagementBankAccountFunction::Deposits->value,
+     *         'services' => new BankAccountServices([
+     *             'moneyIn' => [
+     *                 MoneyInService::Ach->value,
+     *             ],
+     *             'moneyOut' => [
+     *                 MoneyOutService::Ach->value,
+     *             ],
      *         ]),
-     *         'paymentDetails' => new RequestOutAuthorizePaymentDetails([
-     *             'totalAmount' => 47,
-     *             'unbundled' => false,
-     *         ]),
-     *         'vendorData' => new RequestOutAuthorizeVendorData([
-     *             'vendorNumber' => 'VEN-123',
-     *         ]),
-     *         'invoiceData' => [
-     *             new RequestOutAuthorizeInvoiceData([
-     *                 'billId' => 54323,
-     *             ]),
-     *         ],
-     *         'autoCapture' => true,
      *     ]),
      * );
      * ```
      *
-     * @param RequestOutAuthorize $request
+     * @param int $paypointId The paypoint's numeric identifier.
+     * @param ValidateBankAccountChangeRequest $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -121,42 +115,23 @@ class MoneyOutClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?AuthCapturePayoutResponse
+     * @return ?PreCreationValidationResult
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function authorizeOut(RequestOutAuthorize $request, ?array $options = null): ?AuthCapturePayoutResponse
+    public function validateBankAccountChange(int $paypointId, ValidateBankAccountChangeRequest $request, ?array $options = null): ?PreCreationValidationResult
     {
         $options = array_merge($this->options, $options ?? []);
         $options['headers'] = array_merge(
-            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []]]) ?? [],
             $options['headers'] ?? []
         );
-        $query = [];
-        if ($request->allowDuplicatedBills != null) {
-            $query['allowDuplicatedBills'] = $request->allowDuplicatedBills;
-        }
-        if ($request->doNotCreateBills != null) {
-            $query['doNotCreateBills'] = $request->doNotCreateBills;
-        }
-        if ($request->forceVendorCreation != null) {
-            $query['forceVendorCreation'] = $request->forceVendorCreation;
-        }
-        if ($request->sameDayAch != null) {
-            $query['sameDayACH'] = $request->sameDayAch;
-        }
-        $headers = [];
-        if ($request->idempotencyKey != null) {
-            $headers['idempotencyKey'] = $request->idempotencyKey;
-        }
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "MoneyOut/authorize",
+                    path: "v2/cases/bank-account/{$paypointId}/validate",
                     method: HttpMethod::POST,
-                    headers: $headers,
-                    query: $query,
                     body: $request,
                 ),
                 $options,
@@ -167,7 +142,7 @@ class MoneyOutClient
                 if (empty($json)) {
                     return null;
                 }
-                return AuthCapturePayoutResponse::fromJson($json);
+                return PreCreationValidationResult::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -182,20 +157,41 @@ class MoneyOutClient
     }
 
     /**
-     * Cancels an array of payout transactions.
+     * Creates a bank-account-change case for a paypoint. The account and
+     * routing numbers are validated and tokenized before the case is saved —
+     * the raw numbers are never stored or returned. The account holder name is
+     * taken from the paypoint's legal name. On success the case is created in
+     * `Submitted` and asynchronous verification starts.
+     *
+     * Available to both Platform and Enterprise Partners.
      *
      * Example:
      * ```php
-     * $client->moneyOut->cancelAllOut(
-     *     [
-     *         '2-29',
-     *         '2-28',
-     *         '2-27',
-     *     ],
+     * $client->caseManagement->createBankAccountChange(
+     *     3040,
+     *     new CreateBankAccountChangeCaseRequest([
+     *         'nickname' => 'Main Settlement Account',
+     *         'bankName' => 'First National Bank',
+     *         'routingNumber' => '123456789',
+     *         'accountNumber' => '987654321',
+     *         'accountType' => 'checking',
+     *         'bankAccountHolderType' => 'business',
+     *         'bankAccountFunction' => CaseManagementBankAccountFunction::Deposits->value,
+     *         'services' => new BankAccountServices([
+     *             'moneyIn' => [
+     *                 MoneyInService::Ach->value,
+     *             ],
+     *             'moneyOut' => [
+     *                 MoneyOutService::Ach->value,
+     *             ],
+     *         ]),
+     *         'default' => true,
+     *     ]),
      * );
      * ```
      *
-     * @param array<string> $request
+     * @param int $paypointId The paypoint's numeric identifier.
+     * @param CreateBankAccountChangeCaseRequest $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -204,24 +200,24 @@ class MoneyOutClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?CaptureAllOutResponse
+     * @return ?CaseResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function cancelAllOut(array $request, ?array $options = null): ?CaptureAllOutResponse
+    public function createBankAccountChange(int $paypointId, CreateBankAccountChangeCaseRequest $request, ?array $options = null): ?CaseResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $options['headers'] = array_merge(
-            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []]]) ?? [],
             $options['headers'] ?? []
         );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "MoneyOut/cancelAll",
+                    path: "v2/cases/bank-account/{$paypointId}",
                     method: HttpMethod::POST,
-                    body: JsonSerializer::serializeArray($request, ['string']),
+                    body: $request,
                 ),
                 $options,
             );
@@ -231,7 +227,7 @@ class MoneyOutClient
                 if (empty($json)) {
                     return null;
                 }
-                return CaptureAllOutResponse::fromJson($json);
+                return CaseResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -246,16 +242,19 @@ class MoneyOutClient
     }
 
     /**
-     * Cancel a payout transaction by ID.
+     * Returns a case by its UUID, including its current state, parameters,
+     * state history, verification metadata, and attachments.
+     *
+     * Available to both Platform and Enterprise Partners.
      *
      * Example:
      * ```php
-     * $client->moneyOut->cancelOutGet(
-     *     '129-219',
+     * $client->caseManagement->getCase(
+     *     '9c2b7e14-3a5f-4d21-b8e0-1f6a4c9d2e70',
      * );
      * ```
      *
-     * @param string $referenceId The ID for the payout transaction.
+     * @param string $uuid The case's UUID.
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -264,22 +263,22 @@ class MoneyOutClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?PayabliApiResponse0000
+     * @return ?CaseResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function cancelOutGet(string $referenceId, ?array $options = null): ?PayabliApiResponse0000
+    public function getCase(string $uuid, ?array $options = null): ?CaseResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $options['headers'] = array_merge(
-            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []]]) ?? [],
             $options['headers'] ?? []
         );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "MoneyOut/cancel/{$referenceId}",
+                    path: "v2/cases/{$uuid}",
                     method: HttpMethod::GET,
                 ),
                 $options,
@@ -290,7 +289,7 @@ class MoneyOutClient
                 if (empty($json)) {
                     return null;
                 }
-                return PayabliApiResponse0000::fromJson($json);
+                return CaseResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -305,16 +304,28 @@ class MoneyOutClient
     }
 
     /**
-     * Cancel a payout transaction by ID.
+     * Lists cases for an organization, climbing the platform org hierarchy.
+     * Supports pagination and sorting through query parameters, and filtering
+     * through repeatable `parameters[field(op)]=value` query parameters (for
+     * example `parameters[state(in)]=Assigned|PendingReview`). Filterable
+     * fields include `state`, `caseType`, `paypointId`, `createdAt`,
+     * `updatedAt`, `scheduleFor`, and `createdBy`.
+     *
+     * Available to both Platform and Enterprise Partners.
      *
      * Example:
      * ```php
-     * $client->moneyOut->cancelOutDelete(
-     *     '129-219',
+     * $client->caseManagement->listCases(
+     *     123,
+     *     new ListCasesCaseManagementRequest([
+     *         'fromRecord' => 0,
+     *         'limitRecord' => 20,
+     *     ]),
      * );
      * ```
      *
-     * @param string $referenceId The ID for the payout transaction.
+     * @param int $organizationId The organization's numeric identifier.
+     * @param ListCasesCaseManagementRequest $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -323,659 +334,634 @@ class MoneyOutClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?PayabliApiResponse0000
+     * @return ?CaseListResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function cancelOutDelete(string $referenceId, ?array $options = null): ?PayabliApiResponse0000
+    public function listCases(int $organizationId, ListCasesCaseManagementRequest $request = new ListCasesCaseManagementRequest(), ?array $options = null): ?CaseListResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $options['headers'] = array_merge(
-            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
+        $query = [];
+        if ($request->fromRecord != null) {
+            $query['fromRecord'] = $request->fromRecord;
+        }
+        if ($request->limitRecord != null) {
+            $query['limitRecord'] = $request->limitRecord;
+        }
+        if ($request->sortBy != null) {
+            $query['sortBy'] = $request->sortBy;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "v2/cases/organization/{$organizationId}",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return CaseListResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Lists the notes on a case, ordered oldest to newest. Cursor-paginated.
+     *
+     * Available to both Platform and Enterprise Partners.
+     *
+     * Example:
+     * ```php
+     * $client->caseManagement->listMessages(
+     *     '9c2b7e14-3a5f-4d21-b8e0-1f6a4c9d2e70',
+     *     new ListMessagesCaseManagementRequest([]),
+     * );
+     * ```
+     *
+     * @param string $caseUuid The case's UUID.
+     * @param ListMessagesCaseManagementRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?MessagePage
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function listMessages(string $caseUuid, ListMessagesCaseManagementRequest $request = new ListMessagesCaseManagementRequest(), ?array $options = null): ?MessagePage
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
+        $query = [];
+        if ($request->limit != null) {
+            $query['limit'] = $request->limit;
+        }
+        if ($request->cursor != null) {
+            $query['cursor'] = $request->cursor;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "v2/cases/{$caseUuid}/messages",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return MessagePage::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Adds a note to a case.
+     *
+     * Available to both Platform and Enterprise Partners.
+     *
+     * This endpoint is in development and not yet available for API use. To
+     * add a note for now, use Case Management in the
+     * [Payabli Portal](/guides/pay-ops-portal-bank-account-changes-manage).
+     * To read existing notes on a case, use
+     * [List case notes](/developers/api-reference/caseManagement/list-case-notes).
+     *
+     * Example:
+     * ```php
+     * $client->caseManagement->postMessage(
+     *     '9c2b7e14-3a5f-4d21-b8e0-1f6a4c9d2e70',
+     *     new PostCaseMessageRequest([
+     *         'content' => 'Reviewed supporting documents; account ownership confirmed.',
+     *     ]),
+     * );
+     * ```
+     *
+     * @param string $caseUuid The case's UUID.
+     * @param PostCaseMessageRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?PostedMessage
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function postMessage(string $caseUuid, PostCaseMessageRequest $request, ?array $options = null): ?PostedMessage
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []]]) ?? [],
             $options['headers'] ?? []
         );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "MoneyOut/cancel/{$referenceId}",
+                    path: "v2/cases/{$caseUuid}/messages",
+                    method: HttpMethod::POST,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return PostedMessage::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Lists the review actions currently available on a case. The list is
+     * empty when no user action is available (for example while the case is
+     * mid-automation).
+     *
+     * Available to both Platform and Enterprise Partners, though only
+     * Enterprise Partners can fire the returned actions.
+     *
+     * Example:
+     * ```php
+     * $client->caseManagement->listTransitions(
+     *     '9c2b7e14-3a5f-4d21-b8e0-1f6a4c9d2e70',
+     * );
+     * ```
+     *
+     * @param string $uuid The case's UUID.
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?AvailableTransitionsResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function listTransitions(string $uuid, ?array $options = null): ?AvailableTransitionsResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "v2/cases/{$uuid}/transitions",
+                    method: HttpMethod::GET,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return AvailableTransitionsResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Fires a review action on a case, such as `Approve`, `Deny`, `Escalate`,
+     * or `RequestReview`. Assigning a case uses the dedicated assign endpoint,
+     * not this one. Firing an action that isn't valid for the case's current
+     * state returns `409`.
+     *
+     * Available to Enterprise Partners only.
+     *
+     * Example:
+     * ```php
+     * $client->caseManagement->transition(
+     *     '9c2b7e14-3a5f-4d21-b8e0-1f6a4c9d2e70',
+     *     new TransitionCaseRequest([
+     *         'trigger' => CaseTrigger::Approve->value,
+     *         'reason' => 'Account ownership confirmed with the merchant by phone.',
+     *     ]),
+     * );
+     * ```
+     *
+     * @param string $uuid The case's UUID.
+     * @param TransitionCaseRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?CaseResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function transition(string $uuid, TransitionCaseRequest $request, ?array $options = null): ?CaseResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "v2/cases/{$uuid}/transitions",
+                    method: HttpMethod::POST,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return CaseResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Assigns a case to a reviewer.
+     *
+     * Available to Enterprise Partners only.
+     *
+     * Example:
+     * ```php
+     * $client->caseManagement->assignCase(
+     *     '9c2b7e14-3a5f-4d21-b8e0-1f6a4c9d2e70',
+     *     new AssignCaseRequest([
+     *         'assigneeId' => 4238,
+     *         'reason' => 'Routing to the risk team for review.',
+     *     ]),
+     * );
+     * ```
+     *
+     * @param string $uuid The case's UUID.
+     * @param AssignCaseRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?CaseResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function assignCase(string $uuid, AssignCaseRequest $request, ?array $options = null): ?CaseResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "v2/cases/{$uuid}/assign",
+                    method: HttpMethod::POST,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return CaseResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Lists the files attached to a case.
+     *
+     * Available to both Platform and Enterprise Partners.
+     *
+     * Example:
+     * ```php
+     * $client->caseManagement->listAttachments(
+     *     '9c2b7e14-3a5f-4d21-b8e0-1f6a4c9d2e70',
+     * );
+     * ```
+     *
+     * @param string $caseUuid The case's UUID.
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?array<AttachmentResponse>
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function listAttachments(string $caseUuid, ?array $options = null): ?array
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "v2/cases/{$caseUuid}/attachments",
+                    method: HttpMethod::GET,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return JsonDecoder::decodeArray($json, [AttachmentResponse::class]); // @phpstan-ignore-line
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Uploads a file to a case as multipart form data. The maximum size is
+     * 25 MiB, and the content type must be an allowed type such as PDF, PNG,
+     * JPEG, CSV, XLSX, DOCX, or plain text.
+     *
+     * Available to both Platform and Enterprise Partners.
+     *
+     * Example:
+     * ```php
+     * $client->caseManagement->uploadAttachment(
+     *     'caseUuid',
+     *     new UploadAttachmentCaseManagementRequest([
+     *         'file' => File::createFromString("example_file", "example_file"),
+     *     ]),
+     * );
+     * ```
+     *
+     * @param string $caseUuid The case's UUID.
+     * @param UploadAttachmentCaseManagementRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     * } $options
+     * @return ?AttachmentResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function uploadAttachment(string $caseUuid, UploadAttachmentCaseManagementRequest $request, ?array $options = null): ?AttachmentResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
+        $body = new MultipartFormData();
+        $body->addPart($request->file->toMultipartFormDataPart('file'));
+        try {
+            $response = $this->client->sendRequest(
+                new MultipartApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "v2/cases/{$caseUuid}/attachments",
+                    method: HttpMethod::POST,
+                    body: $body,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return AttachmentResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Streams the file content of an attachment.
+     *
+     * Available to both Platform and Enterprise Partners.
+     *
+     * Example:
+     * ```php
+     * $client->caseManagement->getAttachment(
+     *     'caseUuid',
+     *     'attachmentId',
+     * );
+     * ```
+     *
+     * @param string $caseUuid The case's UUID.
+     * @param string $attachmentId The attachment's UUID.
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return string
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function getAttachment(string $caseUuid, string $attachmentId, ?array $options = null): string
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "v2/cases/{$caseUuid}/attachments/{$attachmentId}",
+                    method: HttpMethod::GET,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                return $response->getBody()->getContents();
+            }
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Deletes an attachment from a case.
+     *
+     * Available to both Platform and Enterprise Partners.
+     *
+     * Example:
+     * ```php
+     * $client->caseManagement->deleteAttachment(
+     *     'caseUuid',
+     *     'attachmentId',
+     * );
+     * ```
+     *
+     * @param string $caseUuid The case's UUID.
+     * @param string $attachmentId The attachment's UUID.
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function deleteAttachment(string $caseUuid, string $attachmentId, ?array $options = null): void
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "v2/cases/{$caseUuid}/attachments/{$attachmentId}",
                     method: HttpMethod::DELETE,
                 ),
                 $options,
             );
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return PayabliApiResponse0000::fromJson($json);
+                return;
             }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Captures an array of authorized payout transactions for settlement. The maximum number of transactions that can be captured in a single request is 500.
-     *
-     * Example:
-     * ```php
-     * $client->moneyOut->captureAllOut(
-     *     new CaptureAllOutRequest([
-     *         'body' => [
-     *             '2-29',
-     *             '2-28',
-     *             '2-27',
-     *         ],
-     *     ]),
-     * );
-     * ```
-     *
-     * @param CaptureAllOutRequest $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?CaptureAllOutResponse
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function captureAllOut(CaptureAllOutRequest $request, ?array $options = null): ?CaptureAllOutResponse
-    {
-        $options = array_merge($this->options, $options ?? []);
-        $options['headers'] = array_merge(
-            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
-            $options['headers'] ?? []
-        );
-        $query = [];
-        if ($request->autoConvertSameDayAch != null) {
-            $query['autoConvertSameDayAch'] = $request->autoConvertSameDayAch;
-        }
-        $headers = [];
-        if ($request->idempotencyKey != null) {
-            $headers['idempotencyKey'] = $request->idempotencyKey;
-        }
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "MoneyOut/captureAll",
-                    method: HttpMethod::POST,
-                    headers: $headers,
-                    query: $query,
-                    body: $request->body,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return CaptureAllOutResponse::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Captures a single authorized payout transaction by ID. If the transaction was authorized with `autoCapture` set to `true`, you don't need to call this endpoint to capture the transaction for processing.
-     *
-     * If a velocity fraud alert is triggered, the endpoint returns a `202` response with `responseCode` `9051`, and the capture is held for risk review rather than rejected. If a risk policy blocks the transaction, the endpoint returns a `422` response with `responseCode` `9005`, a terminal rejection.
-     *
-     * Example:
-     * ```php
-     * $client->moneyOut->captureOut(
-     *     '129-219',
-     *     new CaptureOutRequest([]),
-     * );
-     * ```
-     *
-     * @param string $referenceId The ID for the payout transaction.
-     * @param CaptureOutRequest $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?AuthCapturePayoutResponse
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function captureOut(string $referenceId, CaptureOutRequest $request = new CaptureOutRequest(), ?array $options = null): ?AuthCapturePayoutResponse
-    {
-        $options = array_merge($this->options, $options ?? []);
-        $options['headers'] = array_merge(
-            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
-            $options['headers'] ?? []
-        );
-        $query = [];
-        if ($request->autoConvertSameDayAch != null) {
-            $query['autoConvertSameDayAch'] = $request->autoConvertSameDayAch;
-        }
-        $headers = [];
-        if ($request->idempotencyKey != null) {
-            $headers['idempotencyKey'] = $request->idempotencyKey;
-        }
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "MoneyOut/capture/{$referenceId}",
-                    method: HttpMethod::GET,
-                    headers: $headers,
-                    query: $query,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return AuthCapturePayoutResponse::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Returns details for a processed money out transaction.
-     *
-     * Example:
-     * ```php
-     * $client->moneyOut->payoutDetails(
-     *     '45-as456777hhhhhhhhhh77777777-324',
-     * );
-     * ```
-     *
-     * @param string $transId ReferenceId for the transaction (PaymentId).
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?BillDetailResponse
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function payoutDetails(string $transId, ?array $options = null): ?BillDetailResponse
-    {
-        $options = array_merge($this->options, $options ?? []);
-        $options['headers'] = array_merge(
-            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
-            $options['headers'] ?? []
-        );
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "MoneyOut/details/{$transId}",
-                    method: HttpMethod::GET,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return BillDetailResponse::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Retrieves vCard details for a single card in an entrypoint.
-     *
-     * Example:
-     * ```php
-     * $client->moneyOut->vCardGet(
-     *     '20230403315245421165',
-     * );
-     * ```
-     *
-     * @param string $cardToken ID for a virtual card.
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?VCardGetResponse
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function vCardGet(string $cardToken, ?array $options = null): ?VCardGetResponse
-    {
-        $options = array_merge($this->options, $options ?? []);
-        $options['headers'] = array_merge(
-            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
-            $options['headers'] ?? []
-        );
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "MoneyOut/vcard/{$cardToken}",
-                    method: HttpMethod::GET,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return VCardGetResponse::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Renews an expired or expiring virtual card by extending its expiration date to a future month.
-     *
-     * The card must be a virtual card that hasn't been fully used. The new expiration date must be in `MM-YYYY` or `MM/YYYY` format and no more than 2 years and 363 days in the future. The card expires on the last day of the month you specify.
-     *
-     * On success, `referenceId` holds the renewed card's token (the card processor may issue a new token). The response reuses the standard payout result object, so the payment-transaction fields it carries don't apply to renewal and always return `null`.
-     *
-     * Example:
-     * ```php
-     * $client->moneyOut->renewVCard(
-     *     '20231206142225226104',
-     *     new RenewVCardRequest([
-     *         'expirationDate' => '12-2027',
-     *     ]),
-     * );
-     * ```
-     *
-     * @param string $cardToken ID for the virtual card to renew.
-     * @param RenewVCardRequest $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?RenewVCardResponse
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function renewVCard(string $cardToken, RenewVCardRequest $request, ?array $options = null): ?RenewVCardResponse
-    {
-        $options = array_merge($this->options, $options ?? []);
-        $options['headers'] = array_merge(
-            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
-            $options['headers'] ?? []
-        );
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "MoneyOutCard/vcard/{$cardToken}/renew",
-                    method: HttpMethod::PUT,
-                    body: $request,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return RenewVCardResponse::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Sends a virtual card link via email to the vendor associated with the `transId`.
-     *
-     * Example:
-     * ```php
-     * $client->moneyOut->sendVCardLink(
-     *     new SendVCardLinkRequest([
-     *         'transId' => '01K33Z6YQZ6GD5QVKZ856MJBSC',
-     *     ]),
-     * );
-     * ```
-     *
-     * @param SendVCardLinkRequest $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?OperationResult
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function sendVCardLink(SendVCardLinkRequest $request, ?array $options = null): ?OperationResult
-    {
-        $options = array_merge($this->options, $options ?? []);
-        $options['headers'] = array_merge(
-            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
-            $options['headers'] ?? []
-        );
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "vcard/send-card-link",
-                    method: HttpMethod::POST,
-                    body: $request,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return OperationResult::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Retrieve the image of a check associated with a processed transaction.
-     * The check image is returned in the response body as a base64-encoded string.
-     * The check image is only available for payouts that have been processed.
-     *
-     * Example:
-     * ```php
-     * $client->moneyOut->getCheckImage(
-     *     'check133832686289732320_01JKBNZ5P32JPTZY8XXXX000000.pdf',
-     * );
-     * ```
-     *
-     * Name of the check asset to retrieve. This is returned as `filename` in the `CheckData` object
-     * in the response when you make a GET request to `/MoneyOut/details/{transId}`.
-     * ```
-     *     "CheckData": {
-     *       "ftype": "PDF",
-     *       "filename": "check133832686289732320_01JKBNZ5P32JPTZY8XXXX000000.pdf",
-     *       "furl": "",
-     *       "fContent": ""
-     *   }
-     * ```
-     *
-     * @param string $assetName
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?string
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function getCheckImage(string $assetName, ?array $options = null): ?string
-    {
-        $options = array_merge($this->options, $options ?? []);
-        $options['headers'] = array_merge(
-            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
-            $options['headers'] ?? []
-        );
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "MoneyOut/checkimage/{$assetName}",
-                    method: HttpMethod::GET,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return JsonDecoder::decodeString($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Updates the status of a processed check payment transaction. This endpoint handles the status transition, updates related bills, creates audit events, and triggers notifications.
-     *
-     * The transaction must meet all of the following criteria:
-     * - **Status**: Must be in Processing or Processed status.
-     * - **Payment method**: Must be a check payment method.
-     *
-     * ### Allowed status values
-     *
-     * | Value | Status | Description |
-     * |-------|--------|-------------|
-     * | `0` | Cancelled/Voided | Cancels the check transaction. Reverts associated bills to their previous state (Approved or Active), creates "Cancelled" events, and sends a `payout_transaction_voidedcancelled` notification if the notification is enabled. |
-     * | `5` | Paid | Marks the check transaction as paid. Updates associated bills to "Paid" status, creates "Paid" events, and sends a `payout_transaction_paid` notification if the notification is enabled. |
-     *
-     * Example:
-     * ```php
-     * $client->moneyOut->updateCheckPaymentStatus(
-     *     'TRANS123456',
-     *     AllowedCheckPaymentStatus::Paid->value,
-     * );
-     * ```
-     *
-     * @param string $transId The Payabli transaction ID for the check payment.
-     * @param value-of<AllowedCheckPaymentStatus> $checkPaymentStatus The new status to apply to the check transaction. To mark a check as `Paid`, send 5. To mark a check as `Cancelled`, send 0.
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?PayabliApiResponse00Responsedatanonobject
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function updateCheckPaymentStatus(string $transId, string $checkPaymentStatus, ?array $options = null): ?PayabliApiResponse00Responsedatanonobject
-    {
-        $options = array_merge($this->options, $options ?? []);
-        $options['headers'] = array_merge(
-            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
-            $options['headers'] ?? []
-        );
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "MoneyOut/status/{$transId}/{$checkPaymentStatus}",
-                    method: HttpMethod::PATCH,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return PayabliApiResponse00Responsedatanonobject::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Reissues a payout transaction with a new payment method. This creates a new transaction linked to the original and marks the original transaction as reissued.
-     *
-     * The original transaction must be in **Processing** or **Processed** status. The payment method in the request body is used directly. The endpoint doesn't fall back to vendor-managed payment methods.
-     *
-     * The new transaction goes through the standard authorize-and-capture flow automatically. Both the original and new transactions are linked through their event histories for audit purposes.
-     *
-     * Example:
-     * ```php
-     * $client->moneyOut->reissueOut(
-     *     new ReissueOutRequest([
-     *         'transId' => '129-219',
-     *         'paymentMethod' => new ReissuePaymentMethod([
-     *             'method' => 'ach',
-     *             'achHolder' => 'Acme Corp',
-     *             'achRouting' => '021000021',
-     *             'achAccount' => '9876543210',
-     *             'achAccountType' => 'savings',
-     *             'achHolderType' => AchHolderType::Business->value,
-     *         ]),
-     *     ]),
-     * );
-     * ```
-     *
-     * @param ReissueOutRequest $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?ReissuePayoutResponse
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function reissueOut(ReissueOutRequest $request, ?array $options = null): ?ReissuePayoutResponse
-    {
-        $options = array_merge($this->options, $options ?? []);
-        $options['headers'] = array_merge(
-            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
-            $options['headers'] ?? []
-        );
-        $query = [];
-        $query['transId'] = $request->transId;
-        $headers = [];
-        if ($request->idempotencyKey != null) {
-            $headers['idempotencyKey'] = $request->idempotencyKey;
-        }
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "MoneyOut/reissue",
-                    method: HttpMethod::POST,
-                    headers: $headers,
-                    query: $query,
-                    body: $request,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return ReissuePayoutResponse::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
         } catch (ClientExceptionInterface $e) {
             throw new PayabliException(message: $e->getMessage(), previous: $e);
         }

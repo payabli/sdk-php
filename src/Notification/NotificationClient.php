@@ -72,7 +72,7 @@ class NotificationClient
      * $client->notification->addNotification(
      *     new NotificationStandardRequest([
      *         'content' => new NotificationStandardRequestContent([
-     *             'eventType' => NotificationStandardRequestContentEventType::CreatedApplication->value,
+     *             'eventType' => NotificationStandardRequestContentEventType::Createdapplication->value,
      *         ]),
      *         'frequency' => NotificationStandardRequestFrequency::Untilcancelled->value,
      *         'method' => NotificationStandardRequestMethod::Web->value,
@@ -205,7 +205,7 @@ class NotificationClient
      *     '1717',
      *     new NotificationStandardRequest([
      *         'content' => new NotificationStandardRequestContent([
-     *             'eventType' => NotificationStandardRequestContentEventType::ApprovedPayment->value,
+     *             'eventType' => NotificationStandardRequestContentEventType::Approvedpayment->value,
      *         ]),
      *         'frequency' => NotificationStandardRequestFrequency::Untilcancelled->value,
      *         'method' => NotificationStandardRequestMethod::Email->value,

@@ -35,6 +35,7 @@ use Payabli\Funding\FundingClient;
 use Payabli\Wallet\WalletClient;
 use Payabli\PayoutSubscription\PayoutSubscriptionClient;
 use Payabli\ChargeBacks\ChargeBacksClient;
+use Payabli\CaseManagement\CaseManagementClient;
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\Core\RoutingAuthProvider;
@@ -208,6 +209,11 @@ class PayabliClient
     public ChargeBacksClient $chargeBacks;
 
     /**
+     * @var CaseManagementClient $caseManagement
+     */
+    public CaseManagementClient $caseManagement;
+
+    /**
      * @var array{
      *   baseUrl?: string,
      *   client?: ClientInterface,
@@ -251,8 +257,8 @@ class PayabliClient
         $defaultHeaders = [
             'X-Fern-Language' => 'PHP',
             'X-Fern-SDK-Name' => 'Payabli',
-            'X-Fern-SDK-Version' => '1.0.8',
-            'User-Agent' => 'payabli/payabli/1.0.8',
+            'X-Fern-SDK-Version' => '1.0.9',
+            'User-Agent' => 'payabli/payabli/1.0.9',
         ];
 
         $this->options = $options ?? [];
@@ -311,5 +317,6 @@ class PayabliClient
         $this->wallet = new WalletClient($this->client, $this->options, $this->routingAuthProvider);
         $this->payoutSubscription = new PayoutSubscriptionClient($this->client, $this->options, $this->routingAuthProvider);
         $this->chargeBacks = new ChargeBacksClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->caseManagement = new CaseManagementClient($this->client, $this->options, $this->routingAuthProvider);
     }
 }
