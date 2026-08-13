@@ -15,7 +15,7 @@ class SettingElement extends JsonSerializableType
     public ?bool $enabled;
 
     /**
-     * @var ?array<DisplayProperty> $fields Fields to display on the reciept.
+     * @var ?array<DisplayProperty> $fields Fields to display on the receipt.
      */
     #[JsonProperty('fields'), ArrayType([DisplayProperty::class])]
     public ?array $fields;
@@ -33,7 +33,7 @@ class SettingElement extends JsonSerializableType
     public ?bool $sendAuto;
 
     /**
-     * @var ?bool $sendManual When `true`, you must send the reciept to the payor manually using the [/MoneyIn/sendreceipt/\{transId\}](/developers/api-reference/moneyin/send-receipt-for-transaction) endpoint.
+     * @var ?bool $sendManual When `true`, you must send the receipt to the payor manually using the [/MoneyIn/sendreceipt/\{transId\}](/developers/api-reference/moneyin/send-receipt-for-transaction) endpoint.
      */
     #[JsonProperty('sendManual')]
     public ?bool $sendManual;

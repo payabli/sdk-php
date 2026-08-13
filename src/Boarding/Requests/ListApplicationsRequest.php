@@ -27,7 +27,7 @@ class ListApplicationsRequest extends JsonSerializableType
      *
      * See [Filters and Conditions Reference](/developers/developer-guides/pay-ops-reporting-engine-overview#filters-and-conditions-reference) for help.
      *
-     * List of field names accepted:
+     * Accepted field names:
      * - `createdAt` (gt, ge, lt, le, eq, ne)
      * - `startDate` (gt, ge, lt, le, eq, ne)
      * - `dbaname` (ct, nct)
@@ -47,7 +47,7 @@ class ListApplicationsRequest extends JsonSerializableType
      * - `repCode` (ct, nct, eq, ne)
      * - `repName` (ct, nct, eq, ne)
      * - `repOffice` (ct, nct, eq, ne)
-     * List of comparison accepted - enclosed between parentheses:
+     * Accepted comparison operators - enclosed between parentheses:
      * - eq or empty => equal
      * - gt => greater than
      * - ge => greater or equal

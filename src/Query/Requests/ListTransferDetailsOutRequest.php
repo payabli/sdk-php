@@ -31,7 +31,7 @@ class ListTransferDetailsOutRequest extends JsonSerializableType
      *
      *   --url https://api-sandbox.payabli.com/api/Query/transactions/org/236?totalAmount(gt)=1000&limitRecord=20
      * </Info>
-     * List of field names accepted:
+     * Accepted field names:
      *
      *   - `grossAmount` (gt, ge, lt, le, eq, ne)
      *   - `returnedAmount` (gt, ge, lt, le, eq, ne)

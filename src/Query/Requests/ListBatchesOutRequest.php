@@ -25,7 +25,7 @@ class ListBatchesOutRequest extends JsonSerializableType
     /**
      * Collection of field names, conditions, and values used to filter the query. See [Filters and Conditions Reference](/developers/developer-guides/pay-ops-reporting-engine-overview#filters-and-conditions-reference) for more information.
      *
-     * **List of field names accepted**:
+     * **Accepted field names**:
      *
      * - `batchDate` (gt, ge, lt, le, eq, ne)
      * - `batchNumber` (ne, eq)

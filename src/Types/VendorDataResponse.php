@@ -77,7 +77,7 @@ class VendorDataResponse extends JsonSerializableType
     public string $state;
 
     /**
-     * @var string $zip Vendor's zip code.
+     * @var string $zip Vendor's ZIP code.
      */
     #[JsonProperty('Zip')]
     public string $zip;

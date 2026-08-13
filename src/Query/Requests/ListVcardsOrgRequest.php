@@ -27,9 +27,7 @@ class ListVcardsOrgRequest extends JsonSerializableType
      * <Info>
      *   **You must remove `parameters=` from the request before you send it, otherwise Payabli will ignore the filters.**
      *
-     *   Because of a technical limitation, you can't make a request that includes filters from the API console on this page. The response won't be filtered. Instead, copy the request, remove `parameters=` and run the request in a different client.
-     *
-     *   For example:
+     *   Because of a technical limitation, you can't make a request that includes filters from the API console on this page. The response won't be filtered. Instead, copy the request, remove `parameters=` and run the request in a different client, for example:
      *
      *   --url https://api-sandbox.payabli.com/api/Query/transactions/org/236?parameters=totalAmount(gt)=1000&limitRecord=20
      *
@@ -37,7 +35,7 @@ class ListVcardsOrgRequest extends JsonSerializableType
      *
      *   --url https://api-sandbox.payabli.com/api/Query/transactions/org/236?totalAmount(gt)=1000&limitRecord=20
      * </Info>
-     * List of field names accepted:
+     * Accepted field names:
      *
      *   - `status` (eq, ne, ct, nct, sw, ew)
      *   - `createdAt` (gt, ge, lt, le, eq, ne)
@@ -58,7 +56,7 @@ class ListVcardsOrgRequest extends JsonSerializableType
      *   - `paypointId` (eq, ne, gt, ge, lt, le)
      *   - `cardType` (eq, ne, gt, ge, lt, le)
      *
-     * List of comparison accepted - enclosed between parentheses:
+     * Accepted comparison operators - enclosed between parentheses:
      *
      *   - eq or empty => equal
      *   - gt => greater than

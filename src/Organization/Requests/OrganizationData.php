@@ -67,10 +67,10 @@ class OrganizationData extends JsonSerializableType
     public ?string $orgEntryName;
 
     /**
-     * @var ?string $organizationDataOrgId
+     * @var ?string $orgId
      */
     #[JsonProperty('orgId')]
-    public ?string $organizationDataOrgId;
+    public ?string $orgId;
 
     /**
      * @var ?FileContent $orgLogo
@@ -137,7 +137,7 @@ class OrganizationData extends JsonSerializableType
      *   orgCity?: ?string,
      *   orgCountry?: ?string,
      *   orgEntryName?: ?string,
-     *   organizationDataOrgId?: ?string,
+     *   orgId?: ?string,
      *   orgLogo?: ?FileContent,
      *   orgName?: ?string,
      *   orgParentId?: ?int,
@@ -161,7 +161,7 @@ class OrganizationData extends JsonSerializableType
         $this->orgCity = $values['orgCity'] ?? null;
         $this->orgCountry = $values['orgCountry'] ?? null;
         $this->orgEntryName = $values['orgEntryName'] ?? null;
-        $this->organizationDataOrgId = $values['organizationDataOrgId'] ?? null;
+        $this->orgId = $values['orgId'] ?? null;
         $this->orgLogo = $values['orgLogo'] ?? null;
         $this->orgName = $values['orgName'] ?? null;
         $this->orgParentId = $values['orgParentId'] ?? null;

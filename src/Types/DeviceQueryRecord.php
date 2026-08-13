@@ -134,6 +134,12 @@ class DeviceQueryRecord extends JsonSerializableType
     public ?string $paypointEntry;
 
     /**
+     * @var ?string $paypointLogo URL of the paypoint's logo, when available.
+     */
+    #[JsonProperty('paypointLogo')]
+    public ?string $paypointLogo;
+
+    /**
      * @var ?string $externalPaypointId External identifier for the paypoint.
      */
     #[JsonProperty('externalPaypointId')]
@@ -152,7 +158,27 @@ class DeviceQueryRecord extends JsonSerializableType
     public ?string $parentOrgName;
 
     /**
+     * @var ?string $parentOrgLogo URL of the parent organization's logo, when available.
+     */
+    #[JsonProperty('parentOrgLogo')]
+    public ?string $parentOrgLogo;
+
+    /**
+     * @var int $transactionCount Total number of transactions processed by this device.
+     */
+    #[JsonProperty('transactionCount')]
+    public int $transactionCount;
+
+    /**
+     * @var float $volumeProcessed Total volume processed by this device, as the sum of net transaction amounts.
+     */
+    #[JsonProperty('volumeProcessed')]
+    public float $volumeProcessed;
+
+    /**
      * @param array{
+     *   transactionCount: int,
+     *   volumeProcessed: float,
      *   deviceId?: ?string,
      *   idCloud?: ?int,
      *   description?: ?string,
@@ -174,13 +200,15 @@ class DeviceQueryRecord extends JsonSerializableType
      *   paypointDba?: ?string,
      *   paypointLegal?: ?string,
      *   paypointEntry?: ?string,
+     *   paypointLogo?: ?string,
      *   externalPaypointId?: ?string,
      *   parentOrgId?: ?int,
      *   parentOrgName?: ?string,
+     *   parentOrgLogo?: ?string,
      * } $values
      */
     public function __construct(
-        array $values = [],
+        array $values,
     ) {
         $this->deviceId = $values['deviceId'] ?? null;
         $this->idCloud = $values['idCloud'] ?? null;
@@ -203,9 +231,13 @@ class DeviceQueryRecord extends JsonSerializableType
         $this->paypointDba = $values['paypointDba'] ?? null;
         $this->paypointLegal = $values['paypointLegal'] ?? null;
         $this->paypointEntry = $values['paypointEntry'] ?? null;
+        $this->paypointLogo = $values['paypointLogo'] ?? null;
         $this->externalPaypointId = $values['externalPaypointId'] ?? null;
         $this->parentOrgId = $values['parentOrgId'] ?? null;
         $this->parentOrgName = $values['parentOrgName'] ?? null;
+        $this->parentOrgLogo = $values['parentOrgLogo'] ?? null;
+        $this->transactionCount = $values['transactionCount'];
+        $this->volumeProcessed = $values['volumeProcessed'];
     }
 
     /**

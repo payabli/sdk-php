@@ -14,13 +14,13 @@ class CheckCaptureRequestBody extends JsonSerializableType
     public string $entryPoint;
 
     /**
-     * @var string $frontImage Base64-encoded front check image. Must be JPEG or PNG format and less than 1MB. Image must show the entire check clearly with no partial, blurry, or illegible portions.
+     * @var string $frontImage Base64-encoded front check image. Must be JPEG or PNG format and less than 1MB. Image must show the entire check with no partial, blurry, or illegible portions.
      */
     #[JsonProperty('frontImage')]
     public string $frontImage;
 
     /**
-     * @var string $rearImage Base64-encoded rear check image. Must be JPEG or PNG format and less than 1MB. Image must show the entire check clearly with no partial, blurry, or illegible portions.
+     * @var string $rearImage Base64-encoded rear check image. Must be JPEG or PNG format and less than 1MB. Image must show the entire check with no partial, blurry, or illegible portions.
      */
     #[JsonProperty('rearImage')]
     public string $rearImage;

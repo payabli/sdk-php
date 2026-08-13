@@ -48,6 +48,10 @@ class RequestOutAuthorizeVendorData extends JsonSerializableType
     public ?string $email;
 
     /**
+     * Vendor's address
+     *
+     * For a PO Box address, include only the PO Box in this field, for example `PO Box 29652`. Put the rest of the address, such as a department number, in `address2`.
+     *
      * @var ?string $address1
      */
     #[JsonProperty('address1')]
@@ -162,6 +166,10 @@ class RequestOutAuthorizeVendorData extends JsonSerializableType
     public ?array $additionalData;
 
     /**
+     * Additional line for vendor's address.
+     *
+     * For a PO Box address, this field holds the part of the address that follows the PO Box, for example `Dept# 880662`.
+     *
      * @var ?string $address2
      */
     #[JsonProperty('address2')]

@@ -27,9 +27,7 @@ class ExportChargebacksRequest extends JsonSerializableType
      * <Info>
      *   **You must remove `parameters=` from the request before you send it, otherwise Payabli will ignore the filters.**
      *
-     *   Because of a technical limitation, you can't make a request that includes filters from the API console on this page. The response won't be filtered. Instead, copy the request, remove `parameters=` and run the request in a different client.
-     *
-     *   For example:
+     *   Because of a technical limitation, you can't make a request that includes filters from the API console on this page. The response won't be filtered. Instead, copy the request, remove `parameters=` and run the request in a different client, for example:
      *
      *   --url https://api-sandbox.payabli.com/api/Query/transactions/org/236?parameters=totalAmount(gt)=1000&limitRecord=20
      *
@@ -40,7 +38,7 @@ class ExportChargebacksRequest extends JsonSerializableType
      *
      * See [Filters and Conditions Reference](/developers/developer-guides/pay-ops-reporting-engine-overview#filters-and-conditions-reference) for help.
      *
-     * List of field names accepted:
+     * **Accepted field names:**
      * - `chargebackDate` (gt, ge, lt, le, eq, ne)
      * - `transId` (ne, eq, ct, nct)
      * - `method` (in, nin, eq, ne)
@@ -77,7 +75,7 @@ class ExportChargebacksRequest extends JsonSerializableType
      * - `orgName` (ne, eq, ct, nct)
      * - `additional-xxx` (ne, eq, ct, nct) where xxx is the additional field name
      *
-     * List of comparison accepted - enclosed between parentheses:
+     * Accepted comparison operators - enclosed between parentheses:
      * - eq or empty => equal
      * - gt => greater than
      * - ge => greater or equal
@@ -89,7 +87,7 @@ class ExportChargebacksRequest extends JsonSerializableType
      * - in => inside array separated by "|"
      * - nin => not inside array separated by "|"
      *
-     * List of parameters accepted:
+     * Accepted parameters:
      * - limitRecord : max number of records for query (default="20", "0" or negative value for all)
      * - fromRecord : initial record in query
      *

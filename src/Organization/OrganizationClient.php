@@ -189,7 +189,7 @@ class OrganizationClient
      *         'orgCity' => 'Johnson City',
      *         'orgCountry' => 'US',
      *         'orgEntryName' => 'pilgrim-planner',
-     *         'organizationDataOrgId' => '123',
+     *         'orgId' => '123',
      *         'orgName' => 'Pilgrim Planner',
      *         'orgState' => 'TN',
      *         'orgTimezone' => -5,
@@ -200,7 +200,7 @@ class OrganizationClient
      * );
      * ```
      *
-     * @param int $orgId The numeric identifier for organization, assigned by Payabli.
+     * @param int $orgIdPathParam The numeric identifier for organization, assigned by Payabli.
      * @param OrganizationData $request
      * @param ?array{
      *   baseUrl?: string,
@@ -214,7 +214,7 @@ class OrganizationClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function editOrganization(int $orgId, OrganizationData $request = new OrganizationData(), ?array $options = null): ?EditOrganizationResponse
+    public function editOrganization(int $orgIdPathParam, OrganizationData $request = new OrganizationData(), ?array $options = null): ?EditOrganizationResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $options['headers'] = array_merge(
@@ -225,7 +225,7 @@ class OrganizationClient
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "Organization/{$orgId}",
+                    path: "Organization/{$orgIdPathParam}",
                     method: HttpMethod::PUT,
                     body: $request,
                 ),

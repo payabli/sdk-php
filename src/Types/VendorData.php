@@ -21,13 +21,21 @@ class VendorData extends JsonSerializableType
     public ?array $additionalData;
 
     /**
-     * @var ?string $address1 Vendor's street address. If any address field is provided, this field is required along with `city`, `state`, and `zip`. Allowed characters are letters, numbers, spaces, and `. ,
+     * Vendor's street address. If any address field is provided, this field is required along with `city`, `state`, and `zip`. Allowed characters are letters, numbers, spaces, and `. ,
+     *
+     * For a PO Box address, include only the PO Box in this field, for example `PO Box 29652`. Put the rest of the address, such as a department number, in `address2`.
+     *
+     * @var ?string $address1
      */
     #[JsonProperty('address1')]
     public ?string $address1;
 
     /**
-     * @var ?string $address2 Additional line for vendor's address, such as a suite or unit number. Always optional.
+     * Additional line for vendor's address, such as a suite or unit number. Always optional.
+     *
+     * For a PO Box address, this field holds the part of the address that follows the PO Box, for example `Dept# 880662`.
+     *
+     * @var ?string $address2
      */
     #[JsonProperty('address2')]
     public ?string $address2;

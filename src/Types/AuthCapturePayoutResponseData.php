@@ -14,10 +14,10 @@ class AuthCapturePayoutResponseData extends JsonSerializableType
     public ?string $authCode;
 
     /**
-     * @var string $referenceId
+     * @var ?string $referenceId The transaction reference ID, used to capture the transaction. Returns `null` when no transaction is created, such as a declined authorization.
      */
     #[JsonProperty('referenceId')]
-    public string $referenceId;
+    public ?string $referenceId;
 
     /**
      * @var int $resultCode
@@ -63,12 +63,12 @@ class AuthCapturePayoutResponseData extends JsonSerializableType
 
     /**
      * @param array{
-     *   referenceId: string,
      *   resultCode: int,
      *   resultText: string,
      *   customerId: int,
      *   vendorId: int,
      *   authCode?: ?string,
+     *   referenceId?: ?string,
      *   avsResponseText?: ?string,
      *   cvvResponseText?: ?string,
      *   methodReferenceId?: ?string,
@@ -78,7 +78,7 @@ class AuthCapturePayoutResponseData extends JsonSerializableType
         array $values,
     ) {
         $this->authCode = $values['authCode'] ?? null;
-        $this->referenceId = $values['referenceId'];
+        $this->referenceId = $values['referenceId'] ?? null;
         $this->resultCode = $values['resultCode'];
         $this->resultText = $values['resultText'];
         $this->avsResponseText = $values['avsResponseText'] ?? null;

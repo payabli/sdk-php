@@ -11,7 +11,7 @@ use Payabli\Core\Types\ArrayType;
 class SubscriptionQueryRecords extends JsonSerializableType
 {
     /**
-     * @var ?DateTime $createdAt Timestamp of when the subscription ws created, in UTC.
+     * @var ?DateTime $createdAt Timestamp of when the subscription was created, in UTC.
      */
     #[JsonProperty('CreatedAt'), Date(Date::TYPE_DATETIME)]
     public ?DateTime $createdAt;

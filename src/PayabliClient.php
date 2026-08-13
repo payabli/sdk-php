@@ -36,6 +36,7 @@ use Payabli\Wallet\WalletClient;
 use Payabli\PayoutSubscription\PayoutSubscriptionClient;
 use Payabli\ChargeBacks\ChargeBacksClient;
 use Payabli\CaseManagement\CaseManagementClient;
+use Payabli\Billing\BillingClient;
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\Core\RoutingAuthProvider;
@@ -214,6 +215,11 @@ class PayabliClient
     public CaseManagementClient $caseManagement;
 
     /**
+     * @var BillingClient $billing
+     */
+    public BillingClient $billing;
+
+    /**
      * @var array{
      *   baseUrl?: string,
      *   client?: ClientInterface,
@@ -257,8 +263,8 @@ class PayabliClient
         $defaultHeaders = [
             'X-Fern-Language' => 'PHP',
             'X-Fern-SDK-Name' => 'Payabli',
-            'X-Fern-SDK-Version' => '1.0.9',
-            'User-Agent' => 'payabli/payabli/1.0.9',
+            'X-Fern-SDK-Version' => '1.0.10',
+            'User-Agent' => 'payabli/payabli/1.0.10',
         ];
 
         $this->options = $options ?? [];
@@ -270,7 +276,7 @@ class PayabliClient
 
         $oauthTokenProvider = null;
         if ($clientId !== null && $clientSecret !== null) {
-            $authRawClient = new RawClient(['baseUrl' => $this->options['baseUrl'] ?? '', 'headers' => []]);
+            $authRawClient = new RawClient(isset($this->options['baseUrl']) ? ['baseUrl' => $this->options['baseUrl'], 'headers' => []] : ['headers' => []]);
             $authClient = new TokenClient($authRawClient);
             $oauthTokenProvider = new OAuthTokenProvider($clientId, $clientSecret, $authClient);
 
@@ -318,5 +324,6 @@ class PayabliClient
         $this->payoutSubscription = new PayoutSubscriptionClient($this->client, $this->options, $this->routingAuthProvider);
         $this->chargeBacks = new ChargeBacksClient($this->client, $this->options, $this->routingAuthProvider);
         $this->caseManagement = new CaseManagementClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->billing = new BillingClient($this->client, $this->options, $this->routingAuthProvider);
     }
 }

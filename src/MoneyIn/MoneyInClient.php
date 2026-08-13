@@ -1339,12 +1339,11 @@ class MoneyInClient
      * ```php
      * $client->moneyIn->refundv2(
      *     '10-3ffa27df-b171-44e0-b251-e95fbfc7a723',
-     *     new RefundV2Request([]),
      * );
      * ```
      *
      * @param string $transId ReferenceId for the transaction (PaymentId).
-     * @param RefundV2Request $request
+     * @param ?RefundV2Request $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -1357,7 +1356,7 @@ class MoneyInClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function refundv2(string $transId, RefundV2Request $request, ?array $options = null): ?V2TransactionResponseWrapper
+    public function refundv2(string $transId, ?RefundV2Request $request = null, ?array $options = null): ?V2TransactionResponseWrapper
     {
         $options = array_merge($this->options, $options ?? []);
         $options['headers'] = array_merge(
@@ -1371,6 +1370,7 @@ class MoneyInClient
                     path: "v2/MoneyIn/refund/{$transId}",
                     method: HttpMethod::POST,
                     body: $request,
+                    omitContentTypeWithoutBody: true,
                 ),
                 $options,
             );
@@ -1400,7 +1400,7 @@ class MoneyInClient
      * This is the v2 version of the refund endpoint, and returns the unified response format. See [Pay In unified response codes reference](/guides/pay-in-unified-response-codes-reference) for more information.
      *
      * <Note>
-     *   To refund a split-funded transaction, include split instructions in the request body. Omit the body for a standard refund.
+     *   For a standard refund, whether full (`amount` set to 0) or partial, send no request body. Include a request body only to refund a split-funded transaction, with split instructions in `refundDetails`.
      * </Note>
      *
      * Example:
@@ -1408,13 +1408,12 @@ class MoneyInClient
      * $client->moneyIn->refundv2Amount(
      *     '10-3ffa27df-b171-44e0-b251-e95fbfc7a723',
      *     0,
-     *     new RefundV2Request([]),
      * );
      * ```
      *
      * @param string $transId ReferenceId for the transaction (PaymentId).
      * @param float $amount Amount to refund from original transaction, minus any service fees charged on the original transaction. If set to 0, performs a full refund.
-     * @param RefundV2Request $request
+     * @param ?RefundV2Request $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -1427,7 +1426,7 @@ class MoneyInClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function refundv2Amount(string $transId, float $amount, RefundV2Request $request, ?array $options = null): ?V2TransactionResponseWrapper
+    public function refundv2Amount(string $transId, float $amount, ?RefundV2Request $request = null, ?array $options = null): ?V2TransactionResponseWrapper
     {
         $options = array_merge($this->options, $options ?? []);
         $options['headers'] = array_merge(
@@ -1441,6 +1440,7 @@ class MoneyInClient
                     path: "v2/MoneyIn/refund/{$transId}/{$amount}",
                     method: HttpMethod::POST,
                     body: $request,
+                    omitContentTypeWithoutBody: true,
                 ),
                 $options,
             );

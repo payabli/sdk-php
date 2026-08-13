@@ -305,7 +305,14 @@ class QueryPayoutTransactionRecordsItem extends JsonSerializableType
     public ?string $entityId;
 
     /**
+     * @var array<value-of<QueryPayoutTransactionRecordsItemAllowedActionsItem>> $allowedActions Operations currently permitted for this payout, derived from its status. Always present; empty for terminal statuses such as paid or canceled. Read this array directly rather than inferring available actions from `PaymentStatus`.
+     */
+    #[JsonProperty('allowedActions'), ArrayType(['string'])]
+    public array $allowedActions;
+
+    /**
      * @param array{
+     *   allowedActions: array<value-of<QueryPayoutTransactionRecordsItemAllowedActionsItem>>,
      *   idOut?: ?int,
      *   createdAt?: ?DateTime,
      *   comments?: ?string,
@@ -358,7 +365,7 @@ class QueryPayoutTransactionRecordsItem extends JsonSerializableType
      * } $values
      */
     public function __construct(
-        array $values = [],
+        array $values,
     ) {
         $this->idOut = $values['idOut'] ?? null;
         $this->createdAt = $values['createdAt'] ?? null;
@@ -409,6 +416,7 @@ class QueryPayoutTransactionRecordsItem extends JsonSerializableType
         $this->payoutProgram = $values['payoutProgram'] ?? null;
         $this->achTraceNumber = $values['achTraceNumber'] ?? null;
         $this->entityId = $values['entityId'] ?? null;
+        $this->allowedActions = $values['allowedActions'];
     }
 
     /**

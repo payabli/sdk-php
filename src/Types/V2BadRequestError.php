@@ -48,7 +48,7 @@ class V2BadRequestError extends JsonSerializableType
     public string $code;
 
     /**
-     * @var array<string, array<V2BadRequestErrorDetail>> $errors Dictionary of field-specific validation errors. Keys are field paths (e.g., "paymentMethod.cardnumber") and values are arrays of error details.
+     * @var array<string, array<V2BadRequestErrorDetail>> $errors Dictionary of field-specific validation errors. Keys are field paths (for example, "paymentMethod.cardnumber") and values are arrays of error details.
      */
     #[JsonProperty('errors'), ArrayType(['string' => [V2BadRequestErrorDetail::class]])]
     public array $errors;
