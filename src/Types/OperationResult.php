@@ -8,28 +8,36 @@ use Payabli\Core\Json\JsonProperty;
 class OperationResult extends JsonSerializableType
 {
     /**
-     * @var ?string $message Message describing the result. If the virtual card link was sent successfully, this contains the email address to which the link was sent.
-     */
-    #[JsonProperty('message')]
-    public ?string $message;
-
-    /**
      * @var bool $success Indicates whether the operation was successful.
      */
     #[JsonProperty('success')]
     public bool $success;
 
     /**
+     * @var string $message A status message describing the result.
+     */
+    #[JsonProperty('message')]
+    public string $message;
+
+    /**
+     * @var string $link The secure link the vendor uses to view their virtual card details. Empty when the operation fails.
+     */
+    #[JsonProperty('link')]
+    public string $link;
+
+    /**
      * @param array{
      *   success: bool,
-     *   message?: ?string,
+     *   message: string,
+     *   link: string,
      * } $values
      */
     public function __construct(
         array $values,
     ) {
-        $this->message = $values['message'] ?? null;
         $this->success = $values['success'];
+        $this->message = $values['message'];
+        $this->link = $values['link'];
     }
 
     /**

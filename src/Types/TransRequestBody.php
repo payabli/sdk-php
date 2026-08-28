@@ -62,13 +62,14 @@ class TransRequestBody extends JsonSerializableType
      *   |PayMethodAch
      *   |PayMethodStoredMethod
      *   |PayMethodCloud
+     *   |PayMethodDevice
      *   |Check
      *   |Cash
      *   |PayMethodBodyAllFields
      * ) $paymentMethod Information about the payment method for the transaction. Required and recommended fields for each payment method type are described in each schema below.
      */
-    #[JsonProperty('paymentMethod'), Union(PayMethodCredit::class, PayMethodAch::class, PayMethodStoredMethod::class, PayMethodCloud::class, Check::class, Cash::class, PayMethodBodyAllFields::class)]
-    public PayMethodCredit|PayMethodAch|PayMethodStoredMethod|PayMethodCloud|Check|Cash|PayMethodBodyAllFields $paymentMethod;
+    #[JsonProperty('paymentMethod'), Union(PayMethodCredit::class, PayMethodAch::class, PayMethodStoredMethod::class, PayMethodCloud::class, PayMethodDevice::class, Check::class, Cash::class, PayMethodBodyAllFields::class)]
+    public PayMethodCredit|PayMethodAch|PayMethodStoredMethod|PayMethodCloud|PayMethodDevice|Check|Cash|PayMethodBodyAllFields $paymentMethod;
 
     /**
      * @var ?string $source
@@ -96,6 +97,7 @@ class TransRequestBody extends JsonSerializableType
      *   |PayMethodAch
      *   |PayMethodStoredMethod
      *   |PayMethodCloud
+     *   |PayMethodDevice
      *   |Check
      *   |Cash
      *   |PayMethodBodyAllFields

@@ -23,11 +23,6 @@ class RequestOutAuthorize extends JsonSerializableType
     public ?bool $doNotCreateBills;
 
     /**
-     * @var ?bool $forceVendorCreation When `true`, the request creates a new vendor record, regardless of whether the vendor already exists.
-     */
-    public ?bool $forceVendorCreation;
-
-    /**
      * When `true`, Payabli authorizes the payout for same-day ACH processing instead of standard ACH. Same-day ACH must be enabled for the paypoint, otherwise the authorization fails with a `400` response and `responseCode` `3492`. Only ACH payouts honor this flag. Wire and RTP payouts ignore it.
      *
      * Same-day ACH has a daily cutoff. Capture the transaction before the cutoff, or pass `autoConvertSameDayAch` with a value of `true` when you capture it.
@@ -84,10 +79,10 @@ class RequestOutAuthorize extends JsonSerializableType
     public RequestOutAuthorizeVendorData $vendorData;
 
     /**
-     * @var array<RequestOutAuthorizeInvoiceData> $invoiceData Array of bills associated to the transaction
+     * @var ?array<RequestOutAuthorizeInvoiceData> $invoiceData Bills to pay with this payout, each referenced by `billId`.
      */
     #[JsonProperty('invoiceData'), ArrayType([RequestOutAuthorizeInvoiceData::class])]
-    public array $invoiceData;
+    public ?array $invoiceData;
 
     /**
      * @var ?string $accountId
@@ -119,15 +114,14 @@ class RequestOutAuthorize extends JsonSerializableType
      *   paymentMethod: AuthorizePaymentMethod,
      *   paymentDetails: RequestOutAuthorizePaymentDetails,
      *   vendorData: RequestOutAuthorizeVendorData,
-     *   invoiceData: array<RequestOutAuthorizeInvoiceData>,
      *   allowDuplicatedBills?: ?bool,
      *   doNotCreateBills?: ?bool,
-     *   forceVendorCreation?: ?bool,
      *   sameDayAch?: ?bool,
      *   idempotencyKey?: ?string,
      *   source?: ?string,
      *   orderId?: ?string,
      *   orderDescription?: ?string,
+     *   invoiceData?: ?array<RequestOutAuthorizeInvoiceData>,
      *   accountId?: ?string,
      *   subdomain?: ?string,
      *   subscriptionId?: ?int,
@@ -139,7 +133,6 @@ class RequestOutAuthorize extends JsonSerializableType
     ) {
         $this->allowDuplicatedBills = $values['allowDuplicatedBills'] ?? null;
         $this->doNotCreateBills = $values['doNotCreateBills'] ?? null;
-        $this->forceVendorCreation = $values['forceVendorCreation'] ?? null;
         $this->sameDayAch = $values['sameDayAch'] ?? null;
         $this->idempotencyKey = $values['idempotencyKey'] ?? null;
         $this->entryPoint = $values['entryPoint'];
@@ -149,7 +142,7 @@ class RequestOutAuthorize extends JsonSerializableType
         $this->paymentMethod = $values['paymentMethod'];
         $this->paymentDetails = $values['paymentDetails'];
         $this->vendorData = $values['vendorData'];
-        $this->invoiceData = $values['invoiceData'];
+        $this->invoiceData = $values['invoiceData'] ?? null;
         $this->accountId = $values['accountId'] ?? null;
         $this->subdomain = $values['subdomain'] ?? null;
         $this->subscriptionId = $values['subscriptionId'] ?? null;

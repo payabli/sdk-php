@@ -117,6 +117,15 @@ class PaypointData extends JsonSerializableType
     public ?string $state;
 
     /**
+     * This business description is captured during boarding. It differs from `summary`, which
+     * reports counts of customers, transactions, and subscriptions attached to the paypoint.
+     *
+     * @var ?string $businessSummary
+     */
+    #[JsonProperty('Summary')]
+    public ?string $businessSummary;
+
+    /**
      * @var ?PaypointSummary $summary
      */
     #[JsonProperty('summary')]
@@ -166,6 +175,7 @@ class PaypointData extends JsonSerializableType
      *   phone?: ?string,
      *   serviceData?: ?Services,
      *   state?: ?string,
+     *   businessSummary?: ?string,
      *   summary?: ?PaypointSummary,
      *   timeZone?: ?int,
      *   websiteAddress?: ?string,
@@ -194,6 +204,7 @@ class PaypointData extends JsonSerializableType
         $this->phone = $values['phone'] ?? null;
         $this->serviceData = $values['serviceData'] ?? null;
         $this->state = $values['state'] ?? null;
+        $this->businessSummary = $values['businessSummary'] ?? null;
         $this->summary = $values['summary'] ?? null;
         $this->timeZone = $values['timeZone'] ?? null;
         $this->websiteAddress = $values['websiteAddress'] ?? null;

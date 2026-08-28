@@ -255,7 +255,7 @@ class CloudClient
     }
 
     /**
-     * Use [List devices by paypoint](/developers/api-reference/cloud/get-list-of-devices-for-a-paypoint) instead, which supports filters, sorting, and pagination.
+     * Use [List devices by paypoint](/developers/api-reference/get-list-of-devices-for-a-paypoint) instead, which supports filters, sorting, and pagination.
      *
      * Get a list of cloud devices registered to an entrypoint.
      *

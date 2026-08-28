@@ -139,9 +139,6 @@ class MoneyOutClient
         if ($request->doNotCreateBills != null) {
             $query['doNotCreateBills'] = $request->doNotCreateBills;
         }
-        if ($request->forceVendorCreation != null) {
-            $query['forceVendorCreation'] = $request->forceVendorCreation;
-        }
         if ($request->sameDayAch != null) {
             $query['sameDayACH'] = $request->sameDayAch;
         }
@@ -734,7 +731,7 @@ class MoneyOutClient
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "vcard/send-card-link",
+                    path: "MoneyOut/vcard/send-card-link",
                     method: HttpMethod::POST,
                     body: $request,
                 ),

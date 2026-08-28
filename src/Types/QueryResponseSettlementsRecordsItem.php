@@ -213,7 +213,7 @@ class QueryResponseSettlementsRecordsItem extends JsonSerializableType
     public ?DateTime $transactionTime;
 
     /**
-     * @var ?string $transMethod Payment method used: card or ach.
+     * @var ?string $transMethod The payment method used for the transaction, for example card, ach, or device.
      */
     #[JsonProperty('TransMethod')]
     public ?string $transMethod;

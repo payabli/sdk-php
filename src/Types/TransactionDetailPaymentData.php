@@ -11,16 +11,16 @@ use Payabli\Core\Json\JsonProperty;
 class TransactionDetailPaymentData extends JsonSerializableType
 {
     /**
-     * @var string $maskedAccount
+     * @var ?string $maskedAccount
      */
     #[JsonProperty('maskedAccount')]
-    public string $maskedAccount;
+    public ?string $maskedAccount;
 
     /**
-     * @var string $accountType
+     * @var ?string $accountType
      */
     #[JsonProperty('accountType')]
-    public string $accountType;
+    public ?string $accountType;
 
     /**
      * @var ?string $accountExp
@@ -90,10 +90,10 @@ class TransactionDetailPaymentData extends JsonSerializableType
 
     /**
      * @param array{
-     *   maskedAccount: string,
-     *   accountType: string,
      *   holderName: string,
      *   paymentDetails: TransactionDetailPaymentDetails,
+     *   maskedAccount?: ?string,
+     *   accountType?: ?string,
      *   accountExp?: ?string,
      *   storedId?: ?string,
      *   initiator?: ?string,
@@ -108,8 +108,8 @@ class TransactionDetailPaymentData extends JsonSerializableType
     public function __construct(
         array $values,
     ) {
-        $this->maskedAccount = $values['maskedAccount'];
-        $this->accountType = $values['accountType'];
+        $this->maskedAccount = $values['maskedAccount'] ?? null;
+        $this->accountType = $values['accountType'] ?? null;
         $this->accountExp = $values['accountExp'] ?? null;
         $this->holderName = $values['holderName'];
         $this->storedId = $values['storedId'] ?? null;

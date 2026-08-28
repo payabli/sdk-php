@@ -1504,22 +1504,12 @@ Only card transactions can be authorized. This endpoint can't be used for ACH tr
 $client->moneyIn->authorize(
     new RequestPaymentAuthorize([
         'body' => new TransRequestBody([
-            'customerData' => new PayorDataRequest([
-                'customerId' => 4440,
-            ]),
-            'entryPoint' => '8cfec329267',
-            'ipaddress' => '255.255.255.255',
             'paymentDetails' => new PaymentDetail([
-                'serviceFee' => 0,
-                'totalAmount' => 100,
+                'totalAmount' => 1.1,
             ]),
             'paymentMethod' => new PayMethodCredit([
-                'cardcvv' => '999',
-                'cardexp' => '02/27',
-                'cardHolder' => 'John Cassian',
-                'cardnumber' => '4111111111111111',
-                'cardzip' => '12345',
-                'initiator' => 'payor',
+                'cardexp' => 'cardexp',
+                'cardnumber' => 'cardnumber',
                 'method' => PayMethodCreditMethod::Card->value,
             ]),
         ]),
@@ -1600,8 +1590,8 @@ transaction](/developers/api-reference/moneyin/authorize-a-transaction) to compl
 
 ```php
 $client->moneyIn->capture(
-    '10-7d9cd67d-2d5d-4cd7-a1b7-72b8b201ec13',
-    0,
+    'transId',
+    1.1,
 );
 ```
 </dd>
@@ -1671,11 +1661,10 @@ You can use this endpoint to capture both full and partial amounts of the origin
 
 ```php
 $client->moneyIn->captureAuth(
-    '10-7d9cd67d-2d5d-4cd7-a1b7-72b8b201ec13',
+    'transId',
     new CaptureRequest([
         'paymentDetails' => new CapturePaymentDetails([
-            'totalAmount' => 105,
-            'serviceFee' => 5,
+            'totalAmount' => 1.1,
         ]),
     ]),
 );
@@ -1959,22 +1948,12 @@ Make a single transaction. This method authorizes and captures a payment in one 
 $client->moneyIn->getpaid(
     new RequestPayment([
         'body' => new TransRequestBody([
-            'customerData' => new PayorDataRequest([
-                'customerId' => 4440,
-            ]),
-            'entryPoint' => '8cfec329267',
-            'ipaddress' => '255.255.255.255',
             'paymentDetails' => new PaymentDetail([
-                'serviceFee' => 0,
-                'totalAmount' => 100,
+                'totalAmount' => 1.1,
             ]),
             'paymentMethod' => new PayMethodCredit([
-                'cardcvv' => '999',
-                'cardexp' => '02/27',
-                'cardHolder' => 'John Cassian',
-                'cardnumber' => '4111111111111111',
-                'cardzip' => '12345',
-                'initiator' => 'payor',
+                'cardexp' => 'cardexp',
+                'cardnumber' => 'cardnumber',
                 'method' => PayMethodCreditMethod::Card->value,
             ]),
         ]),
@@ -2078,8 +2057,8 @@ A reversal either refunds or voids a transaction independent of the transaction'
 
 ```php
 $client->moneyIn->reverse(
-    '10-3ffa27df-b171-44e0-b251-e95fbfc7a723',
-    0,
+    'transId',
+    1.1,
 );
 ```
 </dd>
@@ -2153,8 +2132,8 @@ Refund a transaction that has settled and send money back to the account holder.
 
 ```php
 $client->moneyIn->refund(
-    '10-3ffa27df-b171-44e0-b251-e95fbfc7a723',
-    0,
+    'transId',
+    1.1,
 );
 ```
 </dd>
@@ -2228,29 +2207,8 @@ Refunds a settled transaction with split instructions.
 
 ```php
 $client->moneyIn->refundWithInstructions(
-    '10-3ffa27df-b171-44e0-b251-e95fbfc7a723',
-    new RequestRefund([
-        'idempotencyKey' => '8A29FC40-CA47-1067-B31D-00DD010662DB',
-        'amount' => 100,
-        'orderDescription' => 'Materials deposit',
-        'refundDetails' => new RefundDetail([
-            'splitRefunding' => [
-                new SplitFundingRefundContent([
-                    'accountId' => '187-342',
-                    'amount' => 60,
-                    'description' => 'Refunding undelivered materials',
-                    'originationEntryPoint' => '7f1a381696',
-                ]),
-                new SplitFundingRefundContent([
-                    'accountId' => '187-343',
-                    'amount' => 40,
-                    'description' => 'Refunding deposit for undelivered materials',
-                    'originationEntryPoint' => '7f1a381696',
-                ]),
-            ],
-        ]),
-        'source' => 'api',
-    ]),
+    'transId',
+    new RequestRefund([]),
 );
 ```
 </dd>
@@ -2605,7 +2563,7 @@ Cancel a transaction that hasn't been settled yet. Voiding non-captured authoriz
 
 ```php
 $client->moneyIn->void(
-    '10-3ffa27df-b171-44e0-b251-e95fbfc7a723',
+    'transId',
 );
 ```
 </dd>
@@ -14531,6 +14489,72 @@ $client->notificationlogs->bulkRetryNotificationLogs(
 </dl>
 </details>
 
+## Device
+<details><summary><code>$client-&gt;device-&gt;challenge($entry) -> ?DeviceChallengeResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Generates a one-time, 6-digit verification code for activating a
+semi-integrated card-present device in a paypoint. After calling this endpoint, an operator enters the returned code
+on the device's terminal, along with a device name, to register the
+device to the paypoint resolved from `{entry}`.
+
+A code expires 5 minutes after it's issued. A paypoint can have several
+codes active at once — for example, when activating a batch of devices —
+and a code binds to whichever device enters it first.
+
+Authenticate with an OAuth2 Bearer token that has the `device_registry` scope.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```php
+$client->device->challenge(
+    '8cfec329267',
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**$entry:** `string` — The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Cloud
 <details><summary><code>$client-&gt;cloud-&gt;addDevice($entry, $request) -> ?AddDeviceResponse</code></summary>
 <dl>
@@ -14764,7 +14788,7 @@ $client->cloud->historyDevice(
 <dl>
 <dd>
 
-Use [List devices by paypoint](/developers/api-reference/cloud/get-list-of-devices-for-a-paypoint) instead, which supports filters, sorting, and pagination.
+Use [List devices by paypoint](/developers/api-reference/get-list-of-devices-for-a-paypoint) instead, which supports filters, sorting, and pagination.
 
 Get a list of cloud devices registered to an entrypoint.
 </dd>
@@ -24792,14 +24816,6 @@ $client->moneyOut->authorizeOut(
 <dl>
 <dd>
 
-**$forceVendorCreation:** `?bool` — When `true`, the request creates a new vendor record, regardless of whether the vendor already exists.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
 **$sameDayAch:** `?bool` 
 
 When `true`, Payabli authorizes the payout for same-day ACH processing instead of standard ACH. Same-day ACH must be enabled for the paypoint, otherwise the authorization fails with a `400` response and `responseCode` `3492`. Only ACH payouts honor this flag. Wire and RTP payouts ignore it.
@@ -24876,7 +24892,7 @@ Same-day ACH has a daily cutoff. Capture the transaction before the cutoff, or p
 <dl>
 <dd>
 
-**$invoiceData:** `array` — Array of bills associated to the transaction
+**$invoiceData:** `?array` — Bills to pay with this payout, each referenced by `billId`.
     
 </dd>
 </dl>
@@ -25755,7 +25771,7 @@ Deposits funds into a paypoint's available payout balance. Deposited funds enter
 ```php
 $client->funding->depositFunds(
     new DepositFundsRequest([
-        'amount' => 10,
+        'amount' => 1500,
         'entrypoint' => '48acde49',
         'accountId' => '333',
     ]),

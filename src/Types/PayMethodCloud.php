@@ -20,16 +20,9 @@ class PayMethodCloud extends JsonSerializableType
     public string $method;
 
     /**
-     * @var ?bool $saveIfSuccess
-     */
-    #[JsonProperty('saveIfSuccess')]
-    public ?bool $saveIfSuccess;
-
-    /**
      * @param array{
      *   method: value-of<PayMethodCloudMethod>,
      *   device?: ?string,
-     *   saveIfSuccess?: ?bool,
      * } $values
      */
     public function __construct(
@@ -37,7 +30,6 @@ class PayMethodCloud extends JsonSerializableType
     ) {
         $this->device = $values['device'] ?? null;
         $this->method = $values['method'];
-        $this->saveIfSuccess = $values['saveIfSuccess'] ?? null;
     }
 
     /**

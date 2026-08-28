@@ -1,12 +1,11 @@
 <?php
 
-namespace Payabli\Funding;
+namespace Payabli\Device;
 
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\Core\RoutingAuthProvider;
-use Payabli\Funding\Requests\DepositFundsRequest;
-use Payabli\Types\DepositFundsResponse;
+use Payabli\Types\DeviceChallengeResponse;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
 use Payabli\Core\Json\JsonApiRequest;
@@ -15,7 +14,7 @@ use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 
-class FundingClient
+class DeviceClient
 {
     /**
      * @var array{
@@ -60,20 +59,25 @@ class FundingClient
     }
 
     /**
-     * Deposits funds into a paypoint's available payout balance. Deposited funds enter a pending state and aren't available for instant payouts until confirmed through FBO reconciliation.
+     * Generates a one-time, 6-digit verification code for activating a
+     * semi-integrated card-present device in a paypoint. After calling this endpoint, an operator enters the returned code
+     * on the device's terminal, along with a device name, to register the
+     * device to the paypoint resolved from `{entry}`.
+     *
+     * A code expires 5 minutes after it's issued. A paypoint can have several
+     * codes active at once — for example, when activating a batch of devices —
+     * and a code binds to whichever device enters it first.
+     *
+     * Authenticate with an OAuth2 Bearer token that has the `device_registry` scope.
      *
      * Example:
      * ```php
-     * $client->funding->depositFunds(
-     *     new DepositFundsRequest([
-     *         'amount' => 1500,
-     *         'entrypoint' => '48acde49',
-     *         'accountId' => '333',
-     *     ]),
+     * $client->device->challenge(
+     *     '8cfec329267',
      * );
      * ```
      *
-     * @param DepositFundsRequest $request
+     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -82,24 +86,23 @@ class FundingClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?DepositFundsResponse
+     * @return ?DeviceChallengeResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function depositFunds(DepositFundsRequest $request, ?array $options = null): ?DepositFundsResponse
+    public function challenge(string $entry, ?array $options = null): ?DeviceChallengeResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $options['headers'] = array_merge(
-            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []]]) ?? [],
             $options['headers'] ?? []
         );
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "Funding/depositFunds",
+                    path: "Device/challenge/{$entry}",
                     method: HttpMethod::POST,
-                    body: $request,
                 ),
                 $options,
             );
@@ -109,7 +112,7 @@ class FundingClient
                 if (empty($json)) {
                     return null;
                 }
-                return DepositFundsResponse::fromJson($json);
+                return DeviceChallengeResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

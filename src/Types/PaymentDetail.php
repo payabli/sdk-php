@@ -45,7 +45,7 @@ class PaymentDetail extends JsonSerializableType
     public ?float $serviceFee;
 
     /**
-     * @var ?array<SplitFundingContent> $splitFunding Split funding instructions for the transaction. See [Split a Transaction](/developers/developer-guides/money-in-split-funding) for more.
+     * @var ?array<SplitFundingContent> $splitFunding Split funding instructions for the transaction. See [Split a Transaction](/guides/pay-in-developer-routing-split-funds) for more.
      */
     #[JsonProperty('splitFunding'), ArrayType([SplitFundingContent::class])]
     public ?array $splitFunding;

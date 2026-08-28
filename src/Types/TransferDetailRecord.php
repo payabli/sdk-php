@@ -179,7 +179,7 @@ class TransferDetailRecord extends JsonSerializableType
     public ?string $orderId;
 
     /**
-     * @var ?string $method Payment method used: card, ach, or wallet
+     * @var ?string $method The payment method used for the transaction, for example card, ach, or device.
      */
     #[JsonProperty('Method')]
     public ?string $method;

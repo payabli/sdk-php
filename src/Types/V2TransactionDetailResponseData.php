@@ -41,10 +41,10 @@ class V2TransactionDetailResponseData extends JsonSerializableType
     public ?string $authcode;
 
     /**
-     * @var string $transactionid Unique identifier for the transaction assigned by the payment processor.
+     * @var ?string $transactionid Unique identifier for the transaction assigned by the payment processor.
      */
     #[JsonProperty('transactionid')]
-    public string $transactionid;
+    public ?string $transactionid;
 
     /**
      * @var ?string $avsresponse
@@ -111,11 +111,11 @@ class V2TransactionDetailResponseData extends JsonSerializableType
      *   resultCode: string,
      *   resultCodeText: string,
      *   responsetext: string,
-     *   transactionid: string,
      *   responseCode: string,
      *   responseCodeText: string,
      *   response?: ?string,
      *   authcode?: ?string,
+     *   transactionid?: ?string,
      *   avsresponse?: ?string,
      *   avsresponseText?: ?string,
      *   cvvresponse?: ?string,
@@ -134,7 +134,7 @@ class V2TransactionDetailResponseData extends JsonSerializableType
         $this->response = $values['response'] ?? null;
         $this->responsetext = $values['responsetext'];
         $this->authcode = $values['authcode'] ?? null;
-        $this->transactionid = $values['transactionid'];
+        $this->transactionid = $values['transactionid'] ?? null;
         $this->avsresponse = $values['avsresponse'] ?? null;
         $this->avsresponseText = $values['avsresponseText'] ?? null;
         $this->cvvresponse = $values['cvvresponse'] ?? null;

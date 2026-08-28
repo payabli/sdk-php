@@ -56,10 +56,10 @@ class V2TransactionDetails extends JsonSerializableType
     public string $externalProcessorInformation;
 
     /**
-     * @var string $gatewayTransId Gateway transaction identifier.
+     * @var ?string $gatewayTransId Gateway transaction identifier.
      */
     #[JsonProperty('gatewayTransId')]
-    public string $gatewayTransId;
+    public ?string $gatewayTransId;
 
     /**
      * @var ?string $orderId
@@ -334,7 +334,6 @@ class V2TransactionDetails extends JsonSerializableType
      *   paymentTransId: string,
      *   connectorName: string,
      *   externalProcessorInformation: string,
-     *   gatewayTransId: string,
      *   method: string,
      *   batchNumber: string,
      *   batchAmount: float,
@@ -369,6 +368,7 @@ class V2TransactionDetails extends JsonSerializableType
      *   achSecCode: string,
      *   ipAddress: string,
      *   isSameDayAch: bool,
+     *   gatewayTransId?: ?string,
      *   orderId?: ?string,
      *   transAdditionalData?: mixed,
      *   externalPaypointId?: ?string,
@@ -391,7 +391,7 @@ class V2TransactionDetails extends JsonSerializableType
         $this->paymentTransId = $values['paymentTransId'];
         $this->connectorName = $values['connectorName'];
         $this->externalProcessorInformation = $values['externalProcessorInformation'];
-        $this->gatewayTransId = $values['gatewayTransId'];
+        $this->gatewayTransId = $values['gatewayTransId'] ?? null;
         $this->orderId = $values['orderId'] ?? null;
         $this->method = $values['method'];
         $this->batchNumber = $values['batchNumber'];

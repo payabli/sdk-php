@@ -18,6 +18,7 @@ use Payabli\Import\ImportClient;
 use Payabli\Query\QueryClient;
 use Payabli\Ocr\OcrClient;
 use Payabli\Notificationlogs\NotificationlogsClient;
+use Payabli\Device\DeviceClient;
 use Payabli\Cloud\CloudClient;
 use Payabli\LineItem\LineItemClient;
 use Payabli\Boarding\BoardingClient;
@@ -123,6 +124,11 @@ class PayabliClient
      * @var NotificationlogsClient $notificationlogs
      */
     public NotificationlogsClient $notificationlogs;
+
+    /**
+     * @var DeviceClient $device
+     */
+    public DeviceClient $device;
 
     /**
      * @var CloudClient $cloud
@@ -263,8 +269,8 @@ class PayabliClient
         $defaultHeaders = [
             'X-Fern-Language' => 'PHP',
             'X-Fern-SDK-Name' => 'Payabli',
-            'X-Fern-SDK-Version' => '1.0.10',
-            'User-Agent' => 'payabli/payabli/1.0.10',
+            'X-Fern-SDK-Version' => '1.0.11',
+            'User-Agent' => 'payabli/payabli/1.0.11',
         ];
 
         $this->options = $options ?? [];
@@ -306,6 +312,7 @@ class PayabliClient
         $this->query = new QueryClient($this->client, $this->options, $this->routingAuthProvider);
         $this->ocr = new OcrClient($this->client, $this->options, $this->routingAuthProvider);
         $this->notificationlogs = new NotificationlogsClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->device = new DeviceClient($this->client, $this->options, $this->routingAuthProvider);
         $this->cloud = new CloudClient($this->client, $this->options, $this->routingAuthProvider);
         $this->lineItem = new LineItemClient($this->client, $this->options, $this->routingAuthProvider);
         $this->boarding = new BoardingClient($this->client, $this->options, $this->routingAuthProvider);

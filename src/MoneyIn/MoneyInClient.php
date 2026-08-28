@@ -95,22 +95,12 @@ class MoneyInClient
      * $client->moneyIn->authorize(
      *     new RequestPaymentAuthorize([
      *         'body' => new TransRequestBody([
-     *             'customerData' => new PayorDataRequest([
-     *                 'customerId' => 4440,
-     *             ]),
-     *             'entryPoint' => '8cfec329267',
-     *             'ipaddress' => '255.255.255.255',
      *             'paymentDetails' => new PaymentDetail([
-     *                 'serviceFee' => 0,
-     *                 'totalAmount' => 100,
+     *                 'totalAmount' => 1.1,
      *             ]),
      *             'paymentMethod' => new PayMethodCredit([
-     *                 'cardcvv' => '999',
-     *                 'cardexp' => '02/27',
-     *                 'cardHolder' => 'John Cassian',
-     *                 'cardnumber' => '4111111111111111',
-     *                 'cardzip' => '12345',
-     *                 'initiator' => 'payor',
+     *                 'cardexp' => 'cardexp',
+     *                 'cardnumber' => 'cardnumber',
      *                 'method' => PayMethodCreditMethod::Card->value,
      *             ]),
      *         ]),
@@ -189,8 +179,8 @@ class MoneyInClient
      * Example:
      * ```php
      * $client->moneyIn->capture(
-     *     '10-7d9cd67d-2d5d-4cd7-a1b7-72b8b201ec13',
-     *     0,
+     *     'transId',
+     *     1.1,
      * );
      * ```
      *
@@ -256,11 +246,10 @@ class MoneyInClient
      * Example:
      * ```php
      * $client->moneyIn->captureAuth(
-     *     '10-7d9cd67d-2d5d-4cd7-a1b7-72b8b201ec13',
+     *     'transId',
      *     new CaptureRequest([
      *         'paymentDetails' => new CapturePaymentDetails([
-     *             'totalAmount' => 105,
-     *             'serviceFee' => 5,
+     *             'totalAmount' => 1.1,
      *         ]),
      *     ]),
      * );
@@ -478,22 +467,12 @@ class MoneyInClient
      * $client->moneyIn->getpaid(
      *     new RequestPayment([
      *         'body' => new TransRequestBody([
-     *             'customerData' => new PayorDataRequest([
-     *                 'customerId' => 4440,
-     *             ]),
-     *             'entryPoint' => '8cfec329267',
-     *             'ipaddress' => '255.255.255.255',
      *             'paymentDetails' => new PaymentDetail([
-     *                 'serviceFee' => 0,
-     *                 'totalAmount' => 100,
+     *                 'totalAmount' => 1.1,
      *             ]),
      *             'paymentMethod' => new PayMethodCredit([
-     *                 'cardcvv' => '999',
-     *                 'cardexp' => '02/27',
-     *                 'cardHolder' => 'John Cassian',
-     *                 'cardnumber' => '4111111111111111',
-     *                 'cardzip' => '12345',
-     *                 'initiator' => 'payor',
+     *                 'cardexp' => 'cardexp',
+     *                 'cardnumber' => 'cardnumber',
      *                 'method' => PayMethodCreditMethod::Card->value,
      *             ]),
      *         ]),
@@ -580,8 +559,8 @@ class MoneyInClient
      * Example:
      * ```php
      * $client->moneyIn->reverse(
-     *     '10-3ffa27df-b171-44e0-b251-e95fbfc7a723',
-     *     0,
+     *     'transId',
+     *     1.1,
      * );
      * ```
      *
@@ -651,8 +630,8 @@ class MoneyInClient
      * Example:
      * ```php
      * $client->moneyIn->refund(
-     *     '10-3ffa27df-b171-44e0-b251-e95fbfc7a723',
-     *     0,
+     *     'transId',
+     *     1.1,
      * );
      * ```
      *
@@ -722,29 +701,8 @@ class MoneyInClient
      * Example:
      * ```php
      * $client->moneyIn->refundWithInstructions(
-     *     '10-3ffa27df-b171-44e0-b251-e95fbfc7a723',
-     *     new RequestRefund([
-     *         'idempotencyKey' => '8A29FC40-CA47-1067-B31D-00DD010662DB',
-     *         'amount' => 100,
-     *         'orderDescription' => 'Materials deposit',
-     *         'refundDetails' => new RefundDetail([
-     *             'splitRefunding' => [
-     *                 new SplitFundingRefundContent([
-     *                     'accountId' => '187-342',
-     *                     'amount' => 60,
-     *                     'description' => 'Refunding undelivered materials',
-     *                     'originationEntryPoint' => '7f1a381696',
-     *                 ]),
-     *                 new SplitFundingRefundContent([
-     *                     'accountId' => '187-343',
-     *                     'amount' => 40,
-     *                     'description' => 'Refunding deposit for undelivered materials',
-     *                     'originationEntryPoint' => '7f1a381696',
-     *                 ]),
-     *             ],
-     *         ]),
-     *         'source' => 'api',
-     *     ]),
+     *     'transId',
+     *     new RequestRefund([]),
      * );
      * ```
      *
@@ -1016,7 +974,7 @@ class MoneyInClient
      * Example:
      * ```php
      * $client->moneyIn->void(
-     *     '10-3ffa27df-b171-44e0-b251-e95fbfc7a723',
+     *     'transId',
      * );
      * ```
      *
