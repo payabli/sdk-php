@@ -37,6 +37,18 @@ class BillDetailsResponse extends JsonSerializableType
     public ?string $netAmount;
 
     /**
+     * @var ?string $paidAmount The amount paid toward the bill so far.
+     */
+    #[JsonProperty('paidAmount')]
+    public ?string $paidAmount;
+
+    /**
+     * @var ?string $outstandingBalance The amount still owed on the bill, calculated as `netAmount` minus `paidAmount`.
+     */
+    #[JsonProperty('outstandingBalance')]
+    public ?string $outstandingBalance;
+
+    /**
      * @var ?string $discount Bill discount amount.
      */
     #[JsonProperty('discount')]
@@ -66,6 +78,8 @@ class BillDetailsResponse extends JsonSerializableType
      *   lotNumber?: ?string,
      *   invoiceNumber?: ?string,
      *   netAmount?: ?string,
+     *   paidAmount?: ?string,
+     *   outstandingBalance?: ?string,
      *   discount?: ?string,
      *   dueDate?: ?DateTime,
      *   invoiceDate?: ?DateTime,
@@ -79,6 +93,8 @@ class BillDetailsResponse extends JsonSerializableType
         $this->lotNumber = $values['lotNumber'] ?? null;
         $this->invoiceNumber = $values['invoiceNumber'] ?? null;
         $this->netAmount = $values['netAmount'] ?? null;
+        $this->paidAmount = $values['paidAmount'] ?? null;
+        $this->outstandingBalance = $values['outstandingBalance'] ?? null;
         $this->discount = $values['discount'] ?? null;
         $this->dueDate = $values['dueDate'] ?? null;
         $this->invoiceDate = $values['invoiceDate'] ?? null;

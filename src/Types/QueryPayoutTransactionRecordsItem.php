@@ -65,6 +65,12 @@ class QueryPayoutTransactionRecordsItem extends JsonSerializableType
     public ?string $paymentId;
 
     /**
+     * @var ?string $orderId
+     */
+    #[JsonProperty('orderId')]
+    public ?string $orderId;
+
+    /**
      * @var ?string $transId ID of the transaction linked to this payout, when applicable.
      */
     #[JsonProperty('TransId')]
@@ -322,6 +328,7 @@ class QueryPayoutTransactionRecordsItem extends JsonSerializableType
      *   paypointId?: ?int,
      *   status?: ?int,
      *   paymentId?: ?string,
+     *   orderId?: ?string,
      *   transId?: ?string,
      *   transStatus?: ?int,
      *   transStatusDetail?: ?string,
@@ -376,6 +383,7 @@ class QueryPayoutTransactionRecordsItem extends JsonSerializableType
         $this->paypointId = $values['paypointId'] ?? null;
         $this->status = $values['status'] ?? null;
         $this->paymentId = $values['paymentId'] ?? null;
+        $this->orderId = $values['orderId'] ?? null;
         $this->transId = $values['transId'] ?? null;
         $this->transStatus = $values['transStatus'] ?? null;
         $this->transStatusDetail = $values['transStatusDetail'] ?? null;

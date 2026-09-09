@@ -41,6 +41,18 @@ class BillResponseData extends JsonSerializableType
     public ?float $totalAmount;
 
     /**
+     * @var ?float $paidAmount The amount paid toward the bill so far.
+     */
+    #[JsonProperty('PaidAmount')]
+    public ?float $paidAmount;
+
+    /**
+     * @var ?float $outstandingBalance The amount still owed on the bill, calculated as `NetAmount` minus `PaidAmount`.
+     */
+    #[JsonProperty('OutstandingBalance')]
+    public ?float $outstandingBalance;
+
+    /**
      * @var ?DateTime $billDate Date of bill. Accepted formats: YYYY-MM-DD, MM/DD/YYYY
      */
     #[JsonProperty('BillDate'), Date(Date::TYPE_DATE)]
@@ -239,6 +251,8 @@ class BillResponseData extends JsonSerializableType
      *   netAmount?: ?float,
      *   discount?: ?float,
      *   totalAmount?: ?float,
+     *   paidAmount?: ?float,
+     *   outstandingBalance?: ?float,
      *   billDate?: ?DateTime,
      *   dueDate?: ?DateTime,
      *   comments?: ?string,
@@ -281,6 +295,8 @@ class BillResponseData extends JsonSerializableType
         $this->netAmount = $values['netAmount'] ?? null;
         $this->discount = $values['discount'] ?? null;
         $this->totalAmount = $values['totalAmount'] ?? null;
+        $this->paidAmount = $values['paidAmount'] ?? null;
+        $this->outstandingBalance = $values['outstandingBalance'] ?? null;
         $this->billDate = $values['billDate'] ?? null;
         $this->dueDate = $values['dueDate'] ?? null;
         $this->comments = $values['comments'] ?? null;

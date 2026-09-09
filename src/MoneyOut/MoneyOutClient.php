@@ -19,6 +19,7 @@ use Payabli\Core\Json\JsonSerializer;
 use Payabli\Types\PayabliApiResponse0000;
 use Payabli\MoneyOut\Requests\CaptureAllOutRequest;
 use Payabli\MoneyOut\Requests\CaptureOutRequest;
+use Payabli\MoneyOut\Requests\PayoutRequest;
 use Payabli\Types\BillDetailResponse;
 use Payabli\Types\VCardGetResponse;
 use Payabli\MoneyOut\Requests\RenewVCardRequest;
@@ -90,24 +91,26 @@ class MoneyOutClient
      * ```php
      * $client->moneyOut->authorizeOut(
      *     new RequestOutAuthorize([
-     *         'entryPoint' => '8cfec329267',
-     *         'orderDescription' => 'Window Painting',
-     *         'paymentMethod' => new AuthorizePaymentMethod([
-     *             'method' => 'managed',
-     *         ]),
-     *         'paymentDetails' => new RequestOutAuthorizePaymentDetails([
-     *             'totalAmount' => 47,
-     *             'unbundled' => false,
-     *         ]),
-     *         'vendorData' => new RequestOutAuthorizeVendorData([
-     *             'vendorNumber' => 'VEN-123',
-     *         ]),
-     *         'invoiceData' => [
-     *             new RequestOutAuthorizeInvoiceData([
-     *                 'billId' => 54323,
+     *         'body' => new AuthorizePayoutBody([
+     *             'entryPoint' => '8cfec329267',
+     *             'orderDescription' => 'Window Painting',
+     *             'paymentMethod' => new AuthorizePaymentMethod([
+     *                 'method' => 'managed',
      *             ]),
-     *         ],
-     *         'autoCapture' => true,
+     *             'paymentDetails' => new RequestOutAuthorizePaymentDetails([
+     *                 'totalAmount' => 47,
+     *                 'unbundled' => false,
+     *             ]),
+     *             'vendorData' => new RequestOutAuthorizeVendorData([
+     *                 'vendorNumber' => 'VEN-123',
+     *             ]),
+     *             'invoiceData' => [
+     *                 new RequestOutAuthorizeInvoiceData([
+     *                     'billId' => 54323,
+     *                 ]),
+     *             ],
+     *             'autoCapture' => true,
+     *         ]),
      *     ]),
      * );
      * ```
@@ -154,7 +157,7 @@ class MoneyOutClient
                     method: HttpMethod::POST,
                     headers: $headers,
                     query: $query,
-                    body: $request,
+                    body: $request->body,
                 ),
                 $options,
             );
@@ -486,6 +489,113 @@ class MoneyOutClient
                     method: HttpMethod::GET,
                     headers: $headers,
                     query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return AuthCapturePayoutResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Authorizes a payout and captures it in the same request, returning the capture result. Use this endpoint when you need the capture outcome synchronously: it does the same work as calling `POST /MoneyOut/authorize` followed by `GET /MoneyOut/capture/{referenceId}`, in a single call.
+     *
+     * Risk and fraud review runs at both the authorize and capture stages, exactly as it does for the two-call flow.
+     *
+     * Payabli ignores the `autoCapture` field in the request body, since this endpoint always captures inline.
+     *
+     * If the capture fails, the payout stays authorized. Retry the capture with `GET /MoneyOut/capture/{referenceId}` using the `referenceId` from the error response rather than resubmitting, which would create a second payout. See the [Manage payouts guide](/guides/pay-out-developer-payouts-manage#authorize-and-capture-in-one-call) for details.
+     *
+     * Example:
+     * ```php
+     * $client->moneyOut->payout(
+     *     new PayoutRequest([
+     *         'body' => new AuthorizePayoutBody([
+     *             'entryPoint' => '8cfec329267',
+     *             'orderDescription' => 'Window Painting',
+     *             'paymentMethod' => new AuthorizePaymentMethod([
+     *                 'method' => 'managed',
+     *             ]),
+     *             'paymentDetails' => new RequestOutAuthorizePaymentDetails([
+     *                 'totalAmount' => 47,
+     *             ]),
+     *             'vendorData' => new RequestOutAuthorizeVendorData([
+     *                 'vendorNumber' => 'VEN-123',
+     *             ]),
+     *             'invoiceData' => [
+     *                 new RequestOutAuthorizeInvoiceData([
+     *                     'billId' => 54323,
+     *                 ]),
+     *             ],
+     *         ]),
+     *     ]),
+     * );
+     * ```
+     *
+     * @param PayoutRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?AuthCapturePayoutResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function payout(PayoutRequest $request, ?array $options = null): ?AuthCapturePayoutResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
+        $query = [];
+        if ($request->sameDayAch != null) {
+            $query['sameDayACH'] = $request->sameDayAch;
+        }
+        if ($request->doNotCreateBills != null) {
+            $query['doNotCreateBills'] = $request->doNotCreateBills;
+        }
+        if ($request->allowDuplicatedBills != null) {
+            $query['allowDuplicatedBills'] = $request->allowDuplicatedBills;
+        }
+        if ($request->updateVendorPaymentMethod != null) {
+            $query['updateVendorPaymentMethod'] = $request->updateVendorPaymentMethod;
+        }
+        if ($request->autoConvertSameDayAch != null) {
+            $query['autoConvertSameDayAch'] = $request->autoConvertSameDayAch;
+        }
+        $headers = [];
+        if ($request->idempotencyKey != null) {
+            $headers['idempotencyKey'] = $request->idempotencyKey;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "MoneyOut/payout",
+                    method: HttpMethod::POST,
+                    headers: $headers,
+                    query: $query,
+                    body: $request->body,
                 ),
                 $options,
             );

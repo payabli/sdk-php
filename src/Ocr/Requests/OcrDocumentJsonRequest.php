@@ -1,11 +1,12 @@
 <?php
 
-namespace Payabli\Types;
+namespace Payabli\Ocr\Requests;
 
 use Payabli\Core\Json\JsonSerializableType;
+use Payabli\Types\FileContentFtype;
 use Payabli\Core\Json\JsonProperty;
 
-class FileContentImageOnly extends JsonSerializableType
+class OcrDocumentJsonRequest extends JsonSerializableType
 {
     /**
      * @var ?value-of<FileContentFtype> $ftype
@@ -46,13 +47,5 @@ class FileContentImageOnly extends JsonSerializableType
         $this->filename = $values['filename'] ?? null;
         $this->furl = $values['furl'] ?? null;
         $this->fContent = $values['fContent'] ?? null;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString(): string
-    {
-        return $this->toJson();
     }
 }

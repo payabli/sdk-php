@@ -5,15 +5,18 @@ namespace Payabli\Ocr;
 use Psr\Http\Client\ClientInterface;
 use Payabli\Core\Client\RawClient;
 use Payabli\Core\RoutingAuthProvider;
-use Payabli\Types\FileContentImageOnly;
+use Payabli\Ocr\Requests\OcrDocumentFormRequest;
 use Payabli\Types\PayabliApiResponseOcr;
 use Payabli\Exceptions\PayabliException;
 use Payabli\Exceptions\PayabliApiException;
-use Payabli\Core\Json\JsonApiRequest;
+use Payabli\Core\Multipart\MultipartFormData;
+use Payabli\Core\Multipart\MultipartApiRequest;
 use Payabli\Environments;
 use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
+use Payabli\Ocr\Requests\OcrDocumentJsonRequest;
+use Payabli\Core\Json\JsonApiRequest;
 
 class OcrClient
 {
@@ -60,44 +63,47 @@ class OcrClient
     }
 
     /**
-     * Use this endpoint to upload an image file for OCR processing. The accepted file formats include PDF, JPG, JPEG, PNG, and GIF. Specify the desired type of result (either 'bill' or 'invoice') in the path parameter `typeResult`. The response will contain the OCR processing results, including extracted data such as bill number, vendor information, bill items, and more.
+     * Use this endpoint to upload a document file for OCR processing as `multipart/form-data`, with the file in a field named `file`. The accepted file formats include PDF, JPG, JPEG, PNG, and GIF. Specify the desired type of result (either 'bill' or 'invoice') in the path parameter `typeResult`. The response will contain the OCR processing results, including extracted data such as bill number, vendor information, bill items, and more. To send the file as a Base64-encoded string in a JSON body instead, use `ocrDocumentJson`.
      *
      * Example:
      * ```php
      * $client->ocr->ocrDocumentForm(
      *     'typeResult',
-     *     new FileContentImageOnly([]),
+     *     new OcrDocumentFormRequest([
+     *         'file' => File::createFromString("example_file", "example_file"),
+     *     ]),
      * );
      * ```
      *
      * @param string $typeResult The type of object to create in Payabli. Accepted values are `bill` and `invoice`.
-     * @param FileContentImageOnly $request
+     * @param OcrDocumentFormRequest $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
      *   timeout?: float,
      *   headers?: array<string, string>,
      *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
      * } $options
      * @return ?PayabliApiResponseOcr
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function ocrDocumentForm(string $typeResult, FileContentImageOnly $request, ?array $options = null): ?PayabliApiResponseOcr
+    public function ocrDocumentForm(string $typeResult, OcrDocumentFormRequest $request, ?array $options = null): ?PayabliApiResponseOcr
     {
         $options = array_merge($this->options, $options ?? []);
         $options['headers'] = array_merge(
             $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
             $options['headers'] ?? []
         );
+        $body = new MultipartFormData();
+        $body->addPart($request->file->toMultipartFormDataPart('file'));
         try {
             $response = $this->client->sendRequest(
-                new JsonApiRequest(
+                new MultipartApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
                     path: "Import/ocrDocumentForm/{$typeResult}",
                     method: HttpMethod::POST,
-                    body: $request,
+                    body: $body,
                 ),
                 $options,
             );
@@ -128,12 +134,12 @@ class OcrClient
      * ```php
      * $client->ocr->ocrDocumentJson(
      *     'typeResult',
-     *     new FileContentImageOnly([]),
+     *     new OcrDocumentJsonRequest([]),
      * );
      * ```
      *
      * @param string $typeResult The type of object to create in Payabli. Accepted values are `bill` and `invoice`.
-     * @param FileContentImageOnly $request
+     * @param OcrDocumentJsonRequest $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -146,7 +152,7 @@ class OcrClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function ocrDocumentJson(string $typeResult, FileContentImageOnly $request, ?array $options = null): ?PayabliApiResponseOcr
+    public function ocrDocumentJson(string $typeResult, OcrDocumentJsonRequest $request = new OcrDocumentJsonRequest(), ?array $options = null): ?PayabliApiResponseOcr
     {
         $options = array_merge($this->options, $options ?? []);
         $options['headers'] = array_merge(

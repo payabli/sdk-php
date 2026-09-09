@@ -8,9 +8,9 @@ use Payabli\Core\Json\JsonProperty;
 class QuerySummary extends JsonSerializableType
 {
     /**
-     * @var ?string $pageIdentifier
+     * @var ?string $pageIdentifier Pagination token for retrieving the next page of results. Returns `null` when there's no additional page.
      */
-    #[JsonProperty('pageIdentifier')]
+    #[JsonProperty('pageidentifier')]
     public ?string $pageIdentifier;
 
     /**

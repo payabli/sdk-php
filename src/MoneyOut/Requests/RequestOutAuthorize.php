@@ -3,12 +3,7 @@
 namespace Payabli\MoneyOut\Requests;
 
 use Payabli\Core\Json\JsonSerializableType;
-use Payabli\Core\Json\JsonProperty;
-use Payabli\Types\AuthorizePaymentMethod;
-use Payabli\Types\RequestOutAuthorizePaymentDetails;
-use Payabli\Types\RequestOutAuthorizeVendorData;
-use Payabli\Types\RequestOutAuthorizeInvoiceData;
-use Payabli\Core\Types\ArrayType;
+use Payabli\Types\AuthorizePayoutBody;
 
 class RequestOutAuthorize extends JsonSerializableType
 {
@@ -37,95 +32,17 @@ class RequestOutAuthorize extends JsonSerializableType
     public ?string $idempotencyKey;
 
     /**
-     * @var string $entryPoint
+     * @var AuthorizePayoutBody $body
      */
-    #[JsonProperty('entryPoint')]
-    public string $entryPoint;
-
-    /**
-     * @var ?string $source
-     */
-    #[JsonProperty('source')]
-    public ?string $source;
-
-    /**
-     * @var ?string $orderId
-     */
-    #[JsonProperty('orderId')]
-    public ?string $orderId;
-
-    /**
-     * @var ?string $orderDescription
-     */
-    #[JsonProperty('orderDescription')]
-    public ?string $orderDescription;
-
-    /**
-     * @var AuthorizePaymentMethod $paymentMethod
-     */
-    #[JsonProperty('paymentMethod')]
-    public AuthorizePaymentMethod $paymentMethod;
-
-    /**
-     * @var RequestOutAuthorizePaymentDetails $paymentDetails Object containing payment details.
-     */
-    #[JsonProperty('paymentDetails')]
-    public RequestOutAuthorizePaymentDetails $paymentDetails;
-
-    /**
-     * @var RequestOutAuthorizeVendorData $vendorData Object containing vendor data.
-     */
-    #[JsonProperty('vendorData')]
-    public RequestOutAuthorizeVendorData $vendorData;
-
-    /**
-     * @var ?array<RequestOutAuthorizeInvoiceData> $invoiceData Bills to pay with this payout, each referenced by `billId`.
-     */
-    #[JsonProperty('invoiceData'), ArrayType([RequestOutAuthorizeInvoiceData::class])]
-    public ?array $invoiceData;
-
-    /**
-     * @var ?string $accountId
-     */
-    #[JsonProperty('accountId')]
-    public ?string $accountId;
-
-    /**
-     * @var ?string $subdomain
-     */
-    #[JsonProperty('subdomain')]
-    public ?string $subdomain;
-
-    /**
-     * @var ?int $subscriptionId
-     */
-    #[JsonProperty('subscriptionId')]
-    public ?int $subscriptionId;
-
-    /**
-     * @var ?bool $autoCapture
-     */
-    #[JsonProperty('autoCapture')]
-    public ?bool $autoCapture;
+    public AuthorizePayoutBody $body;
 
     /**
      * @param array{
-     *   entryPoint: string,
-     *   paymentMethod: AuthorizePaymentMethod,
-     *   paymentDetails: RequestOutAuthorizePaymentDetails,
-     *   vendorData: RequestOutAuthorizeVendorData,
+     *   body: AuthorizePayoutBody,
      *   allowDuplicatedBills?: ?bool,
      *   doNotCreateBills?: ?bool,
      *   sameDayAch?: ?bool,
      *   idempotencyKey?: ?string,
-     *   source?: ?string,
-     *   orderId?: ?string,
-     *   orderDescription?: ?string,
-     *   invoiceData?: ?array<RequestOutAuthorizeInvoiceData>,
-     *   accountId?: ?string,
-     *   subdomain?: ?string,
-     *   subscriptionId?: ?int,
-     *   autoCapture?: ?bool,
      * } $values
      */
     public function __construct(
@@ -135,17 +52,6 @@ class RequestOutAuthorize extends JsonSerializableType
         $this->doNotCreateBills = $values['doNotCreateBills'] ?? null;
         $this->sameDayAch = $values['sameDayAch'] ?? null;
         $this->idempotencyKey = $values['idempotencyKey'] ?? null;
-        $this->entryPoint = $values['entryPoint'];
-        $this->source = $values['source'] ?? null;
-        $this->orderId = $values['orderId'] ?? null;
-        $this->orderDescription = $values['orderDescription'] ?? null;
-        $this->paymentMethod = $values['paymentMethod'];
-        $this->paymentDetails = $values['paymentDetails'];
-        $this->vendorData = $values['vendorData'];
-        $this->invoiceData = $values['invoiceData'] ?? null;
-        $this->accountId = $values['accountId'] ?? null;
-        $this->subdomain = $values['subdomain'] ?? null;
-        $this->subscriptionId = $values['subscriptionId'] ?? null;
-        $this->autoCapture = $values['autoCapture'] ?? null;
+        $this->body = $values['body'];
     }
 }

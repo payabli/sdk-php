@@ -222,6 +222,18 @@ class BillQueryRecord2 extends JsonSerializableType
     public ?float $totalAmount;
 
     /**
+     * @var ?float $paidAmount The amount paid toward the bill so far.
+     */
+    #[JsonProperty('PaidAmount')]
+    public ?float $paidAmount;
+
+    /**
+     * @var ?float $outstandingBalance The amount still owed on the bill, calculated as `NetAmount` minus `PaidAmount`.
+     */
+    #[JsonProperty('OutstandingBalance')]
+    public ?float $outstandingBalance;
+
+    /**
      * @var ?TransactionOutQueryRecord $transaction MoneyOut transaction associated to the bill.
      */
     #[JsonProperty('Transaction')]
@@ -270,6 +282,8 @@ class BillQueryRecord2 extends JsonSerializableType
      *   status?: ?int,
      *   terms?: ?value-of<Terms>,
      *   totalAmount?: ?float,
+     *   paidAmount?: ?float,
+     *   outstandingBalance?: ?float,
      *   transaction?: ?TransactionOutQueryRecord,
      *   vendor?: ?VendorOutData,
      * } $values
@@ -312,6 +326,8 @@ class BillQueryRecord2 extends JsonSerializableType
         $this->status = $values['status'] ?? null;
         $this->terms = $values['terms'] ?? null;
         $this->totalAmount = $values['totalAmount'] ?? null;
+        $this->paidAmount = $values['paidAmount'] ?? null;
+        $this->outstandingBalance = $values['outstandingBalance'] ?? null;
         $this->transaction = $values['transaction'] ?? null;
         $this->vendor = $values['vendor'] ?? null;
     }
