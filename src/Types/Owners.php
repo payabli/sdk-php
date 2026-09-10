@@ -4,6 +4,7 @@ namespace Payabli\Types;
 
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
+use Payabli\Core\Types\ArrayType;
 
 class Owners extends JsonSerializableType
 {
@@ -98,10 +99,10 @@ class Owners extends JsonSerializableType
     public ?string $ozip;
 
     /**
-     * @var ?string $additionalData
+     * @var ?array<string, string> $additionalData
      */
-    #[JsonProperty('additionalData')]
-    public ?string $additionalData;
+    #[JsonProperty('additionalData'), ArrayType(['string' => 'string'])]
+    public ?array $additionalData;
 
     /**
      * @param array{
@@ -120,7 +121,7 @@ class Owners extends JsonSerializableType
      *   odriverstate?: ?string,
      *   ostate?: ?string,
      *   ozip?: ?string,
-     *   additionalData?: ?string,
+     *   additionalData?: ?array<string, string>,
      * } $values
      */
     public function __construct(
