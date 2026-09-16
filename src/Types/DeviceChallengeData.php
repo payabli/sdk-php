@@ -23,7 +23,7 @@ class DeviceChallengeData extends JsonSerializableType
     public string $code;
 
     /**
-     * UTC time when the code expires, in ISO-8601 round-trip format. A code is
+     * UTC time when the code expires, in ISO 8601 round-trip format. A code is
      * valid for 5 minutes after it's issued.
      *
      * @var DateTime $expiresAt

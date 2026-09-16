@@ -8,103 +8,103 @@ use Payabli\Core\Json\JsonProperty;
 class StatisticsVendorQueryRecord extends JsonSerializableType
 {
     /**
-     * @var string $statX Statistical grouping identifier
+     * @var string $statX The time bucket for this row, formatted according to the query's `freq` (for example, `2025-11` for a monthly bucket). Each bill falls in the bucket of its most recent update. The counts below break the vendor's bills down by bill state.
      */
     #[JsonProperty('statX')]
     public string $statX;
 
     /**
-     * @var int $active Number of active transactions
+     * @var int $active Number of the vendor's bills in the active state (created, not yet submitted for approval).
      */
     #[JsonProperty('active')]
     public int $active;
 
     /**
-     * @var float $activeVolume Volume of active transactions
+     * @var float $activeVolume Total value of the vendor's active bills, net of fees.
      */
     #[JsonProperty('activeVolume')]
     public float $activeVolume;
 
     /**
-     * @var int $sentToApproval Number of transactions sent to approval
+     * @var int $sentToApproval Number of the vendor's bills submitted into an approval workflow.
      */
     #[JsonProperty('sentToApproval')]
     public int $sentToApproval;
 
     /**
-     * @var float $sentToApprovalVolume Volume of transactions sent to approval
+     * @var float $sentToApprovalVolume Total value of the vendor's bills sent to approval, net of fees.
      */
     #[JsonProperty('sentToApprovalVolume')]
     public float $sentToApprovalVolume;
 
     /**
-     * @var int $toApproval Number of transactions to approval
+     * @var int $toApproval Number of the vendor's bills awaiting an approver's decision.
      */
     #[JsonProperty('toApproval')]
     public int $toApproval;
 
     /**
-     * @var float $toApprovalVolume Volume of transactions to approval
+     * @var float $toApprovalVolume Total value of the vendor's bills awaiting approval, net of fees.
      */
     #[JsonProperty('toApprovalVolume')]
     public float $toApprovalVolume;
 
     /**
-     * @var int $approved Number of approved transactions
+     * @var int $approved Number of the vendor's bills approved for payment.
      */
     #[JsonProperty('approved')]
     public int $approved;
 
     /**
-     * @var float $approvedVolume Volume of approved transactions
+     * @var float $approvedVolume Total value of the vendor's approved bills, net of fees.
      */
     #[JsonProperty('approvedVolume')]
     public float $approvedVolume;
 
     /**
-     * @var int $disapproved Number of disapproved transactions
+     * @var int $disapproved Number of the vendor's bills rejected during approval.
      */
     #[JsonProperty('disapproved')]
     public int $disapproved;
 
     /**
-     * @var float $disapprovedVolume Volume of disapproved transactions
+     * @var float $disapprovedVolume Total value of the vendor's disapproved bills, net of fees.
      */
     #[JsonProperty('disapprovedVolume')]
     public float $disapprovedVolume;
 
     /**
-     * @var int $cancelled Number of cancelled transactions
+     * @var int $cancelled Number of the vendor's cancelled bills.
      */
     #[JsonProperty('cancelled')]
     public int $cancelled;
 
     /**
-     * @var float $cancelledVolume Volume of cancelled transactions
+     * @var float $cancelledVolume Total value of the vendor's cancelled bills, net of fees.
      */
     #[JsonProperty('cancelledVolume')]
     public float $cancelledVolume;
 
     /**
-     * @var int $inTransit Number of transactions in transit
+     * @var int $inTransit Number of the vendor's bills whose payment is in transit.
      */
     #[JsonProperty('inTransit')]
     public int $inTransit;
 
     /**
-     * @var float $inTransitVolume Volume of transactions in transit
+     * @var float $inTransitVolume Total value of the vendor's in-transit bills, net of fees.
      */
     #[JsonProperty('inTransitVolume')]
     public float $inTransitVolume;
 
     /**
-     * @var int $paid Number of paid transactions
+     * @var int $paid Number of the vendor's bills marked paid. Paid means the payout has settled, not merely that Payabli issued it.
      */
     #[JsonProperty('paid')]
     public int $paid;
 
     /**
-     * @var float $paidVolume Volume of paid transactions
+     * @var float $paidVolume Total value of the vendor's paid bills, net of fees.
      */
     #[JsonProperty('paidVolume')]
     public float $paidVolume;

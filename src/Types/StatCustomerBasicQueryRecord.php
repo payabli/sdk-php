@@ -5,45 +5,31 @@ namespace Payabli\Types;
 use Payabli\Core\Json\JsonSerializableType;
 use Payabli\Core\Json\JsonProperty;
 
-class StatBasicQueryRecord extends JsonSerializableType
+class StatCustomerBasicQueryRecord extends JsonSerializableType
 {
     /**
-     * @var string $statX Statistical grouping identifier
+     * @var string $statX The time bucket for this row, formatted according to the query's `freq` (for example, `2026-9` for a monthly bucket). The response returns one object per bucket across the requested range.
      */
     #[JsonProperty('statX')]
     public string $statX;
 
     /**
-     * @var int $inTransactions Number of incoming transactions
+     * @var int $inTransactions Count of the customer's approved transactions.
      */
     #[JsonProperty('inTransactions')]
     public int $inTransactions;
 
     /**
-     * @var float $inTransactionsVolume Volume of incoming transactions
+     * @var float $inTransactionsVolume Total gross value of the customer's approved transactions. Unlike `/Statistic/basic`, this volume is the gross amount, before fees.
      */
     #[JsonProperty('inTransactionsVolume')]
     public float $inTransactionsVolume;
-
-    /**
-     * @var int $inWalletTransactions Number of incoming wallet transactions
-     */
-    #[JsonProperty('inWalletTransactions')]
-    public int $inWalletTransactions;
-
-    /**
-     * @var float $inWalletVolume Volume of incoming wallet transactions
-     */
-    #[JsonProperty('inWalletVolume')]
-    public float $inWalletVolume;
 
     /**
      * @param array{
      *   statX: string,
      *   inTransactions: int,
      *   inTransactionsVolume: float,
-     *   inWalletTransactions: int,
-     *   inWalletVolume: float,
      * } $values
      */
     public function __construct(
@@ -52,8 +38,6 @@ class StatBasicQueryRecord extends JsonSerializableType
         $this->statX = $values['statX'];
         $this->inTransactions = $values['inTransactions'];
         $this->inTransactionsVolume = $values['inTransactionsVolume'];
-        $this->inWalletTransactions = $values['inWalletTransactions'];
-        $this->inWalletVolume = $values['inWalletVolume'];
     }
 
     /**

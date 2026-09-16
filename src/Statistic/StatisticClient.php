@@ -15,11 +15,8 @@ use Payabli\Core\Client\HttpMethod;
 use Payabli\Core\Json\JsonDecoder;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
-use Payabli\Statistic\Requests\CustomerBasicStatsRequest;
+use Payabli\Types\StatCustomerBasicQueryRecord;
 use Payabli\Types\SubscriptionStatsQueryRecord;
-use Payabli\Statistic\Requests\SubStatsRequest;
-use Payabli\Types\StatBasicQueryRecord;
-use Payabli\Statistic\Requests\VendorBasicStatsRequest;
 use Payabli\Types\StatisticsVendorQueryRecord;
 
 class StatisticClient
@@ -67,7 +64,7 @@ class StatisticClient
     }
 
     /**
-     * Retrieves the basic statistics for an organization or a paypoint, for a given time period, grouped by a particular frequency.
+     * Retrieves the basic statistics for an organization or a paypoint over a date range, grouped by a frequency. The response returns one row per time bucket. Counts and volumes cover approved transactions only and leave out declines. Volumes are net of fees.
      *
      * Example:
      * ```php
@@ -139,9 +136,6 @@ class StatisticClient
         if ($request->endDate != null) {
             $query['endDate'] = $request->endDate;
         }
-        if ($request->parameters != null) {
-            $query['parameters'] = $request->parameters;
-        }
         if ($request->startDate != null) {
             $query['startDate'] = $request->startDate;
         }
@@ -176,15 +170,14 @@ class StatisticClient
     }
 
     /**
-     * Retrieves the basic statistics for a customer for a specific time period, grouped by a selected frequency.
+     * Retrieves the basic statistics for a customer over a date range, grouped by a frequency. This is a Pay In view: it counts the customer's approved transactions and returns one row per time bucket. Volume here is the gross amount, before fees.
      *
      * Example:
      * ```php
      * $client->statistic->customerBasicStats(
-     *     'ytd',
+     *     'm12',
      *     'm',
      *     4440,
-     *     new CustomerBasicStatsRequest([]),
      * );
      * ```
      *
@@ -214,7 +207,81 @@ class StatisticClient
      *
      * @param string $freq
      * @param int $customerId Payabli-generated customer ID. Maps to "Customer ID" column in the Payabli Portal.
-     * @param CustomerBasicStatsRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?array<StatCustomerBasicQueryRecord>
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function customerBasicStats(string $mode, string $freq, int $customerId, ?array $options = null): ?array
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "Statistic/customerbasic/{$mode}/{$freq}/{$customerId}",
+                    method: HttpMethod::GET,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return JsonDecoder::decodeArray($json, [StatCustomerBasicQueryRecord::class]); // @phpstan-ignore-line
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Retrieves subscription statistics for a paypoint or organization, bucketed by how soon active subscriptions are due to renew. This is a forward-looking forecast of upcoming renewals, not charges already taken. Request a single window with `interval`, or `all` to return every window in one call.
+     *
+     * Example:
+     * ```php
+     * $client->statistic->subStats(
+     *     'all',
+     *     2,
+     *     1000000,
+     * );
+     * ```
+     *
+     * Interval to get the data. Allowed values:
+     *
+     * - `all` - all intervals
+     * - `30` - 1-30 days
+     * - `60` - 31-60 days
+     * - `90` - 61-90 days
+     * - `plus` - +90 days
+     *
+     * @param string $interval
+     * The entry level for the request:
+     *   - 0 for Organization
+     *   - 2 for Paypoint
+     *
+     * @param int $level
+     * @param int $entryId Identifier in Payabli for the entity.
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -227,24 +294,19 @@ class StatisticClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function customerBasicStats(string $mode, string $freq, int $customerId, CustomerBasicStatsRequest $request = new CustomerBasicStatsRequest(), ?array $options = null): ?array
+    public function subStats(string $interval, int $level, int $entryId, ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $options['headers'] = array_merge(
             $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
             $options['headers'] ?? []
         );
-        $query = [];
-        if ($request->parameters != null) {
-            $query['parameters'] = $request->parameters;
-        }
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "Statistic/customerbasic/{$mode}/{$freq}/{$customerId}",
+                    path: "Statistic/subscriptions/{$interval}/{$level}/{$entryId}",
                     method: HttpMethod::GET,
-                    query: $query,
                 ),
                 $options,
             );
@@ -269,89 +331,7 @@ class StatisticClient
     }
 
     /**
-     * Retrieves the subscription statistics for a given interval for a paypoint or organization.
-     *
-     * Example:
-     * ```php
-     * $client->statistic->subStats(
-     *     '30',
-     *     2,
-     *     1000000,
-     *     new SubStatsRequest([]),
-     * );
-     * ```
-     *
-     * Interval to get the data. Allowed values:
-     *
-     * - `all` - all intervals
-     * - `30` - 1-30 days
-     * - `60` - 31-60 days
-     * - `90` - 61-90 days
-     * - `plus` - +90 days
-     *
-     * @param string $interval
-     * The entry level for the request:
-     *   - 0 for Organization
-     *   - 2 for Paypoint
-     *
-     * @param int $level
-     * @param int $entryId Identifier in Payabli for the entity.
-     * @param SubStatsRequest $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     *   timeout?: float,
-     *   headers?: array<string, string>,
-     *   queryParameters?: array<string, mixed>,
-     *   bodyProperties?: array<string, mixed>,
-     * } $options
-     * @return ?array<StatBasicQueryRecord>
-     * @throws PayabliException
-     * @throws PayabliApiException
-     */
-    public function subStats(string $interval, int $level, int $entryId, SubStatsRequest $request = new SubStatsRequest(), ?array $options = null): ?array
-    {
-        $options = array_merge($this->options, $options ?? []);
-        $options['headers'] = array_merge(
-            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
-            $options['headers'] ?? []
-        );
-        $query = [];
-        if ($request->parameters != null) {
-            $query['parameters'] = $request->parameters;
-        }
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
-                    path: "Statistic/subscriptions/{$interval}/{$level}/{$entryId}",
-                    method: HttpMethod::GET,
-                    query: $query,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                if (empty($json)) {
-                    return null;
-                }
-                return JsonDecoder::decodeArray($json, [StatBasicQueryRecord::class]); // @phpstan-ignore-line
-            }
-        } catch (JsonException $e) {
-            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (ClientExceptionInterface $e) {
-            throw new PayabliException(message: $e->getMessage(), previous: $e);
-        }
-        throw new PayabliApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Retrieve the basic statistics about a vendor for a given time period, grouped by frequency.
+     * Retrieve the basic statistics about a vendor over a date range, grouped by frequency. The response returns one row per time bucket, breaking the vendor's bills down by bill state (active, sent to approval, approved, in transit, paid, and so on). Volumes are net of fees.
      *
      * Example:
      * ```php
@@ -359,7 +339,6 @@ class StatisticClient
      *     'ytd',
      *     'm',
      *     1,
-     *     new VendorBasicStatsRequest([]),
      * );
      * ```
      *
@@ -389,7 +368,6 @@ class StatisticClient
      *
      * @param string $freq
      * @param int $idVendor Vendor ID.
-     * @param VendorBasicStatsRequest $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -402,24 +380,19 @@ class StatisticClient
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function vendorBasicStats(string $mode, string $freq, int $idVendor, VendorBasicStatsRequest $request = new VendorBasicStatsRequest(), ?array $options = null): ?array
+    public function vendorBasicStats(string $mode, string $freq, int $idVendor, ?array $options = null): ?array
     {
         $options = array_merge($this->options, $options ?? []);
         $options['headers'] = array_merge(
             $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
             $options['headers'] ?? []
         );
-        $query = [];
-        if ($request->parameters != null) {
-            $query['parameters'] = $request->parameters;
-        }
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
                     path: "Statistic/vendorbasic/{$mode}/{$freq}/{$idVendor}",
                     method: HttpMethod::GET,
-                    query: $query,
                 ),
                 $options,
             );

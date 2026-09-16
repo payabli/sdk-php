@@ -19,11 +19,6 @@ class BasicStatsRequest extends JsonSerializableType
     public ?string $endDate;
 
     /**
-     * @var ?array<string, ?string> $parameters List of parameters.
-     */
-    public ?array $parameters;
-
-    /**
      * Used with `custom` mode. The start date for the range.
      * Valid formats:
      *    - YYYY-mm-dd
@@ -38,7 +33,6 @@ class BasicStatsRequest extends JsonSerializableType
     /**
      * @param array{
      *   endDate?: ?string,
-     *   parameters?: ?array<string, ?string>,
      *   startDate?: ?string,
      * } $values
      */
@@ -46,7 +40,6 @@ class BasicStatsRequest extends JsonSerializableType
         array $values = [],
     ) {
         $this->endDate = $values['endDate'] ?? null;
-        $this->parameters = $values['parameters'] ?? null;
         $this->startDate = $values['startDate'] ?? null;
     }
 }

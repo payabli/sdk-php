@@ -88,15 +88,15 @@ class PayoutSubscriptionClient
      *         ]),
      *         'billData' => [
      *             new BillPayOutDataRequest([
-     *                 'dueDate' => new DateTime('2025-08-15'),
-     *                 'invoiceDate' => new DateTime('2025-08-01'),
+     *                 'dueDate' => new DateTime('2027-08-15'),
+     *                 'invoiceDate' => new DateTime('2027-08-01'),
      *                 'invoiceNumber' => 'INV-2345',
      *                 'netAmount' => '500',
      *             ]),
      *         ],
      *         'scheduleDetails' => new PayoutScheduleDetail([
-     *             'startDate' => '09/01/2027',
-     *             'endDate' => '09/01/2026',
+     *             'startDate' => '01/01/2027',
+     *             'endDate' => '12/31/2027',
      *             'frequency' => Frequency::Monthly->value,
      *         ]),
      *     ]),

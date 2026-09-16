@@ -188,9 +188,8 @@ class MoneyOutClient
      * ```php
      * $client->moneyOut->cancelAllOut(
      *     [
-     *         '2-29',
-     *         '2-28',
-     *         '2-27',
+     *         '129-230',
+     *         '129-219',
      *     ],
      * );
      * ```
@@ -371,9 +370,8 @@ class MoneyOutClient
      * $client->moneyOut->captureAllOut(
      *     new CaptureAllOutRequest([
      *         'body' => [
-     *             '2-29',
-     *             '2-28',
-     *             '2-27',
+     *             '129-230',
+     *             '129-219',
      *         ],
      *     ]),
      * );

@@ -270,10 +270,10 @@ class SubscriptionClient
      *             'method' => PayMethodCreditMethod::Card->value,
      *         ]),
      *         'scheduleDetails' => new ScheduleDetail([
-     *             'endDate' => '2025-03-20',
+     *             'endDate' => '2027-12-31',
      *             'frequency' => Frequency::Weekly->value,
      *             'planId' => 1,
-     *             'startDate' => '2024-09-20',
+     *             'startDate' => '2027-01-01',
      *         ]),
      *     ]),
      * );
