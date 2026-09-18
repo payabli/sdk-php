@@ -17,10 +17,10 @@ class UserQueryRecord extends JsonSerializableType
     public ?array $access;
 
     /**
-     * @var ?string $additionalData
+     * @var ?array<string, string> $additionalData
      */
-    #[JsonProperty('AdditionalData')]
-    public ?string $additionalData;
+    #[JsonProperty('AdditionalData'), ArrayType(['string' => 'string'])]
+    public ?array $additionalData;
 
     /**
      * @var ?DateTime $createdAt The timestamp for the user's creation, in UTC.
@@ -115,7 +115,7 @@ class UserQueryRecord extends JsonSerializableType
     /**
      * @param array{
      *   access?: ?array<UsrAccess>,
-     *   additionalData?: ?string,
+     *   additionalData?: ?array<string, string>,
      *   createdAt?: ?DateTime,
      *   email?: ?string,
      *   language?: ?string,

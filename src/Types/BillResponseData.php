@@ -53,15 +53,15 @@ class BillResponseData extends JsonSerializableType
     public ?float $outstandingBalance;
 
     /**
-     * @var ?DateTime $billDate Date of bill. Accepted formats: YYYY-MM-DD, MM/DD/YYYY
+     * @var ?DateTime $billDate Date of bill, returned as a timestamp.
      */
-    #[JsonProperty('BillDate'), Date(Date::TYPE_DATE)]
+    #[JsonProperty('BillDate'), Date(Date::TYPE_DATETIME)]
     public ?DateTime $billDate;
 
     /**
-     * @var ?DateTime $dueDate Due Date of bill. Accepted formats: YYYY-MM-DD, MM/DD/YYYY
+     * @var ?DateTime $dueDate Due date of bill, returned as a timestamp.
      */
-    #[JsonProperty('DueDate'), Date(Date::TYPE_DATE)]
+    #[JsonProperty('DueDate'), Date(Date::TYPE_DATETIME)]
     public ?DateTime $dueDate;
 
     /**
@@ -125,10 +125,10 @@ class BillResponseData extends JsonSerializableType
     public ?string $source;
 
     /**
-     * @var ?string $additionalData
+     * @var ?array<string, string> $additionalData
      */
-    #[JsonProperty('AdditionalData')]
-    public ?string $additionalData;
+    #[JsonProperty('AdditionalData'), ArrayType(['string' => 'string'])]
+    public ?array $additionalData;
 
     /**
      * @var ?VendorDataResponse $vendor
@@ -265,7 +265,7 @@ class BillResponseData extends JsonSerializableType
      *   accountingField2?: ?string,
      *   terms?: ?value-of<Terms>,
      *   source?: ?string,
-     *   additionalData?: ?string,
+     *   additionalData?: ?array<string, string>,
      *   vendor?: ?VendorDataResponse,
      *   status?: ?int,
      *   createdAt?: ?DateTime,

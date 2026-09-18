@@ -71,10 +71,10 @@ class BillPayOutDataRequest extends JsonSerializableType
     public ?string $accountingField2;
 
     /**
-     * @var ?string $additionalData
+     * @var ?array<string, string> $additionalData
      */
-    #[JsonProperty('additionalData')]
-    public ?string $additionalData;
+    #[JsonProperty('additionalData'), ArrayType(['string' => 'string'])]
+    public ?array $additionalData;
 
     /**
      * @var ?array<FileContent> $attachments Bill image attachment. Send the bill image as Base64-encoded string, or as a publicly accessible link. For full details on using this field with a payout authorization, see [the documentation](/developers/developer-guides/pay-out-manage-payouts).
@@ -94,7 +94,7 @@ class BillPayOutDataRequest extends JsonSerializableType
      *   terms?: ?value-of<Terms>,
      *   accountingField1?: ?string,
      *   accountingField2?: ?string,
-     *   additionalData?: ?string,
+     *   additionalData?: ?array<string, string>,
      *   attachments?: ?array<FileContent>,
      * } $values
      */

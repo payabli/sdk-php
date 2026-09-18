@@ -42,9 +42,9 @@ class BillQueryRecord2 extends JsonSerializableType
     public ?array $billApprovals;
 
     /**
-     * @var ?DateTime $billDate Bill creation date in one of the accepted formats: YYYY-MM-DD, MM/DD/YYYY.
+     * @var ?DateTime $billDate Bill creation date, returned as a timestamp.
      */
-    #[JsonProperty('BillDate'), Date(Date::TYPE_DATE)]
+    #[JsonProperty('BillDate'), Date(Date::TYPE_DATETIME)]
     public ?DateTime $billDate;
 
     /**
@@ -90,9 +90,9 @@ class BillQueryRecord2 extends JsonSerializableType
     public ?string $documentsRef;
 
     /**
-     * @var ?DateTime $dueDate Bill due date in one of the accepted formats: YYYY-MM-DD, MM/DD/YYYY.
+     * @var ?DateTime $dueDate Bill due date, returned as a timestamp.
      */
-    #[JsonProperty('DueDate'), Date(Date::TYPE_DATE)]
+    #[JsonProperty('DueDate'), Date(Date::TYPE_DATETIME)]
     public ?DateTime $dueDate;
 
     /**

@@ -26,10 +26,10 @@ class BillOutData extends JsonSerializableType
     public ?string $accountingField2;
 
     /**
-     * @var ?string $additionalData
+     * @var ?array<string, string> $additionalData
      */
-    #[JsonProperty('additionalData')]
-    public ?string $additionalData;
+    #[JsonProperty('additionalData'), ArrayType(['string' => 'string'])]
+    public ?array $additionalData;
 
     /**
      * An array of bill images. Attachments aren't required, but we strongly
@@ -160,7 +160,7 @@ class BillOutData extends JsonSerializableType
      * @param array{
      *   accountingField1?: ?string,
      *   accountingField2?: ?string,
-     *   additionalData?: ?string,
+     *   additionalData?: ?array<string, string>,
      *   attachments?: ?array<FileContent>,
      *   billDate?: ?DateTime,
      *   billItems?: ?array<BillItem>,

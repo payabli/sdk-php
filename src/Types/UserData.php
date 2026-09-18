@@ -15,9 +15,9 @@ class UserData extends JsonSerializableType
     public ?array $access;
 
     /**
-     * @var ?array<string, array<string, mixed>> $additionalData
+     * @var ?array<string, string> $additionalData
      */
-    #[JsonProperty('additionalData'), ArrayType(['string' => ['string' => 'mixed']])]
+    #[JsonProperty('additionalData'), ArrayType(['string' => 'string'])]
     public ?array $additionalData;
 
     /**
@@ -77,7 +77,7 @@ class UserData extends JsonSerializableType
     /**
      * @param array{
      *   access?: ?array<UsrAccess>,
-     *   additionalData?: ?array<string, array<string, mixed>>,
+     *   additionalData?: ?array<string, string>,
      *   email?: ?string,
      *   language?: ?string,
      *   mfaData?: ?MfaData,

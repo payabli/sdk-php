@@ -11,16 +11,16 @@ use Payabli\Core\Types\Date;
 class VendorQueryRecord extends JsonSerializableType
 {
     /**
-     * @var ?string $vendorNumber
+     * @var string $vendorNumber
      */
     #[JsonProperty('VendorNumber')]
-    public ?string $vendorNumber;
+    public string $vendorNumber;
 
     /**
-     * @var ?string $name1
+     * @var string $name1
      */
     #[JsonProperty('Name1')]
-    public ?string $name1;
+    public string $name1;
 
     /**
      * @var ?string $name2
@@ -53,25 +53,25 @@ class VendorQueryRecord extends JsonSerializableType
     public ?string $remitEmail;
 
     /**
-     * @var ?string $address1
+     * @var ?string $address1 The address.
      */
     #[JsonProperty('Address1')]
     public ?string $address1;
 
     /**
-     * @var ?string $address2
+     * @var ?string $address2 Additional line for the address.
      */
     #[JsonProperty('Address2')]
     public ?string $address2;
 
     /**
-     * @var ?string $city
+     * @var ?string $city The city.
      */
     #[JsonProperty('City')]
     public ?string $city;
 
     /**
-     * @var ?string $state
+     * @var ?string $state The state or province.
      */
     #[JsonProperty('State')]
     public ?string $state;
@@ -119,16 +119,16 @@ class VendorQueryRecord extends JsonSerializableType
     public ?string $paymentMethod;
 
     /**
-     * @var ?int $vendorStatus
+     * @var int $vendorStatus
      */
     #[JsonProperty('VendorStatus')]
-    public ?int $vendorStatus;
+    public int $vendorStatus;
 
     /**
-     * @var ?int $vendorId
+     * @var int $vendorId
      */
     #[JsonProperty('VendorId')]
-    public ?int $vendorId;
+    public int $vendorId;
 
     /**
      * @var ?string $enrollmentStatus
@@ -143,10 +143,10 @@ class VendorQueryRecord extends JsonSerializableType
     public ?VendorSummary $summary;
 
     /**
-     * @var ?string $paypointLegalname
+     * @var string $paypointLegalname
      */
     #[JsonProperty('PaypointLegalname')]
-    public ?string $paypointLegalname;
+    public string $paypointLegalname;
 
     /**
      * @var ?int $paypointId The paypoint's ID. This is different from the entryname.
@@ -155,40 +155,40 @@ class VendorQueryRecord extends JsonSerializableType
     public ?int $paypointId;
 
     /**
-     * @var ?string $paypointDbaname
+     * @var string $paypointDbaname
      */
     #[JsonProperty('PaypointDbaname')]
-    public ?string $paypointDbaname;
+    public string $paypointDbaname;
 
     /**
-     * @var ?string $paypointEntryname
+     * @var string $paypointEntryname
      */
     #[JsonProperty('PaypointEntryname')]
-    public ?string $paypointEntryname;
+    public string $paypointEntryname;
 
     /**
-     * @var ?string $parentOrgName
+     * @var string $parentOrgName
      */
     #[JsonProperty('ParentOrgName')]
-    public ?string $parentOrgName;
+    public string $parentOrgName;
 
     /**
-     * @var ?int $parentOrgId
+     * @var int $parentOrgId
      */
     #[JsonProperty('ParentOrgId')]
-    public ?int $parentOrgId;
+    public int $parentOrgId;
 
     /**
-     * @var ?DateTime $createdDate
+     * @var DateTime $createdDate
      */
     #[JsonProperty('CreatedDate'), Date(Date::TYPE_DATETIME)]
-    public ?DateTime $createdDate;
+    public DateTime $createdDate;
 
     /**
-     * @var ?DateTime $lastUpdated
+     * @var DateTime $lastUpdated
      */
     #[JsonProperty('LastUpdated'), Date(Date::TYPE_DATETIME)]
-    public ?DateTime $lastUpdated;
+    public DateTime $lastUpdated;
 
     /**
      * @var ?string $remitAddress1
@@ -257,10 +257,10 @@ class VendorQueryRecord extends JsonSerializableType
     public ?string $customerVendorAccount;
 
     /**
-     * @var ?int $internalReferenceId
+     * @var int $internalReferenceId
      */
     #[JsonProperty('InternalReferenceId')]
-    public ?int $internalReferenceId;
+    public int $internalReferenceId;
 
     /**
      * @var ?string $paymentPortalUrl URL for the vendor's online payment portal, if known. Populated by the vendor enrichment pipeline.
@@ -287,10 +287,10 @@ class VendorQueryRecord extends JsonSerializableType
     public ?string $checkAccepted;
 
     /**
-     * @var ?string $enrichmentStatus Current enrichment state of the vendor. Values are `not_enriched`, `partially_enriched`, `fully_enriched`, or `fallback_applied`.
+     * @var string $enrichmentStatus Current enrichment state of the vendor. Values are `not_enriched`, `partially_enriched`, `fully_enriched`, or `fallback_applied`.
      */
     #[JsonProperty('EnrichmentStatus')]
-    public ?string $enrichmentStatus;
+    public string $enrichmentStatus;
 
     /**
      * @var ?string $enrichedBy Which enrichment method resolved the vendor's payment acceptance info. Values are `invoice_scan`, `web_search`, `vendor_network`, or `manual`.
@@ -330,8 +330,19 @@ class VendorQueryRecord extends JsonSerializableType
 
     /**
      * @param array{
-     *   vendorNumber?: ?string,
-     *   name1?: ?string,
+     *   vendorNumber: string,
+     *   name1: string,
+     *   vendorStatus: int,
+     *   vendorId: int,
+     *   paypointLegalname: string,
+     *   paypointDbaname: string,
+     *   paypointEntryname: string,
+     *   parentOrgName: string,
+     *   parentOrgId: int,
+     *   createdDate: DateTime,
+     *   lastUpdated: DateTime,
+     *   internalReferenceId: int,
+     *   enrichmentStatus: string,
      *   name2?: ?string,
      *   ein?: ?string,
      *   phone?: ?string,
@@ -348,18 +359,9 @@ class VendorQueryRecord extends JsonSerializableType
      *   contacts?: ?array<ContactsResponse>,
      *   billingData?: ?BillingDataResponse,
      *   paymentMethod?: ?string,
-     *   vendorStatus?: ?int,
-     *   vendorId?: ?int,
      *   enrollmentStatus?: ?string,
      *   summary?: ?VendorSummary,
-     *   paypointLegalname?: ?string,
      *   paypointId?: ?int,
-     *   paypointDbaname?: ?string,
-     *   paypointEntryname?: ?string,
-     *   parentOrgName?: ?string,
-     *   parentOrgId?: ?int,
-     *   createdDate?: ?DateTime,
-     *   lastUpdated?: ?DateTime,
      *   remitAddress1?: ?string,
      *   remitAddress2?: ?string,
      *   remitCity?: ?string,
@@ -371,12 +373,10 @@ class VendorQueryRecord extends JsonSerializableType
      *   customField1?: ?string,
      *   customField2?: ?string,
      *   customerVendorAccount?: ?string,
-     *   internalReferenceId?: ?int,
      *   paymentPortalUrl?: ?string,
      *   cardAccepted?: ?string,
      *   achAccepted?: ?string,
      *   checkAccepted?: ?string,
-     *   enrichmentStatus?: ?string,
      *   enrichedBy?: ?string,
      *   enrichedAt?: ?DateTime,
      *   enrichmentId?: ?string,
@@ -386,10 +386,10 @@ class VendorQueryRecord extends JsonSerializableType
      * } $values
      */
     public function __construct(
-        array $values = [],
+        array $values,
     ) {
-        $this->vendorNumber = $values['vendorNumber'] ?? null;
-        $this->name1 = $values['name1'] ?? null;
+        $this->vendorNumber = $values['vendorNumber'];
+        $this->name1 = $values['name1'];
         $this->name2 = $values['name2'] ?? null;
         $this->ein = $values['ein'] ?? null;
         $this->phone = $values['phone'] ?? null;
@@ -406,18 +406,18 @@ class VendorQueryRecord extends JsonSerializableType
         $this->contacts = $values['contacts'] ?? null;
         $this->billingData = $values['billingData'] ?? null;
         $this->paymentMethod = $values['paymentMethod'] ?? null;
-        $this->vendorStatus = $values['vendorStatus'] ?? null;
-        $this->vendorId = $values['vendorId'] ?? null;
+        $this->vendorStatus = $values['vendorStatus'];
+        $this->vendorId = $values['vendorId'];
         $this->enrollmentStatus = $values['enrollmentStatus'] ?? null;
         $this->summary = $values['summary'] ?? null;
-        $this->paypointLegalname = $values['paypointLegalname'] ?? null;
+        $this->paypointLegalname = $values['paypointLegalname'];
         $this->paypointId = $values['paypointId'] ?? null;
-        $this->paypointDbaname = $values['paypointDbaname'] ?? null;
-        $this->paypointEntryname = $values['paypointEntryname'] ?? null;
-        $this->parentOrgName = $values['parentOrgName'] ?? null;
-        $this->parentOrgId = $values['parentOrgId'] ?? null;
-        $this->createdDate = $values['createdDate'] ?? null;
-        $this->lastUpdated = $values['lastUpdated'] ?? null;
+        $this->paypointDbaname = $values['paypointDbaname'];
+        $this->paypointEntryname = $values['paypointEntryname'];
+        $this->parentOrgName = $values['parentOrgName'];
+        $this->parentOrgId = $values['parentOrgId'];
+        $this->createdDate = $values['createdDate'];
+        $this->lastUpdated = $values['lastUpdated'];
         $this->remitAddress1 = $values['remitAddress1'] ?? null;
         $this->remitAddress2 = $values['remitAddress2'] ?? null;
         $this->remitCity = $values['remitCity'] ?? null;
@@ -429,12 +429,12 @@ class VendorQueryRecord extends JsonSerializableType
         $this->customField1 = $values['customField1'] ?? null;
         $this->customField2 = $values['customField2'] ?? null;
         $this->customerVendorAccount = $values['customerVendorAccount'] ?? null;
-        $this->internalReferenceId = $values['internalReferenceId'] ?? null;
+        $this->internalReferenceId = $values['internalReferenceId'];
         $this->paymentPortalUrl = $values['paymentPortalUrl'] ?? null;
         $this->cardAccepted = $values['cardAccepted'] ?? null;
         $this->achAccepted = $values['achAccepted'] ?? null;
         $this->checkAccepted = $values['checkAccepted'] ?? null;
-        $this->enrichmentStatus = $values['enrichmentStatus'] ?? null;
+        $this->enrichmentStatus = $values['enrichmentStatus'];
         $this->enrichedBy = $values['enrichedBy'] ?? null;
         $this->enrichedAt = $values['enrichedAt'] ?? null;
         $this->enrichmentId = $values['enrichmentId'] ?? null;

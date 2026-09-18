@@ -258,10 +258,10 @@ class VCardGetResponseAssociatedVendor extends JsonSerializableType
     public ?int $internalReferenceId;
 
     /**
-     * @var ?string $additionalData Field for additional data, if any.
+     * @var ?array<string, string> $additionalData
      */
-    #[JsonProperty('additionalData')]
-    public ?string $additionalData;
+    #[JsonProperty('additionalData'), ArrayType(['string' => 'string'])]
+    public ?array $additionalData;
 
     /**
      * @var ?string $externalPaypointId
@@ -318,7 +318,7 @@ class VCardGetResponseAssociatedVendor extends JsonSerializableType
      *   customField2?: ?string,
      *   customerVendorAccount?: ?string,
      *   internalReferenceId?: ?int,
-     *   additionalData?: ?string,
+     *   additionalData?: ?array<string, string>,
      *   externalPaypointId?: ?string,
      *   storedMethods?: ?string,
      * } $values
