@@ -119,6 +119,12 @@ class GetMethodResponseResponseData extends JsonSerializableType
     public ?array $vendors;
 
     /**
+     * @var ?string $walletType Digital wallet type if applicable.
+     */
+    #[JsonProperty('walletType')]
+    public ?string $walletType;
+
+    /**
      * @param array{
      *   aba?: ?string,
      *   achHolderType?: ?value-of<AchHolderType>,
@@ -138,6 +144,7 @@ class GetMethodResponseResponseData extends JsonSerializableType
      *   methodType?: ?string,
      *   postalCode?: ?string,
      *   vendors?: ?array<GetMethodResponseResponseDataVendorsItem>,
+     *   walletType?: ?string,
      * } $values
      */
     public function __construct(
@@ -161,6 +168,7 @@ class GetMethodResponseResponseData extends JsonSerializableType
         $this->methodType = $values['methodType'] ?? null;
         $this->postalCode = $values['postalCode'] ?? null;
         $this->vendors = $values['vendors'] ?? null;
+        $this->walletType = $values['walletType'] ?? null;
     }
 
     /**

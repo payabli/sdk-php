@@ -20,37 +20,37 @@ class SearchNotificationLogsRequest extends JsonSerializableType
     public ?int $page;
 
     /**
-     * @var DateTime $startDate The start date for the search.
+     * @var DateTime $startDate The start date for the search. Can't be more than 30 days before `endDate`.
      */
     #[JsonProperty('startDate'), Date(Date::TYPE_DATETIME)]
     public DateTime $startDate;
 
     /**
-     * @var DateTime $endDate The end date for the search.
+     * @var DateTime $endDate The end date for the search. Can't be more than 30 days after `startDate`.
      */
     #[JsonProperty('endDate'), Date(Date::TYPE_DATETIME)]
     public DateTime $endDate;
 
     /**
-     * @var ?string $notificationEvent The type of notification event to filter by.
+     * @var ?string $notificationEvent The event to filter by, such as `approvedpayment`. Case-insensitive.
      */
     #[JsonProperty('notificationEvent')]
     public ?string $notificationEvent;
 
     /**
-     * @var ?bool $succeeded Indicates whether the notification was successful.
+     * @var ?bool $succeeded Filter by delivery outcome. Set to `false` to return only failed notifications.
      */
     #[JsonProperty('succeeded')]
     public ?bool $succeeded;
 
     /**
-     * @var ?int $orgId The ID of the organization to filter by.
+     * @var ?int $orgId The ID of the organization to filter by. Either `orgId` or `paypointId` is required.
      */
     #[JsonProperty('orgId')]
     public ?int $orgId;
 
     /**
-     * @var ?int $paypointId The ID of the paypoint to filter by.
+     * @var ?int $paypointId The ID of the paypoint to filter by. Either `orgId` or `paypointId` is required.
      */
     #[JsonProperty('paypointId')]
     public ?int $paypointId;

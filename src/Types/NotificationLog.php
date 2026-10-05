@@ -3,95 +3,60 @@
 namespace Payabli\Types;
 
 use Payabli\Core\Json\JsonSerializableType;
+use Payabli\Traits\NotificationLogBase;
 use Payabli\Core\Json\JsonProperty;
 use DateTime;
-use Payabli\Core\Types\Date;
 
+/**
+ * A notification log entry returned by the search endpoint.
+ */
 class NotificationLog extends JsonSerializableType
 {
-    /**
-     * @var string $id The unique identifier for the notification.
-     */
-    #[JsonProperty('id')]
-    public string $id;
+    use NotificationLogBase;
 
     /**
-     * @var ?int $orgId The ID of the organization that the notification belongs to.
+     * @var string $organizationLogo The URL of the organization's logo.
      */
-    #[JsonProperty('orgId')]
-    public ?int $orgId;
+    #[JsonProperty('organizationLogo')]
+    public string $organizationLogo;
 
     /**
-     * @var ?int $paypointId The ID of the paypoint that the notification is related to.
+     * @var string $organizationFavIcon The URL of the organization's browser tab icon.
      */
-    #[JsonProperty('paypointId')]
-    public ?int $paypointId;
+    #[JsonProperty('organizationFavIcon')]
+    public string $organizationFavIcon;
 
     /**
-     * @var ?string $notificationEvent The event that triggered the notification.
+     * @var string $paypointLogo The URL of the paypoint's logo.
      */
-    #[JsonProperty('notificationEvent')]
-    public ?string $notificationEvent;
+    #[JsonProperty('paypointLogo')]
+    public string $paypointLogo;
 
     /**
-     * @var ?string $target The target URL for the notification.
+     * @var int $notificationType The notification's delivery method — `1` (Email), `2` (SMS), or `3` (Webhook).
      */
-    #[JsonProperty('target')]
-    public ?string $target;
-
-    /**
-     * @var ?string $responseStatus The HTTP response status of the notification.
-     */
-    #[JsonProperty('responseStatus')]
-    public ?string $responseStatus;
-
-    /**
-     * @var bool $success Indicates whether the notification was successful.
-     */
-    #[JsonProperty('success')]
-    public bool $success;
-
-    /**
-     * @var ?string $jobData Contains the body of the notification.
-     */
-    #[JsonProperty('jobData')]
-    public ?string $jobData;
-
-    /**
-     * @var DateTime $createdDate The date and time when the notification was created.
-     */
-    #[JsonProperty('createdDate'), Date(Date::TYPE_DATETIME)]
-    public DateTime $createdDate;
-
-    /**
-     * @var ?DateTime $successDate The date and time when the notification was successfully delivered.
-     */
-    #[JsonProperty('successDate'), Date(Date::TYPE_DATETIME)]
-    public ?DateTime $successDate;
-
-    /**
-     * @var ?DateTime $lastFailedDate The date and time when the notification last failed.
-     */
-    #[JsonProperty('lastFailedDate'), Date(Date::TYPE_DATETIME)]
-    public ?DateTime $lastFailedDate;
-
-    /**
-     * @var bool $isInProgress Indicates whether the notification is currently in progress.
-     */
-    #[JsonProperty('isInProgress')]
-    public bool $isInProgress;
+    #[JsonProperty('notificationType')]
+    public int $notificationType;
 
     /**
      * @param array{
+     *   organizationName: string,
+     *   paypointName: string,
+     *   requestId: string,
      *   id: string,
+     *   responseStatusCode: int,
+     *   responseStatus: string,
      *   success: bool,
      *   createdDate: DateTime,
      *   isInProgress: bool,
+     *   organizationLogo: string,
+     *   organizationFavIcon: string,
+     *   paypointLogo: string,
+     *   notificationType: int,
      *   orgId?: ?int,
      *   paypointId?: ?int,
      *   notificationEvent?: ?string,
      *   target?: ?string,
-     *   responseStatus?: ?string,
      *   jobData?: ?string,
      *   successDate?: ?DateTime,
      *   lastFailedDate?: ?DateTime,
@@ -100,18 +65,26 @@ class NotificationLog extends JsonSerializableType
     public function __construct(
         array $values,
     ) {
+        $this->organizationName = $values['organizationName'];
+        $this->paypointName = $values['paypointName'];
+        $this->requestId = $values['requestId'];
         $this->id = $values['id'];
         $this->orgId = $values['orgId'] ?? null;
         $this->paypointId = $values['paypointId'] ?? null;
         $this->notificationEvent = $values['notificationEvent'] ?? null;
         $this->target = $values['target'] ?? null;
-        $this->responseStatus = $values['responseStatus'] ?? null;
+        $this->responseStatusCode = $values['responseStatusCode'];
+        $this->responseStatus = $values['responseStatus'];
         $this->success = $values['success'];
         $this->jobData = $values['jobData'] ?? null;
         $this->createdDate = $values['createdDate'];
         $this->successDate = $values['successDate'] ?? null;
         $this->lastFailedDate = $values['lastFailedDate'] ?? null;
         $this->isInProgress = $values['isInProgress'];
+        $this->organizationLogo = $values['organizationLogo'];
+        $this->organizationFavIcon = $values['organizationFavIcon'];
+        $this->paypointLogo = $values['paypointLogo'];
+        $this->notificationType = $values['notificationType'];
     }
 
     /**

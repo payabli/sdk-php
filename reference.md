@@ -5775,7 +5775,7 @@ $client->paymentLink->updatePayLinkOutFromId(
 <dl>
 <dd>
 
-Saves a payment method for reuse. This call exchanges sensitive payment information for a token that can be used to process future transactions. The `ReferenceId` value in the response is the `storedMethodId` to use with transactions.
+Saves a payment method for reuse. This call exchanges sensitive payment information for a token that can be used to process future transactions. The `referenceId` value in the response is the `storedMethodId` to use with transactions, and the `methodId` to use when you manage the saved payment method.
 </dd>
 </dl>
 </dd>
@@ -9117,7 +9117,7 @@ See [Filters and Conditions Reference](/developers/developer-guides/pay-ops-repo
 <dl>
 <dd>
 
-Returns a list of cloud devices for a single paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
+Returns a list of cloud and AXIUM devices for a single paypoint. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
 </dd>
 </dl>
 </dd>
@@ -9317,7 +9317,7 @@ for more information.
 <dl>
 <dd>
 
-Returns a list of cloud devices for a single organization. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
+Returns a list of cloud and AXIUM devices for a single organization. Use filters to limit results. Include the `exportFormat` query parameter to return the results as a file instead of a JSON response.
 </dd>
 </dl>
 </dd>
@@ -14250,7 +14250,7 @@ $client->notificationlogs->searchNotificationLogs(
         'pageSize' => 20,
         'startDate' => new DateTime('2024-01-01T00:00:00Z'),
         'endDate' => new DateTime('2024-01-31T23:59:59Z'),
-        'notificationEvent' => 'ActivatedMerchant',
+        'notificationEvent' => 'approvedpayment',
         'succeeded' => true,
         'orgId' => 123,
     ]),
@@ -14285,7 +14285,7 @@ $client->notificationlogs->searchNotificationLogs(
 <dl>
 <dd>
 
-**$startDate:** `DateTime` — The start date for the search.
+**$startDate:** `DateTime` — The start date for the search. Can't be more than 30 days before `endDate`.
     
 </dd>
 </dl>
@@ -14293,7 +14293,7 @@ $client->notificationlogs->searchNotificationLogs(
 <dl>
 <dd>
 
-**$endDate:** `DateTime` — The end date for the search.
+**$endDate:** `DateTime` — The end date for the search. Can't be more than 30 days after `startDate`.
     
 </dd>
 </dl>
@@ -14301,7 +14301,7 @@ $client->notificationlogs->searchNotificationLogs(
 <dl>
 <dd>
 
-**$notificationEvent:** `?string` — The type of notification event to filter by.
+**$notificationEvent:** `?string` — The event to filter by, such as `approvedpayment`. Case-insensitive.
     
 </dd>
 </dl>
@@ -14309,7 +14309,7 @@ $client->notificationlogs->searchNotificationLogs(
 <dl>
 <dd>
 
-**$succeeded:** `?bool` — Indicates whether the notification was successful.
+**$succeeded:** `?bool` — Filter by delivery outcome. Set to `false` to return only failed notifications.
     
 </dd>
 </dl>
@@ -14317,7 +14317,7 @@ $client->notificationlogs->searchNotificationLogs(
 <dl>
 <dd>
 
-**$orgId:** `?int` — The ID of the organization to filter by.
+**$orgId:** `?int` — The ID of the organization to filter by. Either `orgId` or `paypointId` is required.
     
 </dd>
 </dl>
@@ -14325,7 +14325,7 @@ $client->notificationlogs->searchNotificationLogs(
 <dl>
 <dd>
 
-**$paypointId:** `?int` — The ID of the paypoint to filter by.
+**$paypointId:** `?int` — The ID of the paypoint to filter by. Either `orgId` or `paypointId` is required.
     
 </dd>
 </dl>
@@ -14394,7 +14394,7 @@ $client->notificationlogs->getNotificationLog(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;notificationlogs-&gt;retryNotificationLog($uuid) -> ?NotificationLogDetail</code></summary>
+<details><summary><code>$client-&gt;notificationlogs-&gt;retryNotificationLog($uuid) -> ?NotificationRetryResponse</code></summary>
 <dl>
 <dd>
 
@@ -14452,7 +14452,7 @@ $client->notificationlogs->retryNotificationLog(
 </dl>
 </details>
 
-<details><summary><code>$client-&gt;notificationlogs-&gt;bulkRetryNotificationLogs($request)</code></summary>
+<details><summary><code>$client-&gt;notificationlogs-&gt;bulkRetryNotificationLogs($request) -> string</code></summary>
 <dl>
 <dd>
 
@@ -14484,9 +14484,8 @@ This endpoint requires the `notifications_create` permission.
 ```php
 $client->notificationlogs->bulkRetryNotificationLogs(
     [
-        '550e8400-e29b-41d4-a716-446655440000',
-        '550e8400-e29b-41d4-a716-446655440001',
-        '550e8400-e29b-41d4-a716-446655440002',
+        'string',
+        'string',
     ],
 );
 ```
@@ -25794,6 +25793,8 @@ Reissues a payout transaction with a new payment method. This creates a new tran
 The original transaction must be in **Processing** or **Processed** status. The payment method in the request body is used directly. The endpoint doesn't fall back to vendor-managed payment methods.
 
 The new transaction goes through the standard authorize-and-capture flow automatically. Both the original and new transactions are linked through their event histories for audit purposes.
+
+The reissue request doesn't accept a service fee. Payabli always charges the fee configured in the paypoint's ACH payout pricing, even when the pricing allows fee overrides. The new transaction keeps the original payout's total amount. The vendor receives that amount minus the configured fee.
 </dd>
 </dl>
 </dd>

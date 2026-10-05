@@ -17,10 +17,30 @@ class OcrResultData extends JsonSerializableType
     public ?string $billNumber;
 
     /**
+     * Subtotal of the document's line items, before tax.
+     *
+     * This isn't the amount due. When you create a bill from this result,
+     * set the bill's `netAmount` from `totalAmount`.
+     *
      * @var ?float $netAmount
      */
     #[JsonProperty('netAmount')]
     public ?float $netAmount;
+
+    /**
+     * Discount on the document. This is often `null` even when the
+     * document shows a discount. `totalAmount` already reflects any discount.
+     *
+     * @var ?float $discount
+     */
+    #[JsonProperty('discount')]
+    public ?float $discount;
+
+    /**
+     * @var ?float $totalAmount Total amount due on the document, after any discount and including tax.
+     */
+    #[JsonProperty('totalAmount')]
+    public ?float $totalAmount;
 
     /**
      * @var ?DateTime $billDate
@@ -116,6 +136,8 @@ class OcrResultData extends JsonSerializableType
      * @param array{
      *   billNumber?: ?string,
      *   netAmount?: ?float,
+     *   discount?: ?float,
+     *   totalAmount?: ?float,
      *   billDate?: ?DateTime,
      *   dueDate?: ?DateTime,
      *   comments?: ?string,
@@ -138,6 +160,8 @@ class OcrResultData extends JsonSerializableType
     ) {
         $this->billNumber = $values['billNumber'] ?? null;
         $this->netAmount = $values['netAmount'] ?? null;
+        $this->discount = $values['discount'] ?? null;
+        $this->totalAmount = $values['totalAmount'] ?? null;
         $this->billDate = $values['billDate'] ?? null;
         $this->dueDate = $values['dueDate'] ?? null;
         $this->comments = $values['comments'] ?? null;

@@ -16,6 +16,7 @@ use Payabli\Core\Json\JsonDecoder;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Payabli\Types\NotificationLogDetail;
+use Payabli\Types\NotificationRetryResponse;
 use Payabli\Core\Json\JsonSerializer;
 
 class NotificationlogsClient
@@ -76,7 +77,7 @@ class NotificationlogsClient
      *         'pageSize' => 20,
      *         'startDate' => new DateTime('2024-01-01T00:00:00Z'),
      *         'endDate' => new DateTime('2024-01-31T23:59:59Z'),
-     *         'notificationEvent' => 'ActivatedMerchant',
+     *         'notificationEvent' => 'approvedpayment',
      *         'succeeded' => true,
      *         'orgId' => 123,
      *     ]),
@@ -222,11 +223,11 @@ class NotificationlogsClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?NotificationLogDetail
+     * @return ?NotificationRetryResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function retryNotificationLog(string $uuid, ?array $options = null): ?NotificationLogDetail
+    public function retryNotificationLog(string $uuid, ?array $options = null): ?NotificationRetryResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $options['headers'] = array_merge(
@@ -248,7 +249,7 @@ class NotificationlogsClient
                 if (empty($json)) {
                     return null;
                 }
-                return NotificationLogDetail::fromJson($json);
+                return NotificationRetryResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -272,9 +273,8 @@ class NotificationlogsClient
      * ```php
      * $client->notificationlogs->bulkRetryNotificationLogs(
      *     [
-     *         '550e8400-e29b-41d4-a716-446655440000',
-     *         '550e8400-e29b-41d4-a716-446655440001',
-     *         '550e8400-e29b-41d4-a716-446655440002',
+     *         'string',
+     *         'string',
      *     ],
      * );
      * ```
@@ -288,10 +288,11 @@ class NotificationlogsClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
+     * @return string
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function bulkRetryNotificationLogs(array $request, ?array $options = null): void
+    public function bulkRetryNotificationLogs(array $request, ?array $options = null): string
     {
         $options = array_merge($this->options, $options ?? []);
         $options['headers'] = array_merge(
@@ -310,7 +311,7 @@ class NotificationlogsClient
             );
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
-                return;
+                return $response->getBody()->getContents();
             }
         } catch (ClientExceptionInterface $e) {
             throw new PayabliException(message: $e->getMessage(), previous: $e);

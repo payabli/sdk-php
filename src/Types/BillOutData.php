@@ -53,7 +53,7 @@ class BillOutData extends JsonSerializableType
     public ?array $attachments;
 
     /**
-     * @var ?DateTime $billDate Date of bill. Accepted formats: YYYY-MM-DD, MM/DD/YYYY.
+     * @var ?DateTime $billDate Date of bill. Send the date in YYYY-MM-DD format. The API also accepts ISO 8601 date-time values but keeps only the date.
      */
     #[JsonProperty('billDate'), Date(Date::TYPE_DATE)]
     public ?DateTime $billDate;
@@ -83,7 +83,7 @@ class BillOutData extends JsonSerializableType
     public ?float $discount;
 
     /**
-     * @var ?DateTime $dueDate Due date of bill. Accepted formats: YYYY-MM-DD, MM/DD/YYYY.
+     * @var ?DateTime $dueDate Due date of bill. Send the date in YYYY-MM-DD format. The API also accepts ISO 8601 date-time values but keeps only the date.
      */
     #[JsonProperty('dueDate'), Date(Date::TYPE_DATE)]
     public ?DateTime $dueDate;

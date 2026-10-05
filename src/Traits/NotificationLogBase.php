@@ -1,0 +1,126 @@
+<?php
+
+namespace Payabli\Traits;
+
+use DateTime;
+use Payabli\Core\Json\JsonProperty;
+use Payabli\Core\Types\Date;
+
+/**
+ * Fields shared by the search and detail responses for a notification log entry.
+ *
+ * @property string $organizationName
+ * @property string $paypointName
+ * @property string $requestId
+ * @property string $id
+ * @property ?int $orgId
+ * @property ?int $paypointId
+ * @property ?string $notificationEvent
+ * @property ?string $target
+ * @property int $responseStatusCode
+ * @property string $responseStatus
+ * @property bool $success
+ * @property ?string $jobData
+ * @property DateTime $createdDate
+ * @property ?DateTime $successDate
+ * @property ?DateTime $lastFailedDate
+ * @property bool $isInProgress
+ */
+trait NotificationLogBase
+{
+    /**
+     * @var string $organizationName The name of the organization the notification belongs to.
+     */
+    #[JsonProperty('organizationName')]
+    public string $organizationName;
+
+    /**
+     * @var string $paypointName The name of the paypoint the notification is related to. Empty for organization-level notifications.
+     */
+    #[JsonProperty('paypointName')]
+    public string $paypointName;
+
+    /**
+     * @var string $requestId The identifier for the delivery request.
+     */
+    #[JsonProperty('requestId')]
+    public string $requestId;
+
+    /**
+     * @var string $id The unique identifier for the notification.
+     */
+    #[JsonProperty('id')]
+    public string $id;
+
+    /**
+     * @var ?int $orgId The ID of the organization the notification belongs to.
+     */
+    #[JsonProperty('orgId')]
+    public ?int $orgId;
+
+    /**
+     * @var ?int $paypointId The ID of the paypoint the notification is related to. Null for organization-level notifications.
+     */
+    #[JsonProperty('paypointId')]
+    public ?int $paypointId;
+
+    /**
+     * @var ?string $notificationEvent The event that triggered the notification, such as `approvedpayment`.
+     */
+    #[JsonProperty('notificationEvent')]
+    public ?string $notificationEvent;
+
+    /**
+     * @var ?string $target The target the notification was delivered to, such as a webhook URL, email address, or phone number.
+     */
+    #[JsonProperty('target')]
+    public ?string $target;
+
+    /**
+     * @var int $responseStatusCode The HTTP status code the target returned, such as `200`. Returns `0` when the target sent no response.
+     */
+    #[JsonProperty('responseStatusCode')]
+    public int $responseStatusCode;
+
+    /**
+     * @var string $responseStatus The delivery status message, such as `OK` when the notification succeeded, `Dropped` when it failed, or `No response received from server.` when the target sent no response.
+     */
+    #[JsonProperty('responseStatus')]
+    public string $responseStatus;
+
+    /**
+     * @var bool $success Indicates whether the notification was delivered successfully.
+     */
+    #[JsonProperty('success')]
+    public bool $success;
+
+    /**
+     * @var ?string $jobData The body of the notification.
+     */
+    #[JsonProperty('jobData')]
+    public ?string $jobData;
+
+    /**
+     * @var DateTime $createdDate The date and time when the notification was created.
+     */
+    #[JsonProperty('createdDate'), Date(Date::TYPE_DATETIME)]
+    public DateTime $createdDate;
+
+    /**
+     * @var ?DateTime $successDate The date and time when the notification was delivered successfully. Null if it hasn't succeeded.
+     */
+    #[JsonProperty('successDate'), Date(Date::TYPE_DATETIME)]
+    public ?DateTime $successDate;
+
+    /**
+     * @var ?DateTime $lastFailedDate The date and time when the notification last failed. Null if it hasn't failed.
+     */
+    #[JsonProperty('lastFailedDate'), Date(Date::TYPE_DATETIME)]
+    public ?DateTime $lastFailedDate;
+
+    /**
+     * @var bool $isInProgress Indicates whether the notification is currently being sent.
+     */
+    #[JsonProperty('isInProgress')]
+    public bool $isInProgress;
+}

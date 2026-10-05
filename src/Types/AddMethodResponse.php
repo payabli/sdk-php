@@ -11,6 +11,12 @@ class AddMethodResponse extends JsonSerializableType
     use PayabliApiResponseGeneric2Part;
 
     /**
+     * @var ?string $pageIdentifier Returned only when the request succeeds. Not returned when the request is declined, or when you convert a temporary token to a permanent token.
+     */
+    #[JsonProperty('pageIdentifier')]
+    public ?string $pageIdentifier;
+
+    /**
      * @var ?AddMethodResponseResponseData $responseData
      */
     #[JsonProperty('responseData')]
@@ -20,6 +26,7 @@ class AddMethodResponse extends JsonSerializableType
      * @param array{
      *   responseText: string,
      *   isSuccess?: ?bool,
+     *   pageIdentifier?: ?string,
      *   responseData?: ?AddMethodResponseResponseData,
      * } $values
      */
@@ -28,6 +35,7 @@ class AddMethodResponse extends JsonSerializableType
     ) {
         $this->isSuccess = $values['isSuccess'] ?? null;
         $this->responseText = $values['responseText'];
+        $this->pageIdentifier = $values['pageIdentifier'] ?? null;
         $this->responseData = $values['responseData'] ?? null;
     }
 

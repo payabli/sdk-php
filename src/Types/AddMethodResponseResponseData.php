@@ -36,6 +36,35 @@ class AddMethodResponseResponseData extends JsonSerializableType
     public ?int $customerId;
 
     /**
+     * @var ?string $authCode Only returned when the request is declined.
+     */
+    #[JsonProperty('authCode')]
+    public ?string $authCode;
+
+    /**
+     * @var ?string $avsResponseText Only returned when the request is declined.
+     */
+    #[JsonProperty('avsResponseText')]
+    public ?string $avsResponseText;
+
+    /**
+     * @var ?string $cvvResponseText Only returned when the request is declined.
+     */
+    #[JsonProperty('cvvResponseText')]
+    public ?string $cvvResponseText;
+
+    /**
+     * @var ?int $vendorId Only returned when the request is declined.
+     */
+    #[JsonProperty('vendorId')]
+    public ?int $vendorId;
+
+    /**
+     * Stored method identifier in Payabli platform. Returns the same value as
+     * `referenceId`. This field isn't returned when you convert a temporary
+     * token to a permanent token, so use `referenceId` to get the stored
+     * method ID.
+     *
      * @var ?string $methodReferenceId
      */
     #[JsonProperty('methodReferenceId')]
@@ -47,6 +76,10 @@ class AddMethodResponseResponseData extends JsonSerializableType
      *   resultCode?: ?int,
      *   resultText?: ?string,
      *   customerId?: ?int,
+     *   authCode?: ?string,
+     *   avsResponseText?: ?string,
+     *   cvvResponseText?: ?string,
+     *   vendorId?: ?int,
      *   methodReferenceId?: ?string,
      * } $values
      */
@@ -57,6 +90,10 @@ class AddMethodResponseResponseData extends JsonSerializableType
         $this->resultCode = $values['resultCode'] ?? null;
         $this->resultText = $values['resultText'] ?? null;
         $this->customerId = $values['customerId'] ?? null;
+        $this->authCode = $values['authCode'] ?? null;
+        $this->avsResponseText = $values['avsResponseText'] ?? null;
+        $this->cvvResponseText = $values['cvvResponseText'] ?? null;
+        $this->vendorId = $values['vendorId'] ?? null;
         $this->methodReferenceId = $values['methodReferenceId'] ?? null;
     }
 
