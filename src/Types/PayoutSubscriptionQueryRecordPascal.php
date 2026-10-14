@@ -51,6 +51,30 @@ class PayoutSubscriptionQueryRecordPascal extends JsonSerializableType
     public ?string $externalPaypointId;
 
     /**
+     * @var ?bool $sameDayAch When `true`, the payout subscription's payouts are processed as same-day ACH instead of standard ACH. Same-day ACH must be enabled for the paypoint. Only ACH payouts honor this setting.
+     */
+    #[JsonProperty('SameDayAch')]
+    public ?bool $sameDayAch;
+
+    /**
+     * @var ?bool $doNotCreateBills When `true`, Payabli doesn't automatically create a bill for the payout subscription's payouts.
+     */
+    #[JsonProperty('DoNotCreateBills')]
+    public ?bool $doNotCreateBills;
+
+    /**
+     * @var ?bool $allowDuplicatedBills When `true`, the payout subscription bypasses the requirement for unique bills, identified by vendor invoice number.
+     */
+    #[JsonProperty('AllowDuplicatedBills')]
+    public ?bool $allowDuplicatedBills;
+
+    /**
+     * @var ?bool $autoConvertSameDayAch When `true`, a same-day ACH payout captured after the same-day ACH cutoff is converted to a standard ACH payment. When `false`, the capture is declined. Has no effect when `SameDayAch` is `false`.
+     */
+    #[JsonProperty('AutoConvertSameDayAch')]
+    public ?bool $autoConvertSameDayAch;
+
+    /**
      * @var ?string $method The payout subscription's payment method.
      */
     #[JsonProperty('Method')]
@@ -81,10 +105,10 @@ class PayoutSubscriptionQueryRecordPascal extends JsonSerializableType
     public ?float $feeAmount;
 
     /**
-     * @var ?QueryPaymentData $paymentData
+     * @var ?PayoutSubscriptionPaymentDataPascal $paymentData
      */
     #[JsonProperty('PaymentData')]
-    public ?QueryPaymentData $paymentData;
+    public ?PayoutSubscriptionPaymentDataPascal $paymentData;
 
     /**
      * @var ?DateTime $startDate The payout subscription start date.
@@ -189,6 +213,12 @@ class PayoutSubscriptionQueryRecordPascal extends JsonSerializableType
     public ?string $source;
 
     /**
+     * @var ?string $subscriptionType Subscription type. Always `null` for payout subscriptions.
+     */
+    #[JsonProperty('SubscriptionType')]
+    public ?string $subscriptionType;
+
+    /**
      * @param array{
      *   idOutSubscription?: ?int,
      *   status?: ?int,
@@ -196,12 +226,16 @@ class PayoutSubscriptionQueryRecordPascal extends JsonSerializableType
      *   vendor?: ?VendorQueryRecord,
      *   billData?: ?array<BillPayOutData>,
      *   externalPaypointId?: ?string,
+     *   sameDayAch?: ?bool,
+     *   doNotCreateBills?: ?bool,
+     *   allowDuplicatedBills?: ?bool,
+     *   autoConvertSameDayAch?: ?bool,
      *   method?: ?string,
      *   paypointId?: ?int,
      *   totalAmount?: ?float,
      *   netAmount?: ?float,
      *   feeAmount?: ?float,
-     *   paymentData?: ?QueryPaymentData,
+     *   paymentData?: ?PayoutSubscriptionPaymentDataPascal,
      *   startDate?: ?DateTime,
      *   endDate?: ?DateTime,
      *   nextDate?: ?DateTime,
@@ -219,6 +253,7 @@ class PayoutSubscriptionQueryRecordPascal extends JsonSerializableType
      *   parentOrgName?: ?string,
      *   parentOrgId?: ?int,
      *   source?: ?string,
+     *   subscriptionType?: ?string,
      * } $values
      */
     public function __construct(
@@ -230,6 +265,10 @@ class PayoutSubscriptionQueryRecordPascal extends JsonSerializableType
         $this->vendor = $values['vendor'] ?? null;
         $this->billData = $values['billData'] ?? null;
         $this->externalPaypointId = $values['externalPaypointId'] ?? null;
+        $this->sameDayAch = $values['sameDayAch'] ?? null;
+        $this->doNotCreateBills = $values['doNotCreateBills'] ?? null;
+        $this->allowDuplicatedBills = $values['allowDuplicatedBills'] ?? null;
+        $this->autoConvertSameDayAch = $values['autoConvertSameDayAch'] ?? null;
         $this->method = $values['method'] ?? null;
         $this->paypointId = $values['paypointId'] ?? null;
         $this->totalAmount = $values['totalAmount'] ?? null;
@@ -253,6 +292,7 @@ class PayoutSubscriptionQueryRecordPascal extends JsonSerializableType
         $this->parentOrgName = $values['parentOrgName'] ?? null;
         $this->parentOrgId = $values['parentOrgId'] ?? null;
         $this->source = $values['source'] ?? null;
+        $this->subscriptionType = $values['subscriptionType'] ?? null;
     }
 
     /**

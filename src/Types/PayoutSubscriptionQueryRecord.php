@@ -33,15 +33,15 @@ class PayoutSubscriptionQueryRecord extends JsonSerializableType
     public ?array $events;
 
     /**
-     * @var ?VendorQueryRecord $vendor
+     * @var ?PayoutSubscriptionVendor $vendor
      */
     #[JsonProperty('vendor')]
-    public ?VendorQueryRecord $vendor;
+    public ?PayoutSubscriptionVendor $vendor;
 
     /**
-     * @var ?array<BillPayOutData> $billData Bills associated with the payout subscription.
+     * @var ?array<PayoutSubscriptionBill> $billData Bills associated with the payout subscription.
      */
-    #[JsonProperty('billData'), ArrayType([BillPayOutData::class])]
+    #[JsonProperty('billData'), ArrayType([PayoutSubscriptionBill::class])]
     public ?array $billData;
 
     /**
@@ -49,6 +49,30 @@ class PayoutSubscriptionQueryRecord extends JsonSerializableType
      */
     #[JsonProperty('externalPaypointID')]
     public ?string $externalPaypointId;
+
+    /**
+     * @var ?bool $sameDayAch When `true`, the payout subscription's payouts are processed as same-day ACH instead of standard ACH. Same-day ACH must be enabled for the paypoint. Only ACH payouts honor this setting.
+     */
+    #[JsonProperty('sameDayAch')]
+    public ?bool $sameDayAch;
+
+    /**
+     * @var ?bool $doNotCreateBills When `true`, Payabli doesn't automatically create a bill for the payout subscription's payouts.
+     */
+    #[JsonProperty('doNotCreateBills')]
+    public ?bool $doNotCreateBills;
+
+    /**
+     * @var ?bool $allowDuplicatedBills When `true`, the payout subscription bypasses the requirement for unique bills, identified by vendor invoice number.
+     */
+    #[JsonProperty('allowDuplicatedBills')]
+    public ?bool $allowDuplicatedBills;
+
+    /**
+     * @var ?bool $autoConvertSameDayAch When `true`, a same-day ACH payout captured after the same-day ACH cutoff is converted to a standard ACH payment. When `false`, the capture is declined. Has no effect when `sameDayAch` is `false`.
+     */
+    #[JsonProperty('autoConvertSameDayAch')]
+    public ?bool $autoConvertSameDayAch;
 
     /**
      * @var ?string $method The payout subscription's payment method.
@@ -81,10 +105,10 @@ class PayoutSubscriptionQueryRecord extends JsonSerializableType
     public ?float $feeAmount;
 
     /**
-     * @var ?QueryPaymentData $paymentData
+     * @var ?PayoutSubscriptionPaymentData $paymentData
      */
     #[JsonProperty('paymentData')]
-    public ?QueryPaymentData $paymentData;
+    public ?PayoutSubscriptionPaymentData $paymentData;
 
     /**
      * @var ?DateTime $startDate The payout subscription start date.
@@ -189,19 +213,29 @@ class PayoutSubscriptionQueryRecord extends JsonSerializableType
     public ?string $source;
 
     /**
+     * @var ?string $subscriptionType Subscription type. Always `null` for payout subscriptions.
+     */
+    #[JsonProperty('subscriptionType')]
+    public ?string $subscriptionType;
+
+    /**
      * @param array{
      *   idOutSubscription?: ?int,
      *   status?: ?int,
      *   events?: ?array<GeneralEvents>,
-     *   vendor?: ?VendorQueryRecord,
-     *   billData?: ?array<BillPayOutData>,
+     *   vendor?: ?PayoutSubscriptionVendor,
+     *   billData?: ?array<PayoutSubscriptionBill>,
      *   externalPaypointId?: ?string,
+     *   sameDayAch?: ?bool,
+     *   doNotCreateBills?: ?bool,
+     *   allowDuplicatedBills?: ?bool,
+     *   autoConvertSameDayAch?: ?bool,
      *   method?: ?string,
      *   paypointId?: ?int,
      *   totalAmount?: ?float,
      *   netAmount?: ?float,
      *   feeAmount?: ?float,
-     *   paymentData?: ?QueryPaymentData,
+     *   paymentData?: ?PayoutSubscriptionPaymentData,
      *   startDate?: ?DateTime,
      *   endDate?: ?DateTime,
      *   nextDate?: ?DateTime,
@@ -219,6 +253,7 @@ class PayoutSubscriptionQueryRecord extends JsonSerializableType
      *   parentOrgName?: ?string,
      *   parentOrgId?: ?int,
      *   source?: ?string,
+     *   subscriptionType?: ?string,
      * } $values
      */
     public function __construct(
@@ -230,6 +265,10 @@ class PayoutSubscriptionQueryRecord extends JsonSerializableType
         $this->vendor = $values['vendor'] ?? null;
         $this->billData = $values['billData'] ?? null;
         $this->externalPaypointId = $values['externalPaypointId'] ?? null;
+        $this->sameDayAch = $values['sameDayAch'] ?? null;
+        $this->doNotCreateBills = $values['doNotCreateBills'] ?? null;
+        $this->allowDuplicatedBills = $values['allowDuplicatedBills'] ?? null;
+        $this->autoConvertSameDayAch = $values['autoConvertSameDayAch'] ?? null;
         $this->method = $values['method'] ?? null;
         $this->paypointId = $values['paypointId'] ?? null;
         $this->totalAmount = $values['totalAmount'] ?? null;
@@ -253,6 +292,7 @@ class PayoutSubscriptionQueryRecord extends JsonSerializableType
         $this->parentOrgName = $values['parentOrgName'] ?? null;
         $this->parentOrgId = $values['parentOrgId'] ?? null;
         $this->source = $values['source'] ?? null;
+        $this->subscriptionType = $values['subscriptionType'] ?? null;
     }
 
     /**

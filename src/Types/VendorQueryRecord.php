@@ -323,10 +323,16 @@ class VendorQueryRecord extends JsonSerializableType
     public ?string $externalPaypointId;
 
     /**
-     * @var ?array<VendorResponseStoredMethod> $storedMethods
+     * @var ?array<VendorStoredMethod> $storedMethods
      */
-    #[JsonProperty('StoredMethods'), ArrayType([VendorResponseStoredMethod::class])]
+    #[JsonProperty('StoredMethods'), ArrayType([VendorStoredMethod::class])]
     public ?array $storedMethods;
+
+    /**
+     * @var ?VendorPortalAccess $vendorPortal
+     */
+    #[JsonProperty('VendorPortal')]
+    public ?VendorPortalAccess $vendorPortal;
 
     /**
      * @param array{
@@ -382,7 +388,8 @@ class VendorQueryRecord extends JsonSerializableType
      *   enrichmentId?: ?string,
      *   additionalData?: ?array<string, string>,
      *   externalPaypointId?: ?string,
-     *   storedMethods?: ?array<VendorResponseStoredMethod>,
+     *   storedMethods?: ?array<VendorStoredMethod>,
+     *   vendorPortal?: ?VendorPortalAccess,
      * } $values
      */
     public function __construct(
@@ -441,6 +448,7 @@ class VendorQueryRecord extends JsonSerializableType
         $this->additionalData = $values['additionalData'] ?? null;
         $this->externalPaypointId = $values['externalPaypointId'] ?? null;
         $this->storedMethods = $values['storedMethods'] ?? null;
+        $this->vendorPortal = $values['vendorPortal'] ?? null;
     }
 
     /**

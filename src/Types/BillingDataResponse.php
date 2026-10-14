@@ -98,6 +98,12 @@ class BillingDataResponse extends JsonSerializableType
     public bool $default;
 
     /**
+     * @var ?string $country Country code of the bank account, in ISO 3166-1 alpha-2 format (for example, `US` or `CA`).
+     */
+    #[JsonProperty('country')]
+    public ?string $country;
+
+    /**
      * @param array{
      *   id: int,
      *   nickname: string,
@@ -113,6 +119,7 @@ class BillingDataResponse extends JsonSerializableType
      *   services: array<mixed>,
      *   default: bool,
      *   accountId?: ?string,
+     *   country?: ?string,
      * } $values
      */
     public function __construct(
@@ -132,6 +139,7 @@ class BillingDataResponse extends JsonSerializableType
         $this->status = $values['status'];
         $this->services = $values['services'];
         $this->default = $values['default'];
+        $this->country = $values['country'] ?? null;
     }
 
     /**
