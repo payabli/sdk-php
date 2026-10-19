@@ -101,6 +101,12 @@ class VendorQueryRecord extends JsonSerializableType
     public ?string $locationCode;
 
     /**
+     * @var bool $issue1099
+     */
+    #[JsonProperty('Issue1099')]
+    public bool $issue1099;
+
+    /**
      * @var ?array<ContactsResponse> $contacts Array of objects describing the vendor's contacts.
      */
     #[JsonProperty('Contacts'), ArrayType([ContactsResponse::class])]
@@ -338,6 +344,7 @@ class VendorQueryRecord extends JsonSerializableType
      * @param array{
      *   vendorNumber: string,
      *   name1: string,
+     *   issue1099: bool,
      *   vendorStatus: int,
      *   vendorId: int,
      *   paypointLegalname: string,
@@ -410,6 +417,7 @@ class VendorQueryRecord extends JsonSerializableType
         $this->country = $values['country'] ?? null;
         $this->mcc = $values['mcc'] ?? null;
         $this->locationCode = $values['locationCode'] ?? null;
+        $this->issue1099 = $values['issue1099'];
         $this->contacts = $values['contacts'] ?? null;
         $this->billingData = $values['billingData'] ?? null;
         $this->paymentMethod = $values['paymentMethod'] ?? null;

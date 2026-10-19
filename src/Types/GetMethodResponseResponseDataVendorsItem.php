@@ -119,6 +119,12 @@ class GetMethodResponseResponseDataVendorsItem extends JsonSerializableType
     public ?string $locationCode;
 
     /**
+     * @var ?bool $issue1099
+     */
+    #[JsonProperty('issue1099')]
+    public ?bool $issue1099;
+
+    /**
      * @var ?string $mcc Merchant category code
      */
     #[JsonProperty('mcc')]
@@ -300,6 +306,7 @@ class GetMethodResponseResponseDataVendorsItem extends JsonSerializableType
      *   internalReferenceId?: ?int,
      *   lastUpdated?: ?DateTime,
      *   locationCode?: ?string,
+     *   issue1099?: ?bool,
      *   mcc?: ?string,
      *   name1?: ?string,
      *   name2?: ?string,
@@ -350,6 +357,7 @@ class GetMethodResponseResponseDataVendorsItem extends JsonSerializableType
         $this->internalReferenceId = $values['internalReferenceId'] ?? null;
         $this->lastUpdated = $values['lastUpdated'] ?? null;
         $this->locationCode = $values['locationCode'] ?? null;
+        $this->issue1099 = $values['issue1099'] ?? null;
         $this->mcc = $values['mcc'] ?? null;
         $this->name1 = $values['name1'] ?? null;
         $this->name2 = $values['name2'] ?? null;

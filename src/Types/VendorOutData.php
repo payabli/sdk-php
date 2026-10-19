@@ -89,6 +89,12 @@ class VendorOutData extends JsonSerializableType
     public ?string $locationCode;
 
     /**
+     * @var ?bool $issue1099
+     */
+    #[JsonProperty('Issue1099')]
+    public ?bool $issue1099;
+
+    /**
      * @var ?string $mcc
      */
     #[JsonProperty('Mcc')]
@@ -214,6 +220,7 @@ class VendorOutData extends JsonSerializableType
      *   email?: ?string,
      *   internalReferenceId?: ?int,
      *   locationCode?: ?string,
+     *   issue1099?: ?bool,
      *   mcc?: ?string,
      *   name2?: ?string,
      *   payeeName1?: ?string,
@@ -245,6 +252,7 @@ class VendorOutData extends JsonSerializableType
         $this->email = $values['email'] ?? null;
         $this->internalReferenceId = $values['internalReferenceId'] ?? null;
         $this->locationCode = $values['locationCode'] ?? null;
+        $this->issue1099 = $values['issue1099'] ?? null;
         $this->mcc = $values['mcc'] ?? null;
         $this->name1 = $values['name1'];
         $this->name2 = $values['name2'] ?? null;

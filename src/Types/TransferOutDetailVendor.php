@@ -102,6 +102,12 @@ class TransferOutDetailVendor extends JsonSerializableType
     public ?string $locationCode;
 
     /**
+     * @var bool $issue1099
+     */
+    #[JsonProperty('Issue1099')]
+    public bool $issue1099;
+
+    /**
      * @var ?array<ContactsResponse> $contacts List of contacts for the vendor.
      */
     #[JsonProperty('Contacts'), ArrayType([ContactsResponse::class])]
@@ -283,6 +289,7 @@ class TransferOutDetailVendor extends JsonSerializableType
 
     /**
      * @param array{
+     *   issue1099: bool,
      *   vendorNumber?: ?string,
      *   name1?: ?string,
      *   name2?: ?string,
@@ -331,7 +338,7 @@ class TransferOutDetailVendor extends JsonSerializableType
      * } $values
      */
     public function __construct(
-        array $values = [],
+        array $values,
     ) {
         $this->vendorNumber = $values['vendorNumber'] ?? null;
         $this->name1 = $values['name1'] ?? null;
@@ -348,6 +355,7 @@ class TransferOutDetailVendor extends JsonSerializableType
         $this->country = $values['country'] ?? null;
         $this->mcc = $values['mcc'] ?? null;
         $this->locationCode = $values['locationCode'] ?? null;
+        $this->issue1099 = $values['issue1099'];
         $this->contacts = $values['contacts'] ?? null;
         $this->billingData = $values['billingData'] ?? null;
         $this->paymentMethod = $values['paymentMethod'] ?? null;

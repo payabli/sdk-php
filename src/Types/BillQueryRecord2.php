@@ -240,6 +240,16 @@ class BillQueryRecord2 extends JsonSerializableType
     public ?TransactionOutQueryRecord $transaction;
 
     /**
+     * All payout transactions that paid the bill, with one entry for each payout. When a bill is paid by several [partial payouts](/guides/pay-out-developer-bills-manage#partially-pay-a-bill), each one has an entry and `Transaction` holds the most recent. Canceled payouts aren't included.
+     *
+     * The value is `null` when the bill has no payouts, and an empty array when every payout on the bill has been canceled. For details, see `transactions` in [Get bill](/developers/api-reference/bill/get-bill).
+     *
+     * @var ?array<BillTransactionReference> $transactions
+     */
+    #[JsonProperty('transactions'), ArrayType([BillTransactionReference::class])]
+    public ?array $transactions;
+
+    /**
      * @var ?VendorOutData $vendor
      */
     #[JsonProperty('Vendor')]
@@ -285,6 +295,7 @@ class BillQueryRecord2 extends JsonSerializableType
      *   paidAmount?: ?float,
      *   outstandingBalance?: ?float,
      *   transaction?: ?TransactionOutQueryRecord,
+     *   transactions?: ?array<BillTransactionReference>,
      *   vendor?: ?VendorOutData,
      * } $values
      */
@@ -329,6 +340,7 @@ class BillQueryRecord2 extends JsonSerializableType
         $this->paidAmount = $values['paidAmount'] ?? null;
         $this->outstandingBalance = $values['outstandingBalance'] ?? null;
         $this->transaction = $values['transaction'] ?? null;
+        $this->transactions = $values['transactions'] ?? null;
         $this->vendor = $values['vendor'] ?? null;
     }
 

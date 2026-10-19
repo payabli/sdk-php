@@ -275,8 +275,8 @@ class PayabliClient
         $defaultHeaders = [
             'X-Fern-Language' => 'PHP',
             'X-Fern-SDK-Name' => 'Payabli',
-            'X-Fern-SDK-Version' => '1.0.19',
-            'User-Agent' => 'payabli/payabli/1.0.19',
+            'X-Fern-SDK-Version' => '1.0.20',
+            'User-Agent' => 'payabli/payabli/1.0.20',
         ];
 
         $this->options = $options ?? [];

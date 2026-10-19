@@ -203,6 +203,17 @@ class VendorData extends JsonSerializableType
     public ?int $vendorStatus;
 
     /**
+     * When `true`, a 1099 tax form is issued to this vendor. When you
+     * create a vendor and omit this field, it defaults to `false`. When
+     * you update a vendor and omit this field, the vendor keeps its
+     * current value.
+     *
+     * @var ?bool $issue1099
+     */
+    #[JsonProperty('issue1099')]
+    public ?bool $issue1099;
+
+    /**
      * @var ?string $zip Vendor's ZIP or postal code. Required if any address field is provided. For US addresses, use five digits (`12345`) or ZIP+4 format (`12345-6789`).
      */
     #[JsonProperty('zip')]
@@ -260,6 +271,7 @@ class VendorData extends JsonSerializableType
      *   remitZip?: ?string,
      *   state?: ?string,
      *   vendorStatus?: ?int,
+     *   issue1099?: ?bool,
      *   zip?: ?string,
      *   defaultMethodId?: ?string,
      *   attachment?: ?FileContent,
@@ -299,6 +311,7 @@ class VendorData extends JsonSerializableType
         $this->remitZip = $values['remitZip'] ?? null;
         $this->state = $values['state'] ?? null;
         $this->vendorStatus = $values['vendorStatus'] ?? null;
+        $this->issue1099 = $values['issue1099'] ?? null;
         $this->zip = $values['zip'] ?? null;
         $this->defaultMethodId = $values['defaultMethodId'] ?? null;
         $this->attachment = $values['attachment'] ?? null;

@@ -311,7 +311,7 @@ class QueryPayoutTransactionRecordsItem extends JsonSerializableType
     public ?string $entityId;
 
     /**
-     * @var array<value-of<QueryPayoutTransactionRecordsItemAllowedActionsItem>> $allowedActions Operations currently permitted for this payout, derived from its status. Always present; empty for terminal statuses such as paid or canceled. Read this array directly rather than inferring available actions from `PaymentStatus`.
+     * @var array<value-of<QueryPayoutTransactionRecordsItemAllowedActionsItem>> $allowedActions Operations currently permitted for this payout, derived from its status and other payout details such as payment method. For example, a returned ACH payout can include `cancel` and `reissue`. Always present; empty for terminal statuses such as paid or canceled. Read this array directly rather than inferring available actions from `PaymentStatus`.
      */
     #[JsonProperty('allowedActions'), ArrayType(['string'])]
     public array $allowedActions;

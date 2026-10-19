@@ -50,16 +50,53 @@ class DeviceQueryRecord extends JsonSerializableType
     public ?string $model;
 
     /**
+     * @var ?string $appVersion Version of the Payabli app running on the device.
+     */
+    #[JsonProperty('appVersion')]
+    public ?string $appVersion;
+
+    /**
+     * @var ?string $osVersion Version of Android running on the device.
+     */
+    #[JsonProperty('osVersion')]
+    public ?string $osVersion;
+
+    /**
      * @var ?int $deviceType Type of device.
      */
     #[JsonProperty('deviceType')]
     public ?int $deviceType;
 
     /**
-     * @var ?int $deviceStatus Current status of the device.
+     * Lifecycle status of the device, as an integer. A value of `1` means the
+     * device is active. This field doesn't show whether the device is running
+     * a command. To check whether the device can accept a transaction now,
+     * use `operationalStatus`.
+     *
+     * @var ?int $deviceStatus
      */
     #[JsonProperty('deviceStatus')]
     public ?int $deviceStatus;
+
+    /**
+     * Shows whether the device can accept a transaction now. The value
+     * reflects the device's state when you send the query.
+     *
+     * - `online`: The device is active and isn't running a command. It can
+     *   accept a transaction.
+     * - `busy`: The device is running a command that's pending, dispatched,
+     *   or processing, and the command hasn't expired. A new transaction sent
+     *   to the device fails with error `E7069` (Device busy). Wait for the
+     *   command to finish or expire, then query the device again.
+     * - `offline`: The device isn't active, so it can't accept transactions.
+     *   Its lifecycle status (`deviceStatus`) isn't active.
+     *
+     * Check this field before you send a transaction to a device.
+     *
+     * @var value-of<DeviceQueryRecordOperationalStatus> $operationalStatus
+     */
+    #[JsonProperty('operationalStatus')]
+    public string $operationalStatus;
 
     /**
      * @var ?int $deviceOs Operating system of the device.
@@ -177,6 +214,7 @@ class DeviceQueryRecord extends JsonSerializableType
 
     /**
      * @param array{
+     *   operationalStatus: value-of<DeviceQueryRecordOperationalStatus>,
      *   transactionCount: int,
      *   volumeProcessed: float,
      *   deviceId?: ?string,
@@ -186,6 +224,8 @@ class DeviceQueryRecord extends JsonSerializableType
      *   friendlyName?: ?string,
      *   make?: ?string,
      *   model?: ?string,
+     *   appVersion?: ?string,
+     *   osVersion?: ?string,
      *   deviceType?: ?int,
      *   deviceStatus?: ?int,
      *   deviceOs?: ?int,
@@ -217,8 +257,11 @@ class DeviceQueryRecord extends JsonSerializableType
         $this->friendlyName = $values['friendlyName'] ?? null;
         $this->make = $values['make'] ?? null;
         $this->model = $values['model'] ?? null;
+        $this->appVersion = $values['appVersion'] ?? null;
+        $this->osVersion = $values['osVersion'] ?? null;
         $this->deviceType = $values['deviceType'] ?? null;
         $this->deviceStatus = $values['deviceStatus'] ?? null;
+        $this->operationalStatus = $values['operationalStatus'];
         $this->deviceOs = $values['deviceOs'] ?? null;
         $this->macAddress = $values['macAddress'] ?? null;
         $this->lastHealthCheck = $values['lastHealthCheck'] ?? null;

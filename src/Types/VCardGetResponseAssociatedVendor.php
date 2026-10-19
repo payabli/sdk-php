@@ -102,6 +102,12 @@ class VCardGetResponseAssociatedVendor extends JsonSerializableType
     public ?string $locationCode;
 
     /**
+     * @var ?bool $issue1099
+     */
+    #[JsonProperty('Issue1099')]
+    public ?bool $issue1099;
+
+    /**
      * @var ?array<VCardGetResponseContact> $contacts Array of objects describing the vendor's contacts.
      */
     #[JsonProperty('Contacts'), ArrayType([VCardGetResponseContact::class])]
@@ -292,6 +298,7 @@ class VCardGetResponseAssociatedVendor extends JsonSerializableType
      *   country?: ?string,
      *   mcc?: ?string,
      *   locationCode?: ?string,
+     *   issue1099?: ?bool,
      *   contacts?: ?array<VCardGetResponseContact>,
      *   billingData?: ?VCardGetResponseAssociatedVendorBillingData,
      *   paymentMethod?: ?string,
@@ -341,6 +348,7 @@ class VCardGetResponseAssociatedVendor extends JsonSerializableType
         $this->country = $values['country'] ?? null;
         $this->mcc = $values['mcc'] ?? null;
         $this->locationCode = $values['locationCode'] ?? null;
+        $this->issue1099 = $values['issue1099'] ?? null;
         $this->contacts = $values['contacts'] ?? null;
         $this->billingData = $values['billingData'] ?? null;
         $this->paymentMethod = $values['paymentMethod'] ?? null;

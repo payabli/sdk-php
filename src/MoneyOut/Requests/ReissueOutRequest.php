@@ -25,10 +25,17 @@ class ReissueOutRequest extends JsonSerializableType
     public ReissuePaymentMethod $paymentMethod;
 
     /**
+     * @var ?string $checkNumber
+     */
+    #[JsonProperty('checkNumber')]
+    public ?string $checkNumber;
+
+    /**
      * @param array{
      *   transId: string,
      *   paymentMethod: ReissuePaymentMethod,
      *   idempotencyKey?: ?string,
+     *   checkNumber?: ?string,
      * } $values
      */
     public function __construct(
@@ -37,5 +44,6 @@ class ReissueOutRequest extends JsonSerializableType
         $this->transId = $values['transId'];
         $this->idempotencyKey = $values['idempotencyKey'] ?? null;
         $this->paymentMethod = $values['paymentMethod'];
+        $this->checkNumber = $values['checkNumber'] ?? null;
     }
 }

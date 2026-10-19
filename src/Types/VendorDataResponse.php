@@ -101,6 +101,12 @@ class VendorDataResponse extends JsonSerializableType
     public string $locationCode;
 
     /**
+     * @var bool $issue1099
+     */
+    #[JsonProperty('Issue1099')]
+    public bool $issue1099;
+
+    /**
      * @var array<ContactsResponse> $contacts Array of objects describing the vendor's contacts.
      */
     #[JsonProperty('Contacts'), ArrayType([ContactsResponse::class])]
@@ -290,6 +296,7 @@ class VendorDataResponse extends JsonSerializableType
      *   country: string,
      *   mcc: string,
      *   locationCode: string,
+     *   issue1099: bool,
      *   contacts: array<ContactsResponse>,
      *   billingData: VendorResponseBillingData,
      *   paymentMethod: value-of<VendorDataResponsePaymentMethod>,
@@ -340,6 +347,7 @@ class VendorDataResponse extends JsonSerializableType
         $this->country = $values['country'];
         $this->mcc = $values['mcc'];
         $this->locationCode = $values['locationCode'];
+        $this->issue1099 = $values['issue1099'];
         $this->contacts = $values['contacts'];
         $this->billingData = $values['billingData'];
         $this->paymentMethod = $values['paymentMethod'];

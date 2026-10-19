@@ -59,6 +59,24 @@ class TransactionQueryRecords extends JsonSerializableType
     public ?string $deviceId;
 
     /**
+     * @var ?QueryDeviceData $deviceData
+     */
+    #[JsonProperty('DeviceData')]
+    public ?QueryDeviceData $deviceData;
+
+    /**
+     * @var ?string $deviceEntryMode
+     */
+    #[JsonProperty('DeviceEntryMode')]
+    public ?string $deviceEntryMode;
+
+    /**
+     * @var ?EmvAuthData $emvAuthData
+     */
+    #[JsonProperty('EmvAuthData')]
+    public ?EmvAuthData $emvAuthData;
+
+    /**
      * @var ?int $entrypageId
      */
     #[JsonProperty('EntrypageId')]
@@ -261,6 +279,9 @@ class TransactionQueryRecords extends JsonSerializableType
      *   connectorName?: ?string,
      *   customer?: ?QueryTransactionPayorData,
      *   deviceId?: ?string,
+     *   deviceData?: ?QueryDeviceData,
+     *   deviceEntryMode?: ?string,
+     *   emvAuthData?: ?EmvAuthData,
      *   entrypageId?: ?int,
      *   externalProcessorInformation?: ?string,
      *   feeAmount?: ?float,
@@ -305,6 +326,9 @@ class TransactionQueryRecords extends JsonSerializableType
         $this->connectorName = $values['connectorName'] ?? null;
         $this->customer = $values['customer'] ?? null;
         $this->deviceId = $values['deviceId'] ?? null;
+        $this->deviceData = $values['deviceData'] ?? null;
+        $this->deviceEntryMode = $values['deviceEntryMode'] ?? null;
+        $this->emvAuthData = $values['emvAuthData'] ?? null;
         $this->entrypageId = $values['entrypageId'] ?? null;
         $this->externalProcessorInformation = $values['externalProcessorInformation'] ?? null;
         $this->feeAmount = $values['feeAmount'] ?? null;

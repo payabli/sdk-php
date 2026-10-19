@@ -14,6 +14,7 @@ use Payabli\Environments;
 use Payabli\Core\Client\HttpMethod;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
+use Payabli\Types\DeleteGhostCardResponse;
 use Payabli\GhostCard\Requests\UpdateCardRequestBody;
 use Payabli\Types\PayabliApiResponse;
 
@@ -66,7 +67,7 @@ class GhostCardClient
      *
      * Unlike single-use virtual cards issued as part of a payout transaction, ghost cards aren't tied to a specific payout. They're issued directly to a vendor and can be reused up to a configurable number of times within the card's spending limits.
      *
-     * Only one ghost card can exist per vendor per paypoint. To issue a new card to the same vendor, cancel the existing card first.
+     * Only one active ghost card can exist per vendor per paypoint. If the vendor already has one, the request fails with error `7067`. To issue a new card to the same vendor, cancel the existing card first. Canceled and expired cards don't count toward this limit. See [Cancel ghost card](/developers/api-reference/cards/cancel-ghost-card).
      *
      * Example:
      * ```php
@@ -130,6 +131,69 @@ class GhostCardClient
                     return null;
                 }
                 return CreateGhostCardResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (ClientExceptionInterface $e) {
+            throw new PayabliException(message: $e->getMessage(), previous: $e);
+        }
+        throw new PayabliApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Cancels a ghost card. This is always a soft delete: Payabli keeps the card record, including its transaction history.
+     *
+     * Canceling a ghost card frees the vendor's slot, so you can issue a new ghost card to the same vendor. A card canceled with this endpoint can't be used, reactivated, or canceled again.
+     *
+     * Requires the `vcard_delete` permission.
+     *
+     * Example:
+     * ```php
+     * $client->ghostCard->deleteGhostCard(
+     *     'gc_abc123def456',
+     * );
+     * ```
+     *
+     * @param string $cardToken Token that identifies the ghost card to cancel. This is the `ReferenceId` returned when the card was created.
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     *   timeout?: float,
+     *   headers?: array<string, string>,
+     *   queryParameters?: array<string, mixed>,
+     *   bodyProperties?: array<string, mixed>,
+     * } $options
+     * @return ?DeleteGhostCardResponse
+     * @throws PayabliException
+     * @throws PayabliApiException
+     */
+    public function deleteGhostCard(string $cardToken, ?array $options = null): ?DeleteGhostCardResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $options['headers'] = array_merge(
+            $this->routingAuthProvider?->getAuthHeaders([['BearerAuth' => []], ['APIKeyAuth' => []]]) ?? [],
+            $options['headers'] ?? []
+        );
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Sandbox->value,
+                    path: "MoneyOutCard/GhostCard/{$cardToken}",
+                    method: HttpMethod::DELETE,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                if (empty($json)) {
+                    return null;
+                }
+                return DeleteGhostCardResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

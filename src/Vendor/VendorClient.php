@@ -116,6 +116,7 @@ class VendorClient
      *         'remitZip' => '31113',
      *         'state' => 'FL',
      *         'vendorStatus' => 1,
+     *         'issue1099' => true,
      *         'zip' => '33139',
      *     ]),
      * );

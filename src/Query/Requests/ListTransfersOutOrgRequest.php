@@ -47,6 +47,7 @@ class ListTransfersOutOrgRequest extends JsonSerializableType
      *   - `batchId` (ne, eq, in, nin)
      *   - `detailType` (eq, ne, in, nin, ct, nct)
      *   - `detailMethod` (eq, ne, in, nin, ct, nct)
+     *   - `paymentId` (ne, eq, in, nin): The payout's payment ID. Returns every transfer linked to that payout: the payout transfer, any refund and stale check refund transfers, and the billing fee transfer.
      *
      * @var ?array<string, ?string> $parameters
      */

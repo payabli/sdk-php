@@ -173,6 +173,20 @@ class BillResponseData extends JsonSerializableType
     public ?TransactionOutQueryRecord $transaction;
 
     /**
+     * All payout transactions that paid the bill, with one entry for each payout. When a bill is paid by several [partial payouts](/guides/pay-out-developer-bills-manage#partially-pay-a-bill), each one has an entry and `Transaction` holds the most recent. A bill paid by a single payout has one entry, and its `idOut` and `paymentId` match those on `Transaction`.
+     *
+     * Canceled payouts aren't included.
+     *
+     * The value is `null` when the bill has no payouts. When every payout on the bill has been canceled, the value is an empty array. If partial payments aren't enabled, a bill whose only payout was canceled returns `null` instead.
+     *
+     * Each entry has identifiers only. For a transaction's details, see [Get payout details](/developers/api-reference/moneyout/get-details-for-a-processed-payout-transaction).
+     *
+     * @var ?array<BillTransactionReference> $transactions
+     */
+    #[JsonProperty('transactions'), ArrayType([BillTransactionReference::class])]
+    public ?array $transactions;
+
+    /**
      * @var ?array<GeneralEvents> $billEvents
      */
     #[JsonProperty('billEvents'), ArrayType([GeneralEvents::class])]
@@ -273,6 +287,7 @@ class BillResponseData extends JsonSerializableType
      *   lastUpdated?: ?DateTime,
      *   frequency?: ?value-of<Frequency>,
      *   transaction?: ?TransactionOutQueryRecord,
+     *   transactions?: ?array<BillTransactionReference>,
      *   billEvents?: ?array<GeneralEvents>,
      *   billApprovals?: ?array<BillQueryRecord2BillApprovalsItem>,
      *   paypointLegalname?: ?string,
@@ -317,6 +332,7 @@ class BillResponseData extends JsonSerializableType
         $this->lastUpdated = $values['lastUpdated'] ?? null;
         $this->frequency = $values['frequency'] ?? null;
         $this->transaction = $values['transaction'] ?? null;
+        $this->transactions = $values['transactions'] ?? null;
         $this->billEvents = $values['billEvents'] ?? null;
         $this->billApprovals = $values['billApprovals'] ?? null;
         $this->paypointLegalname = $values['paypointLegalname'] ?? null;
