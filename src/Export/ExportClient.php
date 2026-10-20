@@ -90,7 +90,7 @@ class ExportClient
 
     /**
      * <Warning>
-     *   This endpoint is deprecated. To export this data, use [List all apps for org](/developers/api-reference/boarding/get-list-of-applications-for-an-organization) with the `exportFormat` query parameter instead.
+     *   Legacy boarding is deprecated and will be sunset in Q2 2027. Use [List applications](/developers/api-reference/applications/list-applications) instead. It doesn't export files.
      * </Warning>
      *
      * Export a list of boarding applications for an organization. Use filters to limit results.

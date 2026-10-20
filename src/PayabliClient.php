@@ -22,6 +22,12 @@ use Payabli\Device\DeviceClient;
 use Payabli\Taptopay\TaptopayClient;
 use Payabli\Cloud\CloudClient;
 use Payabli\LineItem\LineItemClient;
+use Payabli\Businesses\BusinessesClient;
+use Payabli\People\PeopleClient;
+use Payabli\Paypoints\PaypointsClient;
+use Payabli\PaymentMethods\PaymentMethodsClient;
+use Payabli\BoardingTemplates\BoardingTemplatesClient;
+use Payabli\Applications\ApplicationsClient;
 use Payabli\Boarding\BoardingClient;
 use Payabli\Templates\TemplatesClient;
 use Payabli\Export\ExportClient;
@@ -145,6 +151,36 @@ class PayabliClient
      * @var LineItemClient $lineItem
      */
     public LineItemClient $lineItem;
+
+    /**
+     * @var BusinessesClient $businesses
+     */
+    public BusinessesClient $businesses;
+
+    /**
+     * @var PeopleClient $people
+     */
+    public PeopleClient $people;
+
+    /**
+     * @var PaypointsClient $paypoints
+     */
+    public PaypointsClient $paypoints;
+
+    /**
+     * @var PaymentMethodsClient $paymentMethods
+     */
+    public PaymentMethodsClient $paymentMethods;
+
+    /**
+     * @var BoardingTemplatesClient $boardingTemplates
+     */
+    public BoardingTemplatesClient $boardingTemplates;
+
+    /**
+     * @var ApplicationsClient $applications
+     */
+    public ApplicationsClient $applications;
 
     /**
      * @var BoardingClient $boarding
@@ -275,8 +311,8 @@ class PayabliClient
         $defaultHeaders = [
             'X-Fern-Language' => 'PHP',
             'X-Fern-SDK-Name' => 'Payabli',
-            'X-Fern-SDK-Version' => '1.0.20',
-            'User-Agent' => 'payabli/payabli/1.0.20',
+            'X-Fern-SDK-Version' => '1.0.21',
+            'User-Agent' => 'payabli/payabli/1.0.21',
         ];
 
         $this->options = $options ?? [];
@@ -322,6 +358,12 @@ class PayabliClient
         $this->taptopay = new TaptopayClient($this->client, $this->options, $this->routingAuthProvider);
         $this->cloud = new CloudClient($this->client, $this->options, $this->routingAuthProvider);
         $this->lineItem = new LineItemClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->businesses = new BusinessesClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->people = new PeopleClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->paypoints = new PaypointsClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->paymentMethods = new PaymentMethodsClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->boardingTemplates = new BoardingTemplatesClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->applications = new ApplicationsClient($this->client, $this->options, $this->routingAuthProvider);
         $this->boarding = new BoardingClient($this->client, $this->options, $this->routingAuthProvider);
         $this->templates = new TemplatesClient($this->client, $this->options, $this->routingAuthProvider);
         $this->export = new ExportClient($this->client, $this->options, $this->routingAuthProvider);

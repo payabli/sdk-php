@@ -12,21 +12,21 @@ use Payabli\Core\Types\ArrayType;
 class BankAccountServices extends JsonSerializableType
 {
     /**
-     * @var ?array<value-of<MoneyInService>> $moneyIn Pay In services the account is used for.
+     * @var ?array<value-of<CaseManagementMoneyInService>> $moneyIn Pay In services the account is used for.
      */
     #[JsonProperty('moneyIn'), ArrayType(['string'])]
     public ?array $moneyIn;
 
     /**
-     * @var ?array<value-of<MoneyOutService>> $moneyOut Pay Out services the account is used for.
+     * @var ?array<value-of<CaseManagementMoneyOutService>> $moneyOut Pay Out services the account is used for.
      */
     #[JsonProperty('moneyOut'), ArrayType(['string'])]
     public ?array $moneyOut;
 
     /**
      * @param array{
-     *   moneyIn?: ?array<value-of<MoneyInService>>,
-     *   moneyOut?: ?array<value-of<MoneyOutService>>,
+     *   moneyIn?: ?array<value-of<CaseManagementMoneyInService>>,
+     *   moneyOut?: ?array<value-of<CaseManagementMoneyOutService>>,
      * } $values
      */
     public function __construct(

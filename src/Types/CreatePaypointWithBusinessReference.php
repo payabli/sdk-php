@@ -1,0 +1,60 @@
+<?php
+
+namespace Payabli\Types;
+
+use Payabli\Core\Json\JsonSerializableType;
+use Payabli\Traits\PaypointWritableFields;
+use Payabli\Core\Json\JsonProperty;
+
+/**
+ * Create a paypoint under an existing business. Provide `businessReference` plus `doingBusinessAs`; all other fields are optional.
+ */
+class CreatePaypointWithBusinessReference extends JsonSerializableType
+{
+    use PaypointWritableFields;
+
+    /**
+     * @var string $businessReference The reference of the existing business the paypoint boards under.
+     */
+    #[JsonProperty('businessReference')]
+    public string $businessReference;
+
+    /**
+     * @param array{
+     *   doingBusinessAs: string,
+     *   businessReference: string,
+     *   parentPaypointReference?: ?string,
+     *   paypointType?: ?string,
+     *   description?: ?string,
+     *   website?: ?string,
+     *   customerServicePhone?: ?string,
+     *   customerServiceEmail?: ?string,
+     *   timezone?: ?string,
+     *   externalId?: ?string,
+     *   customData?: ?array<string, mixed>,
+     * } $values
+     */
+    public function __construct(
+        array $values,
+    ) {
+        $this->parentPaypointReference = $values['parentPaypointReference'] ?? null;
+        $this->paypointType = $values['paypointType'] ?? null;
+        $this->doingBusinessAs = $values['doingBusinessAs'];
+        $this->description = $values['description'] ?? null;
+        $this->website = $values['website'] ?? null;
+        $this->customerServicePhone = $values['customerServicePhone'] ?? null;
+        $this->customerServiceEmail = $values['customerServiceEmail'] ?? null;
+        $this->timezone = $values['timezone'] ?? null;
+        $this->externalId = $values['externalId'] ?? null;
+        $this->customData = $values['customData'] ?? null;
+        $this->businessReference = $values['businessReference'];
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->toJson();
+    }
+}

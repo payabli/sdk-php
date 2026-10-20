@@ -95,10 +95,10 @@ class CaseManagementClient
      *         'bankAccountFunction' => CaseManagementBankAccountFunction::Deposits->value,
      *         'services' => new BankAccountServices([
      *             'moneyIn' => [
-     *                 MoneyInService::Ach->value,
+     *                 CaseManagementMoneyInService::Ach->value,
      *             ],
      *             'moneyOut' => [
-     *                 MoneyOutService::Ach->value,
+     *                 CaseManagementMoneyOutService::Ach->value,
      *             ],
      *         ]),
      *     ]),
@@ -179,10 +179,10 @@ class CaseManagementClient
      *         'bankAccountFunction' => CaseManagementBankAccountFunction::Deposits->value,
      *         'services' => new BankAccountServices([
      *             'moneyIn' => [
-     *                 MoneyInService::Ach->value,
+     *                 CaseManagementMoneyInService::Ach->value,
      *             ],
      *             'moneyOut' => [
-     *                 MoneyOutService::Ach->value,
+     *                 CaseManagementMoneyOutService::Ach->value,
      *             ],
      *         ]),
      *         'default' => true,
