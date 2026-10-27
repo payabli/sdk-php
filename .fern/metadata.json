@@ -7,10 +7,10 @@
     "packageName": "payabli/payabli",
     "respectOptionalRequestBody": true
   },
-  "originGitCommit": "b86804f7b7e691004b32c4c2703fa51f494c4eec",
+  "originGitCommit": "794e4e445022509f2199080b61dd748f2c6ea9e6",
   "originGitCommitIsDirty": true,
   "invokedBy": "ci",
-  "requestedVersion": "1.0.21",
+  "requestedVersion": "1.0.22",
   "ciProvider": "github",
-  "sdkVersion": "1.0.21"
+  "sdkVersion": "1.0.22"
 }

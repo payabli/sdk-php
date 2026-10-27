@@ -21,16 +21,16 @@ class PayabliCredentialsPascal extends JsonSerializableType
     public ?int $mode;
 
     /**
-     * @var ?float $minTicket
+     * @var ?float $minticket
      */
-    #[JsonProperty('MinTicket')]
-    public ?float $minTicket;
+    #[JsonProperty('Minticket')]
+    public ?float $minticket;
 
     /**
-     * @var ?float $maxTicket
+     * @var ?float $maxticket
      */
-    #[JsonProperty('MaxTicket')]
-    public ?float $maxTicket;
+    #[JsonProperty('Maxticket')]
+    public ?float $maxticket;
 
     /**
      * @var ?float $cfeeFix
@@ -102,8 +102,8 @@ class PayabliCredentialsPascal extends JsonSerializableType
      * @param array{
      *   service?: ?string,
      *   mode?: ?int,
-     *   minTicket?: ?float,
-     *   maxTicket?: ?float,
+     *   minticket?: ?float,
+     *   maxticket?: ?float,
      *   cfeeFix?: ?float,
      *   cfeeFloat?: ?float,
      *   cfeeMin?: ?float,
@@ -122,8 +122,8 @@ class PayabliCredentialsPascal extends JsonSerializableType
     ) {
         $this->service = $values['service'] ?? null;
         $this->mode = $values['mode'] ?? null;
-        $this->minTicket = $values['minTicket'] ?? null;
-        $this->maxTicket = $values['maxTicket'] ?? null;
+        $this->minticket = $values['minticket'] ?? null;
+        $this->maxticket = $values['maxticket'] ?? null;
         $this->cfeeFix = $values['cfeeFix'] ?? null;
         $this->cfeeFloat = $values['cfeeFloat'] ?? null;
         $this->cfeeMin = $values['cfeeMin'] ?? null;

@@ -11,21 +11,15 @@ use Payabli\Core\Types\Date;
 class OrganizationQueryRecord extends JsonSerializableType
 {
     /**
-     * @var ?array<OrganizationQueryRecordServicesItem> $services
+     * @var ?InstrumentResponse $billingInfo
      */
-    #[JsonProperty('services'), ArrayType([OrganizationQueryRecordServicesItem::class])]
-    public ?array $services;
+    #[JsonProperty('BillingInfo')]
+    public ?InstrumentResponse $billingInfo;
 
     /**
-     * @var ?Instrument $billingInfo
+     * @var ?array<ContactsResponse> $contacts List of contacts.
      */
-    #[JsonProperty('billingInfo')]
-    public ?Instrument $billingInfo;
-
-    /**
-     * @var ?array<Contacts> $contacts
-     */
-    #[JsonProperty('contacts'), ArrayType([Contacts::class])]
+    #[JsonProperty('Contacts'), ArrayType([ContactsResponse::class])]
     public ?array $contacts;
 
     /**
@@ -37,13 +31,13 @@ class OrganizationQueryRecord extends JsonSerializableType
     /**
      * @var ?bool $hasBilling
      */
-    #[JsonProperty('hasBilling')]
+    #[JsonProperty('HasBilling')]
     public ?bool $hasBilling;
 
     /**
      * @var ?bool $hasResidual
      */
-    #[JsonProperty('hasResidual')]
+    #[JsonProperty('HasResidual')]
     public ?bool $hasResidual;
 
     /**
@@ -61,85 +55,91 @@ class OrganizationQueryRecord extends JsonSerializableType
     /**
      * @var ?string $orgAddress
      */
-    #[JsonProperty('orgAddress')]
+    #[JsonProperty('OrgAddress')]
     public ?string $orgAddress;
 
     /**
      * @var ?string $orgCity
      */
-    #[JsonProperty('orgCity')]
+    #[JsonProperty('OrgCity')]
     public ?string $orgCity;
 
     /**
      * @var ?string $orgCountry
      */
-    #[JsonProperty('orgCountry')]
+    #[JsonProperty('OrgCountry')]
     public ?string $orgCountry;
 
     /**
      * @var ?string $orgEntryName
      */
-    #[JsonProperty('orgEntryName')]
+    #[JsonProperty('OrgEntryName')]
     public ?string $orgEntryName;
+
+    /**
+     * @var ?string $orgFavicon URL of the organization's favicon.
+     */
+    #[JsonProperty('OrgFavicon')]
+    public ?string $orgFavicon;
 
     /**
      * @var ?string $orgId
      */
-    #[JsonProperty('orgId')]
+    #[JsonProperty('OrgId')]
     public ?string $orgId;
 
     /**
-     * @var ?FileContent $orgLogo
+     * @var ?string $orgLogo URL of the organization's logo.
      */
-    #[JsonProperty('orgLogo')]
-    public ?FileContent $orgLogo;
+    #[JsonProperty('OrgLogo')]
+    public ?string $orgLogo;
 
     /**
      * @var ?string $orgName
      */
-    #[JsonProperty('orgName')]
+    #[JsonProperty('OrgName')]
     public ?string $orgName;
 
     /**
      * @var ?int $orgParentId
      */
-    #[JsonProperty('orgParentId')]
+    #[JsonProperty('OrgParentId')]
     public ?int $orgParentId;
 
     /**
      * @var ?string $orgParentName
      */
-    #[JsonProperty('orgParentName')]
+    #[JsonProperty('OrgParentName')]
     public ?string $orgParentName;
 
     /**
      * @var ?string $orgState
      */
-    #[JsonProperty('orgState')]
+    #[JsonProperty('OrgState')]
     public ?string $orgState;
 
     /**
      * @var ?int $orgTimezone
      */
-    #[JsonProperty('orgTimezone')]
+    #[JsonProperty('OrgTimezone')]
     public ?int $orgTimezone;
 
     /**
      * @var ?int $orgType
      */
-    #[JsonProperty('orgType')]
+    #[JsonProperty('OrgType')]
     public ?int $orgType;
 
     /**
      * @var ?string $orgWebsite
      */
-    #[JsonProperty('orgWebsite')]
+    #[JsonProperty('OrgWebsite')]
     public ?string $orgWebsite;
 
     /**
      * @var ?string $orgZip
      */
-    #[JsonProperty('orgZip')]
+    #[JsonProperty('OrgZip')]
     public ?string $orgZip;
 
     /**
@@ -151,7 +151,7 @@ class OrganizationQueryRecord extends JsonSerializableType
     /**
      * @var ?string $replyToEmail
      */
-    #[JsonProperty('replyToEmail')]
+    #[JsonProperty('ReplyToEmail')]
     public ?string $replyToEmail;
 
     /**
@@ -159,6 +159,12 @@ class OrganizationQueryRecord extends JsonSerializableType
      */
     #[JsonProperty('resumable')]
     public ?bool $resumable;
+
+    /**
+     * @var ?array<OrganizationQueryRecordServicesItem> $services
+     */
+    #[JsonProperty('Services'), ArrayType([OrganizationQueryRecordServicesItem::class])]
+    public ?array $services;
 
     /**
      * @var ?SummaryOrg $summary
@@ -174,9 +180,8 @@ class OrganizationQueryRecord extends JsonSerializableType
 
     /**
      * @param array{
-     *   services?: ?array<OrganizationQueryRecordServicesItem>,
-     *   billingInfo?: ?Instrument,
-     *   contacts?: ?array<Contacts>,
+     *   billingInfo?: ?InstrumentResponse,
+     *   contacts?: ?array<ContactsResponse>,
      *   createdAt?: ?DateTime,
      *   hasBilling?: ?bool,
      *   hasResidual?: ?bool,
@@ -186,8 +191,9 @@ class OrganizationQueryRecord extends JsonSerializableType
      *   orgCity?: ?string,
      *   orgCountry?: ?string,
      *   orgEntryName?: ?string,
+     *   orgFavicon?: ?string,
      *   orgId?: ?string,
-     *   orgLogo?: ?FileContent,
+     *   orgLogo?: ?string,
      *   orgName?: ?string,
      *   orgParentId?: ?int,
      *   orgParentName?: ?string,
@@ -199,6 +205,7 @@ class OrganizationQueryRecord extends JsonSerializableType
      *   recipientEmailNotification?: ?bool,
      *   replyToEmail?: ?string,
      *   resumable?: ?bool,
+     *   services?: ?array<OrganizationQueryRecordServicesItem>,
      *   summary?: ?SummaryOrg,
      *   users?: ?array<UserQueryRecord>,
      * } $values
@@ -206,7 +213,6 @@ class OrganizationQueryRecord extends JsonSerializableType
     public function __construct(
         array $values = [],
     ) {
-        $this->services = $values['services'] ?? null;
         $this->billingInfo = $values['billingInfo'] ?? null;
         $this->contacts = $values['contacts'] ?? null;
         $this->createdAt = $values['createdAt'] ?? null;
@@ -218,6 +224,7 @@ class OrganizationQueryRecord extends JsonSerializableType
         $this->orgCity = $values['orgCity'] ?? null;
         $this->orgCountry = $values['orgCountry'] ?? null;
         $this->orgEntryName = $values['orgEntryName'] ?? null;
+        $this->orgFavicon = $values['orgFavicon'] ?? null;
         $this->orgId = $values['orgId'] ?? null;
         $this->orgLogo = $values['orgLogo'] ?? null;
         $this->orgName = $values['orgName'] ?? null;
@@ -231,6 +238,7 @@ class OrganizationQueryRecord extends JsonSerializableType
         $this->recipientEmailNotification = $values['recipientEmailNotification'] ?? null;
         $this->replyToEmail = $values['replyToEmail'] ?? null;
         $this->resumable = $values['resumable'] ?? null;
+        $this->services = $values['services'] ?? null;
         $this->summary = $values['summary'] ?? null;
         $this->users = $values['users'] ?? null;
     }

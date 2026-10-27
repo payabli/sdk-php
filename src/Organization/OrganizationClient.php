@@ -17,6 +17,7 @@ use Psr\Http\Client\ClientExceptionInterface;
 use Payabli\Organization\Requests\OrganizationData;
 use Payabli\Types\EditOrganizationResponse;
 use Payabli\Types\DeleteOrganizationResponse;
+use Payabli\Types\GetBasicOrganizationResponse;
 use Payabli\Types\OrganizationQueryRecord;
 use Payabli\Types\SettingsQueryRecord;
 
@@ -316,11 +317,11 @@ class OrganizationClient
      * Example:
      * ```php
      * $client->organization->getBasicOrganization(
-     *     '8cfec329267',
+     *     'pilgrim-planner',
      * );
      * ```
      *
-     * @param string $entry The paypoint's entrypoint identifier. [Learn more](/developers/api-reference/api-overview#entrypoint-vs-entry)
+     * @param string $entry The organization's entry name (`OrgEntryName`).
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -329,11 +330,11 @@ class OrganizationClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?OrganizationQueryRecord
+     * @return ?GetBasicOrganizationResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getBasicOrganization(string $entry, ?array $options = null): ?OrganizationQueryRecord
+    public function getBasicOrganization(string $entry, ?array $options = null): ?GetBasicOrganizationResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $options['headers'] = array_merge(
@@ -355,7 +356,7 @@ class OrganizationClient
                 if (empty($json)) {
                     return null;
                 }
-                return OrganizationQueryRecord::fromJson($json);
+                return GetBasicOrganizationResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
@@ -388,11 +389,11 @@ class OrganizationClient
      *   queryParameters?: array<string, mixed>,
      *   bodyProperties?: array<string, mixed>,
      * } $options
-     * @return ?OrganizationQueryRecord
+     * @return ?GetBasicOrganizationResponse
      * @throws PayabliException
      * @throws PayabliApiException
      */
-    public function getBasicOrganizationById(int $orgId, ?array $options = null): ?OrganizationQueryRecord
+    public function getBasicOrganizationById(int $orgId, ?array $options = null): ?GetBasicOrganizationResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $options['headers'] = array_merge(
@@ -414,7 +415,7 @@ class OrganizationClient
                 if (empty($json)) {
                     return null;
                 }
-                return OrganizationQueryRecord::fromJson($json);
+                return GetBasicOrganizationResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new PayabliException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

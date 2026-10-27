@@ -25,6 +25,7 @@ use Payabli\LineItem\LineItemClient;
 use Payabli\Businesses\BusinessesClient;
 use Payabli\People\PeopleClient;
 use Payabli\Paypoints\PaypointsClient;
+use Payabli\Organizations\OrganizationsClient;
 use Payabli\PaymentMethods\PaymentMethodsClient;
 use Payabli\BoardingTemplates\BoardingTemplatesClient;
 use Payabli\Applications\ApplicationsClient;
@@ -166,6 +167,11 @@ class PayabliClient
      * @var PaypointsClient $paypoints
      */
     public PaypointsClient $paypoints;
+
+    /**
+     * @var OrganizationsClient $organizations
+     */
+    public OrganizationsClient $organizations;
 
     /**
      * @var PaymentMethodsClient $paymentMethods
@@ -311,8 +317,8 @@ class PayabliClient
         $defaultHeaders = [
             'X-Fern-Language' => 'PHP',
             'X-Fern-SDK-Name' => 'Payabli',
-            'X-Fern-SDK-Version' => '1.0.21',
-            'User-Agent' => 'payabli/payabli/1.0.21',
+            'X-Fern-SDK-Version' => '1.0.22',
+            'User-Agent' => 'payabli/payabli/1.0.22',
         ];
 
         $this->options = $options ?? [];
@@ -361,6 +367,7 @@ class PayabliClient
         $this->businesses = new BusinessesClient($this->client, $this->options, $this->routingAuthProvider);
         $this->people = new PeopleClient($this->client, $this->options, $this->routingAuthProvider);
         $this->paypoints = new PaypointsClient($this->client, $this->options, $this->routingAuthProvider);
+        $this->organizations = new OrganizationsClient($this->client, $this->options, $this->routingAuthProvider);
         $this->paymentMethods = new PaymentMethodsClient($this->client, $this->options, $this->routingAuthProvider);
         $this->boardingTemplates = new BoardingTemplatesClient($this->client, $this->options, $this->routingAuthProvider);
         $this->applications = new ApplicationsClient($this->client, $this->options, $this->routingAuthProvider);

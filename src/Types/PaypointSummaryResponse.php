@@ -77,6 +77,12 @@ class PaypointSummaryResponse extends JsonSerializableType
     public ?string $customerServiceEmail;
 
     /**
+     * @var ?string $externalId Your own identifier for the paypoint. Omitted when you haven't set one.
+     */
+    #[JsonProperty('externalId')]
+    public ?string $externalId;
+
+    /**
      * @var string $entryName The paypoint's entrypoint name, used as the `entry` value on endpoints that target the paypoint.
      */
     #[JsonProperty('entryName')]
@@ -117,6 +123,7 @@ class PaypointSummaryResponse extends JsonSerializableType
      *   timezone?: ?string,
      *   customerServicePhone?: ?string,
      *   customerServiceEmail?: ?string,
+     *   externalId?: ?string,
      * } $values
      */
     public function __construct(
@@ -133,6 +140,7 @@ class PaypointSummaryResponse extends JsonSerializableType
         $this->timezone = $values['timezone'] ?? null;
         $this->customerServicePhone = $values['customerServicePhone'] ?? null;
         $this->customerServiceEmail = $values['customerServiceEmail'] ?? null;
+        $this->externalId = $values['externalId'] ?? null;
         $this->entryName = $values['entryName'];
         $this->createdAt = $values['createdAt'];
         $this->updatedAt = $values['updatedAt'];

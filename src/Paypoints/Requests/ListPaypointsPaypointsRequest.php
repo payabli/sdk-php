@@ -12,7 +12,7 @@ class ListPaypointsPaypointsRequest extends JsonSerializableType
     public ?string $businessReference;
 
     /**
-     * @var ?string $status Filter by paypoint status.
+     * @var ?string $status Filter by paypoint status. One of `active`, `inactive`, `suspended`, or `closed`. Any other value, including `pending`, returns `400`.
      */
     public ?string $status;
 

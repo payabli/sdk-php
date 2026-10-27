@@ -23,16 +23,30 @@ class MethodsListOut extends JsonSerializableType
     public ?bool $check;
 
     /**
+     * @var ?bool $rtp When `true`, Real-Time Payments (RTP) is offered as a payout method.
+     */
+    #[JsonProperty('rtp')]
+    public ?bool $rtp;
+
+    /**
      * @var ?bool $vcard When `true`, virtual card (vCard) is offered as a payout method.
      */
     #[JsonProperty('vcard')]
     public ?bool $vcard;
 
     /**
+     * @var ?bool $wire When `true`, wire transfer is offered as a payout method.
+     */
+    #[JsonProperty('wire')]
+    public ?bool $wire;
+
+    /**
      * @param array{
      *   ach?: ?bool,
      *   check?: ?bool,
+     *   rtp?: ?bool,
      *   vcard?: ?bool,
+     *   wire?: ?bool,
      * } $values
      */
     public function __construct(
@@ -40,7 +54,9 @@ class MethodsListOut extends JsonSerializableType
     ) {
         $this->ach = $values['ach'] ?? null;
         $this->check = $values['check'] ?? null;
+        $this->rtp = $values['rtp'] ?? null;
         $this->vcard = $values['vcard'] ?? null;
+        $this->wire = $values['wire'] ?? null;
     }
 
     /**
