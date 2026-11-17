@@ -316,7 +316,7 @@ class CaseManagementClient
      * Example:
      * ```php
      * $client->caseManagement->listCases(
-     *     123,
+     *     900123,
      *     new ListCasesCaseManagementRequest([
      *         'fromRecord' => 0,
      *         'limitRecord' => 20,

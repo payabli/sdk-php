@@ -96,7 +96,7 @@ class OrganizationClient
      *         'orgCity' => 'Johnson City',
      *         'orgCountry' => 'US',
      *         'orgEntryName' => 'pilgrim-planner',
-     *         'orgId' => '123',
+     *         'orgId' => '900123',
      *         'orgLogo' => new FileContent([
      *             'fContent' => 'TXkgdGVzdCBmaWxlHJ==...',
      *             'filename' => 'my-doc.pdf',
@@ -104,7 +104,7 @@ class OrganizationClient
      *             'furl' => 'https://mysite.com/my-doc.pdf',
      *         ]),
      *         'orgName' => 'Pilgrim Planner',
-     *         'orgParentId' => 236,
+     *         'orgParentId' => 900123,
      *         'orgState' => 'TN',
      *         'orgTimezone' => -5,
      *         'orgType' => 0,
@@ -176,7 +176,7 @@ class OrganizationClient
      * Example:
      * ```php
      * $client->organization->editOrganization(
-     *     123,
+     *     900123,
      *     new OrganizationData([
      *         'contacts' => [
      *             new Contacts([
@@ -190,7 +190,7 @@ class OrganizationClient
      *         'orgCity' => 'Johnson City',
      *         'orgCountry' => 'US',
      *         'orgEntryName' => 'pilgrim-planner',
-     *         'orgId' => '123',
+     *         'orgId' => '900123',
      *         'orgName' => 'Pilgrim Planner',
      *         'orgState' => 'TN',
      *         'orgTimezone' => -5,
@@ -258,7 +258,7 @@ class OrganizationClient
      * Example:
      * ```php
      * $client->organization->deleteOrganization(
-     *     123,
+     *     900123,
      * );
      * ```
      *
@@ -376,7 +376,7 @@ class OrganizationClient
      * Example:
      * ```php
      * $client->organization->getBasicOrganizationById(
-     *     123,
+     *     900123,
      * );
      * ```
      *
@@ -435,7 +435,7 @@ class OrganizationClient
      * Example:
      * ```php
      * $client->organization->getOrganization(
-     *     123,
+     *     900123,
      * );
      * ```
      *
@@ -494,7 +494,7 @@ class OrganizationClient
      * Example:
      * ```php
      * $client->organization->getSettingsOrganization(
-     *     123,
+     *     900123,
      * );
      * ```
      *

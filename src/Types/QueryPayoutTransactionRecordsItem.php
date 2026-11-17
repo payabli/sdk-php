@@ -59,6 +59,17 @@ class QueryPayoutTransactionRecordsItem extends JsonSerializableType
     public ?int $status;
 
     /**
+     * The name of the payout's `Status`: `Canceled`, `Captured`, `Processing`, `Processed`,
+     * `Held`, `Paid`, `Authorized`, `Capturing`, `Returned`, `Rejected`, `Reissued`, or
+     * `Refunded`. Returns `null` for an unrecognized code. See
+     * [Pay Out statuses](/guides/pay-out-status-reference#payout-transaction-statuses).
+     *
+     * @var ?string $statusLabel
+     */
+    #[JsonProperty('StatusLabel')]
+    public ?string $statusLabel;
+
+    /**
      * @var ?string $paymentId
      */
     #[JsonProperty('PaymentId')]
@@ -327,6 +338,7 @@ class QueryPayoutTransactionRecordsItem extends JsonSerializableType
      *   paypointLegalname?: ?string,
      *   paypointId?: ?int,
      *   status?: ?int,
+     *   statusLabel?: ?string,
      *   paymentId?: ?string,
      *   orderId?: ?string,
      *   transId?: ?string,
@@ -382,6 +394,7 @@ class QueryPayoutTransactionRecordsItem extends JsonSerializableType
         $this->paypointLegalname = $values['paypointLegalname'] ?? null;
         $this->paypointId = $values['paypointId'] ?? null;
         $this->status = $values['status'] ?? null;
+        $this->statusLabel = $values['statusLabel'] ?? null;
         $this->paymentId = $values['paymentId'] ?? null;
         $this->orderId = $values['orderId'] ?? null;
         $this->transId = $values['transId'] ?? null;

@@ -210,6 +210,17 @@ class BillQueryRecord2 extends JsonSerializableType
     public ?int $status;
 
     /**
+     * The name of the bill's `Status`: `Canceled`, `None`, `Active`, `Sent to Approval`,
+     * `Partially Approved`, `Rejected`, `Approved`, `In Transit`, `Partially Paid`, or `Paid`.
+     * Returns `null` for an unrecognized code. See
+     * [Pay Out statuses](/guides/pay-out-status-reference#bill-statuses).
+     *
+     * @var ?string $statusLabel
+     */
+    #[JsonProperty('StatusLabel')]
+    public ?string $statusLabel;
+
+    /**
      * @var ?value-of<Terms> $terms The payment terms for invoice. If no terms were defined initially, then response data for this field will default to `N30`.
      */
     #[JsonProperty('Terms')]
@@ -290,6 +301,7 @@ class BillQueryRecord2 extends JsonSerializableType
      *   paypointLegalname?: ?string,
      *   source?: ?string,
      *   status?: ?int,
+     *   statusLabel?: ?string,
      *   terms?: ?value-of<Terms>,
      *   totalAmount?: ?float,
      *   paidAmount?: ?float,
@@ -335,6 +347,7 @@ class BillQueryRecord2 extends JsonSerializableType
         $this->paypointLegalname = $values['paypointLegalname'] ?? null;
         $this->source = $values['source'] ?? null;
         $this->status = $values['status'] ?? null;
+        $this->statusLabel = $values['statusLabel'] ?? null;
         $this->terms = $values['terms'] ?? null;
         $this->totalAmount = $values['totalAmount'] ?? null;
         $this->paidAmount = $values['paidAmount'] ?? null;

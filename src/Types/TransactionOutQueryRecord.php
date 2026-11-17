@@ -53,6 +53,17 @@ class TransactionOutQueryRecord extends JsonSerializableType
     public ?int $status;
 
     /**
+     * The name of the payout's `Status`: `Canceled`, `Captured`, `Processing`, `Processed`,
+     * `Held`, `Paid`, `Authorized`, `Capturing`, `Returned`, `Rejected`, `Reissued`, or
+     * `Refunded`. Returns `null` for an unrecognized code. See
+     * [Pay Out statuses](/guides/pay-out-status-reference#payout-transaction-statuses).
+     *
+     * @var ?string $statusLabel
+     */
+    #[JsonProperty('StatusLabel')]
+    public ?string $statusLabel;
+
+    /**
      * @var ?DateTime $lastUpdated Timestamp when payment record was updated, in UTC.
      */
     #[JsonProperty('LastUpdated'), Date(Date::TYPE_DATETIME)]
@@ -253,6 +264,7 @@ class TransactionOutQueryRecord extends JsonSerializableType
      *   paypointDbaname?: ?string,
      *   paypointLegalname?: ?string,
      *   status?: ?int,
+     *   statusLabel?: ?string,
      *   lastUpdated?: ?DateTime,
      *   totalAmount?: ?float,
      *   netAmount?: ?float,
@@ -297,6 +309,7 @@ class TransactionOutQueryRecord extends JsonSerializableType
         $this->paypointDbaname = $values['paypointDbaname'] ?? null;
         $this->paypointLegalname = $values['paypointLegalname'] ?? null;
         $this->status = $values['status'] ?? null;
+        $this->statusLabel = $values['statusLabel'] ?? null;
         $this->lastUpdated = $values['lastUpdated'] ?? null;
         $this->totalAmount = $values['totalAmount'] ?? null;
         $this->netAmount = $values['netAmount'] ?? null;

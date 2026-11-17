@@ -131,6 +131,15 @@ class VendorQueryRecord extends JsonSerializableType
     public int $vendorStatus;
 
     /**
+     * The name of the `VendorStatus`: `Inactive`, `Active`, or `Deleted`. Returns `null` for
+     * an unrecognized code.
+     *
+     * @var ?string $vendorStatusLabel
+     */
+    #[JsonProperty('VendorStatusLabel')]
+    public ?string $vendorStatusLabel;
+
+    /**
      * @var int $vendorId
      */
     #[JsonProperty('VendorId')]
@@ -372,6 +381,7 @@ class VendorQueryRecord extends JsonSerializableType
      *   contacts?: ?array<ContactsResponse>,
      *   billingData?: ?BillingDataResponse,
      *   paymentMethod?: ?string,
+     *   vendorStatusLabel?: ?string,
      *   enrollmentStatus?: ?string,
      *   summary?: ?VendorSummary,
      *   paypointId?: ?int,
@@ -422,6 +432,7 @@ class VendorQueryRecord extends JsonSerializableType
         $this->billingData = $values['billingData'] ?? null;
         $this->paymentMethod = $values['paymentMethod'] ?? null;
         $this->vendorStatus = $values['vendorStatus'];
+        $this->vendorStatusLabel = $values['vendorStatusLabel'] ?? null;
         $this->vendorId = $values['vendorId'];
         $this->enrollmentStatus = $values['enrollmentStatus'] ?? null;
         $this->summary = $values['summary'] ?? null;

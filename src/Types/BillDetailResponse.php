@@ -161,6 +161,17 @@ class BillDetailResponse extends JsonSerializableType
     public ?int $status;
 
     /**
+     * The name of the payout's `Status`: `Canceled`, `Captured`, `Processing`, `Processed`,
+     * `Held`, `Paid`, `Authorized`, `Capturing`, `Returned`, `Rejected`, `Reissued`, or
+     * `Refunded`. Returns `null` for an unrecognized code. See
+     * [Pay Out statuses](/guides/pay-out-status-reference#payout-transaction-statuses).
+     *
+     * @var ?string $statusLabel
+     */
+    #[JsonProperty('StatusLabel')]
+    public ?string $statusLabel;
+
+    /**
      * @var ?string $statusText Text description of the payout transaction status.
      */
     #[JsonProperty('StatusText')]
@@ -293,6 +304,7 @@ class BillDetailResponse extends JsonSerializableType
      *   paypointLegalname?: ?string,
      *   source?: ?string,
      *   status?: ?int,
+     *   statusLabel?: ?string,
      *   statusText?: ?string,
      *   totalAmount?: ?float,
      *   vendor?: ?VendorQueryRecord,
@@ -339,6 +351,7 @@ class BillDetailResponse extends JsonSerializableType
         $this->paypointLegalname = $values['paypointLegalname'] ?? null;
         $this->source = $values['source'] ?? null;
         $this->status = $values['status'] ?? null;
+        $this->statusLabel = $values['statusLabel'] ?? null;
         $this->statusText = $values['statusText'] ?? null;
         $this->totalAmount = $values['totalAmount'] ?? null;
         $this->vendor = $values['vendor'] ?? null;

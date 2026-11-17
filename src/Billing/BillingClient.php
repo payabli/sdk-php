@@ -72,7 +72,7 @@ class BillingClient
      * Example:
      * ```php
      * $client->billing->listProfiles(
-     *     123,
+     *     900123,
      *     new ListBillingProfilesRequest([
      *         'limitRecord' => 20,
      *         'fromRecord' => 0,
@@ -166,7 +166,7 @@ class BillingClient
      * $client->billing->getProfile(
      *     GetProfileBillingRequestServiceGroup::PayIn->value,
      *     GetProfileBillingRequestEntityType::Organization->value,
-     *     123,
+     *     900123,
      * );
      * ```
      *

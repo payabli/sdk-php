@@ -9,6 +9,34 @@ use Payabli\Core\Types\ArrayType;
 class PayabliCredentialsPascal extends JsonSerializableType
 {
     /**
+     * When `true`, the gateway for this credential is enabled for the paypoint. The value is
+     * `null` when the credential isn't linked to a gateway.
+     *
+     * @var ?bool $active
+     */
+    #[JsonProperty('active')]
+    public ?bool $active;
+
+    /**
+     * The customer ID configured for this gateway. Returned only for gateways that use a
+     * customer ID. For all other gateways, or when no customer ID is configured, the value is
+     * `null`.
+     *
+     * @var ?string $customerId
+     */
+    #[JsonProperty('customerId')]
+    public ?string $customerId;
+
+    /**
+     * The client ID configured for this gateway. Returned only for gateways that use a client
+     * ID. For all other gateways, or when no client ID is configured, the value is `null`.
+     *
+     * @var ?string $clientId
+     */
+    #[JsonProperty('clientId')]
+    public ?string $clientId;
+
+    /**
      * @var ?string $service The payment service that this credential applies to. A paypoint can support multiple services, each represented by its own credential object in the array. Possible values are `card` (credit/debit card), `ach` (ACH bank transfer), `check` (paper check), `vcard` (virtual card), `cloud` (card-present), `cash`, `managed` (managed payment service), and `wallet`.
      */
     #[JsonProperty('Service')]
@@ -100,6 +128,9 @@ class PayabliCredentialsPascal extends JsonSerializableType
 
     /**
      * @param array{
+     *   active?: ?bool,
+     *   customerId?: ?string,
+     *   clientId?: ?string,
      *   service?: ?string,
      *   mode?: ?int,
      *   minticket?: ?float,
@@ -120,6 +151,9 @@ class PayabliCredentialsPascal extends JsonSerializableType
     public function __construct(
         array $values = [],
     ) {
+        $this->active = $values['active'] ?? null;
+        $this->customerId = $values['customerId'] ?? null;
+        $this->clientId = $values['clientId'] ?? null;
         $this->service = $values['service'] ?? null;
         $this->mode = $values['mode'] ?? null;
         $this->minticket = $values['minticket'] ?? null;

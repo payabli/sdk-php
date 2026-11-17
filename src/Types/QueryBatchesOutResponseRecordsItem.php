@@ -112,6 +112,16 @@ class QueryBatchesOutResponseRecordsItem extends JsonSerializableType
     public ?int $batchStatus;
 
     /**
+     * The name of the `BatchStatus`: `Open`, `Closed`, `Funded`, `Processed`, `Paid`,
+     * `Canceled`, `Funding Pending`, `Held`, or `Released`. Returns `null` for an unrecognized
+     * code. See [Pay Out statuses](/guides/pay-out-status-reference#batch-statuses).
+     *
+     * @var ?string $batchStatusLabel
+     */
+    #[JsonProperty('BatchStatusLabel')]
+    public ?string $batchStatusLabel;
+
+    /**
      * @var ?string $batchStatusText A text description of the batch status.
      */
     #[JsonProperty('BatchStatusText')]
@@ -208,6 +218,16 @@ class QueryBatchesOutResponseRecordsItem extends JsonSerializableType
     public ?string $paypointName;
 
     /**
+     * The date and time, in UTC, of the transfer that funds the batch. For a batch that
+     * hasn't been funded yet, this field returns the time of the request instead, and
+     * `transferDate` filters don't match that value.
+     *
+     * @var ?DateTime $transferDate
+     */
+    #[JsonProperty('TransferDate'), Date(Date::TYPE_DATETIME)]
+    public ?DateTime $transferDate;
+
+    /**
      * @var ?float $vcardAmount
      */
     #[JsonProperty('VcardAmount')]
@@ -274,6 +294,7 @@ class QueryBatchesOutResponseRecordsItem extends JsonSerializableType
      *   batchProcessingRecords?: ?int,
      *   batchRecords?: ?int,
      *   batchStatus?: ?int,
+     *   batchStatusLabel?: ?string,
      *   batchStatusText?: ?string,
      *   cardAmount?: ?float,
      *   cardRecords?: ?int,
@@ -290,6 +311,7 @@ class QueryBatchesOutResponseRecordsItem extends JsonSerializableType
      *   paypointDba?: ?string,
      *   paypointId?: ?int,
      *   paypointName?: ?string,
+     *   transferDate?: ?DateTime,
      *   vcardAmount?: ?float,
      *   vcardRecords?: ?int,
      *   vcardStatus?: ?int,
@@ -320,6 +342,7 @@ class QueryBatchesOutResponseRecordsItem extends JsonSerializableType
         $this->batchProcessingRecords = $values['batchProcessingRecords'] ?? null;
         $this->batchRecords = $values['batchRecords'] ?? null;
         $this->batchStatus = $values['batchStatus'] ?? null;
+        $this->batchStatusLabel = $values['batchStatusLabel'] ?? null;
         $this->batchStatusText = $values['batchStatusText'] ?? null;
         $this->cardAmount = $values['cardAmount'] ?? null;
         $this->cardRecords = $values['cardRecords'] ?? null;
@@ -336,6 +359,7 @@ class QueryBatchesOutResponseRecordsItem extends JsonSerializableType
         $this->paypointDba = $values['paypointDba'] ?? null;
         $this->paypointId = $values['paypointId'] ?? null;
         $this->paypointName = $values['paypointName'] ?? null;
+        $this->transferDate = $values['transferDate'] ?? null;
         $this->vcardAmount = $values['vcardAmount'] ?? null;
         $this->vcardRecords = $values['vcardRecords'] ?? null;
         $this->vcardStatus = $values['vcardStatus'] ?? null;

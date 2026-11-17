@@ -256,7 +256,7 @@ class PaypointClient
      * $client->paypoint->migrate(
      *     new PaypointMoveRequest([
      *         'entryPoint' => '8cfec329267',
-     *         'newParentOrganizationId' => 123,
+     *         'newParentOrganizationId' => 900123,
      *         'notificationRequest' => new NotificationRequest([
      *             'notificationUrl' => 'https://webhook-test.yoursie.com',
      *             'webHeaderParameters' => [

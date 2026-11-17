@@ -79,7 +79,7 @@ class NotificationlogsClient
      *         'endDate' => new DateTime('2024-01-31T23:59:59Z'),
      *         'notificationEvent' => 'approvedpayment',
      *         'succeeded' => true,
-     *         'orgId' => 123,
+     *         'orgId' => 900123,
      *     ]),
      * );
      * ```

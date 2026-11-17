@@ -25,11 +25,11 @@ class ListTransfersOutPaypointRequest extends JsonSerializableType
      *
      *   For example:
      *
-     *   --url https://api-sandbox.payabli.com/api/Query/transactions/org/236?parameters=totalAmount(gt)=1000&limitRecord=20
+     *   --url https://api-sandbox.payabli.com/api/Query/transactions/org/900123?parameters=totalAmount(gt)=1000&limitRecord=20
      *
      *   should become:
      *
-     *   --url https://api-sandbox.payabli.com/api/Query/transactions/org/236?totalAmount(gt)=1000&limitRecord=20
+     *   --url https://api-sandbox.payabli.com/api/Query/transactions/org/900123?totalAmount(gt)=1000&limitRecord=20
      * </Info>
      * Accepted field names:
      *

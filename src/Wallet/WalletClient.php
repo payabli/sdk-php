@@ -73,7 +73,7 @@ class WalletClient
      *     new ConfigureOrganizationRequestApplePay([
      *         'cascade' => true,
      *         'isEnabled' => true,
-     *         'orgId' => 123,
+     *         'orgId' => 900123,
      *     ]),
      * );
      * ```
@@ -200,7 +200,7 @@ class WalletClient
      *     new ConfigureOrganizationRequestGooglePay([
      *         'cascade' => true,
      *         'isEnabled' => true,
-     *         'orgId' => 123,
+     *         'orgId' => 900123,
      *     ]),
      * );
      * ```

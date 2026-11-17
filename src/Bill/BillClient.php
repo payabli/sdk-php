@@ -809,7 +809,7 @@ class BillClient
      * Example:
      * ```php
      * $client->bill->listBillsOrg(
-     *     123,
+     *     900123,
      *     new ListBillsOrgRequest([
      *         'fromRecord' => 251,
      *         'limitRecord' => 0,

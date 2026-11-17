@@ -11,9 +11,10 @@ use Payabli\Core\Types\ArrayType;
  * with `isSigner` on the business, and Payabli records the signer's identity
  * from their person record and business link. Keep the signer's details
  * current with the people endpoints before you submit, because you can't
- * correct them here. Provide a signature with `signature` and
- * `signatureType`, or, if the signer signed in your own e-sign tool, send
- * `signedDocumentReference` instead. Signer identity fields such as `name`,
+ * correct them here. Every submit needs a signature in `signature` and
+ * `signatureType`. If the signer also signed in your own e-sign tool, send
+ * `signedDocumentReference` too, and Payabli records it with the
+ * signature. Signer identity fields such as `name`,
  * `email`, `ssn`, and `address` aren't part of this object, and Payabli
  * ignores them if you send them.
  */
@@ -26,19 +27,19 @@ class SubmitSigner extends JsonSerializableType
     public ?string $personReference;
 
     /**
-     * @var ?string $signature The signature. For `type` and `checkbox`, send the signer's name. For `draw`, send the image as a base64 data URL, such as the output of `canvas.toDataURL()`. Required unless you send `signedDocumentReference`.
+     * @var string $signature The signature. For `type` and `checkbox`, send the signer's name. For `draw`, send the image as a base64 data URL, such as the output of `canvas.toDataURL()`. Can't be empty or only whitespace.
      */
     #[JsonProperty('signature')]
-    public ?string $signature;
+    public string $signature;
 
     /**
-     * @var ?value-of<SignatureType> $signatureType How the signer signed. Required with `signature`.
+     * @var value-of<SignatureType> $signatureType How the signer signed.
      */
     #[JsonProperty('signatureType')]
-    public ?string $signatureType;
+    public string $signatureType;
 
     /**
-     * @var ?string $signedDocumentReference The reference for a document the signer signed in your own e-sign tool, such as a DocuSign envelope ID. Send it instead of `signature` and `signatureType`.
+     * @var ?string $signedDocumentReference The reference for a document the signer signed in your own e-sign tool, such as a DocuSign envelope ID. Payabli records it with the signature. It doesn't replace `signature` and `signatureType`, which every submit needs.
      */
     #[JsonProperty('signedDocumentReference')]
     public ?string $signedDocumentReference;
@@ -78,9 +79,9 @@ class SubmitSigner extends JsonSerializableType
 
     /**
      * @param array{
+     *   signature: string,
+     *   signatureType: value-of<SignatureType>,
      *   personReference?: ?string,
-     *   signature?: ?string,
-     *   signatureType?: ?value-of<SignatureType>,
      *   signedDocumentReference?: ?string,
      *   acceptance?: ?bool,
      *   pciAttestation?: ?bool,
@@ -89,11 +90,11 @@ class SubmitSigner extends JsonSerializableType
      * } $values
      */
     public function __construct(
-        array $values = [],
+        array $values,
     ) {
         $this->personReference = $values['personReference'] ?? null;
-        $this->signature = $values['signature'] ?? null;
-        $this->signatureType = $values['signatureType'] ?? null;
+        $this->signature = $values['signature'];
+        $this->signatureType = $values['signatureType'];
         $this->signedDocumentReference = $values['signedDocumentReference'] ?? null;
         $this->acceptance = $values['acceptance'] ?? null;
         $this->pciAttestation = $values['pciAttestation'] ?? null;

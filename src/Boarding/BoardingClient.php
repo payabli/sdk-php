@@ -159,7 +159,7 @@ class BoardingClient
      *         'mcountry' => 'US',
      *         'mstate' => 'TN',
      *         'mzip' => '37615',
-     *         'orgId' => 123,
+     *         'orgId' => 900123,
      *         'ownership' => [
      *             new Owners([
      *                 'ownername' => 'John Smith',
@@ -208,7 +208,7 @@ class BoardingClient
      *         ]),
      *         'startdate' => '01/01/1990',
      *         'taxFillName' => 'Sunshine LLC',
-     *         'templateId' => 22,
+     *         'templateId' => 900022,
      *         'ticketamt' => 1000,
      *         'website' => 'www.example.com',
      *         'whenCharged' => Whencharged::WhenServiceProvided->value,
@@ -281,6 +281,9 @@ class BoardingClient
      *
      *
      * Updates a boarding application by ID. This endpoint requires an application API token.
+     *
+     *
+     * If you send `ownership`, it replaces the application's owners. Include every owner, and set `primaryOwner` again on the primary owner, or the application loses its primary owner. If you leave `ownership` out, the owners don't change.
      *
      * Example:
      * ```php
@@ -614,7 +617,7 @@ class BoardingClient
      * Example:
      * ```php
      * $client->boarding->getByTemplateIdLinkApplication(
-     *     80,
+     *     900022,
      * );
      * ```
      *
@@ -815,7 +818,7 @@ class BoardingClient
      * Example:
      * ```php
      * $client->boarding->listApplications(
-     *     123,
+     *     900123,
      *     new ListApplicationsRequest([
      *         'fromRecord' => 251,
      *         'limitRecord' => 0,
@@ -902,7 +905,7 @@ class BoardingClient
      * Example:
      * ```php
      * $client->boarding->listBoardingLinks(
-     *     123,
+     *     900123,
      *     new ListBoardingLinksRequest([
      *         'fromRecord' => 251,
      *         'limitRecord' => 0,
@@ -988,7 +991,7 @@ class BoardingClient
      * $client->boarding->addServiceToPaypointFromApp(
      *     new CreateApplicationFromPaypointRequest([
      *         'paypointId' => 3040,
-     *         'templateId' => 456,
+     *         'templateId' => 900022,
      *         'recipientEmail' => 'merchant@example.com',
      *         'returnBoardingAccessInfoInLine' => true,
      *         'onCreate' => [

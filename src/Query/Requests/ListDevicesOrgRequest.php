@@ -31,11 +31,11 @@ class ListDevicesOrgRequest extends JsonSerializableType
      *
      *   Because of a technical limitation, you can't make a request that includes filters from the API console on this page. The response won't be filtered. Instead, copy the request, remove `parameters=` and run the request in a different client, for example:
      *
-     *   --url https://api-sandbox.payabli.com/api/Query/devices/org/236?parameters=status=1&limitRecord=20
+     *   --url https://api-sandbox.payabli.com/api/Query/devices/org/900123?parameters=status=1&limitRecord=20
      *
      *   should become:
      *
-     *   --url https://api-sandbox.payabli.com/api/Query/devices/org/236?status=1&limitRecord=20
+     *   --url https://api-sandbox.payabli.com/api/Query/devices/org/900123?status=1&limitRecord=20
      * </Info>
      *
      * See [Filters and Conditions

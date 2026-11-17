@@ -73,7 +73,7 @@ class TemplatesClient
      * Example:
      * ```php
      * $client->templates->deleteTemplate(
-     *     80,
+     *     900022,
      * );
      * ```
      *
@@ -137,7 +137,7 @@ class TemplatesClient
      * Example:
      * ```php
      * $client->templates->getlinkTemplate(
-     *     80,
+     *     900022,
      *     true,
      * );
      * ```
@@ -203,7 +203,7 @@ class TemplatesClient
      * Example:
      * ```php
      * $client->templates->getTemplate(
-     *     80,
+     *     900022,
      * );
      * ```
      *
@@ -267,7 +267,7 @@ class TemplatesClient
      * Example:
      * ```php
      * $client->templates->listTemplates(
-     *     123,
+     *     900123,
      *     new ListTemplatesRequest([
      *         'fromRecord' => 251,
      *         'limitRecord' => 0,

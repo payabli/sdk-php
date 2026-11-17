@@ -105,6 +105,18 @@ class Owners extends JsonSerializableType
     public ?array $additionalData;
 
     /**
+     * When `true`, marks this owner as the primary owner, the main principal that Payabli sends to the processor. Set it on exactly one owner. If you flag more than one owner, the request fails with HTTP 400 and the response text `Only one owner can be primary`.
+     *
+     * If the application has one owner and you don't flag it, Payabli flags that owner as the primary owner. If the application has two or more owners, flag one of them. Payabli accepts an application with no primary owner, but the processor can reject it at submission.
+     *
+     * Responses return `null` for owners that aren't the primary owner.
+     *
+     * @var ?bool $primaryOwner
+     */
+    #[JsonProperty('primaryOwner')]
+    public ?bool $primaryOwner;
+
+    /**
      * @param array{
      *   ownername?: ?string,
      *   ownertitle?: ?string,
@@ -122,6 +134,7 @@ class Owners extends JsonSerializableType
      *   ostate?: ?string,
      *   ozip?: ?string,
      *   additionalData?: ?array<string, string>,
+     *   primaryOwner?: ?bool,
      * } $values
      */
     public function __construct(
@@ -143,6 +156,7 @@ class Owners extends JsonSerializableType
         $this->ostate = $values['ostate'] ?? null;
         $this->ozip = $values['ozip'] ?? null;
         $this->additionalData = $values['additionalData'] ?? null;
+        $this->primaryOwner = $values['primaryOwner'] ?? null;
     }
 
     /**

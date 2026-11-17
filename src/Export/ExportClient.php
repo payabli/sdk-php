@@ -99,7 +99,7 @@ class ExportClient
      * ```php
      * $client->export->exportApplications(
      *     ExportFormat1::Csv->value,
-     *     123,
+     *     900123,
      *     new ExportApplicationsRequest([
      *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
      *         'fromRecord' => 251,
@@ -269,7 +269,7 @@ class ExportClient
      * ```php
      * $client->export->exportBatchDetailsOrg(
      *     ExportFormat1::Csv->value,
-     *     123,
+     *     900123,
      *     new ExportBatchDetailsOrgRequest([
      *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
      *         'fromRecord' => 251,
@@ -439,7 +439,7 @@ class ExportClient
      * ```php
      * $client->export->exportBatchesOrg(
      *     ExportFormat1::Csv->value,
-     *     123,
+     *     900123,
      *     new ExportBatchesOrgRequest([
      *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
      *         'fromRecord' => 251,
@@ -609,7 +609,7 @@ class ExportClient
      * ```php
      * $client->export->exportBatchesOutOrg(
      *     ExportFormat1::Csv->value,
-     *     123,
+     *     900123,
      *     new ExportBatchesOutOrgRequest([
      *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
      *         'fromRecord' => 251,
@@ -779,7 +779,7 @@ class ExportClient
      * ```php
      * $client->export->exportBillsOrg(
      *     ExportFormat1::Csv->value,
-     *     123,
+     *     900123,
      *     new ExportBillsOrgRequest([
      *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
      *         'fromRecord' => 251,
@@ -949,7 +949,7 @@ class ExportClient
      * ```php
      * $client->export->exportChargebacksOrg(
      *     ExportFormat1::Csv->value,
-     *     123,
+     *     900123,
      *     new ExportChargebacksOrgRequest([
      *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
      *         'fromRecord' => 251,
@@ -1119,7 +1119,7 @@ class ExportClient
      * ```php
      * $client->export->exportCustomersOrg(
      *     ExportFormat1::Csv->value,
-     *     123,
+     *     900123,
      *     new ExportCustomersOrgRequest([
      *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
      *         'fromRecord' => 251,
@@ -1289,7 +1289,7 @@ class ExportClient
      * ```php
      * $client->export->exportInvoicesOrg(
      *     ExportFormat1::Csv->value,
-     *     123,
+     *     900123,
      *     new ExportInvoicesOrgRequest([
      *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
      *         'fromRecord' => 251,
@@ -1374,7 +1374,7 @@ class ExportClient
      * ```php
      * $client->export->exportOrganizations(
      *     ExportFormat1::Csv->value,
-     *     123,
+     *     900123,
      *     new ExportOrganizationsRequest([
      *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
      *         'fromRecord' => 251,
@@ -1544,7 +1544,7 @@ class ExportClient
      * ```php
      * $client->export->exportPayoutOrg(
      *     ExportFormat1::Csv->value,
-     *     123,
+     *     900123,
      *     new ExportPayoutOrgRequest([
      *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
      *         'fromRecord' => 251,
@@ -1629,7 +1629,7 @@ class ExportClient
      * ```php
      * $client->export->exportPaypoints(
      *     ExportFormat1::Csv->value,
-     *     123,
+     *     900123,
      *     new ExportPaypointsRequest([
      *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
      *         'fromRecord' => 251,
@@ -1799,7 +1799,7 @@ class ExportClient
      * ```php
      * $client->export->exportSettlementsOrg(
      *     ExportFormat1::Csv->value,
-     *     123,
+     *     900123,
      *     new ExportSettlementsOrgRequest([
      *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
      *         'fromRecord' => 251,
@@ -1969,7 +1969,7 @@ class ExportClient
      * ```php
      * $client->export->exportSubscriptionsOrg(
      *     ExportFormat1::Csv->value,
-     *     123,
+     *     900123,
      *     new ExportSubscriptionsOrgRequest([
      *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
      *         'fromRecord' => 251,
@@ -2139,7 +2139,7 @@ class ExportClient
      * ```php
      * $client->export->exportTransactionsOrg(
      *     ExportFormat1::Csv->value,
-     *     123,
+     *     900123,
      *     new ExportTransactionsOrgRequest([
      *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
      *         'fromRecord' => 251,
@@ -2487,7 +2487,7 @@ class ExportClient
      * ```php
      * $client->export->exportVendorsOrg(
      *     ExportFormat1::Csv->value,
-     *     123,
+     *     900123,
      *     new ExportVendorsOrgRequest([
      *         'columnsExport' => 'BatchDate:Batch_Date,PaypointName:Legal_name',
      *         'fromRecord' => 251,

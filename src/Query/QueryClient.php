@@ -211,7 +211,7 @@ class QueryClient
      * Example:
      * ```php
      * $client->query->listBatchDetailsOrg(
-     *     123,
+     *     900123,
      *     new ListBatchDetailsOrgRequest([
      *         'fromRecord' => 251,
      *         'limitRecord' => 0,
@@ -375,7 +375,7 @@ class QueryClient
      * Example:
      * ```php
      * $client->query->listBatchesOrg(
-     *     123,
+     *     900123,
      *     new ListBatchesOrgRequest([
      *         'fromRecord' => 251,
      *         'limitRecord' => 0,
@@ -539,7 +539,7 @@ class QueryClient
      * Example:
      * ```php
      * $client->query->listBatchesOutOrg(
-     *     123,
+     *     900123,
      *     new ListBatchesOutOrgRequest([
      *         'fromRecord' => 251,
      *         'limitRecord' => 0,
@@ -703,7 +703,7 @@ class QueryClient
      * Example:
      * ```php
      * $client->query->listChargebacksOrg(
-     *     123,
+     *     900123,
      *     new ListChargebacksOrgRequest([
      *         'fromRecord' => 251,
      *         'limitRecord' => 0,
@@ -867,7 +867,7 @@ class QueryClient
      * Example:
      * ```php
      * $client->query->listCustomersOrg(
-     *     123,
+     *     900123,
      *     new ListCustomersOrgRequest([
      *         'fromRecord' => 251,
      *         'limitRecord' => 0,
@@ -1031,7 +1031,7 @@ class QueryClient
      * Example:
      * ```php
      * $client->query->listDevicesOrg(
-     *     123,
+     *     900123,
      *     new ListDevicesOrgRequest([
      *         'fromRecord' => 0,
      *         'limitRecord' => 20,
@@ -1192,7 +1192,7 @@ class QueryClient
      * Example:
      * ```php
      * $client->query->listNotificationReportsOrg(
-     *     123,
+     *     900123,
      *     new ListNotificationReportsOrgRequest([
      *         'fromRecord' => 251,
      *         'limitRecord' => 0,
@@ -1350,7 +1350,7 @@ class QueryClient
      * Example:
      * ```php
      * $client->query->listNotificationsOrg(
-     *     123,
+     *     900123,
      *     new ListNotificationsOrgRequest([
      *         'fromRecord' => 251,
      *         'limitRecord' => 0,
@@ -1429,7 +1429,7 @@ class QueryClient
      * Example:
      * ```php
      * $client->query->listOrganizations(
-     *     123,
+     *     900123,
      *     new ListOrganizationsRequest([
      *         'fromRecord' => 251,
      *         'limitRecord' => 0,
@@ -1593,7 +1593,7 @@ class QueryClient
      * Example:
      * ```php
      * $client->query->listPayoutOrg(
-     *     123,
+     *     900123,
      *     new ListPayoutOrgRequest([
      *         'fromRecord' => 251,
      *         'limitRecord' => 0,
@@ -1675,7 +1675,7 @@ class QueryClient
      * Example:
      * ```php
      * $client->query->listPaypoints(
-     *     123,
+     *     900123,
      *     new ListPaypointsRequest([
      *         'fromRecord' => 251,
      *         'limitRecord' => 0,
@@ -1839,7 +1839,7 @@ class QueryClient
      * Example:
      * ```php
      * $client->query->listSettlementsOrg(
-     *     123,
+     *     900123,
      *     new ListSettlementsOrgRequest([
      *         'fromRecord' => 251,
      *         'limitRecord' => 0,
@@ -2003,7 +2003,7 @@ class QueryClient
      * Example:
      * ```php
      * $client->query->listSubscriptionsOrg(
-     *     123,
+     *     900123,
      *     new ListSubscriptionsOrgRequest([
      *         'fromRecord' => 251,
      *         'limitRecord' => 0,
@@ -2167,7 +2167,7 @@ class QueryClient
      * Example:
      * ```php
      * $client->query->listPayoutSubscriptionsOrg(
-     *     123,
+     *     900123,
      *     new ListPayoutSubscriptionsOrgRequest([
      *         'fromRecord' => 0,
      *         'limitRecord' => 20,
@@ -2349,7 +2349,7 @@ class QueryClient
      * Example:
      * ```php
      * $client->query->listTransactionsOrg(
-     *     123,
+     *     900123,
      *     new ListTransactionsOrgRequest([
      *         'fromRecord' => 251,
      *         'limitRecord' => 0,
@@ -2592,7 +2592,7 @@ class QueryClient
      * Example:
      * ```php
      * $client->query->listTransfersOrg(
-     *     123,
+     *     900123,
      *     new ListTransfersRequestOrg([
      *         'fromRecord' => 0,
      *         'limitRecord' => 20,
@@ -2673,7 +2673,7 @@ class QueryClient
      * Example:
      * ```php
      * $client->query->listTransfersOutOrg(
-     *     123,
+     *     900123,
      *     new ListTransfersOutOrgRequest([
      *         'fromRecord' => 0,
      *         'limitRecord' => 20,
@@ -2909,7 +2909,7 @@ class QueryClient
      * Example:
      * ```php
      * $client->query->listUsersOrg(
-     *     123,
+     *     900123,
      *     new ListUsersOrgRequest([
      *         'fromRecord' => 251,
      *         'limitRecord' => 0,
@@ -3149,7 +3149,7 @@ class QueryClient
      * Example:
      * ```php
      * $client->query->listVendorsOrg(
-     *     123,
+     *     900123,
      *     new ListVendorsOrgRequest([
      *         'fromRecord' => 251,
      *         'limitRecord' => 0,
@@ -3392,7 +3392,7 @@ class QueryClient
      * Example:
      * ```php
      * $client->query->listVcardsTransactionsOrg(
-     *     123,
+     *     900123,
      *     new ListVcardsTransactionsOrgRequest([
      *         'fromRecord' => 0,
      *         'limitRecord' => 20,
@@ -3471,7 +3471,7 @@ class QueryClient
      * Example:
      * ```php
      * $client->query->listVcardsOrg(
-     *     123,
+     *     900123,
      *     new ListVcardsOrgRequest([
      *         'fromRecord' => 251,
      *         'limitRecord' => 0,

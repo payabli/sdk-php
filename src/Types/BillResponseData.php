@@ -143,6 +143,17 @@ class BillResponseData extends JsonSerializableType
     public ?int $status;
 
     /**
+     * The name of the bill's `Status`: `Canceled`, `None`, `Active`, `Sent to Approval`,
+     * `Partially Approved`, `Rejected`, `Approved`, `In Transit`, `Partially Paid`, or `Paid`.
+     * Returns `null` for an unrecognized code. See
+     * [Pay Out statuses](/guides/pay-out-status-reference#bill-statuses).
+     *
+     * @var ?string $statusLabel
+     */
+    #[JsonProperty('StatusLabel')]
+    public ?string $statusLabel;
+
+    /**
      * @var ?DateTime $createdAt
      */
     #[JsonProperty('CreatedAt'), Date(Date::TYPE_DATETIME)]
@@ -282,6 +293,7 @@ class BillResponseData extends JsonSerializableType
      *   additionalData?: ?array<string, string>,
      *   vendor?: ?VendorDataResponse,
      *   status?: ?int,
+     *   statusLabel?: ?string,
      *   createdAt?: ?DateTime,
      *   endDate?: ?DateTime,
      *   lastUpdated?: ?DateTime,
@@ -327,6 +339,7 @@ class BillResponseData extends JsonSerializableType
         $this->additionalData = $values['additionalData'] ?? null;
         $this->vendor = $values['vendor'] ?? null;
         $this->status = $values['status'] ?? null;
+        $this->statusLabel = $values['statusLabel'] ?? null;
         $this->createdAt = $values['createdAt'] ?? null;
         $this->endDate = $values['endDate'] ?? null;
         $this->lastUpdated = $values['lastUpdated'] ?? null;

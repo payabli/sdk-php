@@ -72,6 +72,18 @@ class PeopleSearchResultResponse extends JsonSerializableType
     public ?bool $isFromVendor;
 
     /**
+     * @var ?PeopleSearchAddressResponse $primaryAddress The person's primary address. `null` when the person has no address on file.
+     */
+    #[JsonProperty('primaryAddress')]
+    public ?PeopleSearchAddressResponse $primaryAddress;
+
+    /**
+     * @var ?array<PeopleSearchAddressResponse> $addresses The person's addresses on file. Empty when the person has no address.
+     */
+    #[JsonProperty('addresses'), ArrayType([PeopleSearchAddressResponse::class])]
+    public ?array $addresses;
+
+    /**
      * @var ?array<string> $phones The person's phone numbers.
      */
     #[JsonProperty('phones'), ArrayType(['string'])]
@@ -113,6 +125,8 @@ class PeopleSearchResultResponse extends JsonSerializableType
      *   matchScore?: ?float,
      *   isTopMatch?: ?bool,
      *   isFromVendor?: ?bool,
+     *   primaryAddress?: ?PeopleSearchAddressResponse,
+     *   addresses?: ?array<PeopleSearchAddressResponse>,
      *   phones?: ?array<string>,
      *   emails?: ?array<string>,
      *   addressCount?: ?int,
@@ -133,6 +147,8 @@ class PeopleSearchResultResponse extends JsonSerializableType
         $this->matchScore = $values['matchScore'] ?? null;
         $this->isTopMatch = $values['isTopMatch'] ?? null;
         $this->isFromVendor = $values['isFromVendor'] ?? null;
+        $this->primaryAddress = $values['primaryAddress'] ?? null;
+        $this->addresses = $values['addresses'] ?? null;
         $this->phones = $values['phones'] ?? null;
         $this->emails = $values['emails'] ?? null;
         $this->addressCount = $values['addressCount'] ?? null;

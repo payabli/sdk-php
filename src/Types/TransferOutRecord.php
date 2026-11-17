@@ -26,7 +26,7 @@ class TransferOutRecord extends JsonSerializableType
     public ?int $paypointId;
 
     /**
-     * @var ?string $batchNumber The batch number for the transfer.
+     * @var ?string $batchNumber The batch number for the transfer. Vendor enrichment and bank account verification billing transfers aren't tied to a batch, so this is an empty string for those transfers.
      */
     #[JsonProperty('batchNumber')]
     public ?string $batchNumber;
@@ -38,19 +38,19 @@ class TransferOutRecord extends JsonSerializableType
     public ?string $batchCurrency;
 
     /**
-     * @var ?int $batchRecords The number of records in the batch.
+     * @var ?int $batchRecords The number of records in the batch. Vendor enrichment and bank account verification billing transfers aren't tied to a batch, so this is `0` for those transfers.
      */
     #[JsonProperty('batchRecords')]
     public ?int $batchRecords;
 
     /**
-     * @var ?string $transferIdentifier An identifier for the transfer.
+     * @var ?string $transferIdentifier An identifier for the transfer. Vendor enrichment and bank account verification billing transfers use the format `BILL_{paypointId}_{yyyyMMdd}_{feeType}`, where `feeType` is `VendorEnrichment` or `BankAccountVerification`.
      */
     #[JsonProperty('transferIdentifier')]
     public ?string $transferIdentifier;
 
     /**
-     * @var ?int $batchId The ID of the batch.
+     * @var ?int $batchId The ID of the batch. Vendor enrichment and bank account verification billing transfers aren't tied to a batch, so this is `0` for those transfers.
      */
     #[JsonProperty('batchId')]
     public ?int $batchId;
@@ -134,7 +134,7 @@ class TransferOutRecord extends JsonSerializableType
     public ?DateTime $transferDate;
 
     /**
-     * @var ?string $processor The processor used for the transfer.
+     * @var ?string $processor The processor used for the transfer. This is `billing` for vendor enrichment and bank account verification billing transfers.
      */
     #[JsonProperty('processor')]
     public ?string $processor;
@@ -144,6 +144,16 @@ class TransferOutRecord extends JsonSerializableType
      */
     #[JsonProperty('transferStatus')]
     public ?int $transferStatus;
+
+    /**
+     * The name of the `transferStatus`: `Pending`, `In Transit`, `Transferred`, `Funded
+     * (settled)`, `Resolved`, `Exception`, `ACH Return or Chargeback`, `Held`, `Released`,
+     * `Refunded`, or `None`. Returns `null` for an unrecognized code.
+     *
+     * @var ?string $transferStatusLabel
+     */
+    #[JsonProperty('transferStatusLabel')]
+    public ?string $transferStatusLabel;
 
     /**
      * @var ?float $grossAmount The gross amount of the transfer.
@@ -218,7 +228,7 @@ class TransferOutRecord extends JsonSerializableType
     public ?array $messages;
 
     /**
-     * @var ?string $type The transfer type. One of `debit`, `credit`, or `billing`.
+     * @var ?string $type The transfer type. One of `debit`, `credit`, or `billing`. A `billing` transfer is an ACH debit from the paypoint that collects fees. Billing transfers for payout fees belong to the payout's batch. Vendor enrichment and bank account verification charges are collected in a separate daily debit for each paypoint and fee type. These transfers aren't tied to a batch, so `batchId` and `batchRecords` are `0` and `batchNumber` is empty. Their `grossAmount`, `billingFeesAmount`, and `netTransferAmount` each hold the charge total as a negative value.
      */
     #[JsonProperty('type')]
     public ?string $type;
@@ -253,6 +263,7 @@ class TransferOutRecord extends JsonSerializableType
      *   transferDate?: ?DateTime,
      *   processor?: ?string,
      *   transferStatus?: ?int,
+     *   transferStatusLabel?: ?string,
      *   grossAmount?: ?float,
      *   chargeBackAmount?: ?float,
      *   returnedAmount?: ?float,
@@ -294,6 +305,7 @@ class TransferOutRecord extends JsonSerializableType
         $this->transferDate = $values['transferDate'] ?? null;
         $this->processor = $values['processor'] ?? null;
         $this->transferStatus = $values['transferStatus'] ?? null;
+        $this->transferStatusLabel = $values['transferStatusLabel'] ?? null;
         $this->grossAmount = $values['grossAmount'] ?? null;
         $this->chargeBackAmount = $values['chargeBackAmount'] ?? null;
         $this->returnedAmount = $values['returnedAmount'] ?? null;

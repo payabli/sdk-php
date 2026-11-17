@@ -71,7 +71,7 @@ class BoardingTemplatesClient
      * ```php
      * $client->boardingTemplates->listTemplates(
      *     new ListTemplatesBoardingTemplatesRequest([
-     *         'orgId' => 123,
+     *         'orgId' => 900123,
      *     ]),
      * );
      * ```

@@ -482,7 +482,7 @@ class PeopleClient
      * $client->people->searchPeople(
      *     new SearchPeopleRequest([
      *         'entry' => '8cfec329267',
-     *         'orgId' => 123,
+     *         'orgId' => 900123,
      *         'body' => [
      *             'firstName' => "Marcus",
      *             'lastName' => "Delgado",
@@ -556,7 +556,7 @@ class PeopleClient
      * $client->people->searchPeopleUnmasked(
      *     new SearchPeopleUnmaskedRequest([
      *         'entry' => '8cfec329267',
-     *         'orgId' => 123,
+     *         'orgId' => 900123,
      *         'body' => [
      *             'firstName' => "Marcus",
      *             'lastName' => "Delgado",

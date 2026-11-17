@@ -27,6 +27,15 @@ class PayoutSubscriptionQueryRecordPascal extends JsonSerializableType
     public ?int $status;
 
     /**
+     * The name of the payout subscription's `Status`: `Paused`, `Active`, `Completed`, `Marked
+     * for Deletion`, or `In Progress`. Returns `null` for an unrecognized code.
+     *
+     * @var ?string $statusLabel
+     */
+    #[JsonProperty('StatusLabel')]
+    public ?string $statusLabel;
+
+    /**
      * @var ?array<GeneralEvents> $events Events associated with the payout subscription.
      */
     #[JsonProperty('Events'), ArrayType([GeneralEvents::class])]
@@ -222,6 +231,7 @@ class PayoutSubscriptionQueryRecordPascal extends JsonSerializableType
      * @param array{
      *   idOutSubscription?: ?int,
      *   status?: ?int,
+     *   statusLabel?: ?string,
      *   events?: ?array<GeneralEvents>,
      *   vendor?: ?VendorQueryRecord,
      *   billData?: ?array<BillPayOutData>,
@@ -261,6 +271,7 @@ class PayoutSubscriptionQueryRecordPascal extends JsonSerializableType
     ) {
         $this->idOutSubscription = $values['idOutSubscription'] ?? null;
         $this->status = $values['status'] ?? null;
+        $this->statusLabel = $values['statusLabel'] ?? null;
         $this->events = $values['events'] ?? null;
         $this->vendor = $values['vendor'] ?? null;
         $this->billData = $values['billData'] ?? null;

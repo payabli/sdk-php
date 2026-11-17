@@ -662,7 +662,7 @@ class InvoiceClient
      * Example:
      * ```php
      * $client->invoice->listInvoicesOrg(
-     *     123,
+     *     900123,
      *     new ListInvoicesOrgRequest([
      *         'fromRecord' => 251,
      *         'limitRecord' => 0,
